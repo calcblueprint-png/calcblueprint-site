@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tile Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate how many tiles you need for any floor or wall. Includes tile count, boxes, thinset, and grout estimates.">
+<link rel="canonical" href="https://calcblueprint.com/tile-calculator/">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Tile Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.6;color:#1a1a1a;background:#f7f7f5}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 1.5rem}
+.container{max-width:720px;margin:0 auto;padding:0 1.5rem}
+header .container{display:flex;align-items:center;justify-content:space-between;max-width:960px}
+.logo{font-size:1.4rem;font-weight:800;color:#fff;text-decoration:none;letter-spacing:-.02em}
+.logo span{color:#f5a623}
+nav a{margin-left:1.5rem;color:#b8c1cc;text-decoration:none;font-size:.95rem}
+main{padding:3rem 0}
+h1{font-size:2.2rem;line-height:1.2;margin-bottom:1rem;color:#1a2332;letter-spacing:-.02em}
+h2{font-size:1.4rem;margin:2rem 0 1rem;color:#1a2332}
+h3{font-size:1.1rem;margin:1.5rem 0 .5rem;color:#1a2332}
+p{margin-bottom:1rem;color:#333}
+.calculator-box{background:#fff;border:1px solid #e0ddd6;border-radius:10px;padding:1.5rem;margin:2rem 0}
+.form-group{margin-bottom:1.25rem}
+label{display:block;font-weight:600;margin-bottom:.4rem;font-size:.95rem;color:#1a2332}
+input,select{width:100%;padding:.75rem;border:1px solid #c9c4bb;border-radius:6px;font-size:1rem;font-family:inherit}
+input:focus,select:focus{outline:2px solid #f5a623;border-color:transparent}
+button{background:#f5a623;color:#1a2332;border:none;padding:1rem 2rem;font-size:1.05rem;font-weight:700;border-radius:6px;cursor:pointer;width:100%;margin-top:.5rem}
+button:hover{background:#e09515}
+.result-box{background:#1a2332;border-radius:10px;padding:1.5rem;margin-top:1.5rem;display:none}
+.result-box.show{display:block}
+.result-row{display:flex;justify-content:space-between;padding:.6rem 0;border-bottom:1px solid #2d3a4d;font-size:.95rem}
+.result-row:last-child{border-bottom:none;padding-top:1rem;margin-top:.5rem;border-top:2px solid #f5a623}
+.result-row .label{color:#b8c1cc}
+.result-row .value{color:#fff;font-weight:700;font-family:"SF Mono",Monaco,monospace}
+.result-row.total .value{font-size:1.5rem;color:#f5a623}
+footer{background:#1a2332;color:#b8c1cc;padding:2rem 0;margin-top:4rem;font-size:.9rem}
+footer .container{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;max-width:960px}
+footer a{color:#b8c1cc;text-decoration:none;margin-right:1rem}
+@media(max-width:600px){h1{font-size:1.6rem}}
+</style>
+</head>
+<body>
+<header><div class="container"><a href="/" class="logo">Calc<span>Blueprint</span></a><nav><a href="/about/">About</a><a href="/contact/">Contact</a></nav></div></header>
+<main><div class="container">
+<h1>Tile Calculator</h1>
+<p>Calculate how many tiles you need for any floor or wall, plus thinset and grout estimates. Just enter your room size and tile dimensions.</p>
+
+<div class="calculator-box">
+<div class="form-group"><label for="roomLength">Room Length (feet)</label><input type="number" id="roomLength" placeholder="e.g., 12" min="0" step="0.1"></div>
+<div class="form-group"><label for="roomWidth">Room Width (feet)</label><input type="number" id="roomWidth" placeholder="e.g., 10" min="0" step="0.1"></div>
+<div class="form-group"><label for="tileWidth">Tile Width (inches)</label><input type="number" id="tileWidth" placeholder="e.g., 12" min="0.1" step="0.1" value="12"></div>
+<div class="form-group"><label for="tileHeight">Tile Height (inches)</label><input type="number" id="tileHeight" placeholder="e.g., 12" min="0.1" step="0.1" value="12"></div>
+<div class="form-group"><label for="waste">Waste factor (%)</label><select id="waste"><option value="5">5%</option><option value="10" selected>10% (recommended)</option><option value="15">15% (diagonal or complex)</option></select></div>
+<button onclick="calculate()">Calculate</button>
+</div>
+
+<div class="result-box" id="resultBox">
+<div class="result-row"><span class="label">Room area</span><span class="value" id="areaOut">—</span></div>
+<div class="result-row"><span class="label">Tile area</span><span class="value" id="tileAreaOut">—</span></div>
+<div class="result-row"><span class="label">Tiles needed (with waste)</span><span class="value" id="tilesOut">—</span></div>
+<div class="result-row"><span class="label">Thinset (50 lb bags)</span><span class="value" id="thinsetOut">—</span></div>
+<div class="result-row"><span class="label">Grout (25 lb bags)</span><span class="value" id="groutOut">—</span></div>
+<div class="result-row total"><span class="label">Boxes to order</span><span class="value" id="boxesOut">—</span></div>
+</div>
+
+<h2>How to Calculate Tile Quantity</h2>
+<p>The formula is: <strong>Room Area ÷ Tile Area = Number of Tiles</strong>. Measure room dimensions in feet, convert to inches, and divide. Always add 10% for cuts, breakage, and future repairs.</p>
+
+<h2>Coverage by Tile Size</h2>
+<h3>12×12 tiles (12" × 12")</h3>
+<p>One tile = 1 sq ft. Easy math — a 200 sq ft room needs 200 tiles plus waste.</p>
+<h3>18×18 tiles</h3>
+<p>One tile = 2.25 sq ft. Popular for large rooms because grout lines are fewer.</p>
+<h3>6×6 tiles</h3>
+<p>One tile = 0.25 sq ft. Used in bathrooms and smaller spaces. More grout lines = more grout needed.</p>
+<h3>12×24 tiles</h3>
+<p>One tile = 2 sq ft. Popular for modern kitchens and bathrooms. Requires level substrate.</p>
+
+<h2>Frequently Asked Questions</h2>
+<h3>How many tiles in a box?</h3>
+<p>Box contents vary by manufacturer. Common box sizes: 12×12 = 10–15 tiles per box; 18×18 = 6–8 tiles per box; 12×24 = 4–6 tiles per box. Always check the box label.</p>
+<h3>How much thinset do I need?</h3>
+<p>Plan on one 50 lb bag of thinset for every 30–50 sq ft of floor, depending on trowel size and tile thickness. Large-format tiles need more thinset per square foot.</p>
+<h3>How much grout do I need?</h3>
+<p>Grout quantity depends on tile size and joint width. Smaller tiles with wider joints need more grout. A 25 lb bag typically covers 50–200 sq ft depending on tile format.</p>
+</div></main>
+<footer><div class="container"><div><a href="/">Home</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="/privacy/">Privacy</a></div><div>© 2026 CalcBlueprint.</div></div></footer>
+<script>
+function calculate(){
+const L=parseFloat(document.getElementById('roomLength').value)||0;
+const W=parseFloat(document.getElementById('roomWidth').value)||0;
+const tw=parseFloat(document.getElementById('tileWidth').value)||12;
+const th=parseFloat(document.getElementById('tileHeight').value)||12;
+const waste=parseFloat(document.getElementById('waste').value)||10;
+if(L===0||W===0){alert('Enter room length and width');return;}
+const roomArea=L*W;
+const tileArea=(tw*th)/144;
+const tilesRaw=roomArea/tileArea;
+const tilesWaste=Math.ceil(tilesRaw*(1+waste/100));
+const thinsetBags=Math.ceil(roomArea/40);
+const groutBags=Math.ceil(roomArea/80);
+const tilesPerBox=10;
+const boxes=Math.ceil(tilesWaste/tilesPerBox);
+document.getElementById('areaOut').textContent=roomArea.toFixed(1)+' sq ft';
+document.getElementById('tileAreaOut').textContent=tileArea.toFixed(2)+' sq ft';
+document.getElementById('tilesOut').textContent=tilesWaste+' tiles';
+document.getElementById('thinsetOut').textContent=thinsetBags+' bags';
+document.getElementById('groutOut').textContent=groutBags+' bags';
+document.getElementById('boxesOut').textContent=boxes+' boxes (est. '+tilesPerBox+'/box)';
+document.getElementById('resultBox').classList.add('show');
+}
+</script>
+</body>
+</html>
