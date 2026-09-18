@@ -1,1 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rebar Spacing Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate rebar spacing, grid layout, and total linear feet for concrete slabs and footings. Free tool for contractors and DIY.">
+<link rel="canonical" href="https://calcblueprint.com/rebar-spacing-calculator/">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Rebar Spacing Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.6;color:#1a1a1a;background:#f7f7f5}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 1.5rem}
+.container{max-width:720px;margin:0 auto;padding:0 1.5rem}
+header .container{display:flex;align-items:center;justify-content:space-between;max-width:960px}
+.logo{font-size:1.4rem;font-weight:800;color:#fff;text-decoration:none;letter-spacing:-.02em}
+.logo span{color:#f5a623}
+nav a{margin-left:1.5rem;color:#b8c1cc;text-decoration:none;font-size:.95rem}
+main{padding:3rem 0}
+h1{font-size:2.2rem;line-height:1.2;margin-bottom:1rem;color:#1a2332;letter-spacing:-.02em}
+h2{font-size:1.4rem;margin:2rem 0 1rem;color:#1a2332}
+h3{font-size:1.1rem;margin:1.5rem 0 .5rem;color:#1a2332}
+p{margin-bottom:1rem;color:#333}
+.calculator-box{background:#fff;border:1px solid #e0ddd6;border-radius:10px;padding:1.5rem;margin:2rem 0}
+.form-group{margin-bottom:1.25rem}
+label{display:block;font-weight:600;margin-bottom:.4rem;font-size:.95rem;color:#1a2332}
+input,select{width:100%;padding:.75rem;border:1px solid #c9c4bb;border-radius:6px;font-size:1rem;font-family:inherit}
+input:focus,select:focus{outline:2px solid #f5a623;border-color:transparent}
+button{background:#f5a623;color:#1a2332;border:none;padding:1rem 2rem;font-size:1.05rem;font-weight:700;border-radius:6px;cursor:pointer;width:100%;margin-top:.5rem}
+button:hover{background:#e09515}
+.result-box{background:#1a2332;border-radius:10px;padding:1.5rem;margin-top:1.5rem;display:none}
+.result-box.show{display:block}
+.result-row{display:flex;justify-content:space-between;padding:.6rem 0;border-bottom:1px solid #2d3a4d;font-size:.95rem}
+.result-row:last-child{border-bottom:none;padding-top:1rem;margin-top:.5rem;border-top:2px solid #f5a623}
+.result-row .label{color:#b8c1cc}
+.result-row .value{color:#fff;font-weight:700;font-family:"SF Mono",Monaco,monospace}
+.result-row.total .value{font-size:1.4rem;color:#f5a623}
+footer{background:#1a2332;color:#b8c1cc;padding:2rem 0;margin-top:4rem;font-size:.9rem}
+footer .container{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;max-width:960px}
+footer a{color:#b8c1cc;text-decoration:none;margin-right:1rem}
+@media(max-width:600px){h1{font-size:1.6rem}}
+</style>
+</head>
+<body>
+<header><div class="container"><a href="/" class="logo">Calc<span>Blueprint</span></a><nav><a href="/about/">About</a><a href="/contact/">Contact</a></nav></div></header>
+<main><div class="container">
+<h1>Rebar Spacing Calculator</h1>
+<p>Calculate the number of rebar pieces, grid layout, and total linear feet needed for your concrete slab. Works for any slab size and spacing requirement.</p>
 
+<div class="calculator-box">
+<div class="form-group"><label for="slabLength">Slab Length (feet)</label><input type="number" id="slabLength" placeholder="e.g., 20" min="0" step="0.1"></div>
+<div class="form-group"><label for="slabWidth">Slab Width (feet)</label><input type="number" id="slabWidth" placeholder="e.g., 10" min="0" step="0.1"></div>
+<div class="form-group"><label for="spacing">Rebar Spacing (inches on center)</label><select id="spacing"><option value="12">12 inches</option><option value="16" selected>16 inches</option><option value="18">18 inches</option><option value="24">24 inches</option></select></div>
+<div class="form-group"><label for="overlap">Overlap per splice (inches)</label><select id="overlap"><option value="12">12 inches</option><option value="18" selected>18 inches</option><option value="24">24 inches</option></select></div>
+<div class="form-group"><label for="barSize">Rebar Size</label><select id="barSize"><option value="3">#3 (3/8")</option><option value="4" selected>#4 (1/2")</option><option value="5">#5 (5/8")</option><option value="6">#6 (3/4")</option></select></div>
+<button onclick="calculate()">Calculate</button>
+</div>
+
+<div class="result-box" id="resultBox">
+<div class="result-row"><span class="label">Slab area</span><span class="value" id="areaOut">—</span></div>
+<div class="result-row"><span class="label">Bars running lengthwise</span><span class="value" id="barsLOut">—</span></div>
+<div class="result-row"><span class="label">Bars running widthwise</span><span class="value" id="barsWOut">—</span></div>
+<div class="result-row"><span class="label">Total rebar pieces</span><span class="value" id="piecesOut">—</span></div>
+<div class="result-row"><span class="label">Linear feet (with overlap)</span><span class="value" id="lfOut">—</span></div>
+<div class="result-row total"><span class="label">Rebar size</span><span class="value" id="sizeOut">—</span></div>
+</div>
+
+<h2>How to Calculate Rebar for a Slab</h2>
+<p>Rebar is laid in a grid pattern. The number of bars in each direction depends on the slab dimensions and the spacing between bars. For a 20-foot slab with 16-inch spacing: 20 feet = 240 inches ÷ 16 = 15 bars running one direction, plus 1 for the edge = 16 bars.</p>
+<p>Standard overlap for #4 rebar is 18 inches at each splice. If your slab is longer than the standard rebar length (usually 20 feet), you'll need to account for extra overlap.</p>
+
+<h2>Standard Rebar Spacing by Application</h2>
+<h3>Residential Slabs (Patios, Driveways)</h3>
+<p>#4 rebar at 16–18 inches on center is standard. For lighter loads (patios, walkways), #3 at 18–24 inches is often sufficient.</p>
+<h3>Structural Slabs</h3>
+<p>#5 or #6 rebar at 12 inches on center is common for foundations and structural slabs. Engineering specifications should always be followed for load-bearing applications.</p>
+<h3>Footings</h3>
+<p>Continuous rebar (2–4 bars depending on width) running the length of the footing, with cross bars at 8–12 inches on center.</p>
+
+<h2>Frequently Asked Questions</h2>
+<h3>What size rebar for a 4-inch slab?</h3>
+<p>#3 or #4 rebar is standard for a 4-inch residential slab. #3 at 18–24 inches on center for patios and walkways; #4 at 16 inches for driveways and heavier use.</p>
+<h3>Can I use wire mesh instead of rebar?</h3>
+<p>Wire mesh works for light-duty slabs (patios, sidewalks) but doesn't provide the same structural reinforcement. For driveways and anything with vehicle traffic, rebar is recommended.</p>
+<h3>How much does rebar cost?</h3>
+<p>#4 rebar costs roughly $0.50–$0.90 per linear foot at retail. A 20×20 slab at 16-inch spacing requires about 250 linear feet, or $125–$225 in materials.</p>
+</div></main>
+<footer><div class="container"><div><a href="/">Home</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="/privacy/">Privacy</a></div><div>© 2026 CalcBlueprint.</div></div></footer>
+<script>
+function calculate(){
+const L=parseFloat(document.getElementById('slabLength').value)||0;
+const W=parseFloat(document.getElementById('slabWidth').value)||0;
+const spacing=parseFloat(document.getElementById('spacing').value)||16;
+const overlap=parseFloat(document.getElementById('overlap').value)||18;
+const barSize=document.getElementById('barSize').value;
+if(L===0||W===0){alert('Enter length and width');return;}
+const area=L*W;
+const Linc=L*12;
+const Winc=W*12;
+const barsL=Math.ceil(Linc/spacing)+1;
+const barsW=Math.ceil(Winc/spacing)+1;
+const totalPieces=barsL+barsW;
+const stdLength=20;
+let lfL=0;
+if(L>stdLength){
+const splices=Math.ceil(L/stdLength)-1;
+lfL=barsL*(L+(splices*(overlap/12)));
+}else{
+lfL=barsL*L;
+}
+let lfW=0;
+if(W>stdLength){
+const splices=Math.ceil(W/stdLength)-1;
+lfW=barsW*(W+(splices*(overlap/12)));
+}else{
+lfW=barsW*W;
+}
+const totalLF=lfL+lfW;
+const sizeLabels={'3':'#3 (3/8")','4':'#4 (1/2")','5':'#5 (5/8")','6':'#6 (3/4")'};
+document.getElementById('areaOut').textContent=area.toFixed(0)+' sq ft';
+document.getElementById('barsLOut').textContent=barsL+' bars';
+document.getElementById('barsWOut').textContent=barsW+' bars';
+document.getElementById('piecesOut').textContent=totalPieces+' pieces';
+document.getElementById('lfOut').textContent=totalLF.toFixed(0)+' linear feet';
+document.getElementById('sizeOut').textContent=sizeLabels[barSize];
+document.getElementById('resultBox').classList.add('show');
+}
+</script>
+</body>
+</html>
