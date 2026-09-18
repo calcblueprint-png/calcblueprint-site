@@ -1,1 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roof Pitch Calculator — CalcBlueprint</title>
+<meta name="description" content="Convert between roof pitch, angle, and slope. Calculate rafter length and total roof area from your measurements.">
+<link rel="canonical" href="https://calcblueprint.com/roof-pitch-calculator/">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Roof Pitch Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.6;color:#1a1a1a;background:#f7f7f5}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 1.5rem}
+.container{max-width:720px;margin:0 auto;padding:0 1.5rem}
+header .container{display:flex;align-items:center;justify-content:space-between;max-width:960px}
+.logo{font-size:1.4rem;font-weight:800;color:#fff;text-decoration:none;letter-spacing:-.02em}
+.logo span{color:#f5a623}
+nav a{margin-left:1.5rem;color:#b8c1cc;text-decoration:none;font-size:.95rem}
+main{padding:3rem 0}
+h1{font-size:2.2rem;line-height:1.2;margin-bottom:1rem;color:#1a2332;letter-spacing:-.02em}
+h2{font-size:1.4rem;margin:2rem 0 1rem;color:#1a2332}
+h3{font-size:1.1rem;margin:1.5rem 0 .5rem;color:#1a2332}
+p{margin-bottom:1rem;color:#333}
+.calculator-box{background:#fff;border:1px solid #e0ddd6;border-radius:10px;padding:1.5rem;margin:2rem 0}
+.form-group{margin-bottom:1.25rem}
+label{display:block;font-weight:600;margin-bottom:.4rem;font-size:.95rem;color:#1a2332}
+input,select{width:100%;padding:.75rem;border:1px solid #c9c4bb;border-radius:6px;font-size:1rem;font-family:inherit}
+input:focus,select:focus{outline:2px solid #f5a623;border-color:transparent}
+button{background:#f5a623;color:#1a2332;border:none;padding:1rem 2rem;font-size:1.05rem;font-weight:700;border-radius:6px;cursor:pointer;width:100%;margin-top:.5rem}
+button:hover{background:#e09515}
+.result-box{background:#1a2332;border-radius:10px;padding:1.5rem;margin-top:1.5rem;display:none}
+.result-box.show{display:block}
+.result-row{display:flex;justify-content:space-between;padding:.6rem 0;border-bottom:1px solid #2d3a4d;font-size:.95rem}
+.result-row:last-child{border-bottom:none;padding-top:1rem;margin-top:.5rem;border-top:2px solid #f5a623}
+.result-row .label{color:#b8c1cc}
+.result-row .value{color:#fff;font-weight:700;font-family:"SF Mono",Monaco,monospace}
+.result-row.total .value{font-size:1.5rem;color:#f5a623}
+footer{background:#1a2332;color:#b8c1cc;padding:2rem 0;margin-top:4rem;font-size:.9rem}
+footer .container{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;max-width:960px}
+footer a{color:#b8c1cc;text-decoration:none;margin-right:1rem}
+@media(max-width:600px){h1{font-size:1.6rem}}
+</style>
+</head>
+<body>
+<header><div class="container"><a href="/" class="logo">Calc<span>Blueprint</span></a><nav><a href="/about/">About</a><a href="/contact/">Contact</a></nav></div></header>
+<main><div class="container">
+<h1>Roof Pitch Calculator</h1>
+<p>Convert between roof pitch (rise:run), angle in degrees, and slope percentage. Includes rafter length and total roof area for any building width.</p>
 
+<div class="calculator-box">
+<div class="form-group"><label for="rise">Rise (inches)</label><input type="number" id="rise" placeholder="e.g., 6" min="0" step="0.5"></div>
+<div class="form-group"><label for="run">Run (inches)</label><input type="number" id="run" placeholder="e.g., 12" min="0.1" step="0.5" value="12"></div>
+<div class="form-group"><label for="buildingWidth">Building Width (feet) — optional</label><input type="number" id="buildingWidth" placeholder="e.g., 30" min="0" step="0.5"></div>
+<div class="form-group"><label for="overhang">Eave Overhang (feet)</label><input type="number" id="overhang" placeholder="e.g., 1" min="0" step="0.5" value="1"></div>
+<button onclick="calculate()">Calculate</button>
+</div>
+
+<div class="result-box" id="resultBox">
+<div class="result-row"><span class="label">Roof pitch</span><span class="value" id="pitchOut">—</span></div>
+<div class="result-row"><span class="label">Angle (degrees)</span><span class="value" id="angleOut">—</span></div>
+<div class="result-row"><span class="label">Slope (percentage)</span><span class="value" id="slopeOut">—</span></div>
+<div class="result-row"><span class="label">Rafter length per foot of run</span><span class="value" id="rafterOut">—</span></div>
+<div class="result-row"><span class="label">Roof area multiplier</span><span class="value" id="multOut">—</span></div>
+<div class="result-row total"><span class="label">Total rafter length</span><span class="value" id="totalRafterOut">—</span></div>
+</div>
+
+<h2>What Is Roof Pitch?</h2>
+<p>Roof pitch is the ratio of vertical rise to horizontal run, expressed as "X:12" — for example, "6:12" means the roof rises 6 inches for every 12 inches of horizontal run. It's the standard way roofers describe how steep a roof is.</p>
+
+<h2>Standard Roof Pitches</h2>
+<h3>Low Slope (2:12 to 4:12)</h3>
+<p>Common on modern homes, sheds, and porches. Requires special low-slope roofing materials — standard shingles may leak. Often uses membrane or rolled roofing.</p>
+<h3>Conventional Slope (4:12 to 9:12)</h3>
+<p>The most common range for residential roofs. Standard asphalt shingles work well. Walkable for most contractors.</p>
+<h3>Steep Slope (9:12 and above)</h3>
+<p>Common on Victorian and Tudor homes. Requires special safety equipment. Materials often need additional fastening. Higher labor cost.</p>
+
+<h2>Frequently Asked Questions</h2>
+<h3>What is a 6/12 pitch in degrees?</h3>
+<p>A 6:12 pitch equals 26.57 degrees. Use the formula: angle = arctan(rise ÷ run). For 6:12: arctan(6/12) = arctan(0.5) = 26.57°.</p>
+<h3>How do I measure roof pitch without climbing up?</h3>
+<p>Hold a level horizontally against the gable end (in the attic) and measure down to the roof surface at 12 inches. The distance in inches is your rise, and 12 is your run — so a measurement of 6 inches means a 6:12 pitch.</p>
+<h3>How do I calculate roof area from pitch?</h3>
+<p>Multiply the footprint area by the pitch multiplier. For 6:12 pitch, the multiplier is 1.118. So a 1,000 sq ft footprint becomes 1,118 sq ft of roof surface.</p>
+</div></main>
+<footer><div class="container"><div><a href="/">Home</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="/privacy/">Privacy</a></div><div>© 2026 CalcBlueprint.</div></div></footer>
+<script>
+function calculate(){
+const rise=parseFloat(document.getElementById('rise').value)||0;
+const run=parseFloat(document.getElementById('run').value)||12;
+const width=parseFloat(document.getElementById('buildingWidth').value)||0;
+const overhang=parseFloat(document.getElementById('overhang').value)||0;
+if(rise===0){alert('Enter the rise');return;}
+const angle=Math.atan(rise/run)*180/Math.PI;
+const slope=(rise/run)*100;
+const multiplier=Math.sqrt(1+Math.pow(rise/run,2));
+const rafterPerFoot=multiplier;
+document.getElementById('pitchOut').textContent=rise+':12';
+document.getElementById('angleOut').textContent=angle.toFixed(2)+'°';
+document.getElementById('slopeOut').textContent=slope.toFixed(1)+'%';
+document.getElementById('rafterOut').textContent=rafterPerFoot.toFixed(3)+' ft per ft of run';
+document.getElementById('multOut').textContent=multiplier.toFixed(3)+'x';
+if(width>0){
+const halfSpan=width/2+overhang;
+const totalRafter=halfSpan*multiplier;
+document.getElementById('totalRafterOut').textContent=totalRafter.toFixed(2)+' ft';
+}else{
+document.getElementById('totalRafterOut').textContent='Enter width';
+}
+document.getElementById('resultBox').classList.add('show');
+}
+</script>
+</body>
+</html>
