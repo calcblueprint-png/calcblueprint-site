@@ -1,1 +1,82 @@
-
+[
+  {
+    "slug": "concrete-footing-calculator",
+    "name": "Concrete Footing Calculator",
+    "description": "Calculate cubic yards of concrete needed for footings and foundations based on width, depth, and total length.",
+    "inputs": "Footing width (inches), footing depth (inches), total length (feet)",
+    "formula": "Volume (cubic feet) = (width/12) * (depth/12) * length. Cubic yards = cubic feet / 27. Add 10% waste.",
+    "status": "pending"
+  },
+  {
+    "slug": "concrete-column-calculator",
+    "name": "Concrete Column Calculator",
+    "description": "Calculate concrete volume for round or square columns. Enter diameter and height to get cubic yards and bag count.",
+    "inputs": "Column shape (round or square), diameter or side (inches), height (feet), number of columns",
+    "formula": "Round: volume = pi * (diameter/24)^2 * height. Square: volume = (side/12)^2 * height. Multiply by number of columns. Convert to cubic yards.",
+    "status": "pending"
+  },
+  {
+    "slug": "gravel-calculator",
+    "name": "Gravel Calculator",
+    "description": "Calculate how much gravel you need for driveways, walkways, and landscaping. Enter area and depth for instant tons and cubic yards.",
+    "inputs": "Length (feet), width (feet), depth (inches), gravel type (pea gravel, crushed stone, river rock)",
+    "formula": "Volume (cubic feet) = length * width * (depth/12). Cubic yards = cubic feet / 27. Tons = cubic yards * 1.4 (varies by type).",
+    "status": "pending"
+  },
+  {
+    "slug": "asphalt-calculator",
+    "name": "Asphalt Calculator",
+    "description": "Calculate tons of asphalt needed for driveways and parking lots. Enter area and thickness for accurate material estimates.",
+    "inputs": "Length (feet), width (feet), thickness (inches)",
+    "formula": "Volume (cubic feet) = length * width * (thickness/12). Tons = cubic feet * 0.145 (hot mix asphalt density).",
+    "status": "pending"
+  },
+  {
+    "slug": "board-foot-calculator",
+    "name": "Board Foot Calculator",
+    "description": "Calculate board feet for lumber purchases. Enter thickness, width, length, and quantity to get total board feet and cost.",
+    "inputs": "Thickness (inches), width (inches), length (feet), quantity, price per board foot",
+    "formula": "Board feet = (thickness * width * length) / 12. Total = board feet * quantity. Cost = total * price per board foot.",
+    "status": "pending"
+  },
+  {
+    "slug": "deck-calculator",
+    "name": "Deck Calculator",
+    "description": "Calculate deck boards, joists, and posts needed for your deck project. Enter dimensions to get a complete material list.",
+    "inputs": "Deck length (feet), deck width (feet), board width (inches), joist spacing (inches)",
+    "formula": "Deck area = length * width. Boards = deck area / ((board_width/12) * length_of_deck). Joists = length / (joist_spacing/12) + 1.",
+    "status": "pending"
+  },
+  {
+    "slug": "fence-calculator",
+    "name": "Fence Calculator",
+    "description": "Calculate fence posts, rails, and pickets needed for any fence project. Supports wood, vinyl, and chain link.",
+    "inputs": "Total fence length (feet), fence height (feet), post spacing (feet), fence type",
+    "formula": "Posts = ceil(length / post_spacing) + 1. Rails = posts * (height / 8). Pickets = length * 12 / picket_width (for picket fences).",
+    "status": "pending"
+  },
+  {
+    "slug": "drywall-calculator",
+    "name": "Drywall Calculator",
+    "description": "Calculate drywall sheets, screws, and joint compound needed for any room. Enter dimensions for complete material list.",
+    "inputs": "Room length (feet), room width (feet), ceiling height (feet), include ceiling (yes/no)",
+    "formula": "Wall area = 2 * (length + width) * height. Ceiling area = length * width if included. Sheets = ceil(total_area / 32). Screws = sheets * 32. Mud = sheets * 4.5 lbs.",
+    "status": "pending"
+  },
+  {
+    "slug": "insulation-calculator",
+    "name": "Insulation Calculator",
+    "description": "Calculate insulation needed for walls, ceilings, and attics. Enter area and R-value target for bag or roll estimates.",
+    "inputs": "Area (square feet), insulation type (fiberglass batts, blown-in, spray foam), R-value target",
+    "formula": "Rolls for batts = ceil(area / coverage_per_roll). For blown-in: bags = ceil(area * R_value / bag_coverage_factor).",
+    "status": "pending"
+  },
+  {
+    "slug": "mulch-calculator",
+    "name": "Mulch Calculator",
+    "description": "Calculate how many bags or cubic yards of mulch you need for garden beds and landscaping.",
+    "inputs": "Bed length (feet), bed width (feet), mulch depth (inches), bag size (cubic feet)",
+    "formula": "Volume (cubic feet) = length * width * (depth/12). Cubic yards = cubic feet / 27. Bags = ceil(cubic feet / bag_size).",
+    "status": "pending"
+  }
+]
