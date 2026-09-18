@@ -14,7 +14,8 @@
     "description": "Calculate concrete volume for round or square columns. Enter diameter and height to get cubic yards and bag count.",
     "inputs": "Column shape (round or square), diameter or side (inches), height (feet), number of columns",
     "formula": "Round: volume = pi * (diameter/24)^2 * height. Square: volume = (side/12)^2 * height. Multiply by number of columns. Convert to cubic yards.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-09-18T13:23:30.952230Z"
   },
   {
     "slug": "gravel-calculator",

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/concrete-column-calculator/">
+<title>Concrete Column Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate concrete volume for round or square columns. Enter diameter and height to get cubic yards and bag count.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Concrete Column Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+    body { font-family: sans-serif; background: #f7f7f5; color: #333; margin: 0; line-height: 1.6; }
+    header { background: #1a2332; color: #fff; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; }
+    header a { color: #fff; text-decoration: none; font-weight: bold; }
+    header span { color: #f5a623; }
+    nav a { margin-left: 15px; font-size: 0.9rem; }
+    .container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+    .calculator-box, .result-box { background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+    .input-group { margin-bottom: 1rem; }
+    label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+    input, select { width: 100%; padding: 0.8rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+    button { background: #f5a623; color: #fff; border: none; padding: 1rem 2rem; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; }
+    .result-box { display: none; background: #eef2f7; }
+    footer { background: #1a2332; color: #fff; text-align: center; padding: 2rem; margin-top: 3rem; }
+    footer a { color: #f5a623; margin: 0 10px; text-decoration: none; }
+    h2 { color: #1a2332; border-bottom: 2px solid #f5a623; display: inline-block; }
+</style>
+</head>
+<body>
+
+<header>
+    <a href="/">Calc<span>Blueprint</span></a>
+    <nav><a href="/about">About</a><a href="/contact">Contact</a></nav>
+</header>
+
+<div class="container">
+    <h1>Concrete Column Calculator</h1>
+    
+    <div class="calculator-box">
+        <div class="input-group">
+            <label>Column Shape</label>
+            <select id="shape">
+                <option value="round">Round</option>
+                <option value="square">Square</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label id="dimLabel">Diameter (inches)</label>
+            <input type="number" id="dimension" placeholder="e.g. 12">
+        </div>
+        <div class="input-group">
+            <label>Height (feet)</label>
+            <input type="number" id="height" placeholder="e.g. 10">
+        </div>
+        <div class="input-group">
+            <label>Number of Columns</label>
+            <input type="number" id="count" value="1">
+        </div>
+        <button onclick="calculate()">Calculate</button>
+    </div>
+
+    <div id="resultBox" class="result-box">
+        <h3>Results</h3>
+        <p>Total Cubic Yards: <strong id="resYards">0</strong></p>
+        <p>Estimated 80lb Bags: <strong id="resBags">0</strong></p>
+    </div>
+
+    <section>
+        <h2>How to Calculate Concrete Columns</h2>
+        <p>Calculating concrete volume for columns requires determining the cross-sectional area and multiplying it by the vertical height. For round columns, use the formula πr², where r is half the diameter. For square columns, simply multiply the side length by itself. Once you have the square footage of the footprint, multiply by the height in feet to get the total cubic feet. Since concrete is sold by the cubic yard, divide your total cubic feet by 27. Always add a 5-10% waste factor to account for spillage, uneven excavation, or formwork deflection during the pour.</p>
+    </section>
+
+    <section>
+        <h2>What Affects Concrete Volume</h2>
+        <p>Several variables impact the actual amount of concrete required on-site. Formwork rigidity is critical; if forms are not properly braced, they may bulge under the hydrostatic pressure of the wet concrete, leading to significant over-ordering. Additionally, the depth of the footing or the presence of steel reinforcement (rebar) displaces a small amount of volume, though this is usually negligible for standard columns. Site conditions, such as the accuracy of the excavation or the levelness of the subgrade, also play a role. Professional contractors typically order slightly more than the theoretical volume to ensure the pour can be completed without cold joints, which occur if the concrete supply is interrupted.</p>
+    </section>
+
+    <section>
+        <h2>Frequently Asked Questions</h2>
+        <p><strong>Q: Should I account for rebar in my volume calculation?</strong><br>A: Generally, no. The volume displaced by standard rebar cages is minimal and serves as a built-in safety margin for your order.</p>
+        <p><strong>Q: How many 80lb bags are in a cubic yard?</strong><br>A: One cubic yard of concrete requires approximately 45 bags of 80lb pre-mixed concrete.</p>
+        <p><strong>Q: Why did my forms bulge?</strong><br>A: Bulging usually occurs due to insufficient external bracing or pouring the concrete too quickly, which increases the lateral pressure on the formwork walls.</p>
+    </section>
+</div>
+
+<footer>
+    <a href="/">Home</a><a href="/about">About</a><a href="/contact">Contact</a><a href="/privacy">Privacy</a>
+    <p>&copy; 2026 CalcBlueprint</p>
+</footer>
+
+<script>
+    document.getElementById('shape').addEventListener('change', function() {
+        document.getElementById('dimLabel').innerText = this.value === 'round' ? 'Diameter (inches)' : 'Side (inches)';
+    });
+
+    function calculate() {
+        const shape = document.getElementById('shape').value;
+        const dim = parseFloat(document.getElementById('dimension').value);
+        const height = parseFloat(document.getElementById('height').value);
+        const count = parseFloat(document.getElementById('count').value);
+
+        if (!dim || !height || !count) return alert('Please fill in all fields');
+
+        let volumeCubicFeet = 0;
+        if (shape === 'round') {
+            volumeCubicFeet = Math.PI * Math.pow((dim / 24), 2) * height;
+        } else {
+            volumeCubicFeet = Math.pow((dim / 12), 2) * height;
+        }
+
+        const totalVolume = volumeCubicFeet * count;
+        const cubicYards = totalVolume / 27;
+        const bags = Math.ceil(cubicYards * 45);
+
+        document.getElementById('resYards').innerText = cubicYards.toFixed(2);
+        document.getElementById('resBags').innerText = bags;
+        document.getElementById('resultBox').style.display = 'block';
+    }
+</script>
+</body>
+</html>
