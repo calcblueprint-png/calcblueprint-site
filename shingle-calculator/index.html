@@ -1,1 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shingle Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate how many bundles of shingles you need for your roof. Enter roof area and pitch to get instant bundles, squares, and waste factor.">
+<link rel="canonical" href="https://calcblueprint.com/shingle-calculator/">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Shingle Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.6;color:#1a1a1a;background:#f7f7f5}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 1.5rem}
+.container{max-width:720px;margin:0 auto;padding:0 1.5rem}
+header .container{display:flex;align-items:center;justify-content:space-between;max-width:960px}
+.logo{font-size:1.4rem;font-weight:800;color:#fff;text-decoration:none;letter-spacing:-.02em}
+.logo span{color:#f5a623}
+nav a{margin-left:1.5rem;color:#b8c1cc;text-decoration:none;font-size:.95rem}
+main{padding:3rem 0}
+h1{font-size:2.2rem;line-height:1.2;margin-bottom:1rem;color:#1a2332;letter-spacing:-.02em}
+h2{font-size:1.4rem;margin:2rem 0 1rem;color:#1a2332}
+h3{font-size:1.1rem;margin:1.5rem 0 .5rem;color:#1a2332}
+p{margin-bottom:1rem;color:#333}
+.calculator-box{background:#fff;border:1px solid #e0ddd6;border-radius:10px;padding:1.5rem;margin:2rem 0}
+.form-group{margin-bottom:1.25rem}
+label{display:block;font-weight:600;margin-bottom:.4rem;font-size:.95rem;color:#1a2332}
+input,select{width:100%;padding:.75rem;border:1px solid #c9c4bb;border-radius:6px;font-size:1rem;font-family:inherit}
+input:focus,select:focus{outline:2px solid #f5a623;border-color:transparent}
+button{background:#f5a623;color:#1a2332;border:none;padding:1rem 2rem;font-size:1.05rem;font-weight:700;border-radius:6px;cursor:pointer;width:100%;margin-top:.5rem}
+button:hover{background:#e09515}
+.result-box{background:#1a2332;border-radius:10px;padding:1.5rem;margin-top:1.5rem;display:none}
+.result-box.show{display:block}
+.result-row{display:flex;justify-content:space-between;padding:.6rem 0;border-bottom:1px solid #2d3a4d;font-size:.95rem}
+.result-row:last-child{border-bottom:none;padding-top:1rem;margin-top:.5rem;border-top:2px solid #f5a623}
+.result-row .label{color:#b8c1cc}
+.result-row .value{color:#fff;font-weight:700;font-family:"SF Mono",Monaco,monospace}
+.result-row.total .value{font-size:1.5rem;color:#f5a623}
+footer{background:#1a2332;color:#b8c1cc;padding:2rem 0;margin-top:4rem;font-size:.9rem}
+footer .container{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;max-width:960px}
+footer a{color:#b8c1cc;text-decoration:none;margin-right:1rem}
+@media(max-width:600px){h1{font-size:1.6rem}}
+</style>
+</head>
+<body>
+<header><div class="container"><a href="/" class="logo">Calc<span>Blueprint</span></a><nav><a href="/about/">About</a><a href="/contact/">Contact</a></nav></div></header>
+<main><div class="container">
+<h1>Shingle Calculator</h1>
+<p>Calculate how many bundles of asphalt shingles you need. Enter your roof footprint and pitch — we'll factor in the slope multiplier and standard 10% waste.</p>
 
+<div class="calculator-box">
+<div class="form-group"><label for="roofLength">Roof Length (feet)</label><input type="number" id="roofLength" placeholder="e.g., 40" min="0" step="0.5"></div>
+<div class="form-group"><label for="roofWidth">Roof Width (feet)</label><input type="number" id="roofWidth" placeholder="e.g., 30" min="0" step="0.5"></div>
+<div class="form-group"><label for="pitch">Roof Pitch</label><select id="pitch"><option value="1.031">3:12 (low slope)</option><option value="1.054">4:12</option><option value="1.083">5:12</option><option value="1.118" selected>6:12 (standard)</option><option value="1.157">7:12</option><option value="1.202">8:12</option><option value="1.25">9:12</option><option value="1.302">10:12</option><option value="1.357">11:12</option><option value="1.414">12:12</option></select></div>
+<div class="form-group"><label for="waste">Waste factor (%)</label><select id="waste"><option value="5">5%</option><option value="10" selected>10% (recommended)</option><option value="15">15% (complex roof)</option></select></div>
+<button onclick="calculate()">Calculate</button>
+</div>
+
+<div class="result-box" id="resultBox">
+<div class="result-row"><span class="label">Roof footprint</span><span class="value" id="footprintOut">—</span></div>
+<div class="result-row"><span class="label">Actual roof area</span><span class="value" id="areaOut">—</span></div>
+<div class="result-row"><span class="label">Squares needed</span><span class="value" id="squaresOut">—</span></div>
+<div class="result-row"><span class="label">Bundles needed</span><span class="value" id="bundlesOut">—</span></div>
+<div class="result-row total"><span class="label">Est. material cost</span><span class="value" id="costOut">—</span></div>
+</div>
+
+<h2>How Many Bundles of Shingles Do I Need?</h2>
+<p>Shingles are sold in bundles. Three bundles cover one "square" — 100 square feet of finished roof. For a 1,200 sq ft roof, you need 12 squares, or 36 bundles. Add 10% for waste and you're at roughly 40 bundles.</p>
+
+<h2>What Is a Roofing Square?</h2>
+<p>A "square" is the roofing industry's unit of measure — 100 square feet of roof surface. If your roof is 1,500 sq ft, you have 15 squares. This is how contractors order materials and how roofers quote prices.</p>
+
+<h2>Why You Need a Waste Factor</h2>
+<p>You will always need extra shingles for:
+<ul style="margin:0 0 1rem 1.5rem;color:#333">
+<li>Hip and ridge caps (cut from shingle bundles)</li>
+<li>Valley cuts (angled cuts waste material)</li>
+<li>Starter strips along eaves and rakes</li>
+<li>Damage during installation</li>
+<li>Future repairs</li>
+</ul>
+<p>10% is standard. Complex roofs with multiple hips, valleys, and dormers need 15%.</p>
+
+<h2>Frequently Asked Questions</h2>
+<h3>How many bundles for a 1,500 sq ft roof?</h3>
+<p>A 1,500 sq ft roof requires 15 squares, which equals 45 bundles. With 10% waste, order 50 bundles.</p>
+<h3>How much does 1 square of shingles cost?</h3>
+<p>Standard 3-tab shingles cost $90–$120 per square (3 bundles). Architectural shingles cost $120–$180 per square. Premium designer shingles cost $250+ per square.</p>
+<h3>How much does a new roof cost?</h3>
+<p>Installed cost is $4–$8 per square foot for asphalt shingles, or $400–$800 per square. A 1,500 sq ft roof typically costs $6,000–$12,000 fully installed.</p>
+</div></main>
+<footer><div class="container"><div><a href="/">Home</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="/privacy/">Privacy</a></div><div>© 2026 CalcBlueprint.</div></div></footer>
+<script>
+function calculate(){
+const L=parseFloat(document.getElementById('roofLength').value)||0;
+const W=parseFloat(document.getElementById('roofWidth').value)||0;
+const pitch=parseFloat(document.getElementById('pitch').value)||1.118;
+const waste=parseFloat(document.getElementById('waste').value)||10;
+if(L===0||W===0){alert('Enter roof length and width');return;}
+const footprint=L*W;
+const area=footprint*pitch;
+const areaWaste=area*(1+waste/100);
+const squares=areaWaste/100;
+const bundles=Math.ceil(squares*3);
+const cost=bundles*40;
+document.getElementById('footprintOut').textContent=footprint.toFixed(0)+' sq ft';
+document.getElementById('areaOut').textContent=areaWaste.toFixed(0)+' sq ft';
+document.getElementById('squaresOut').textContent=squares.toFixed(1)+' squares';
+document.getElementById('bundlesOut').textContent=bundles+' bundles';
+document.getElementById('costOut').textContent='$'+cost.toLocaleString();
+document.getElementById('resultBox').classList.add('show');
+}
+</script>
+</body>
+</html>
