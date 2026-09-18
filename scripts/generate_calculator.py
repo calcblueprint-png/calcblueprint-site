@@ -7,6 +7,7 @@ import os
 import json
 import re
 import sys
+import time
 import urllib.request
 import urllib.error
 from datetime import datetime
@@ -16,17 +17,21 @@ if not API_KEY:
     print("ERROR: GEMINI_API_KEY environment variable is not set")
     sys.exit(1)
 
-# Try these models in order (newest free-tier models first)
+# Try these models in order — current free-tier models as of late 2026
 MODEL_CANDIDATES = [
-    "gemini-3.8-flash",
     "gemini-3.5-flash",
+    "gemini-3.8-flash",
     "gemini-3.1-flash-lite",
+    "gemini-3.5-flash-lite",
     "gemini-2.5-flash",
+    "gemini-2.5-flash-lite",
 ]
 
 BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={key}"
 
 QUEUE_FILE = "scripts/queue.json"
+TIMEOUT_PER_ATTEMPT = 60  # seconds per API call
+MAX_RETRIES_PER_MODEL = 2
 
 
 def load_queue():
@@ -80,7 +85,8 @@ REQUIREMENTS:
 Output the full HTML file now:"""
 
 
-def call_gemini(prompt, model):
+def call_gemini_once(prompt, model):
+    """Single API call. Raises exceptions on failure."""
     url = BASE_URL.format(model=model, key=API_KEY)
     payload = {
         "contents": [{"parts": [{"text": prompt}]}],
@@ -95,37 +101,71 @@ def call_gemini(prompt, model):
         headers={"Content-Type": "application/json"},
         method="POST",
     )
-    try:
-        with urllib.request.urlopen(req, timeout=180) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-    except urllib.error.HTTPError as e:
-        error_body = e.read().decode("utf-8")
-        print(f"HTTP {e.code} for model {model}: {error_body}")
-        raise
-    return data["candidates"][0]["content"]["parts"][0]["text"]
+    with urllib.request.urlopen(req, timeout=TIMEOUT_PER_ATTEMPT) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
+def call_gemini_with_retries(prompt, model):
+    """Try a model up to MAX_RETRIES_PER_MODEL times with backoff."""
+    last_error = None
+    for attempt in range(MAX_RETRIES_PER_MODEL):
+        try:
+            print(f"  Attempt {attempt + 1}/{MAX_RETRIES_PER_MODEL} with {model}")
+            data = call_gemini_once(prompt, model)
+            return data["candidates"][0]["content"]["parts"][0]["text"]
+        except urllib.error.HTTPError as e:
+            error_body = e.read().decode("utf-8", errors="replace")
+            print(f"  HTTP {e.code}: {error_body[:200]}")
+            last_error = e
+            # 503, 429, 500, 502, 504 are retryable
+            if e.code in (429, 500, 502, 503, 504):
+                backoff = 5 * (attempt + 1)
+                print(f"  Retryable error — waiting {backoff}s before retry")
+                time.sleep(backoff)
+                continue
+            else:
+                # 400, 401, 403, 404 — not retryable, break out
+                raise
+        except (TimeoutError, urllib.error.URLError) as e:
+            print(f"  Network/timeout error: {e}")
+            last_error = e
+            backoff = 5 * (attempt + 1)
+            print(f"  Waiting {backoff}s before retry")
+            time.sleep(backoff)
+            continue
+        except Exception as e:
+            print(f"  Unexpected error: {e}")
+            last_error = e
+            break
+    raise RuntimeError(f"All attempts failed for {model}: {last_error}")
 
 
 def generate_with_fallback(prompt):
-    last_error = None
+    errors = []
     for model in MODEL_CANDIDATES:
         print(f"Trying model: {model}")
         try:
-            result = call_gemini(prompt, model)
-            print(f"Success with model: {model}")
+            result = call_gemini_with_retries(prompt, model)
+            print(f"✅ Success with model: {model}")
             return result
         except urllib.error.HTTPError as e:
-            last_error = e
             if e.code == 404:
                 print(f"Model {model} not found, trying next...")
+                errors.append(f"{model}: 404 not found")
+                continue
+            elif e.code in (429, 503):
+                print(f"Model {model} overloaded/unavailable, trying next...")
+                errors.append(f"{model}: {e.code}")
                 continue
             else:
-                # 400/403/429 etc — don't retry with another model
-                raise
+                errors.append(f"{model}: HTTP {e.code}")
+                print(f"Non-retryable error with {model}, trying next...")
+                continue
         except Exception as e:
-            last_error = e
-            print(f"Unexpected error with {model}: {e}")
+            errors.append(f"{model}: {e}")
+            print(f"Model {model} failed: {e}")
             continue
-    raise RuntimeError(f"All models failed. Last error: {last_error}")
+    raise RuntimeError(f"All models failed.\nErrors:\n" + "\n".join(errors))
 
 
 def extract_html(text):
