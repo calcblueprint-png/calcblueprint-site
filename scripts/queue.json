@@ -5,7 +5,8 @@
     "description": "Calculate cubic yards of concrete needed for footings and foundations based on width, depth, and total length.",
     "inputs": "Footing width (inches), footing depth (inches), total length (feet)",
     "formula": "Volume (cubic feet) = (width/12) * (depth/12) * length. Cubic yards = cubic feet / 27. Add 10% waste.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-09-18T12:52:01.904256Z"
   },
   {
     "slug": "concrete-column-calculator",
