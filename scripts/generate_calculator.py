@@ -16,7 +16,7 @@ if not API_KEY:
     print("ERROR: GEMINI_API_KEY environment variable is not set")
     sys.exit(1)
 
-MODEL = "gemini-2.0-flash"
+MODEL = "gemini-3.5-flash"
 API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent?key={API_KEY}"
 
 QUEUE_FILE = "scripts/queue.json"
