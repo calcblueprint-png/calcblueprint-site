@@ -16,8 +16,15 @@ if not API_KEY:
     print("ERROR: GEMINI_API_KEY environment variable is not set")
     sys.exit(1)
 
-MODEL = "gemini-3.5-flash"
-API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent?key={API_KEY}"
+# Try these models in order (newest free-tier models first)
+MODEL_CANDIDATES = [
+    "gemini-3.8-flash",
+    "gemini-3.5-flash",
+    "gemini-3.1-flash-lite",
+    "gemini-2.5-flash",
+]
+
+BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={key}"
 
 QUEUE_FILE = "scripts/queue.json"
 
@@ -73,7 +80,8 @@ REQUIREMENTS:
 Output the full HTML file now:"""
 
 
-def call_gemini(prompt):
+def call_gemini(prompt, model):
+    url = BASE_URL.format(model=model, key=API_KEY)
     payload = {
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
@@ -82,18 +90,42 @@ def call_gemini(prompt):
         },
     }
     req = urllib.request.Request(
-        API_URL,
+        url,
         data=json.dumps(payload).encode("utf-8"),
         headers={"Content-Type": "application/json"},
         method="POST",
     )
     try:
-        with urllib.request.urlopen(req, timeout=120) as resp:
+        with urllib.request.urlopen(req, timeout=180) as resp:
             data = json.loads(resp.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
-        print(f"HTTP error: {e.code} — {e.read().decode('utf-8')}")
+        error_body = e.read().decode("utf-8")
+        print(f"HTTP {e.code} for model {model}: {error_body}")
         raise
     return data["candidates"][0]["content"]["parts"][0]["text"]
+
+
+def generate_with_fallback(prompt):
+    last_error = None
+    for model in MODEL_CANDIDATES:
+        print(f"Trying model: {model}")
+        try:
+            result = call_gemini(prompt, model)
+            print(f"Success with model: {model}")
+            return result
+        except urllib.error.HTTPError as e:
+            last_error = e
+            if e.code == 404:
+                print(f"Model {model} not found, trying next...")
+                continue
+            else:
+                # 400/403/429 etc — don't retry with another model
+                raise
+        except Exception as e:
+            last_error = e
+            print(f"Unexpected error with {model}: {e}")
+            continue
+    raise RuntimeError(f"All models failed. Last error: {last_error}")
 
 
 def extract_html(text):
@@ -161,7 +193,7 @@ def main():
 
     print(f"Generating: {item['name']} ({item['slug']})")
     prompt = build_prompt(item)
-    raw = call_gemini(prompt)
+    raw = generate_with_fallback(prompt)
     html = extract_html(raw)
     write_page(item["slug"], html)
     update_sitemap(item["slug"])
