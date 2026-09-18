@@ -1,23 +1,5 @@
 [
   {
-    "slug": "concrete-footing-calculator",
-    "name": "Concrete Footing Calculator",
-    "description": "Calculate cubic yards of concrete needed for footings and foundations based on width, depth, and total length.",
-    "inputs": "Footing width (inches), footing depth (inches), total length (feet)",
-    "formula": "Volume (cubic feet) = (width/12) * (depth/12) * length. Cubic yards = cubic feet / 27. Add 10% waste.",
-    "status": "done",
-    "generated_at": "2026-09-18T12:52:01.904256Z"
-  },
-  {
-    "slug": "concrete-column-calculator",
-    "name": "Concrete Column Calculator",
-    "description": "Calculate concrete volume for round or square columns. Enter diameter and height to get cubic yards and bag count.",
-    "inputs": "Column shape (round or square), diameter or side (inches), height (feet), number of columns",
-    "formula": "Round: volume = pi * (diameter/24)^2 * height. Square: volume = (side/12)^2 * height. Multiply by number of columns. Convert to cubic yards.",
-    "status": "done",
-    "generated_at": "2026-09-18T13:23:30.952230Z"
-  },
-  {
     "slug": "gravel-calculator",
     "name": "Gravel Calculator",
     "description": "Calculate how much gravel you need for driveways, walkways, and landscaping. Enter area and depth for instant tons and cubic yards.",
@@ -79,6 +61,398 @@
     "description": "Calculate how many bags or cubic yards of mulch you need for garden beds and landscaping.",
     "inputs": "Bed length (feet), bed width (feet), mulch depth (inches), bag size (cubic feet)",
     "formula": "Volume (cubic feet) = length * width * (depth/12). Cubic yards = cubic feet / 27. Bags = ceil(cubic feet / bag_size).",
+    "status": "pending"
+  },
+  {
+    "slug": "concrete-steps-calculator",
+    "name": "Concrete Steps Calculator",
+    "description": "Calculate concrete volume and bag count for outdoor steps and stairways. Enter rise, run, and width for instant estimates.",
+    "inputs": "Number of steps, rise per step (inches), run per step (inches), step width (feet)",
+    "formula": "Volume per step = (width) * (run/12) * (rise/12). Total volume = sum across all steps using average rise. Cubic yards = cubic feet / 27.",
+    "status": "pending"
+  },
+  {
+    "slug": "concrete-block-calculator",
+    "name": "Concrete Block Calculator",
+    "description": "Calculate how many concrete blocks (CMUs) you need for any wall. Includes mortar and block count with waste factor.",
+    "inputs": "Wall length (feet), wall height (feet), block size (8x8x16 or 8x4x16), waste percentage",
+    "formula": "Wall area = length * height. Block face area = block length * block height / 144. Blocks = ceil(wall_area / block_face_area * (1 + waste/100)).",
+    "status": "pending"
+  },
+  {
+    "slug": "concrete-mix-calculator",
+    "name": "Concrete Mix Ratio Calculator",
+    "description": "Calculate cement, sand, and aggregate quantities for custom concrete mixes. Choose your PSI target and get exact ratios.",
+    "inputs": "Total volume (cubic feet), target PSI (2500, 3000, 3500, 4000)",
+    "formula": "For 3000 PSI: cement = volume * 6 bags/cu yd. Sand = cement * 2. Aggregate = cement * 3. Water = cement * 0.5. Adjust ratios by PSI target.",
+    "status": "pending"
+  },
+  {
+    "slug": "mortar-calculator",
+    "name": "Mortar Calculator",
+    "description": "Calculate mortar needed for bricklaying, block walls, and stone work. Enter wall dimensions for accurate bag counts.",
+    "inputs": "Wall area (square feet), block/brick type, mortar joint thickness (inches)",
+    "formula": "Mortar volume = wall_area * joint_thickness / 12 * coverage_factor. Bags = ceil(mortar_volume / 0.7 cu ft per 80-lb bag).",
+    "status": "pending"
+  },
+  {
+    "slug": "brick-calculator",
+    "name": "Brick Calculator",
+    "description": "Calculate how many bricks you need for walls, patios, or veneer. Includes standard brick sizes and waste factor.",
+    "inputs": "Wall length (feet), wall height (feet), brick size (modular, queen, king, closure), waste percentage",
+    "formula": "Wall area (sq in) = length * height * 144. Bricks per sq ft = 144 / ((brick_length + joint) * (brick_height + joint)). Total = ceil(wall_sqft * bricks_per_sqft * (1 + waste/100)).",
+    "status": "pending"
+  },
+  {
+    "slug": "roof-area-calculator",
+    "name": "Roof Area Calculator",
+    "description": "Calculate the actual surface area of your roof from footprint and pitch. Essential for ordering materials accurately.",
+    "inputs": "Building length (feet), building width (feet), roof pitch (X:12)",
+    "formula": "Footprint = length * width. Pitch multiplier = sqrt(1 + (rise/12)^2). Roof area = footprint * pitch multiplier. Add 5% for waste.",
+    "status": "pending"
+  },
+  {
+    "slug": "gutter-calculator",
+    "name": "Gutter Calculator",
+    "description": "Calculate gutter length, downspouts, and hangers needed for your home. Enter roof edges and roof area.",
+    "inputs": "Eave length (feet), number of downspout locations, gutter size, roof area (sq ft)",
+    "formula": "Total gutter = eave_length. Downspouts = number_locations * (wall_height / 10). Hangers = ceil(eave_length / 2).",
+    "status": "pending"
+  },
+  {
+    "slug": "roof-truss-calculator",
+    "name": "Roof Truss Calculator",
+    "description": "Calculate the number of roof trusses needed and spacing for your building. For gable, hip, and shed roofs.",
+    "inputs": "Building length (feet), roof type (gable, hip, shed), truss spacing (16, 24 inches)",
+    "formula": "Number of trusses = ceil(building_length * 12 / truss_spacing) + 1. Add one truss per gable end if applicable.",
+    "status": "pending"
+  },
+  {
+    "slug": "ridge-vent-calculator",
+    "name": "Ridge Vent Calculator",
+    "description": "Calculate linear feet of ridge vent needed for proper attic ventilation. Ensures code-compliant airflow.",
+    "inputs": "Attic floor area (square feet), roof pitch",
+    "formula": "Required net free area = attic_area / 150. Ridge vent length = required_NFA / 18 sq in per linear foot.",
+    "status": "pending"
+  },
+  {
+    "slug": "vinyl-siding-calculator",
+    "name": "Vinyl Siding Calculator",
+    "description": "Calculate vinyl siding squares, starter strips, and trim needed. Enter wall dimensions for complete material list.",
+    "inputs": "Wall length (feet), wall height (feet), number of walls, number of windows, number of doors",
+    "formula": "Wall area = length * height * number_of_walls. Subtract 15 sq ft per window and 20 sq ft per door. Siding squares = net_area / 100 * 1.1.",
+    "status": "pending"
+  },
+  {
+    "slug": "hardie-plank-calculator",
+    "name": "Hardie Plank Calculator",
+    "description": "Calculate fiber cement siding boards needed for your project. Includes starter strips and trim allowance.",
+    "inputs": "Wall area (square feet), board width (inches), board length (feet), overlap (inches)",
+    "formula": "Coverage per board = board_length * (board_width - overlap) / 12. Boards = ceil(wall_area / coverage_per_board * 1.1).",
+    "status": "pending"
+  },
+  {
+    "slug": "hardwood-flooring-calculator",
+    "name": "Hardwood Flooring Calculator",
+    "description": "Calculate square feet of hardwood flooring needed for any room. Includes waste factor and box count.",
+    "inputs": "Room length (feet), room width (feet), waste percentage, box coverage (square feet)",
+    "formula": "Area = length * width. Total with waste = area * (1 + waste/100). Boxes = ceil(total / box_coverage).",
+    "status": "pending"
+  },
+  {
+    "slug": "laminate-flooring-calculator",
+    "name": "Laminate Flooring Calculator",
+    "description": "Calculate laminate planks and boxes for your room. Includes underlayment and transition strips.",
+    "inputs": "Room length (feet), room width (feet), plank dimensions (inches), waste percentage",
+    "formula": "Area = length * width. Plank coverage = plank_length * plank_width / 144. Planks = ceil(area / plank_coverage * (1 + waste/100)).",
+    "status": "pending"
+  },
+  {
+    "slug": "carpet-calculator",
+    "name": "Carpet Calculator",
+    "description": "Calculate carpet square yards and padding needed for any room. Account for seams and directional layout.",
+    "inputs": "Room length (feet), room width (feet), carpet roll width (12 or 15 feet)",
+    "formula": "Area (sq yd) = length * width / 9. Add 10% for seams and waste. Padding = area + 5%.",
+    "status": "pending"
+  },
+  {
+    "slug": "grout-calculator",
+    "name": "Grout Calculator",
+    "description": "Calculate grout needed for tile installations. Enter tile size and joint width for accurate bag count.",
+    "inputs": "Tile area (square feet), tile length (inches), tile width (inches), joint width (inches), tile thickness (inches)",
+    "formula": "Grout volume per sq ft = ((tile_length + tile_width) / (tile_length * tile_width)) * joint_width * tile_thickness. Bags = ceil(total / coverage_per_bag).",
+    "status": "pending"
+  },
+  {
+    "slug": "thinset-calculator",
+    "name": "Thinset Calculator",
+    "description": "Calculate thinset mortar needed for tile installation. Choose trowel size and tile format for accurate coverage.",
+    "inputs": "Tile area (square feet), trowel size (1/4, 3/8, 1/2 inch), tile type (standard, large format, stone)",
+    "formula": "Coverage per 50-lb bag: 1/4 inch = 90 sq ft, 3/8 inch = 60 sq ft, 1/2 inch = 40 sq ft. Large format reduces 20%. Bags = ceil(area / coverage).",
+    "status": "pending"
+  },
+  {
+    "slug": "backsplash-calculator",
+    "name": "Backsplash Calculator",
+    "description": "Calculate tile needed for a kitchen backsplash. Account for outlets, windows, and tile size.",
+    "inputs": "Counter length (feet), backsplash height (inches), number of outlets, tile size (inches)",
+    "formula": "Area (sq in) = counter_length * 12 * backsplash_height. Subtract 30 sq in per outlet. Tiles = ceil(area / tile_area * 1.1).",
+    "status": "pending"
+  },
+  {
+    "slug": "wallpaper-calculator",
+    "name": "Wallpaper Calculator",
+    "description": "Calculate wallpaper rolls needed for any room. Enter wall dimensions and pattern repeat for accuracy.",
+    "inputs": "Room length (feet), room width (feet), ceiling height (feet), pattern repeat (inches), windows and doors count",
+    "formula": "Wall area = 2 * (length + width) * height. Subtract doors and windows. Rolls = ceil(wall_area / usable_area_per_roll).",
+    "status": "pending"
+  },
+  {
+    "slug": "wall-area-calculator",
+    "name": "Wall Area Calculator",
+    "description": "Calculate total wall area for painting, wallpaper, or siding. Subtract doors and windows automatically.",
+    "inputs": "Room length (feet), room width (feet), ceiling height (feet), number of doors, number of windows",
+    "formula": "Perimeter = 2 * (length + width). Gross wall area = perimeter * height. Subtract 20 sq ft per door and 15 sq ft per window.",
+    "status": "pending"
+  },
+  {
+    "slug": "drywall-mud-calculator",
+    "name": "Drywall Mud Calculator",
+    "description": "Calculate joint compound needed for a drywall project. Includes taping, filling, and finishing coats.",
+    "inputs": "Number of drywall sheets, level of finish (Level 3, 4, or 5)",
+    "formula": "Level 3: 2 lbs per sheet. Level 4: 4 lbs per sheet. Level 5: 6 lbs per sheet. Buckets of 4.5 gallons weigh ~55 lbs.",
+    "status": "pending"
+  },
+  {
+    "slug": "drywall-screws-calculator",
+    "name": "Drywall Screws Calculator",
+    "description": "Calculate how many drywall screws you need. Based on sheet count, stud spacing, and screw pattern.",
+    "inputs": "Number of drywall sheets, stud spacing (16 or 24 inches), screw pattern (standard, ceiling, fire-rated)",
+    "formula": "Standard on 16-inch studs: 32 screws per 4x8 sheet. Ceiling pattern: 40 per sheet. Fire-rated: 60 per sheet. Total = sheets * count.",
+    "status": "pending"
+  },
+  {
+    "slug": "corner-bead-calculator",
+    "name": "Drywall Corner Bead Calculator",
+    "description": "Calculate linear feet of corner bead needed for your drywall project. Includes inside and outside corners.",
+    "inputs": "Number of outside corners, number of inside corners, average corner height (feet)",
+    "formula": "Outside corner bead = number_of_outside * corner_height. Add 5% waste for cuts.",
+    "status": "pending"
+  },
+  {
+    "slug": "ac-unit-size-calculator",
+    "name": "AC Unit Size Calculator",
+    "description": "Calculate the correct AC tonnage for any room. Based on square footage, climate, and insulation.",
+    "inputs": "Room length (feet), room width (feet), ceiling height (feet), climate zone, insulation quality",
+    "formula": "BTU base = length * width * 25. Adjust for sun, occupants, ceiling height. Tons = BTU / 12000.",
+    "status": "pending"
+  },
+  {
+    "slug": "btu-calculator",
+    "name": "BTU Calculator",
+    "description": "Calculate heating and cooling BTUs needed for any space. Essential for sizing HVAC equipment correctly.",
+    "inputs": "Room length (feet), room width (feet), ceiling height (feet), insulation level, climate",
+    "formula": "Cooling BTU = area * 25 + adjustments. Heating BTU = area * 45 * climate_factor * insulation_factor.",
+    "status": "pending"
+  },
+  {
+    "slug": "furnace-size-calculator",
+    "name": "Furnace Size Calculator",
+    "description": "Calculate the correct furnace size for your home. Based on square footage, climate, and insulation.",
+    "inputs": "Home square footage, climate zone, insulation quality, ceiling height",
+    "formula": "Output BTU = square_footage * 35 * climate_multiplier * insulation_factor. Furnace input = output / AFUE.",
+    "status": "pending"
+  },
+  {
+    "slug": "duct-size-calculator",
+    "name": "Duct Size Calculator",
+    "description": "Calculate proper duct size for HVAC airflow. Enter CFM and friction rate for correct diameter.",
+    "inputs": "Required CFM, friction rate (inches of water per 100 ft)",
+    "formula": "Approximate: duct_diameter (inches) = 2 * sqrt(CFM / (velocity * pi / 144)). Target velocity: 700-900 fpm for trunk, 500-700 for branches.",
+    "status": "pending"
+  },
+  {
+    "slug": "electrical-load-calculator",
+    "name": "Electrical Load Calculator",
+    "description": "Calculate the electrical load for a home or addition. Determines service panel requirements.",
+    "inputs": "Square footage, number of small appliance circuits, number of laundry circuits, large appliances kW",
+    "formula": "General lighting = 3 watts per sq ft. Small appliance circuits: 1500 VA each. Laundry: 1500 VA. Apply demand factors. Total / 240 = amps.",
+    "status": "pending"
+  },
+  {
+    "slug": "wire-size-calculator",
+    "name": "Wire Size Calculator",
+    "description": "Calculate the correct wire gauge for electrical runs. Based on amperage, distance, and voltage drop.",
+    "inputs": "Amperage, distance (feet), voltage (120 or 240), allowable voltage drop (3% typical)",
+    "formula": "Use NEC ampacity charts for base size. For voltage drop over 50 ft: wire_size = 2 * length * amperage * resistivity / allowable_drop. Round up.",
+    "status": "pending"
+  },
+  {
+    "slug": "breaker-size-calculator",
+    "name": "Breaker Size Calculator",
+    "description": "Calculate the correct circuit breaker size for any load. Follows NEC continuous load rules.",
+    "inputs": "Load in watts or amps, voltage, continuous or non-continuous load",
+    "formula": "Amps = watts / voltage. For continuous loads, multiply by 1.25. Round up to next standard breaker: 15, 20, 30, 40, 50, 60, 70, 80, 90, 100.",
+    "status": "pending"
+  },
+  {
+    "slug": "outlet-spacing-calculator",
+    "name": "Outlet Spacing Calculator",
+    "description": "Calculate number of electrical outlets needed per room. Follows NEC spacing requirements.",
+    "inputs": "Room length (feet), room width (feet), room type (kitchen, bedroom, living room, bathroom)",
+    "formula": "NEC rule: no point along wall more than 6 feet from an outlet. Outlets = ceil(perimeter / 12). Kitchen counters: every 4 ft. Bathrooms: one per sink plus GFCI.",
+    "status": "pending"
+  },
+  {
+    "slug": "shower-tile-calculator",
+    "name": "Shower Tile Calculator",
+    "description": "Calculate tiles and materials needed for a shower surround. Account for niches and benches.",
+    "inputs": "Shower length (feet), shower width (feet), shower height (feet), number of niches, tile size (inches)",
+    "formula": "Wall area = 2 * (length + width) * height. Add 6 sq ft per niche. Tiles = ceil(wall_area / tile_area * 1.15).",
+    "status": "pending"
+  },
+  {
+    "slug": "bathroom-floor-tile-calculator",
+    "name": "Bathroom Floor Tile Calculator",
+    "description": "Calculate floor tile needed for a bathroom. Account for toilet, vanity, and tub cutouts.",
+    "inputs": "Bathroom length (feet), bathroom width (feet), tile size (inches), waste percentage",
+    "formula": "Area = length * width. Add 10% waste. Tiles = ceil(area * 1.1 / (tile_size^2 / 144)).",
+    "status": "pending"
+  },
+  {
+    "slug": "kitchen-floor-calculator",
+    "name": "Kitchen Floor Calculator",
+    "description": "Calculate kitchen floor tile or vinyl needed. Subtract cabinet footprints for accuracy.",
+    "inputs": "Kitchen length (feet), kitchen width (feet), cabinet footprint (square feet), flooring type",
+    "formula": "Area = length * width - cabinet_footprint. Add 10% waste.",
+    "status": "pending"
+  },
+  {
+    "slug": "paver-calculator",
+    "name": "Paver Calculator",
+    "description": "Calculate pavers needed for patios, driveways, and walkways. Includes base material and sand.",
+    "inputs": "Patio length (feet), patio width (feet), paver size (square inches), base depth (inches)",
+    "formula": "Area = length * width. Pavers = ceil(area * 144 / paver_size * 1.05). Base cubic yards = area * (base_depth/12) / 27.",
+    "status": "pending"
+  },
+  {
+    "slug": "retaining-wall-calculator",
+    "name": "Retaining Wall Calculator",
+    "description": "Calculate blocks, caps, gravel, and drainage for a retaining wall. Ensures proper structural design.",
+    "inputs": "Wall length (feet), wall height (feet), block size (square inches of face), wall type",
+    "formula": "Wall face area = length * height. Blocks = ceil(wall_face_area * 144 / block_face_area * 1.05). Cap blocks = ceil(length / cap_length).",
+    "status": "pending"
+  },
+  {
+    "slug": "artificial-turf-calculator",
+    "name": "Artificial Turf Calculator",
+    "description": "Calculate artificial grass needed for lawns and play areas. Includes base material and seaming.",
+    "inputs": "Lawn length (feet), lawn width (feet), roll width (feet), waste percentage",
+    "formula": "Area = length * width. Rolls = ceil(area / roll_coverage). Add 5% for seams. Base gravel: 3 inches = 0.25 cu yd per sq ft.",
+    "status": "pending"
+  },
+  {
+    "slug": "sod-calculator",
+    "name": "Sod Calculator",
+    "description": "Calculate sod rolls or pallets needed for a new lawn. Includes soil prep and starter fertilizer.",
+    "inputs": "Lawn length (feet), lawn width (feet), sod roll size (square feet)",
+    "formula": "Area = length * width. Sod rolls = ceil(area / roll_size). Pallets typically hold 450-500 sq ft.",
+    "status": "pending"
+  },
+  {
+    "slug": "topsoil-calculator",
+    "name": "Topsoil Calculator",
+    "description": "Calculate how much topsoil you need for lawns, gardens, and raised beds. Enter area and depth.",
+    "inputs": "Length (feet), width (feet), depth (inches), measurement unit",
+    "formula": "Volume (cubic feet) = length * width * (depth/12). Cubic yards = cubic feet / 27. Bags (40 lb) = ceil(cubic_feet / 0.75).",
+    "status": "pending"
+  },
+  {
+    "slug": "compost-calculator",
+    "name": "Compost Calculator",
+    "description": "Calculate how much compost to add to garden beds and lawns. Includes application rate recommendations.",
+    "inputs": "Garden area (square feet), application rate (inches), compost type",
+    "formula": "Volume (cubic feet) = area * (rate/12). Cubic yards = volume / 27.",
+    "status": "pending"
+  },
+  {
+    "slug": "fertilizer-calculator",
+    "name": "Fertilizer Calculator",
+    "description": "Calculate fertilizer needed based on NPK ratio and target nitrogen per 1000 sq ft. Essential for lawns.",
+    "inputs": "Lawn area (square feet), desired nitrogen per 1000 sq ft (lbs), fertilizer NPK ratio",
+    "formula": "Total nitrogen = area / 1000 * N_per_1000. Fertilizer weight = nitrogen / (N_percentage / 100).",
+    "status": "pending"
+  },
+  {
+    "slug": "grass-seed-calculator",
+    "name": "Grass Seed Calculator",
+    "description": "Calculate grass seed needed for new lawns or overseeding. Varies by grass type and application.",
+    "inputs": "Lawn area (square feet), grass type, application (new lawn or overseed)",
+    "formula": "New lawn: 4-6 lbs per 1000 sq ft. Overseed: 2-3 lbs per 1000 sq ft. Total = area / 1000 * rate * 1.1.",
+    "status": "pending"
+  },
+  {
+    "slug": "chain-link-fence-calculator",
+    "name": "Chain Link Fence Calculator",
+    "description": "Calculate chain link fence materials: fabric, posts, rails, and tension wire. Complete list for any length.",
+    "inputs": "Total fence length (feet), fence height (feet), post spacing (feet)",
+    "formula": "Line posts = ceil(length / post_spacing) + 1. Top rail = length + 5%. Fabric = length * 1.05. Tension wire = length + 10%.",
+    "status": "pending"
+  },
+  {
+    "slug": "privacy-fence-calculator",
+    "name": "Privacy Fence Calculator",
+    "description": "Calculate wood privacy fence materials: pickets, rails, posts, and concrete. For dog-ear, board-on-board, or shadowbox.",
+    "inputs": "Total fence length (feet), fence height (feet), picket width (inches), post spacing (feet)",
+    "formula": "Pickets = ceil(length * 12 / (picket_width + gap)). Posts = ceil(length / post_spacing) + 1. Rails = posts * (height == 6 ? 3 : 2).",
+    "status": "pending"
+  },
+  {
+    "slug": "gate-calculator",
+    "name": "Fence Gate Calculator",
+    "description": "Calculate materials for a wood fence gate. Includes frame, pickets, hinges, and latch hardware.",
+    "inputs": "Gate width (feet), gate height (feet), gate style (single, double, walk-through)",
+    "formula": "Pickets = ceil(gate_width * 12 / (picket_width + gap)). Hinges: 2 per gate. Latch: 1 per gate.",
+    "status": "pending"
+  },
+  {
+    "slug": "deck-board-calculator",
+    "name": "Deck Board Calculator",
+    "description": "Calculate deck boards needed for your deck surface. Includes gap allowance and waste factor.",
+    "inputs": "Deck length (feet), deck width (feet), board width (inches), board length (feet), gap between boards (inches)",
+    "formula": "Board coverage = (board_width + gap) / 12. Boards = ceil(deck_length / board_coverage) * ceil(deck_width / board_length). Add 10% waste.",
+    "status": "pending"
+  },
+  {
+    "slug": "deck-railing-calculator",
+    "name": "Deck Railing Calculator",
+    "description": "Calculate deck railing materials: posts, top rail, bottom rail, balusters, and hardware.",
+    "inputs": "Total railing length (feet), railing height (feet), post spacing (feet), baluster spacing (inches)",
+    "formula": "Railing posts = ceil(length / post_spacing) + 1. Balusters = ceil(length * 12 / (baluster_width + gap)). Top and bottom rail = length + 5%.",
+    "status": "pending"
+  },
+  {
+    "slug": "deck-stair-calculator",
+    "name": "Deck Stair Calculator",
+    "description": "Calculate stair stringers, treads, and risers for deck stairs. Ensures code-compliant dimensions.",
+    "inputs": "Total rise (inches), total run (inches), desired tread depth (inches), stair width (feet)",
+    "formula": "Risers = ceil(total_rise / 7.5). Total run = (risers - 1) * tread_depth. Stringers = ceil(stair_width / 16).",
+    "status": "pending"
+  },
+  {
+    "slug": "footing-size-calculator",
+    "name": "Concrete Footing Size Calculator",
+    "description": "Determine proper footing dimensions based on load, soil bearing capacity, and building code.",
+    "inputs": "Load in pounds, soil bearing capacity (psf), footing type",
+    "formula": "Required footing area = load / soil_bearing_capacity. For square pad: side = sqrt(area). Depth: 12 inches minimum below frost line.",
+    "status": "pending"
+  },
+  {
+    "slug": "load-bearing-wall-calculator",
+    "name": "Load Bearing Calculator",
+    "description": "Calculate load on a beam or wall based on floor area supported. Ensures structural beams are properly sized.",
+    "inputs": "Floor area supported (square feet), floor type, joist spacing (inches)",
+    "formula": "Live load: 40 psf living, 125 psf storage. Dead load: 10 psf. Total = area * (live + dead).",
     "status": "pending"
   }
 ]
