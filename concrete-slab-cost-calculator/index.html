@@ -1,1 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Concrete Slab Cost Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate concrete slab cost instantly. Enter length, width, and thickness to get cubic yards, bags, and total cost including labor.">
+<link rel="canonical" href="https://calcblueprint.com/concrete-slab-cost-calculator/">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Concrete Slab Cost Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.6;color:#1a1a1a;background:#f7f7f5}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 1.5rem}
+.container{max-width:720px;margin:0 auto;padding:0 1.5rem}
+header .container{display:flex;align-items:center;justify-content:space-between;max-width:960px}
+.logo{font-size:1.4rem;font-weight:800;color:#fff;text-decoration:none;letter-spacing:-.02em}
+.logo span{color:#f5a623}
+nav a{margin-left:1.5rem;color:#b8c1cc;text-decoration:none;font-size:.95rem}
+main{padding:3rem 0}
+h1{font-size:2.2rem;line-height:1.2;margin-bottom:1rem;color:#1a2332;letter-spacing:-.02em}
+h2{font-size:1.4rem;margin:2rem 0 1rem;color:#1a2332}
+h3{font-size:1.1rem;margin:1.5rem 0 .5rem;color:#1a2332}
+p{margin-bottom:1rem;color:#333}
+.calculator-box{background:#fff;border:1px solid #e0ddd6;border-radius:10px;padding:1.5rem;margin:2rem 0}
+.form-group{margin-bottom:1.25rem}
+label{display:block;font-weight:600;margin-bottom:.4rem;font-size:.95rem;color:#1a2332}
+input,select{width:100%;padding:.75rem;border:1px solid #c9c4bb;border-radius:6px;font-size:1rem;font-family:inherit}
+input:focus,select:focus{outline:2px solid #f5a623;border-color:transparent}
+button{background:#f5a623;color:#1a2332;border:none;padding:1rem 2rem;font-size:1.05rem;font-weight:700;border-radius:6px;cursor:pointer;width:100%;margin-top:.5rem}
+button:hover{background:#e09515}
+.result-box{background:#1a2332;border-radius:10px;padding:1.5rem;margin-top:1.5rem;display:none}
+.result-box.show{display:block}
+.result-row{display:flex;justify-content:space-between;padding:.6rem 0;border-bottom:1px solid #2d3a4d;font-size:.95rem}
+.result-row:last-child{border-bottom:none;padding-top:1rem;margin-top:.5rem;border-top:2px solid #f5a623}
+.result-row .label{color:#b8c1cc}
+.result-row .value{color:#fff;font-weight:700;font-family:"SF Mono",Monaco,monospace}
+.result-row.total .value{font-size:1.6rem;color:#f5a623}
+footer{background:#1a2332;color:#b8c1cc;padding:2rem 0;margin-top:4rem;font-size:.9rem}
+footer .container{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;max-width:960px}
+footer a{color:#b8c1cc;text-decoration:none;margin-right:1rem}
+@media(max-width:600px){h1{font-size:1.6rem}}
+</style>
+</head>
+<body>
+<header><div class="container"><a href="/" class="logo">Calc<span>Blueprint</span></a><nav><a href="/about/">About</a><a href="/contact/">Contact</a></nav></div></header>
+<main><div class="container">
+<h1>Concrete Slab Cost Calculator</h1>
+<p>Enter your slab dimensions to get instant cubic yards, bag count, and total project cost — including materials and typical labor rates.</p>
 
+<div class="calculator-box">
+<div class="form-group"><label for="length">Length (feet)</label><input type="number" id="length" placeholder="e.g., 20" min="0" step="0.1"></div>
+<div class="form-group"><label for="width">Width (feet)</label><input type="number" id="width" placeholder="e.g., 10" min="0" step="0.1"></div>
+<div class="form-group"><label for="thickness">Thickness (inches)</label><select id="thickness"><option value="4">4 inches (standard patio)</option><option value="5">5 inches</option><option value="6">6 inches (driveway)</option><option value="8">8 inches (heavy load)</option><option value="10">10 inches</option><option value="12">12 inches</option></select></div>
+<div class="form-group"><label for="waste">Waste factor (%)</label><select id="waste"><option value="5">5% (precise forms)</option><option value="10" selected>10% (recommended)</option><option value="15">15% (uneven subgrade)</option></select></div>
+<div class="form-group"><label for="price">Concrete price per cubic yard ($)</label><input type="number" id="price" value="150" min="0" step="5"></div>
+<button onclick="calculate()">Calculate</button>
+</div>
+
+<div class="result-box" id="resultBox">
+<div class="result-row"><span class="label">Slab area</span><span class="value" id="areaOut">—</span></div>
+<div class="result-row"><span class="label">Volume (cubic feet)</span><span class="value" id="cfOut">—</span></div>
+<div class="result-row"><span class="label">Volume (cubic yards)</span><span class="value" id="cyOut">—</span></div>
+<div class="result-row"><span class="label">80-lb bags needed</span><span class="value" id="bagsOut">—</span></div>
+<div class="result-row"><span class="label">Concrete cost</span><span class="value" id="matOut">—</span></div>
+<div class="result-row"><span class="label">Labor (est. $6/sq ft)</span><span class="value" id="laborOut">—</span></div>
+<div class="result-row total"><span class="label">Total estimated cost</span><span class="value" id="totalOut">—</span></div>
+</div>
+
+<h2>How to Calculate Concrete Slab Cost</h2>
+<p>The formula is simple: <strong>Volume = Length × Width × Thickness</strong>. Convert everything to feet, then divide by 27 to get cubic yards. One cubic yard of concrete covers an 81 sq ft area at 4 inches thick.</p>
+<p>Most projects add a 10% waste factor to account for spillage, uneven subgrade, and over-excavation. Our calculator applies this automatically based on your selection.</p>
+
+<h2>What Affects the Final Price?</h2>
+<h3>Concrete Type</h3>
+<p>Standard 3,000 PSI concrete costs $140–$170 per cubic yard in most US markets. Higher PSI (4,000–5,000) for structural work runs $170–$220. Fiber mesh or rebar reinforcement adds $0.30–$1.00 per square foot.</p>
+<h3>Labor</h3>
+<p>Finishing labor runs $3–$8 per square foot, depending on complexity. Decorative finishes (stamped, exposed aggregate) can push this to $15–$25 per square foot.</p>
+<h3>Site Access</h3>
+<p>If a concrete truck can't reach your pour site, you'll pay pump truck fees ($500–$1,500) or need to wheelbarrow the concrete (adding significant labor).</p>
+
+<h2>Frequently Asked Questions</h2>
+<h3>How many bags of concrete do I need for a 10x10 slab?</h3>
+<p>A 10×10 slab at 4 inches thick requires 1.23 cubic yards, or about 56 bags of 80-lb concrete mix. For larger pours, ready-mix delivery is far cheaper per yard.</p>
+<h3>How much does a 20x20 concrete slab cost?</h3>
+<p>At 4 inches thick, a 20×20 slab (400 sq ft) needs about 4.94 cubic yards. At $150/yard that's $740 in materials, plus $2,400 in labor for a total of roughly $3,100–$3,500.</p>
+<h3>Is it cheaper to mix my own concrete?</h3>
+<p>For slabs over 1 cubic yard, ready-mix is cheaper and far less labor. Bagged mix only makes sense for small repairs and footings under 20 bags.</p>
+</div></main>
+<footer><div class="container"><div><a href="/">Home</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="/privacy/">Privacy</a></div><div>© 2026 CalcBlueprint.</div></div></footer>
+<script>
+function calculate(){
+const L=parseFloat(document.getElementById('length').value)||0;
+const W=parseFloat(document.getElementById('width').value)||0;
+const T=parseFloat(document.getElementById('thickness').value)||4;
+const waste=parseFloat(document.getElementById('waste').value)||10;
+const price=parseFloat(document.getElementById('price').value)||150;
+if(L===0||W===0){alert('Enter length and width');return;}
+const area=L*W;
+const cf=area*(T/12);
+const cfWaste=cf*(1+waste/100);
+const cy=cfWaste/27;
+const bags=Math.ceil(cfWaste/0.6);
+const mat=cy*price;
+const labor=area*6;
+const total=mat+labor;
+document.getElementById('areaOut').textContent=area.toFixed(0)+' sq ft';
+document.getElementById('cfOut').textContent=cfWaste.toFixed(2)+' cu ft';
+document.getElementById('cyOut').textContent=cy.toFixed(2)+' cu yd';
+document.getElementById('bagsOut').textContent=bags+' bags (80 lb)';
+document.getElementById('matOut').textContent='$'+mat.toFixed(0);
+document.getElementById('laborOut').textContent='$'+labor.toFixed(0);
+document.getElementById('totalOut').textContent='$'+total.toFixed(0);
+document.getElementById('resultBox').classList.add('show');
+}
+</script>
+</body>
+</html>
