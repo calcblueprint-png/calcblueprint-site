@@ -66,24 +66,34 @@ REQUIREMENTS:
 1. Output ONLY the full HTML file, starting with <!DOCTYPE html> and ending with </html>. No markdown fences, no explanation.
 2. Use this exact structure and style (dark navy header #1a2332, amber accent #f5a623, background #f7f7f5).
 3. Include: header with logo "Calc<span>Blueprint</span>" linking to "/", nav with About and Contact links.
-4. Include a calculator-box with labeled inputs and a Calculate button.
+4. Include a calculator-box with labeled inputs and a Calculate button. Add a unit toggle at the top of the calculator-box with two buttons: "Imperial (US)" and "Metric". Imperial uses feet, inches, pounds, cubic yards. Metric uses meters, centimeters, kilograms, cubic meters. Switching the toggle must swap the input labels (Length in feet → Length in meters) and recalculate using the metric formula when Metric is selected. Default to Imperial. Convert results between unit systems correctly: 1 foot = 0.3048 m, 1 inch = 2.54 cm, 1 pound = 0.4536 kg, 1 cubic yard = 0.7646 cubic meters. Display the correct unit label next to every result value.
 5. Include a result-box that shows after clicking Calculate with a list of result rows.
 6. Include 3 long-form content sections below the calculator: "How to Calculate [X]", "What Affects [X]", and "Frequently Asked Questions" with 3 Q&As each. Each section should be 100-200 words with real construction industry detail.
-7. Include a footer with links: Home, About, Contact, Privacy. Year 2026.
-8. Include the JSON-LD schema block: {{"@context":"https://schema.org","@type":"WebApplication","name":"{item['name']}","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{{"@type":"Offer","price":"0","priceCurrency":"USD"}}}}
-9. Include this GA4 snippet in the head exactly:
+7. Immediately below the calculator (before the content sections), include a collapsible "How this calculator works" section using <details> and <summary> tags. Inside, write 2-3 sentences explaining the formula in plain English, and one line stating the authoritative source for the formula (e.g., "Formula based on ACI 318 Building Code Requirements for Structural Concrete" or "Coverage rates per NRCA Roofing Manual and manufacturer specifications" or "Material coverage per ASTM standards"). Choose the correct authoritative source for the specific calculator type.
+8. Include a footer that contains: navigation links (Home, About, Contact, Privacy) followed by a small citation line in this exact format: "Formula source: [Authoritative Source]. Results are estimates for planning — verify with a licensed professional before ordering materials." Year 2026. The [Authoritative Source] must be chosen correctly for the calculator type:
+   - Concrete calculators: "ACI 318 Building Code Requirements for Structural Concrete"
+   - Roofing calculators: "NRCA Roofing Manual and manufacturer installation guides"
+   - Tile/flooring calculators: "TCNA Handbook for Ceramic, Glass, and Stone Tile Installation"
+   - Painting calculators: "Paint manufacturer coverage specifications and ASTM D523"
+   - Fence/deck calculators: "IRC (International Residential Code) and AWPA standards"
+   - Insulation calculators: "DOE (Department of Energy) recommended R-values and manufacturer specs"
+   - HVAC calculators: "ASHRAE Handbook of Fundamentals and ACCA Manual J"
+   - Electrical calculators: "NEC (National Electrical Code) and NFPA 70"
+   - Landscaping calculators: "State agricultural extension service recommendations"
+9. Include the JSON-LD schema block: {{"@context":"https://schema.org","@type":"WebApplication","name":"{item['name']}","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{{"@type":"Offer","price":"0","priceCurrency":"USD"}}}}
+10. Include this GA4 snippet in the head exactly:
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
-10. Include this in the head:
+11. Include this in the head:
 <link rel="canonical" href="https://calcblueprint.com/{item['slug']}/">
 <title>{item['name']} — CalcBlueprint</title>
 <meta name="description" content="{item['description']}">
-11. All JavaScript must be inline at the bottom of the body. Use plain vanilla JS.
-12. The calculator must work correctly with the formula: {item['formula']}
-13. Mobile responsive. No external CSS or JS libraries.
+12. All JavaScript must be inline at the bottom of the body. Use plain vanilla JS.
+13. The calculator must work correctly with the formula: {item['formula']}
+14. Mobile responsive. No external CSS or JS libraries.
+15. The unit toggle must be visually clear — two buttons side by side, with the active one highlighted in the amber accent color.
 
 Output the full HTML file now:"""
-
 
 def call_gemini_once(prompt, model):
     """Single API call. Raises exceptions on failure."""
