@@ -32,7 +32,8 @@
     "description": "Convert between roof pitch, angle, and slope. Calculate rafter length and total roof area from your measurements.",
     "inputs": "Rise, run, building width, eave overhang (with unit toggle)",
     "formula": "Pitch ratio = rise:run. Angle = arctan(rise/run). Slope % = (rise/run)*100. Pitch multiplier = sqrt(1 + (rise/run)^2). Rafter length = half-span * multiplier.",
-    "status": "pending"
+    "status": "done",
+    "regenerated_at": "2026-09-19T04:56:01.367487Z"
   },
   {
     "slug": "shingle-calculator",
