@@ -1,0 +1,74 @@
+[
+  {
+    "slug": "concrete-slab-cost-calculator",
+    "name": "Concrete Slab Cost Calculator",
+    "description": "Calculate concrete slab cost instantly. Enter length, width, and thickness to get cubic yards, bags, and total cost including labor.",
+    "inputs": "Length, width, thickness (with unit toggle), waste factor, price per cubic yard",
+    "formula": "Volume (cubic feet) = length * width * (thickness/12). Cubic yards = cubic feet / 27. Add waste factor. Multiply by price per yard. Labor = area * rate.",
+    "status": "pending"
+  },
+  {
+    "slug": "rebar-spacing-calculator",
+    "name": "Rebar Spacing Calculator",
+    "description": "Calculate rebar spacing, grid layout, and total linear feet for concrete slabs and footings. Free tool for contractors and DIY.",
+    "inputs": "Slab length, slab width, rebar spacing, overlap per splice, bar size (with unit toggle)",
+    "formula": "Bars per direction = ceil(dimension_in_inches / spacing) + 1. Total linear feet accounts for overlaps based on slab length exceeding standard bar length.",
+    "status": "pending"
+  },
+  {
+    "slug": "concrete-footing-calculator",
+    "name": "Concrete Footing Calculator",
+    "description": "Calculate cubic yards of concrete needed for footings and foundations based on width, depth, and total length.",
+    "inputs": "Footing width, footing depth, total length (with unit toggle)",
+    "formula": "Volume (cubic feet) = (width/12) * (depth/12) * length. Cubic yards = cubic feet / 27. Add 10% waste.",
+    "status": "pending"
+  },
+  {
+    "slug": "roof-pitch-calculator",
+    "name": "Roof Pitch Calculator",
+    "description": "Convert between roof pitch, angle, and slope. Calculate rafter length and total roof area from your measurements.",
+    "inputs": "Rise, run, building width, eave overhang (with unit toggle)",
+    "formula": "Pitch ratio = rise:run. Angle = arctan(rise/run). Slope % = (rise/run)*100. Pitch multiplier = sqrt(1 + (rise/run)^2). Rafter length = half-span * multiplier.",
+    "status": "pending"
+  },
+  {
+    "slug": "shingle-calculator",
+    "name": "Shingle Calculator",
+    "description": "Calculate how many bundles of shingles you need for your roof. Enter roof area and pitch to get instant bundles, squares, and waste factor.",
+    "inputs": "Roof length, roof width, roof pitch, waste factor (with unit toggle)",
+    "formula": "Roof area = footprint * pitch_multiplier. Squares = roof_area / 100. Bundles = squares * 3. Add waste factor 10-15%.",
+    "status": "pending"
+  },
+  {
+    "slug": "tile-calculator",
+    "name": "Tile Calculator",
+    "description": "Calculate how many tiles you need for any floor or wall. Includes tile count, boxes, thinset, and grout estimates.",
+    "inputs": "Room length, room width, tile dimensions, waste factor (with unit toggle)",
+    "formula": "Room area = length * width. Tile area = (tile_width * tile_height) / 144. Tiles = ceil(room_area / tile_area * (1 + waste/100)). Thinset bags based on trowel size.",
+    "status": "pending"
+  },
+  {
+    "slug": "paint-calculator",
+    "name": "Paint Calculator",
+    "description": "Calculate how many gallons of paint you need for walls, ceilings, and trim. Free estimator for any room size.",
+    "inputs": "Room dimensions, ceiling height, doors, windows, coats (with unit toggle)",
+    "formula": "Wall area = perimeter * height - doors - windows. Gallons per coat = wall_area / 375. Total = gallons_per_coat * coats.",
+    "status": "pending"
+  },
+  {
+    "slug": "concrete-column-calculator",
+    "name": "Concrete Column Calculator",
+    "description": "Calculate concrete volume for round or square columns. Enter diameter and height to get cubic yards and bag count.",
+    "inputs": "Column shape, diameter or side, height, number of columns (with unit toggle)",
+    "formula": "Round: volume = pi * (diameter/24)^2 * height. Square: volume = (side/12)^2 * height. Multiply by number of columns. Convert to cubic yards.",
+    "status": "pending"
+  },
+  {
+    "slug": "gravel-calculator",
+    "name": "Gravel Calculator",
+    "description": "Calculate how much gravel you need for driveways, walkways, and landscaping. Enter area and depth for instant tons and cubic yards.",
+    "inputs": "Length, width, depth, gravel type (with unit toggle)",
+    "formula": "Volume (cubic feet) = length * width * (depth/12). Cubic yards = cubic feet / 27. Tons = cubic yards * 1.4 (varies by type).",
+    "status": "pending"
+  }
+]
