@@ -14,7 +14,8 @@
     "description": "Calculate tons of asphalt needed for driveways and parking lots. Enter area and thickness for accurate material estimates.",
     "inputs": "Length (feet), width (feet), thickness (inches)",
     "formula": "Volume (cubic feet) = length * width * (thickness/12). Tons = cubic feet * 0.145 (hot mix asphalt density).",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-09-19T04:06:58.248072Z"
   },
   {
     "slug": "board-foot-calculator",
