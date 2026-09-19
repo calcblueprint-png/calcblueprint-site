@@ -14,7 +14,8 @@
     "description": "Calculate rebar spacing, grid layout, and total linear feet for concrete slabs and footings. Free tool for contractors and DIY.",
     "inputs": "Slab length, slab width, rebar spacing, overlap per splice, bar size (with unit toggle)",
     "formula": "Bars per direction = ceil(dimension_in_inches / spacing) + 1. Total linear feet accounts for overlaps based on slab length exceeding standard bar length.",
-    "status": "pending"
+    "status": "done",
+    "regenerated_at": "2026-09-19T04:53:27.550369Z"
   },
   {
     "slug": "concrete-footing-calculator",
