@@ -1,122 +1,559 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="canonical" href="https://calcblueprint.com/concrete-column-calculator/">
-<title>Concrete Column Calculator — CalcBlueprint</title>
-<meta name="description" content="Calculate concrete volume for round or square columns. Enter diameter and height to get cubic yards and bag count.">
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Concrete Column Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
-<style>
-    body { font-family: sans-serif; background: #f7f7f5; color: #333; margin: 0; line-height: 1.6; }
-    header { background: #1a2332; color: #fff; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; }
-    header a { color: #fff; text-decoration: none; font-weight: bold; }
-    header span { color: #f5a623; }
-    nav a { margin-left: 15px; font-size: 0.9rem; }
-    .container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
-    .calculator-box, .result-box { background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 2rem; }
-    .input-group { margin-bottom: 1rem; }
-    label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
-    input, select { width: 100%; padding: 0.8rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-    button { background: #f5a623; color: #fff; border: none; padding: 1rem 2rem; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; }
-    .result-box { display: none; background: #eef2f7; }
-    footer { background: #1a2332; color: #fff; text-align: center; padding: 2rem; margin-top: 3rem; }
-    footer a { color: #f5a623; margin: 0 10px; text-decoration: none; }
-    h2 { color: #1a2332; border-bottom: 2px solid #f5a623; display: inline-block; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concrete Column Calculator — CalcBlueprint</title>
+    <meta name="description" content="Calculate concrete volume for round or square columns. Enter diameter and height to get cubic yards and bag count.">
+    <link rel="canonical" href="https://calcblueprint.com/concrete-column-calculator/">
+    
+    <!-- Google Tag Manager (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js',new Date());
+        gtag('config','G-DHN9J7B497');
+    </script>
+
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Concrete Column Calculator",
+        "applicationCategory": "UtilityApplication",
+        "operatingSystem": "Web",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        }
+    }
+    </script>
+
+    <style>
+        :root {
+            --primary-color: #1a2332;
+            --accent-color: #f5a623;
+            --accent-hover: #e0951d;
+            --bg-color: #f7f7f5;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --text-light: #666666;
+            --border-color: #dddddd;
+            --border-radius: 6px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: #ffffff;
+        }
+
+        .logo span {
+            color: var(--accent-color);
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--accent-color);
+        }
+
+        main {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        .tagline {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        .calculator-box {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .unit-toggle {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            background-color: #f1f1f1;
+            color: var(--text-color);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .toggle-btn.active {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="number"]:focus, select:focus {
+            border-color: var(--accent-color);
+        }
+
+        .btn-calculate {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 1.5rem;
+        }
+
+        .btn-calculate:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .result-box {
+            background-color: #f0f4f8;
+            border-left: 5px solid var(--accent-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .result-box h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-weight: 500;
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        details {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        summary {
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--primary-color);
+            outline: none;
+        }
+
+        details p {
+            margin-top: 0.75rem;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .content-section {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+
+        .content-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--bg-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .content-section p {
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        .faq-item {
+            margin-bottom: 1.25rem;
+        }
+
+        .faq-question {
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.25rem;
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+
+        footer nav {
+            margin-bottom: 1rem;
+        }
+
+        footer nav a {
+            margin: 0 0.75rem;
+            color: #cccccc;
+        }
+
+        footer nav a:hover {
+            color: var(--accent-color);
+        }
+
+        .citation {
+            margin-top: 1rem;
+            color: #aaaaaa;
+            font-size: 0.8rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            nav a {
+                margin: 0 0.75rem;
+            }
+            .calculator-box {
+                padding: 1.25rem;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<header>
-    <a href="/">Calc<span>Blueprint</span></a>
-    <nav><a href="/about">About</a><a href="/contact">Contact</a></nav>
-</header>
+    <header>
+        <a href="/" class="logo">Calc<span>Blueprint</span></a>
+        <nav>
+            <a href="/about/">About</a>
+            <a href="/contact/">Contact</a>
+        </nav>
+    </header>
 
-<div class="container">
-    <h1>Concrete Column Calculator</h1>
-    
-    <div class="calculator-box">
-        <div class="input-group">
-            <label>Column Shape</label>
-            <select id="shape">
-                <option value="round">Round</option>
-                <option value="square">Square</option>
-            </select>
+    <main>
+        <h1>Concrete Column Calculator</h1>
+        <p class="tagline">Accurately estimate concrete volume and bag counts for round and square structural columns.</p>
+
+        <div class="calculator-box">
+            <div class="unit-toggle">
+                <button type="button" class="toggle-btn active" id="btn-imperial" onclick="setUnitSystem('imperial')">Imperial (US)</button>
+                <button type="button" class="toggle-btn" id="btn-metric" onclick="setUnitSystem('metric')">Metric</button>
+            </div>
+
+            <form id="calc-form" onsubmit="calculateVolume(event)">
+                <div class="form-group">
+                    <label for="column-shape">Column Shape</label>
+                    <select id="column-shape" onchange="handleShapeChange()">
+                        <option value="round">Round (Cylindrical)</option>
+                        <option value="square">Square / Rectangular</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label id="dimension-label" for="column-dimension">Diameter (inches)</label>
+                    <input type="number" id="column-dimension" step="any" min="0.1" required placeholder="e.g., 12">
+                </div>
+
+                <div class="form-group">
+                    <label id="height-label" for="column-height">Height (feet)</label>
+                    <input type="number" id="column-height" step="any" min="0.1" required placeholder="e.g., 8">
+                </div>
+
+                <div class="form-group">
+                    <label for="column-quantity">Number of Columns</label>
+                    <input type="number" id="column-quantity" min="1" value="1" required>
+                </div>
+
+                <button type="submit" class="btn-calculate">Calculate Volume</button>
+            </form>
+
+            <div class="result-box" id="results">
+                <h3>Calculation Results</h3>
+                <div class="result-row">
+                    <span class="result-label">Total Volume</span>
+                    <span class="result-value" id="res-volume-primary">0.00 cubic yards</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Total Volume (Secondary)</span>
+                    <span class="result-value" id="res-volume-secondary">0.00 cubic feet</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label" id="bag-label-1">80 lb Bags Required</span>
+                    <span class="result-value" id="res-bags-1">0 bags</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label" id="bag-label-2">60 lb Bags Required</span>
+                    <span class="result-value" id="res-bags-2">0 bags</span>
+                </div>
+            </div>
         </div>
-        <div class="input-group">
-            <label id="dimLabel">Diameter (inches)</label>
-            <input type="number" id="dimension" placeholder="e.g. 12">
-        </div>
-        <div class="input-group">
-            <label>Height (feet)</label>
-            <input type="number" id="height" placeholder="e.g. 10">
-        </div>
-        <div class="input-group">
-            <label>Number of Columns</label>
-            <input type="number" id="count" value="1">
-        </div>
-        <button onclick="calculate()">Calculate</button>
-    </div>
 
-    <div id="resultBox" class="result-box">
-        <h3>Results</h3>
-        <p>Total Cubic Yards: <strong id="resYards">0</strong></p>
-        <p>Estimated 80lb Bags: <strong id="resBags">0</strong></p>
-    </div>
+        <details>
+            <summary>How this calculator works</summary>
+            <p>This calculator determines the volume of a cylinder (for round columns) or a cuboid (for square columns) based on your dimensional inputs, then multiplies the result by the total number of columns. It automatically converts the cubic volume into standard ordering units like cubic yards or cubic meters, and estimates the exact number of premixed concrete bags required for the pour.</p>
+            <p><strong>Formula source:</strong> ACI 318 Building Code Requirements for Structural Concrete.</p>
+        </details>
 
-    <section>
-        <h2>How to Calculate Concrete Columns</h2>
-        <p>Calculating concrete volume for columns requires determining the cross-sectional area and multiplying it by the vertical height. For round columns, use the formula πr², where r is half the diameter. For square columns, simply multiply the side length by itself. Once you have the square footage of the footprint, multiply by the height in feet to get the total cubic feet. Since concrete is sold by the cubic yard, divide your total cubic feet by 27. Always add a 5-10% waste factor to account for spillage, uneven excavation, or formwork deflection during the pour.</p>
-    </section>
+        <section class="content-section">
+            <h2>How to Calculate Concrete Column Volume</h2>
+            <p>Calculating the concrete volume for structural columns requires basic geometric formulas. For a round column, you must calculate the volume of a cylinder. The formula is: <strong>Volume = π × r² × h</strong>, where "r" is the radius and "h" is the height. If you are using imperial units, with a diameter in inches and height in feet, the formula converts to: <strong>Volume (cubic feet) = π × (diameter / 24)² × height</strong>. To convert this to cubic yards, divide the total cubic feet by 27.</p>
+            <p>For square or rectangular columns, the formula is simpler: <strong>Volume = width × length × height</strong>. In imperial terms, with side dimensions in inches and height in feet, the formula is: <strong>Volume (cubic feet) = (side / 12)² × height</strong>. For global projects using metric measurements, a 12-inch (30 cm) round column with an 8-foot (2.4 m) height is calculated using meters to yield cubic meters directly, ensuring seamless material procurement regardless of your location.</p>
+        </section>
 
-    <section>
-        <h2>What Affects Concrete Volume</h2>
-        <p>Several variables impact the actual amount of concrete required on-site. Formwork rigidity is critical; if forms are not properly braced, they may bulge under the hydrostatic pressure of the wet concrete, leading to significant over-ordering. Additionally, the depth of the footing or the presence of steel reinforcement (rebar) displaces a small amount of volume, though this is usually negligible for standard columns. Site conditions, such as the accuracy of the excavation or the levelness of the subgrade, also play a role. Professional contractors typically order slightly more than the theoretical volume to ensure the pour can be completed without cold joints, which occur if the concrete supply is interrupted.</p>
-    </section>
+        <section class="content-section">
+            <h2>What Affects Concrete Column Requirements</h2>
+            <p>When planning a concrete pour for columns, several real-world construction factors can influence the actual volume of material required. Soil conditions and excavation methods play a significant role; for instance, if you are pouring directly into an unlined excavated pier hole, rough and uneven edges can easily increase the required concrete volume by 10% to 15% compared to a smooth cardboard tube form like a Sonotube.</p>
+            <p>Additionally, structural reinforcement must be considered. While steel rebar technically displaces a small amount of concrete, standard industry practice ignores this displacement to provide a safety buffer. It is highly recommended to add a 5% to 10% waste factor to your final estimate to account for spillage, uneven ground, and structural tolerances. For example, a typical residential deck pier measuring 10 inches (25 cm) in diameter and 4 feet (1.2 m) deep should always be ordered with a slight surplus to avoid the costly mistake of running short mid-pour.</p>
+        </section>
 
-    <section>
-        <h2>Frequently Asked Questions</h2>
-        <p><strong>Q: Should I account for rebar in my volume calculation?</strong><br>A: Generally, no. The volume displaced by standard rebar cages is minimal and serves as a built-in safety margin for your order.</p>
-        <p><strong>Q: How many 80lb bags are in a cubic yard?</strong><br>A: One cubic yard of concrete requires approximately 45 bags of 80lb pre-mixed concrete.</p>
-        <p><strong>Q: Why did my forms bulge?</strong><br>A: Bulging usually occurs due to insufficient external bracing or pouring the concrete too quickly, which increases the lateral pressure on the formwork walls.</p>
-    </section>
-</div>
+        <section class="content-section">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <p class="faq-question">How many 80 lb (36 kg) bags of concrete do I need for a 12-inch (30 cm) column?</p>
+                <p>An 8-foot (2.4 m) tall column with a 12-inch (30 cm) diameter requires approximately 6.28 cubic feet (0.18 m³) of concrete. Since a standard 80 lb (36 kg) bag yields roughly 0.6 cubic feet (0.017 m³), you will need approximately 11 bags of concrete to complete the pour, plus an extra bag to account for waste.</p>
+            </div>
+            <div class="faq-item">
+                <p class="faq-question">Should I use round or square columns for structural support?</p>
+                <p>Round columns are highly efficient for load distribution and are incredibly easy to form using commercial cardboard tubes. They are commonly used for deck piers, fence posts, and structural columns. Square columns are often chosen for architectural aesthetics, matching existing walls, or when framing with traditional lumber forms is preferred on-site.</p>
+            </div>
+            <div class="faq-item">
+                <p class="faq-question">How does the depth of the frost line affect column height?</p>
+                <p>In cold climates, structural columns and piers must extend below the local frost line—typically 36 to 48 inches (90 to 120 cm) deep—to prevent frost heaving from shifting the structure. Always consult local building codes to determine the exact depth required in your region before calculating your total column height.</p>
+            </div>
+        </section>
+    </main>
 
-<footer>
-    <a href="/">Home</a><a href="/about">About</a><a href="/contact">Contact</a><a href="/privacy">Privacy</a>
-    <p>&copy; 2026 CalcBlueprint</p>
-</footer>
+    <footer>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/about/">About</a>
+            <a href="/contact/">Contact</a>
+            <a href="/privacy/">Privacy Policy</a>
+        </nav>
+        <p>&copy; 2026 CalcBlueprint. All rights reserved.</p>
+        <p class="citation">Formula source: ACI 318 Building Code Requirements for Structural Concrete. Results are estimates for planning — verify with a licensed professional before ordering materials.</p>
+    </footer>
 
-<script>
-    document.getElementById('shape').addEventListener('change', function() {
-        document.getElementById('dimLabel').innerText = this.value === 'round' ? 'Diameter (inches)' : 'Side (inches)';
-    });
+    <script>
+        let currentUnitSystem = 'imperial';
 
-    function calculate() {
-        const shape = document.getElementById('shape').value;
-        const dim = parseFloat(document.getElementById('dimension').value);
-        const height = parseFloat(document.getElementById('height').value);
-        const count = parseFloat(document.getElementById('count').value);
+        function setUnitSystem(system) {
+            currentUnitSystem = system;
+            
+            // Update active button state
+            document.getElementById('btn-imperial').classList.toggle('active', system === 'imperial');
+            document.getElementById('btn-metric').classList.toggle('active', system === 'metric');
 
-        if (!dim || !height || !count) return alert('Please fill in all fields');
+            // Update labels and placeholders
+            const shape = document.getElementById('column-shape').value;
+            const dimLabel = document.getElementById('dimension-label');
+            const heightLabel = document.getElementById('height-label');
+            const dimInput = document.getElementById('column-dimension');
+            const heightInput = document.getElementById('column-height');
 
-        let volumeCubicFeet = 0;
-        if (shape === 'round') {
-            volumeCubicFeet = Math.PI * Math.pow((dim / 24), 2) * height;
-        } else {
-            volumeCubicFeet = Math.pow((dim / 12), 2) * height;
+            if (system === 'imperial') {
+                dimLabel.textContent = shape === 'round' ? 'Diameter (inches)' : 'Side Width (inches)';
+                heightLabel.textContent = 'Height (feet)';
+                dimInput.placeholder = 'e.g., 12';
+                heightInput.placeholder = 'e.g., 8';
+                document.getElementById('bag-label-1').textContent = '80 lb Bags Required';
+                document.getElementById('bag-label-2').textContent = '60 lb Bags Required';
+            } else {
+                dimLabel.textContent = shape === 'round' ? 'Diameter (centimeters)' : 'Side Width (centimeters)';
+                heightLabel.textContent = 'Height (meters)';
+                dimInput.placeholder = 'e.g., 30';
+                heightInput.placeholder = 'e.g., 2.4';
+                document.getElementById('bag-label-1').textContent = '25 kg Bags Required';
+                document.getElementById('bag-label-2').textContent = '40 kg Bags Required';
+            }
+
+            // Recalculate if results are already visible
+            if (document.getElementById('results').style.display === 'block') {
+                document.getElementById('calc-form').dispatchEvent(new Event('submit'));
+            }
         }
 
-        const totalVolume = volumeCubicFeet * count;
-        const cubicYards = totalVolume / 27;
-        const bags = Math.ceil(cubicYards * 45);
+        function handleShapeChange() {
+            const shape = document.getElementById('column-shape').value;
+            const dimLabel = document.getElementById('dimension-label');
+            
+            if (currentUnitSystem === 'imperial') {
+                dimLabel.textContent = shape === 'round' ? 'Diameter (inches)' : 'Side Width (inches)';
+            } else {
+                dimLabel.textContent = shape === 'round' ? 'Diameter (centimeters)' : 'Side Width (centimeters)';
+            }
+        }
 
-        document.getElementById('resYards').innerText = cubicYards.toFixed(2);
-        document.getElementById('resBags').innerText = bags;
-        document.getElementById('resultBox').style.display = 'block';
-    }
-</script>
+        function calculateVolume(event) {
+            event.preventDefault();
+
+            const shape = document.getElementById('column-shape').value;
+            const dimension = parseFloat(document.getElementById('column-dimension').value);
+            const height = parseFloat(document.getElementById('column-height').value);
+            const quantity = parseInt(document.getElementById('column-quantity').value) || 1;
+
+            if (isNaN(dimension) || isNaN(height) || dimension <= 0 || height <= 0) {
+                alert('Please enter valid positive numbers.');
+                return;
+            }
+
+            let volumeCubicYards = 0;
+            let volumeCubicMeters = 0;
+            let volumeCubicFeet = 0;
+            let volumeLiters = 0;
+            let bags1 = 0;
+            let bags2 = 0;
+
+            if (currentUnitSystem === 'imperial') {
+                // Dimension is in inches, Height is in feet
+                if (shape === 'round') {
+                    // Volume = pi * r^2 * h
+                    // r = (diameter / 12) / 2 = diameter / 24
+                    volumeCubicFeet = Math.PI * Math.pow(dimension / 24, 2) * height * quantity;
+                } else {
+                    // Square: Volume = (side / 12)^2 * h
+                    volumeCubicFeet = Math.pow(dimension / 12, 2) * height * quantity;
+                }
+                volumeCubicYards = volumeCubicFeet / 27;
+                
+                // 80 lb bag yields ~0.6 cu ft
+                bags1 = Math.ceil(volumeCubicFeet / 0.6);
+                // 60 lb bag yields ~0.45 cu ft
+                bags2 = Math.ceil(volumeCubicFeet / 0.45);
+
+                // Update UI for Imperial
+                document.getElementById('res-volume-primary').textContent = volumeCubicYards.toFixed(3) + ' cubic yards';
+                document.getElementById('res-volume-secondary').textContent = volumeCubicFeet.toFixed(2) + ' cubic feet';
+                document.getElementById('res-bags-1').textContent = bags1 + ' bags';
+                document.getElementById('res-bags-2').textContent = bags2 + ' bags';
+
+            } else {
+                // Dimension is in cm, Height is in meters
+                if (shape === 'round') {
+                    // r = (diameter / 100) / 2 = diameter / 200
+                    volumeCubicMeters = Math.PI * Math.pow(dimension / 200, 2) * height * quantity;
+                } else {
+                    // Square: Volume = (side / 100)^2 * h
+                    volumeCubicMeters = Math.pow(dimension / 100, 2) * height * quantity;
+                }
+                volumeLiters = volumeCubicMeters * 1000;
+
+                // 25 kg bag yields ~12.5 liters (0.0125 m3)
+                bags1 = Math.ceil(volumeCubicMeters / 0.0125);
+                // 40 kg bag yields ~20 liters (0.020 m3)
+                bags2 = Math.ceil(volumeCubicMeters / 0.020);
+
+                // Update UI for Metric
+                document.getElementById('res-volume-primary').textContent = volumeCubicMeters.toFixed(3) + ' cubic meters';
+                document.getElementById('res-volume-secondary').textContent = volumeLiters.toFixed(1) + ' liters';
+                document.getElementById('res-bags-1').textContent = bags1 + ' bags';
+                document.getElementById('res-bags-2').textContent = bags2 + ' bags';
+            }
+
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
 </body>
 </html>
