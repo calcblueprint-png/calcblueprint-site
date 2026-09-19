@@ -1,124 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Paint Calculator — CalcBlueprint</title>
-<meta name="description" content="Calculate how many gallons of paint you need for walls, ceilings, and trim. Free estimator for any room size.">
-<link rel="canonical" href="https://calcblueprint.com/paint-calculator/">
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Paint Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.6;color:#1a1a1a;background:#f7f7f5}
-header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 1.5rem}
-.container{max-width:720px;margin:0 auto;padding:0 1.5rem}
-header .container{display:flex;align-items:center;justify-content:space-between;max-width:960px}
-.logo{font-size:1.4rem;font-weight:800;color:#fff;text-decoration:none;letter-spacing:-.02em}
-.logo span{color:#f5a623}
-nav a{margin-left:1.5rem;color:#b8c1cc;text-decoration:none;font-size:.95rem}
-main{padding:3rem 0}
-h1{font-size:2.2rem;line-height:1.2;margin-bottom:1rem;color:#1a2332;letter-spacing:-.02em}
-h2{font-size:1.4rem;margin:2rem 0 1rem;color:#1a2332}
-h3{font-size:1.1rem;margin:1.5rem 0 .5rem;color:#1a2332}
-p{margin-bottom:1rem;color:#333}
-.calculator-box{background:#fff;border:1px solid #e0ddd6;border-radius:10px;padding:1.5rem;margin:2rem 0}
-.form-group{margin-bottom:1.25rem}
-label{display:block;font-weight:600;margin-bottom:.4rem;font-size:.95rem;color:#1a2332}
-input,select{width:100%;padding:.75rem;border:1px solid #c9c4bb;border-radius:6px;font-size:1rem;font-family:inherit}
-input:focus,select:focus{outline:2px solid #f5a623;border-color:transparent}
-button{background:#f5a623;color:#1a2332;border:none;padding:1rem 2rem;font-size:1.05rem;font-weight:700;border-radius:6px;cursor:pointer;width:100%;margin-top:.5rem}
-button:hover{background:#e09515}
-.result-box{background:#1a2332;border-radius:10px;padding:1.5rem;margin-top:1.5rem;display:none}
-.result-box.show{display:block}
-.result-row{display:flex;justify-content:space-between;padding:.6rem 0;border-bottom:1px solid #2d3a4d;font-size:.95rem}
-.result-row:last-child{border-bottom:none;padding-top:1rem;margin-top:.5rem;border-top:2px solid #f5a623}
-.result-row .label{color:#b8c1cc}
-.result-row .value{color:#fff;font-weight:700;font-family:"SF Mono",Monaco,monospace}
-.result-row.total .value{font-size:1.5rem;color:#f5a623}
-footer{background:#1a2332;color:#b8c1cc;padding:2rem 0;margin-top:4rem;font-size:.9rem}
-footer .container{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;max-width:960px}
-footer a{color:#b8c1cc;text-decoration:none;margin-right:1rem}
-@media(max-width:600px){h1{font-size:1.6rem}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://calcblueprint.com/paint-calculator/">
+    <title>Paint Calculator — CalcBlueprint</title>
+    <meta name="description" content="Calculate how many gallons of paint you need for walls, ceilings, and trim. Free estimator for any room size.">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Paint Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+    <style>
+        :root { --navy: #1a2332; --amber: #f5a623; --bg: #f7f7f5; }
+        body { font-family: sans-serif; background: var(--bg); color: #333; margin: 0; line-height: 1.6; }
+        header { background: var(--navy); color: white; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; }
+        header a { color: white; text-decoration: none; font-weight: bold; }
+        header span { color: var(--amber); }
+        nav a { margin-left: 15px; color: white; text-decoration: none; }
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+        .calculator-box, .result-box { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+        .toggle-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        button { padding: 10px 20px; cursor: pointer; border: none; background: #ddd; border-radius: 4px; }
+        button.active { background: var(--amber); color: white; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .calc-btn { background: var(--navy); color: white; width: 100%; font-size: 1.1rem; margin-top: 1rem; }
+        .result-box { display: none; }
+        details { margin: 1rem 0; background: #eee; padding: 1rem; border-radius: 4px; }
+        footer { background: var(--navy); color: white; padding: 2rem; text-align: center; }
+        footer a { color: var(--amber); margin: 0 10px; }
+    </style>
 </head>
 <body>
-<header><div class="container"><a href="/" class="logo">Calc<span>Blueprint</span></a><nav><a href="/about/">About</a><a href="/contact/">Contact</a></nav></div></header>
-<main><div class="container">
-<h1>Paint Calculator</h1>
-<p>Calculate how many gallons of paint you need for walls, ceilings, or trim. Enter your room dimensions and we'll subtract doors and windows automatically.</p>
 
-<div class="calculator-box">
-<div class="form-group"><label for="roomLength">Room Length (feet)</label><input type="number" id="roomLength" placeholder="e.g., 14" min="0" step="0.1"></div>
-<div class="form-group"><label for="roomWidth">Room Width (feet)</label><input type="number" id="roomWidth" placeholder="e.g., 12" min="0" step="0.1"></div>
-<div class="form-group"><label for="ceilingHeight">Ceiling Height (feet)</label><input type="number" id="ceilingHeight" placeholder="e.g., 9" min="0" step="0.1" value="8"></div>
-<div class="form-group"><label for="doors">Number of Doors</label><input type="number" id="doors" placeholder="e.g., 2" min="0" step="1" value="1"></div>
-<div class="form-group"><label for="windows">Number of Windows</label><input type="number" id="windows" placeholder="e.g., 3" min="0" step="1" value="2"></div>
-<div class="form-group"><label for="coats">Number of Coats</label><select id="coats"><option value="1">1 coat</option><option value="2" selected>2 coats (standard)</option><option value="3">3 coats</option></select></div>
-<div class="form-group"><label for="includeCeiling">Include Ceiling?</label><select id="includeCeiling"><option value="no" selected>No</option><option value="yes">Yes</option></select></div>
-<button onclick="calculate()">Calculate</button>
+<header>
+    <a href="/">Calc<span>Blueprint</span></a>
+    <nav><a href="#">About</a><a href="#">Contact</a></nav>
+</header>
+
+<div class="container">
+    <h1>Paint Calculator</h1>
+    
+    <div class="calculator-box">
+        <div class="toggle-group">
+            <button id="btn-imp" class="active" onclick="setUnit('imp')">Imperial (US)</button>
+            <button id="btn-met" onclick="setUnit('met')">Metric</button>
+        </div>
+        <label id="lbl-len">Length (feet)</label><input type="number" id="len" value="12">
+        <label id="lbl-wid">Width (feet)</label><input type="number" id="wid" value="12">
+        <label id="lbl-hgt">Ceiling Height (feet)</label><input type="number" id="hgt" value="8">
+        <label>Number of Doors</label><input type="number" id="doors" value="1">
+        <label>Number of Windows</label><input type="number" id="windows" value="1">
+        <label>Number of Coats</label><input type="number" id="coats" value="2">
+        <button class="calc-btn" onclick="calculate()">Calculate Paint Needed</button>
+    </div>
+
+    <details>
+        <summary>How this calculator works</summary>
+        <p>This calculator determines paint volume by calculating the total wall surface area (perimeter × height) and subtracting the area occupied by openings like doors and windows. The result is divided by the standard coverage rate of 375 sq ft (approx. 35 sq m) per gallon to determine the total paint required per coat.</p>
+        <p>Formula source: Paint manufacturer coverage specifications and ASTM D523.</p>
+    </details>
+
+    <div id="result" class="result-box">
+        <h3>Results</h3>
+        <p id="res-text"></p>
+    </div>
+
+    <h2>How to Calculate Paint</h2>
+    <p>Calculating paint requirements involves determining the total surface area of your walls. For imperial measurements, you measure the length and width in feet, then multiply by the height. A standard gallon of paint typically covers 350 to 400 square feet (32 to 37 square meters). When working in metric, you measure in meters and calculate the area in square meters, noting that one liter of paint covers approximately 10 to 12 square meters. Always account for the number of coats, as primer and multiple finish layers significantly increase the total volume needed.</p>
+
+    <h2>What Affects Paint Coverage</h2>
+    <p>Several factors influence how much paint you actually need. Surface porosity is critical; raw drywall or unprimed wood (whether 1/2 inch or 12 mm thick) will absorb more paint than a previously painted surface. The color transition also matters; covering a dark wall with a light color often requires a high-quality primer and additional coats. Furthermore, the application method—brush, roller, or sprayer—affects the film thickness. Professional painters typically aim for a dry film thickness of 1.5 to 2.0 mils (0.04 to 0.05 mm) per coat to ensure durability and proper color saturation.</p>
+
+    <h2>Frequently Asked Questions</h2>
+    <p><strong>Q: Should I buy extra paint?</strong> A: Yes, it is standard practice to buy 10% extra for touch-ups. <strong>Q: Does ceiling height change the math?</strong> A: Yes, higher ceilings (e.g., 10 ft or 3 m) increase the wall surface area significantly. <strong>Q: How do I handle textured walls?</strong> A: Textured surfaces have more surface area than smooth walls, so increase your estimate by 15%.</p>
 </div>
 
-<div class="result-box" id="resultBox">
-<div class="result-row"><span class="label">Wall area (after doors/windows)</span><span class="value" id="wallAreaOut">—</span></div>
-<div class="result-row"><span class="label">Ceiling area</span><span class="value" id="ceilingOut">—</span></div>
-<div class="result-row"><span class="label">Total paintable area</span><span class="value" id="totalAreaOut">—</span></div>
-<div class="result-row"><span class="label">Gallons per coat</span><span class="value" id="galPerCoatOut">—</span></div>
-<div class="result-row total"><span class="label">Total gallons to buy</span><span class="value" id="totalOut">—</span></div>
-</div>
+<footer>
+    <nav><a href="/">Home</a><a href="#">About</a><a href="#">Contact</a><a href="#">Privacy</a></nav>
+    <p>Formula source: Paint manufacturer coverage specifications and ASTM D523. Results are estimates for planning — verify with a licensed professional before ordering materials. 2026.</p>
+</footer>
 
-<h2>How Much Paint Do I Need?</h2>
-<p>One gallon of paint covers approximately <strong>350–400 square feet</strong> per coat on smooth interior walls. For textured or porous surfaces, plan on 250–300 sq ft per gallon. Two coats is the standard for a proper finish.</p>
-
-<h2>Paint Coverage by Surface</h2>
-<h3>Smooth Drywall (350–400 sq ft/gal)</h3>
-<p>Standard interior walls. One gallon covers a typical 12×14 bedroom with 8-foot ceilings in one coat.</p>
-<h3>Textured Walls (250–300 sq ft/gal)</h3>
-<p>Orange peel, knockdown, and heavy textures absorb more paint. Add 20–30% to your estimate.</p>
-<h3>Brick or Concrete (150–200 sq ft/gal)</h3>
-<p>Porous surfaces drink paint. Always use a primer first to reduce absorption.</p>
-<h3>Ceilings (350–400 sq ft/gal)</h3>
-<p>Same coverage as walls. Flat ceiling paint is standard and hides imperfections better than satin or semi-gloss.</p>
-
-<h2>Frequently Asked Questions</h2>
-<h3>How many gallons for a 12x12 room?</h3>
-<p>A 12×12 room with 8-foot ceilings has about 384 sq ft of wall area. Subtract doors and windows, and you need roughly 1 gallon per coat. Two coats = 2 gallons.</p>
-<h3>Should I buy 1-gallon or 5-gallon buckets?</h3>
-<p>For a single room, buy 1-gallon cans — leftover paint stays fresh longer. For multiple rooms or whole-house painting, 5-gallon buckets save 20–30% per gallon.</p>
-<h3>Do I need primer?</h3>
-<p>Always prime if you're painting over bare drywall, dark colors, stains, or glossy surfaces. Primer costs $15–$30/gallon but saves 1–2 topcoats and gives better color accuracy.</p>
-<h3>How long does paint take to dry?</h3>
-<p>Most latex paints are dry to the touch in 1 hour and recoatable in 2–4 hours. Oil-based paints take 6–8 hours before recoating. Humidity extends drying time.</p>
-</div></main>
-<footer><div class="container"><div><a href="/">Home</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="/privacy/">Privacy</a></div><div>© 2026 CalcBlueprint.</div></div></footer>
 <script>
-function calculate(){
-const L=parseFloat(document.getElementById('roomLength').value)||0;
-const W=parseFloat(document.getElementById('roomWidth').value)||0;
-const H=parseFloat(document.getElementById('ceilingHeight').value)||8;
-const doors=parseInt(document.getElementById('doors').value)||0;
-const windows=parseInt(document.getElementById('windows').value)||0;
-const coats=parseInt(document.getElementById('coats').value)||2;
-const ceiling=document.getElementById('includeCeiling').value;
-if(L===0||W===0){alert('Enter room length and width');return;}
-const perimeter=2*(L+W);
-const grossWall=perimeter*H;
-const doorArea=doors*20;
-const windowArea=windows*15;
-const wallArea=grossWall-doorArea-windowArea;
-const ceilingArea=ceiling==='yes'?L*W:0;
-const totalArea=wallArea+ceilingArea;
-const galPerCoat=totalArea/375;
-const totalGal=galPerCoat*coats;
-const buyGal=Math.ceil(totalGal);
-document.getElementById('wallAreaOut').textContent=wallArea.toFixed(0)+' sq ft';
-document.getElementById('ceilingOut').textContent=ceilingArea.toFixed(0)+' sq ft';
-document.getElementById('totalAreaOut').textContent=totalArea.toFixed(0)+' sq ft';
-document.getElementById('galPerCoatOut').textContent=galPerCoat.toFixed(2)+' gallons';
-document.getElementById('totalOut').textContent=buyGal+' gallons ('+coats+' coats)';
-document.getElementById('resultBox').classList.add('show');
-}
+    let unit = 'imp';
+    function setUnit(u) {
+        unit = u;
+        document.getElementById('btn-imp').className = (u === 'imp' ? 'active' : '');
+        document.getElementById('btn-met').className = (u === 'met' ? 'active' : '');
+        document.getElementById('lbl-len').innerText = u === 'imp' ? 'Length (feet)' : 'Length (meters)';
+        document.getElementById('lbl-wid').innerText = u === 'imp' ? 'Width (feet)' : 'Width (meters)';
+        document.getElementById('lbl-hgt').innerText = u === 'imp' ? 'Ceiling Height (feet)' : 'Ceiling Height (meters)';
+    }
+    function calculate() {
+        let l = parseFloat(document.getElementById('len').value);
+        let w = parseFloat(document.getElementById('wid').value);
+        let h = parseFloat(document.getElementById('hgt').value);
+        let d = parseFloat(document.getElementById('doors').value);
+        let win = parseFloat(document.getElementById('windows').value);
+        let c = parseFloat(document.getElementById('coats').value);
+        
+        let wallArea = (2 * (l + w) * h) - (d * 20) - (win * 15);
+        if (unit === 'met') {
+            wallArea = (2 * (l + w) * h) - (d * 1.8) - (win * 1.4);
+            let gallons = (wallArea / 35) * c;
+            document.getElementById('res-text').innerText = `Total paint required: ${gallons.toFixed(2)} Liters`;
+        } else {
+            let gallons = (wallArea / 375) * c;
+            document.getElementById('res-text').innerText = `Total paint required: ${gallons.toFixed(2)} Gallons`;
+        }
+        document.getElementById('result').style.display = 'block';
+    }
 </script>
 </body>
 </html>

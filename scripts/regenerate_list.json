@@ -59,7 +59,8 @@
     "description": "Calculate how many gallons of paint you need for walls, ceilings, and trim. Free estimator for any room size.",
     "inputs": "Room dimensions, ceiling height, doors, windows, coats (with unit toggle)",
     "formula": "Wall area = perimeter * height - doors - windows. Gallons per coat = wall_area / 375. Total = gallons_per_coat * coats.",
-    "status": "pending"
+    "status": "done",
+    "regenerated_at": "2026-09-19T05:01:51.697129Z"
   },
   {
     "slug": "concrete-column-calculator",
