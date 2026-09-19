@@ -1,119 +1,767 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Concrete Slab Cost Calculator — CalcBlueprint</title>
-<meta name="description" content="Calculate concrete slab cost instantly. Enter length, width, and thickness to get cubic yards, bags, and total cost including labor.">
-<link rel="canonical" href="https://calcblueprint.com/concrete-slab-cost-calculator/">
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Concrete Slab Cost Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.6;color:#1a1a1a;background:#f7f7f5}
-header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 1.5rem}
-.container{max-width:720px;margin:0 auto;padding:0 1.5rem}
-header .container{display:flex;align-items:center;justify-content:space-between;max-width:960px}
-.logo{font-size:1.4rem;font-weight:800;color:#fff;text-decoration:none;letter-spacing:-.02em}
-.logo span{color:#f5a623}
-nav a{margin-left:1.5rem;color:#b8c1cc;text-decoration:none;font-size:.95rem}
-main{padding:3rem 0}
-h1{font-size:2.2rem;line-height:1.2;margin-bottom:1rem;color:#1a2332;letter-spacing:-.02em}
-h2{font-size:1.4rem;margin:2rem 0 1rem;color:#1a2332}
-h3{font-size:1.1rem;margin:1.5rem 0 .5rem;color:#1a2332}
-p{margin-bottom:1rem;color:#333}
-.calculator-box{background:#fff;border:1px solid #e0ddd6;border-radius:10px;padding:1.5rem;margin:2rem 0}
-.form-group{margin-bottom:1.25rem}
-label{display:block;font-weight:600;margin-bottom:.4rem;font-size:.95rem;color:#1a2332}
-input,select{width:100%;padding:.75rem;border:1px solid #c9c4bb;border-radius:6px;font-size:1rem;font-family:inherit}
-input:focus,select:focus{outline:2px solid #f5a623;border-color:transparent}
-button{background:#f5a623;color:#1a2332;border:none;padding:1rem 2rem;font-size:1.05rem;font-weight:700;border-radius:6px;cursor:pointer;width:100%;margin-top:.5rem}
-button:hover{background:#e09515}
-.result-box{background:#1a2332;border-radius:10px;padding:1.5rem;margin-top:1.5rem;display:none}
-.result-box.show{display:block}
-.result-row{display:flex;justify-content:space-between;padding:.6rem 0;border-bottom:1px solid #2d3a4d;font-size:.95rem}
-.result-row:last-child{border-bottom:none;padding-top:1rem;margin-top:.5rem;border-top:2px solid #f5a623}
-.result-row .label{color:#b8c1cc}
-.result-row .value{color:#fff;font-weight:700;font-family:"SF Mono",Monaco,monospace}
-.result-row.total .value{font-size:1.6rem;color:#f5a623}
-footer{background:#1a2332;color:#b8c1cc;padding:2rem 0;margin-top:4rem;font-size:.9rem}
-footer .container{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;max-width:960px}
-footer a{color:#b8c1cc;text-decoration:none;margin-right:1rem}
-@media(max-width:600px){h1{font-size:1.6rem}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://calcblueprint.com/concrete-slab-cost-calculator/">
+    <title>Concrete Slab Cost Calculator — CalcBlueprint</title>
+    <meta name="description" content="Calculate concrete slab cost instantly. Enter length, width, and thickness to get cubic yards, bags, and total cost including labor.">
+
+    <!-- Google Tag Manager (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-DHN9J7B497');
+    </script>
+
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Concrete Slab Cost Calculator",
+        "applicationCategory": "UtilityApplication",
+        "operatingSystem": "Web",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        }
+    }
+    </script>
+
+    <style>
+        :root {
+            --primary: #1a2332;
+            --primary-light: #2c3a4e;
+            --accent: #f5a623;
+            --accent-hover: #e09212;
+            --bg: #f7f7f5;
+            --white: #ffffff;
+            --text: #2d3748;
+            --text-light: #718096;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --radius: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--white);
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        nav a {
+            color: var(--white);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        /* Main Layout */
+        main {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        /* Calculator Box */
+        .calculator-box {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Unit Toggle */
+        .unit-toggle {
+            display: flex;
+            background: var(--bg);
+            padding: 4px;
+            border-radius: var(--radius);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .toggle-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            border-radius: calc(var(--radius) - 2px);
+            transition: all 0.2s;
+        }
+
+        .toggle-btn.active {
+            background: var(--accent);
+            color: var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Input Grid */
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 600px) {
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-wrapper input:focus {
+            border-color: var(--accent);
+        }
+
+        .input-unit {
+            position: absolute;
+            right: 1rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+
+        /* Calculate Button */
+        .calculate-btn {
+            width: 100%;
+            background: var(--accent);
+            color: var(--primary);
+            border: none;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: background-color 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .calculate-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        /* Result Box */
+        .result-box {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px dashed var(--border);
+            display: none;
+        }
+
+        .result-box.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .total-cost-card {
+            background: var(--primary);
+            color: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .total-cost-card .label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .total-cost-card .value {
+            font-size: 2.5rem;
+            font-weight: 800;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .result-card {
+            background: var(--bg);
+            padding: 1rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .result-card .label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .result-card .value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Collapsible Section */
+        details {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1rem 1.5rem;
+            margin-bottom: 2.5rem;
+            border: 1px solid var(--border);
+        }
+
+        summary {
+            font-weight: 700;
+            color: var(--primary);
+            cursor: pointer;
+            outline: none;
+            user-select: none;
+            font-size: 1.1rem;
+        }
+
+        details[open] summary {
+            margin-bottom: 1rem;
+        }
+
+        .details-content p {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+
+        .details-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Content Sections */
+        .content-section {
+            margin-bottom: 3rem;
+        }
+
+        .content-section h2 {
+            font-size: 1.75rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.5rem;
+        }
+
+        .content-section p {
+            margin-bottom: 1.25rem;
+            color: var(--text);
+            font-size: 1.05rem;
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            background: var(--white);
+            padding: 1.25rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .faq-item h3 {
+            font-size: 1.15rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-item p {
+            margin-bottom: 0;
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 3rem 2rem 1.5rem;
+            margin-top: 4rem;
+            border-top: 4px solid var(--accent);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-nav {
+            margin-bottom: 2rem;
+        }
+
+        .footer-nav a {
+            color: var(--white);
+            text-decoration: none;
+            margin: 0 1rem;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .footer-nav a:hover {
+            color: var(--accent);
+        }
+
+        .citation {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.5;
+            border-top: 1px solid var(--primary-light);
+            padding-top: 1.5rem;
+        }
+    </style>
 </head>
 <body>
-<header><div class="container"><a href="/" class="logo">Calc<span>Blueprint</span></a><nav><a href="/about/">About</a><a href="/contact/">Contact</a></nav></div></header>
-<main><div class="container">
-<h1>Concrete Slab Cost Calculator</h1>
-<p>Enter your slab dimensions to get instant cubic yards, bag count, and total project cost — including materials and typical labor rates.</p>
 
-<div class="calculator-box">
-<div class="form-group"><label for="length">Length (feet)</label><input type="number" id="length" placeholder="e.g., 20" min="0" step="0.1"></div>
-<div class="form-group"><label for="width">Width (feet)</label><input type="number" id="width" placeholder="e.g., 10" min="0" step="0.1"></div>
-<div class="form-group"><label for="thickness">Thickness (inches)</label><select id="thickness"><option value="4">4 inches (standard patio)</option><option value="5">5 inches</option><option value="6">6 inches (driveway)</option><option value="8">8 inches (heavy load)</option><option value="10">10 inches</option><option value="12">12 inches</option></select></div>
-<div class="form-group"><label for="waste">Waste factor (%)</label><select id="waste"><option value="5">5% (precise forms)</option><option value="10" selected>10% (recommended)</option><option value="15">15% (uneven subgrade)</option></select></div>
-<div class="form-group"><label for="price">Concrete price per cubic yard ($)</label><input type="number" id="price" value="150" min="0" step="5"></div>
-<button onclick="calculate()">Calculate</button>
-</div>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="/" class="logo">Calc<span>Blueprint</span></a>
+            <nav>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
 
-<div class="result-box" id="resultBox">
-<div class="result-row"><span class="label">Slab area</span><span class="value" id="areaOut">—</span></div>
-<div class="result-row"><span class="label">Volume (cubic feet)</span><span class="value" id="cfOut">—</span></div>
-<div class="result-row"><span class="label">Volume (cubic yards)</span><span class="value" id="cyOut">—</span></div>
-<div class="result-row"><span class="label">80-lb bags needed</span><span class="value" id="bagsOut">—</span></div>
-<div class="result-row"><span class="label">Concrete cost</span><span class="value" id="matOut">—</span></div>
-<div class="result-row"><span class="label">Labor (est. $6/sq ft)</span><span class="value" id="laborOut">—</span></div>
-<div class="result-row total"><span class="label">Total estimated cost</span><span class="value" id="totalOut">—</span></div>
-</div>
+    <!-- Main Content -->
+    <main>
+        <h1>Concrete Slab Cost Calculator</h1>
+        <p class="subtitle">Estimate concrete volume, bag counts, and total installation costs instantly.</p>
 
-<h2>How to Calculate Concrete Slab Cost</h2>
-<p>The formula is simple: <strong>Volume = Length × Width × Thickness</strong>. Convert everything to feet, then divide by 27 to get cubic yards. One cubic yard of concrete covers an 81 sq ft area at 4 inches thick.</p>
-<p>Most projects add a 10% waste factor to account for spillage, uneven subgrade, and over-excavation. Our calculator applies this automatically based on your selection.</p>
+        <!-- Calculator Box -->
+        <div class="calculator-box">
+            <!-- Unit Toggle -->
+            <div class="unit-toggle">
+                <button type="button" class="toggle-btn active" id="btn-imperial" onclick="setUnit('imperial')">Imperial (US)</button>
+                <button type="button" class="toggle-btn" id="btn-metric" onclick="setUnit('metric')">Metric</button>
+            </div>
 
-<h2>What Affects the Final Price?</h2>
-<h3>Concrete Type</h3>
-<p>Standard 3,000 PSI concrete costs $140–$170 per cubic yard in most US markets. Higher PSI (4,000–5,000) for structural work runs $170–$220. Fiber mesh or rebar reinforcement adds $0.30–$1.00 per square foot.</p>
-<h3>Labor</h3>
-<p>Finishing labor runs $3–$8 per square foot, depending on complexity. Decorative finishes (stamped, exposed aggregate) can push this to $15–$25 per square foot.</p>
-<h3>Site Access</h3>
-<p>If a concrete truck can't reach your pour site, you'll pay pump truck fees ($500–$1,500) or need to wheelbarrow the concrete (adding significant labor).</p>
+            <!-- Inputs Grid -->
+            <div class="input-grid">
+                <div class="input-group">
+                    <label id="lbl-length" for="input-length">Length</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="input-length" value="10" step="any" min="0">
+                        <span class="input-unit" id="unit-length">ft</span>
+                    </div>
+                </div>
 
-<h2>Frequently Asked Questions</h2>
-<h3>How many bags of concrete do I need for a 10x10 slab?</h3>
-<p>A 10×10 slab at 4 inches thick requires 1.23 cubic yards, or about 56 bags of 80-lb concrete mix. For larger pours, ready-mix delivery is far cheaper per yard.</p>
-<h3>How much does a 20x20 concrete slab cost?</h3>
-<p>At 4 inches thick, a 20×20 slab (400 sq ft) needs about 4.94 cubic yards. At $150/yard that's $740 in materials, plus $2,400 in labor for a total of roughly $3,100–$3,500.</p>
-<h3>Is it cheaper to mix my own concrete?</h3>
-<p>For slabs over 1 cubic yard, ready-mix is cheaper and far less labor. Bagged mix only makes sense for small repairs and footings under 20 bags.</p>
-</div></main>
-<footer><div class="container"><div><a href="/">Home</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="/privacy/">Privacy</a></div><div>© 2026 CalcBlueprint.</div></div></footer>
-<script>
-function calculate(){
-const L=parseFloat(document.getElementById('length').value)||0;
-const W=parseFloat(document.getElementById('width').value)||0;
-const T=parseFloat(document.getElementById('thickness').value)||4;
-const waste=parseFloat(document.getElementById('waste').value)||10;
-const price=parseFloat(document.getElementById('price').value)||150;
-if(L===0||W===0){alert('Enter length and width');return;}
-const area=L*W;
-const cf=area*(T/12);
-const cfWaste=cf*(1+waste/100);
-const cy=cfWaste/27;
-const bags=Math.ceil(cfWaste/0.6);
-const mat=cy*price;
-const labor=area*6;
-const total=mat+labor;
-document.getElementById('areaOut').textContent=area.toFixed(0)+' sq ft';
-document.getElementById('cfOut').textContent=cfWaste.toFixed(2)+' cu ft';
-document.getElementById('cyOut').textContent=cy.toFixed(2)+' cu yd';
-document.getElementById('bagsOut').textContent=bags+' bags (80 lb)';
-document.getElementById('matOut').textContent='$'+mat.toFixed(0);
-document.getElementById('laborOut').textContent='$'+labor.toFixed(0);
-document.getElementById('totalOut').textContent='$'+total.toFixed(0);
-document.getElementById('resultBox').classList.add('show');
-}
-</script>
+                <div class="input-group">
+                    <label id="lbl-width" for="input-width">Width</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="input-width" value="10" step="any" min="0">
+                        <span class="input-unit" id="unit-width">ft</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label id="lbl-thickness" for="input-thickness">Thickness</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="input-thickness" value="4" step="any" min="0">
+                        <span class="input-unit" id="unit-thickness">in</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="input-waste">Waste Factor</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="input-waste" value="10" step="any" min="0">
+                        <span class="input-unit">%</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label id="lbl-price" for="input-price">Price per Cubic Yard</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="input-price" value="150" step="any" min="0">
+                        <span class="input-unit" id="unit-price">$</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label id="lbl-labor" for="input-labor">Labor Rate per Sq Ft</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="input-labor" value="3.00" step="any" min="0">
+                        <span class="input-unit" id="unit-labor">$</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calculate Button -->
+            <button type="button" class="calculate-btn" onclick="calculate()">Calculate Cost</button>
+
+            <!-- Result Box -->
+            <div class="result-box" id="results">
+                <h3 class="result-title">Calculation Results</h3>
+                <div class="total-cost-card">
+                    <div class="label">Total Estimated Cost</div>
+                    <div class="value" id="res-total-cost">$0.00</div>
+                </div>
+                <div class="results-grid">
+                    <div class="result-card">
+                        <div class="label">Slab Area</div>
+                        <div class="value" id="res-area">0.00 sq ft</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Net Volume</div>
+                        <div class="value" id="res-net-vol">0.00 yd³</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Total Volume (with waste)</div>
+                        <div class="value" id="res-gross-vol">0.00 yd³</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label" id="lbl-res-bags">Estimated Bags Needed</div>
+                        <div class="value" id="res-bags">0</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Material Cost</div>
+                        <div class="value" id="res-mat-cost">$0.00</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Labor Cost</div>
+                        <div class="value" id="res-labor-cost">$0.00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collapsible How It Works -->
+        <details>
+            <summary>How this calculator works</summary>
+            <div class="details-content">
+                <p>This calculator determines the required volume of concrete by multiplying the surface area (length × width) by the planned slab thickness. It converts this volume into cubic yards (for Imperial) or cubic meters (for Metric), applies a user-defined waste factor (typically 5% to 10% to account for spillage and uneven subgrades), and computes total material and labor costs based on your local rates.</p>
+                <p><strong>Authoritative Source:</strong> Formula and structural guidelines are based on the ACI 318 Building Code Requirements for Structural Concrete.</p>
+            </div>
+        </details>
+
+        <!-- Content Section 1 -->
+        <section class="content-section" id="how-to-calculate">
+            <h2>How to Calculate Concrete Slab Cost</h2>
+            <p>Calculating the cost of a concrete slab manually is a straightforward process when you break it down into area, volume, and material requirements. First, determine the surface area by multiplying the length by the width. For example, a standard residential patio measuring 10 by 12 feet (approx. 3 by 3.6 meters) has a surface area of 120 square feet (11.1 square meters).</p>
+            <p>Next, calculate the volume by multiplying the surface area by the slab thickness. Standard residential slabs are typically 4 inches (10 cm) thick. To calculate this in Imperial units, convert the thickness to feet (4 inches / 12 = 0.33 feet) and multiply: 120 sq ft × 0.33 ft = 40 cubic feet. Divide this by 27 to find the volume in cubic yards (1.48 yd³). In metric units, multiply 11.1 square meters by 0.1 meters to get 1.11 cubic meters.</p>
+            <p>Finally, always add a waste factor of 10% to account for subgrade variations and spillage. Multiply this gross volume by your local ready-mix supplier's price per cubic yard (or cubic meter) and add your local labor rate per square foot (or square meter) to finalize your project budget.</p>
+        </section>
+
+        <!-- Content Section 2 -->
+        <section class="content-section" id="what-affects-cost">
+            <h2>What Affects Concrete Slab Cost</h2>
+            <p>Several variables influence the final price of pouring a concrete slab. The primary cost driver is the slab's thickness. While a standard garden shed or pedestrian walkway functions perfectly at 4 inches (10 cm) thick, heavy-duty applications like driveways or RV pads require a thickness of 5 to 6 inches (12 to 15 cm) to support the load, which increases concrete volume requirements by 25% to 50%.</p>
+            <p>Site preparation and accessibility also play massive roles. If your yard requires extensive grading, excavation, or the installation of a gravel subbase of 2 to 4 inches (5 to 10 cm), labor costs will rise. Furthermore, if a ready-mix truck cannot drive directly to the pour site, you may need to rent a concrete pump, adding significant equipment fees to your bottom line.</p>
+            <p>Lastly, structural reinforcement dictates durability and cost. Incorporating steel rebar grids or welded wire mesh adds material expenses but prevents structural cracking. In colder climates, utilizing air-entrained concrete is essential to resist freeze-thaw cycles, slightly increasing the material price per cubic yard (or cubic meter).</p>
+        </section>
+
+        <!-- Content Section 3 -->
+        <section class="content-section" id="faq">
+            <h2>Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <h3>How thick should a standard residential concrete slab be?</h3>
+                <p>For standard residential applications like patios, walkways, and shed bases, a thickness of 4 inches (10 cm) is the industry standard. For driveways or slabs designed to support heavy vehicles, a minimum thickness of 5 to 6 inches (12 to 15 cm) is recommended to prevent structural cracking under load.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How much waste factor should I add to my concrete order?</h3>
+                <p>It is standard practice to add a 10% waste factor to your calculations. This margin accounts for uneven excavation depths, spillage during the pour, and settling. For highly irregular shapes or curved borders, increasing the waste factor to 12% or 15% ensures you do not run short of material mid-pour.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is it cheaper to use pre-mixed bags or order a ready-mix truck?</h3>
+                <p>For small projects under 1 cubic yard (0.76 cubic meters), mixing standard 80-pound (36 kg) bags yourself is generally more cost-effective. However, for larger slabs, ordering ready-mix delivery is highly recommended. Mixing 50+ bags by hand is physically exhausting and makes it difficult to achieve a continuous, monolithic pour before the concrete begins to set.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-nav">
+                <a href="/">Home</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="citation">
+                Formula source: ACI 318 Building Code Requirements for Structural Concrete. Results are estimates for planning — verify with a licensed professional before ordering materials. &copy; 2026 CalcBlueprint.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        let currentUnit = 'imperial';
+
+        // Elements
+        const inputLength = document.getElementById('input-length');
+        const inputWidth = document.getElementById('input-width');
+        const inputThickness = document.getElementById('input-thickness');
+        const inputWaste = document.getElementById('input-waste');
+        const inputPrice = document.getElementById('input-price');
+        const inputLabor = document.getElementById('input-labor');
+
+        const lblLength = document.getElementById('lbl-length');
+        const lblWidth = document.getElementById('lbl-width');
+        const lblThickness = document.getElementById('lbl-thickness');
+        const lblPrice = document.getElementById('lbl-price');
+        const lblLabor = document.getElementById('lbl-labor');
+
+        const unitLength = document.getElementById('unit-length');
+        const unitWidth = document.getElementById('unit-width');
+        const unitThickness = document.getElementById('unit-thickness');
+        const unitPrice = document.getElementById('unit-price');
+        const unitLabor = document.getElementById('unit-labor');
+
+        const btnImperial = document.getElementById('btn-imperial');
+        const btnMetric = document.getElementById('btn-metric');
+
+        const resultsBox = document.getElementById('results');
+
+        function setUnit(unit) {
+            if (currentUnit === unit) return;
+
+            // Convert current input values to keep consistency
+            const L = parseFloat(inputLength.value) || 0;
+            const W = parseFloat(inputWidth.value) || 0;
+            const T = parseFloat(inputThickness.value) || 0;
+            const P = parseFloat(inputPrice.value) || 0;
+            const Lab = parseFloat(inputLabor.value) || 0;
+
+            if (unit === 'metric') {
+                // Imperial to Metric
+                inputLength.value = (L * 0.3048).toFixed(2);
+                inputWidth.value = (W * 0.3048).toFixed(2);
+                inputThickness.value = (T * 2.54).toFixed(1);
+                inputPrice.value = (P / 0.764554857984).toFixed(2); // $/CY to $/CM
+                inputLabor.value = (Lab / 0.09290304).toFixed(2); // $/SF to $/SM
+
+                // Update Labels
+                lblLength.textContent = "Length";
+                unitLength.textContent = "m";
+                lblWidth.textContent = "Width";
+                unitWidth.textContent = "m";
+                lblThickness.textContent = "Thickness";
+                unitThickness.textContent = "cm";
+                lblPrice.textContent = "Price per Cubic Meter";
+                unitPrice.textContent = "$";
+                lblLabor.textContent = "Labor Rate per Sq Meter";
+                unitLabor.textContent = "$";
+
+                btnImperial.classList.remove('active');
+                btnMetric.classList.add('active');
+            } else {
+                // Metric to Imperial
+                inputLength.value = (L / 0.3048).toFixed(2);
+                inputWidth.value = (W / 0.3048).toFixed(2);
+                inputThickness.value = (T / 2.54).toFixed(1);
+                inputPrice.value = (P * 0.764554857984).toFixed(2); // $/CM to $/CY
+                inputLabor.value = (Lab * 0.09290304).toFixed(2); // $/SM to $/SF
+
+                // Update Labels
+                lblLength.textContent = "Length";
+                unitLength.textContent = "ft";
+                lblWidth.textContent = "Width";
+                unitWidth.textContent = "ft";
+                lblThickness.textContent = "Thickness";
+                unitThickness.textContent = "in";
+                lblPrice.textContent = "Price per Cubic Yard";
+                unitPrice.textContent = "$";
+                lblLabor.textContent = "Labor Rate per Sq Ft";
+                unitLabor.textContent = "$";
+
+                btnMetric.classList.remove('active');
+                btnImperial.classList.add('active');
+            }
+
+            currentUnit = unit;
+            if (resultsBox.classList.contains('active')) {
+                calculate();
+            }
+        }
+
+        function calculate() {
+            const L = parseFloat(inputLength.value) || 0;
+            const W = parseFloat(inputWidth.value) || 0;
+            const T = parseFloat(inputThickness.value) || 0;
+            const waste = parseFloat(inputWaste.value) || 0;
+            const price = parseFloat(inputPrice.value) || 0;
+            const laborRate = parseFloat(inputLabor.value) || 0;
+
+            let area = 0;
+            let netVol = 0;
+            let grossVol = 0;
+            let bags = 0;
+            let matCost = 0;
+            let laborCost = 0;
+            let totalCost = 0;
+
+            if (currentUnit === 'imperial') {
+                area = L * W; // sq ft
+                const volCF = area * (T / 12); // cu ft
+                netVol = volCF / 27; // cu yd
+                grossVol = netVol * (1 + (waste / 100)); // cu yd with waste
+                
+                // Standard 80 lb bag of concrete yields approx 0.6 cu ft
+                const grossVolCF = volCF * (1 + (waste / 100));
+                bags = Math.ceil(grossVolCF / 0.6);
+
+                matCost = grossVol * price;
+                laborCost = area * laborRate;
+                totalCost = matCost + laborCost;
+
+                // Display results
+                document.getElementById('res-area').textContent = `${area.toFixed(2)} sq ft`;
+                document.getElementById('res-net-vol').textContent = `${netVol.toFixed(2)} yd³`;
+                document.getElementById('res-gross-vol').textContent = `${grossVol.toFixed(2)} yd³`;
+                document.getElementById('lbl-res-bags').textContent = "Estimated 80lb Bags Needed";
+                document.getElementById('res-bags').textContent = bags.toLocaleString();
+            } else {
+                area = L * W; // sq m
+                netVol = area * (T / 100); // cu m
+                grossVol = netVol * (1 + (waste / 100)); // cu m with waste
+
+                // Standard 40 kg bag of concrete yields approx 0.02 cu m
+                bags = Math.ceil(grossVol / 0.02);
+
+                matCost = grossVol * price;
+                laborCost = area * laborRate;
+                totalCost = matCost + laborCost;
+
+                // Display results
+                document.getElementById('res-area').textContent = `${area.toFixed(2)} m²`;
+                document.getElementById('res-net-vol').textContent = `${netVol.toFixed(2)} m³`;
+                document.getElementById('res-gross-vol').textContent = `${grossVol.toFixed(2)} m³`;
+                document.getElementById('lbl-res-bags').textContent = "Estimated 40kg Bags Needed";
+                document.getElementById('res-bags').textContent = bags.toLocaleString();
+            }
+
+            document.getElementById('res-mat-cost').textContent = `$${matCost.toFixed(2)}`;
+            document.getElementById('res-labor-cost').textContent = `$${laborCost.toFixed(2)}`;
+            document.getElementById('res-total-cost').textContent = `$${totalCost.toFixed(2)}`;
+
+            resultsBox.classList.add('active');
+            resultsBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
 </body>
 </html>

@@ -5,7 +5,8 @@
     "description": "Calculate concrete slab cost instantly. Enter length, width, and thickness to get cubic yards, bags, and total cost including labor.",
     "inputs": "Length, width, thickness (with unit toggle), waste factor, price per cubic yard",
     "formula": "Volume (cubic feet) = length * width * (thickness/12). Cubic yards = cubic feet / 27. Add waste factor. Multiply by price per yard. Labor = area * rate.",
-    "status": "pending"
+    "status": "done",
+    "regenerated_at": "2026-09-19T04:51:57.914786Z"
   },
   {
     "slug": "rebar-spacing-calculator",
