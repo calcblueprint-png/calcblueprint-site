@@ -5,7 +5,8 @@
     "description": "Calculate how much gravel you need for driveways, walkways, and landscaping. Enter area and depth for instant tons and cubic yards.",
     "inputs": "Length (feet), width (feet), depth (inches), gravel type (pea gravel, crushed stone, river rock)",
     "formula": "Volume (cubic feet) = length * width * (depth/12). Cubic yards = cubic feet / 27. Tons = cubic yards * 1.4 (varies by type).",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-09-19T02:13:34.642928Z"
   },
   {
     "slug": "asphalt-calculator",

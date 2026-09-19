@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://calcblueprint.com/gravel-calculator/">
+    <title>Gravel Calculator — CalcBlueprint</title>
+    <meta name="description" content="Calculate how much gravel you need for driveways, walkways, and landscaping. Enter area and depth for instant tons and cubic yards.">
+    
+    <!-- Google Tag Manager (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"WebApplication","name":"Gravel Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+    </script>
+
+    <style>
+        /* CSS Variables for Theme Consistency */
+        :root {
+            --primary-navy: #1a2332;
+            --accent-amber: #f5a623;
+            --bg-light: #f7f7f5;
+            --white: #ffffff;
+            --text-dark: #2d3748;
+            --text-muted: #718096;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --transition: all 0.2s ease-in-out;
+        }
+
+        /* Reset & Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--primary-navy);
+            color: var(--white);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-md);
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--accent-amber);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        nav a {
+            font-weight: 500;
+            font-size: 15px;
+            transition: var(--transition);
+        }
+
+        nav a:hover {
+            color: var(--accent-amber);
+        }
+
+        /* Main Content Layout */
+        main {
+            padding: 40px 0;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .hero-section h1 {
+            font-size: 36px;
+            color: var(--primary-navy);
+            margin-bottom: 12px;
+            font-weight: 800;
+        }
+
+        .hero-section p {
+            font-size: 18px;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Calculator Layout */
+        .calculator-container {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            padding: 30px;
+            margin-bottom: 50px;
+            border: 1px solid var(--border-color);
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--primary-navy);
+        }
+
+        .form-group input, .form-group select {
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 16px;
+            transition: var(--transition);
+            outline: none;
+            background-color: var(--white);
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--accent-amber);
+            box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.15);
+        }
+
+        .btn-calculate {
+            background-color: var(--accent-amber);
+            color: var(--primary-navy);
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .btn-calculate:hover {
+            background-color: #e09216;
+            transform: translateY(-1px);
+        }
+
+        /* Result Box Styles */
+        .result-box {
+            display: none;
+            background-color: #fcf8f2;
+            border: 2px solid rgba(245, 166, 35, 0.3);
+            border-radius: 8px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+
+        .result-box.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .result-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary-navy);
+            margin-bottom: 16px;
+            border-bottom: 1px solid rgba(245, 166, 35, 0.2);
+            padding-bottom: 8px;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: var(--primary-navy);
+            font-size: 18px;
+        }
+
+        .result-value span {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-left: 4px;
+        }
+
+        /* Long-form Content Sections */
+        .content-section {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 35px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .content-section h2 {
+            font-size: 24px;
+            color: var(--primary-navy);
+            margin-bottom: 16px;
+            font-weight: 700;
+            border-left: 4px solid var(--accent-amber);
+            padding-left: 12px;
+        }
+
+        .content-section p {
+            color: var(--text-dark);
+            margin-bottom: 16px;
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        /* FAQ Accordion Styles */
+        .faq-item {
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--primary-navy);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-question::after {
+            content: '+';
+            font-size: 20px;
+            color: var(--accent-amber);
+            font-weight: bold;
+            transition: var(--transition);
+        }
+
+        .faq-item.open .faq-question::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-top: 0;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 200px;
+            margin-top: 10px;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: var(--primary-navy);
+            color: var(--white);
+            padding: 40px 0 20px;
+            margin-top: 60px;
+            font-size: 14px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (min-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+
+        .footer-brand h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .footer-brand h3 span {
+            color: var(--accent-amber);
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .footer-links {
+                flex-direction: row;
+                justify-content: flex-end;
+                gap: 24px;
+            }
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-amber);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <a href="/" class="logo">Calc<span>Blueprint</span></a>
+            <nav>
+                <ul>
+                    <li><a href="/about/">About</a></li>
+                    <li><a href="/contact/">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <section class="hero-section">
+            <h1>Gravel Calculator</h1>
+            <p>Accurately estimate the volume and weight of gravel required for your driveway, walkway, patio, or landscaping project.</p>
+        </section>
+
+        <!-- Calculator Box -->
+        <section class="calculator-container">
+            <div class="calculator-grid">
+                <div class="form-group">
+                    <label for="length">Length (Feet)</label>
+                    <input type="number" id="length" placeholder="e.g., 30" min="0" step="any" required>
+                </div>
+                <div class="form-group">
+                    <label for="width">Width (Feet)</label>
+                    <input type="number" id="width" placeholder="e.g., 10" min="0" step="any" required>
+                </div>
+                <div class="form-group">
+                    <label for="depth">Depth (Inches)</label>
+                    <input type="number" id="depth" placeholder="e.g., 3" min="0" step="any" required>
+                </div>
+                <div class="form-group">
+                    <label for="gravel-type">Gravel Type</label>
+                    <select id="gravel-type">
+                        <option value="pea-gravel">Pea Gravel (1.40 tons/yd³)</option>
+                        <option value="crushed-stone" selected>Crushed Stone (1.45 tons/yd³)</option>
+                        <option value="river-rock">River Rock (1.35 tons/yd³)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button type="button" class="btn-calculate" onclick="calculateGravel()">Calculate Material Needed</button>
+
+            <!-- Result Box -->
+            <div class="result-box" id="resultBox">
+                <div class="result-title">Calculation Results</div>
+                <div class="result-row">
+                    <span class="result-label">Total Volume (Cubic Feet)</span>
+                    <span class="result-value" id="resCf">0.00 <span>ft³</span></span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Total Volume (Cubic Yards)</span>
+                    <span class="result-value" id="resCy">0.00 <span>yd³</span></span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Estimated Weight (Tons)</span>
+                    <span class="result-value" id="resTons">0.00 <span>tons</span></span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Estimated 0.5 cu ft Bags (Standard Retail)</span>
+                    <span class="result-value" id="resBags">0 <span>bags</span></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Long-form Content 1 -->
+        <section class="content-section">
+            <h2>How to Calculate Gravel</h2>
+            <p>Calculating the exact amount of gravel needed for your project is crucial to avoid over-ordering or running short mid-job. To manually calculate the required volume, you must first measure the length and width of the coverage area in feet, and the desired depth in inches. Convert the depth from inches to feet by dividing by 12. Next, multiply the length, width, and converted depth together to find the total volume in cubic feet.</p>
+            <p>Since most commercial quarries and landscape supply yards sell bulk gravel by the cubic yard, you must convert your cubic feet measurement. Divide your total cubic feet by 27 (since there are 27 cubic feet in a cubic yard). Finally, to convert cubic yards to tons—the standard unit of weight for commercial deliveries—multiply the cubic yards by the density factor of your chosen material. Standard crushed stone typically weighs about 1.4 to 1.45 tons per cubic yard.</p>
+        </section>
+
+        <!-- Long-form Content 2 -->
+        <section class="content-section">
+            <h2>What Affects Gravel Coverage & Weight</h2>
+            <p>Several real-world variables can alter the actual amount of gravel you need compared to a raw mathematical calculation. The most significant factor is compaction. When gravel is spread, graded, and compacted using heavy machinery or a plate compactor, the air voids between the stones are reduced. This causes the material to settle, reducing its overall volume by 10% to 15%. To compensate for this compaction loss, professional contractors always add a 10% to 15% safety buffer to their final order.</p>
+            <p>Additionally, the size and shape of the aggregate dramatically affect the weight-to-volume ratio. Clean, rounded river rocks have more uniform spaces between them, making them lighter per cubic yard than dense, angular crushed stone mixed with fine dust (often called crusher run or road base). Moisture content also plays a role; wet gravel stored outdoors will weigh significantly more than dry gravel, which can affect delivery weight limits and payload capacities.</p>
+        </section>
+
+        <!-- Long-form Content 3 (FAQ) -->
+        <section class="content-section">
+            <h2>Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">How deep should gravel be for a driveway?</div>
+                <div class="faq-answer">
+                    For a standard residential driveway, a total gravel depth of 4 to 6 inches is highly recommended. This is typically installed in multiple layers: a 3-to-4-inch base layer of larger, angular crushed stone (such as #3 or #4 stone) to provide structural stability, topped with a 2-inch finish layer of smaller gravel mixed with fines (such as crushed run) that compacts into a firm, driving surface.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">What is the difference between pea gravel and crushed stone?</div>
+                <div class="faq-answer">
+                    Pea gravel consists of naturally weathered, smooth, rounded stones that are comfortable to walk on but tend to shift underfoot, making them ideal for walkways and playgrounds. Crushed stone is mechanically fractured rock with sharp, angular edges. These angular edges lock together under pressure, providing a highly stable, non-shifting foundation perfect for driveways, sub-bases, and heavy-traffic areas.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">How much extra gravel should I order for compaction?</div>
+                <div class="faq-answer">
+                    It is standard construction industry practice to add a 10% to 15% safety margin to your calculated total. This extra material accounts for compaction during installation, settling into the soft subgrade soil, and minor variations or unevenness in the excavation depth across the project site.
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>Calc<span>Blueprint</span></h3>
+                    <p>Accurate, professional-grade calculators for construction, landscaping, and DIY projects.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="/">Home</a>
+                    <a href="/about/">About</a>
+                    <a href="/contact/">Contact</a>
+                    <a href="/privacy/">Privacy Policy</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 CalcBlueprint. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        function calculateGravel() {
+            const length = parseFloat(document.getElementById('length').value);
+            const width = parseFloat(document.getElementById('width').value);
+            const depth = parseFloat(document.getElementById('depth').value);
+            const gravelType = document.getElementById('gravel-type').value;
+
+            if (isNaN(length) || length <= 0 || isNaN(width) || width <= 0 || isNaN(depth) || depth <= 0) {
+                alert('Please enter valid positive numbers for length, width, and depth.');
+                return;
+            }
+
+            // Volume in Cubic Feet = L * W * (D / 12)
+            const volumeCf = length * width * (depth / 12);
+            
+            // Volume in Cubic Yards = CF / 27
+            const volumeCy = volumeCf / 27;
+
+            // Density factors based on selection
+            let densityFactor = 1.45; // Default crushed stone
+            if (gravelType === 'pea-gravel') {
+                densityFactor = 1.40;
+            } else if (gravelType === 'river-rock') {
+                densityFactor = 1.35;
+            }
+
+            // Tons = Cubic Yards * Density Factor
+            const tons = volumeCy * densityFactor;
+
+            // Standard retail bag is typically 0.5 cubic feet
+            const bags = Math.ceil(volumeCf / 0.5);
+
+            // Display Results
+            document.getElementById('resCf').innerHTML = volumeCf.toFixed(2) + ' <span>ft³</span>';
+            document.getElementById('resCy').innerHTML = volumeCy.toFixed(2) + ' <span>yd³</span>';
+            document.getElementById('resTons').innerHTML = tons.toFixed(2) + ' <span>tons</span>';
+            document.getElementById('resBags').innerHTML = bags.toLocaleString() + ' <span>bags</span>';
+
+            // Show Result Box
+            const resultBox = document.getElementById('resultBox');
+            resultBox.classList.add('active');
+
+            // Smooth scroll to results on small screens
+            resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function toggleFaq(element) {
+            const item = element.parentElement;
+            item.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
