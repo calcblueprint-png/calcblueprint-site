@@ -102,7 +102,7 @@ def call_gemini_once(prompt, model):
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
             "temperature": 0.4,
-            "maxOutputTokens": 8192,
+            "maxOutputTokens": 32768,
         },
     }
     req = urllib.request.Request(
@@ -180,16 +180,44 @@ def generate_with_fallback(prompt):
 
 def extract_html(text):
     text = text.strip()
+    # Remove markdown fences if present
     text = re.sub(r"^```html\s*", "", text)
     text = re.sub(r"^```\s*", "", text)
     text = re.sub(r"\s*```$", "", text)
+
+    # Try to find full HTML document first
     start = text.find("<!DOCTYPE html>")
     if start == -1:
         start = text.find("<html")
     end = text.rfind("</html>")
-    if start == -1 or end == -1:
-        raise ValueError("Could not extract HTML from model output")
-    return text[start:end + len("</html>")]
+
+    # If we have both start and end, extract cleanly
+    if start != -1 and end != -1:
+        return text[start:end + len("</html>")]
+
+    # Fallback 1: We have a start but no end (truncated response)
+    if start != -1:
+        print(f"WARNING: No closing </html> tag found. Response appears truncated.")
+        print(f"First 200 chars: {text[:200]}")
+        print(f"Last 300 chars: {text[-300:]}")
+        # Try to close the document if it's a valid HTML fragment
+        truncated = text[start:]
+        if "<body" in truncated:
+            # Close any open tags and return
+            if "</body>" not in truncated:
+                truncated += "\n</body>"
+            if "</html>" not in truncated:
+                truncated += "\n</html>"
+            print("Attempted to close truncated HTML")
+            return truncated
+        raise ValueError("Response truncated before body started — retry needed")
+
+    # Fallback 2: No HTML at all — log everything for debugging
+    print("ERROR: No HTML found in response.")
+    print(f"Response length: {len(text)} characters")
+    print(f"First 500 chars:\n{text[:500]}")
+    print(f"Last 500 chars:\n{text[-500:]}")
+    raise ValueError("Could not extract HTML from model output — see logs above")
 
 
 def write_page(slug, html):
