@@ -41,7 +41,8 @@
     "description": "Calculate how many bundles of shingles you need for your roof. Enter roof area and pitch to get instant bundles, squares, and waste factor.",
     "inputs": "Roof length, roof width, roof pitch, waste factor (with unit toggle)",
     "formula": "Roof area = footprint * pitch_multiplier. Squares = roof_area / 100. Bundles = squares * 3. Add waste factor 10-15%.",
-    "status": "pending"
+    "status": "done",
+    "regenerated_at": "2026-09-19T04:57:44.218043Z"
   },
   {
     "slug": "tile-calculator",
