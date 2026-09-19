@@ -79,8 +79,15 @@ REQUIREMENTS:
    - Insulation calculators: "DOE (Department of Energy) recommended R-values and manufacturer specs"
    - HVAC calculators: "ASHRAE Handbook of Fundamentals and ACCA Manual J"
    - Electrical calculators: "NEC (National Electrical Code) and NFPA 70"
+   - Asphalt/paving calculators: "Asphalt Institute MS-22 and NAPA (National Asphalt Pavement Association) specifications"
+   - Masonry/brick/block calculators: "TMS 402/602 (Masonry Standards Joint Committee) and ASTM C270"
+   - Gravel/aggregate calculators: "AASHTO M147 and state DOT aggregate specifications"
+   - Lumber/wood calculators: "AWC (American Wood Council) NDS and SPIB grading rules"
+   - Flooring calculators: "NWFA (National Wood Flooring Association) installation guidelines"
+   - HVAC/ductwork calculators: "ACCA Manual D and ASHRAE Handbook of Fundamentals"
+   - Drainage/waterproofing calculators: "ICC (International Code Council) and ASTM D standards"
    - Landscaping calculators: "State agricultural extension service recommendations"
-9. Include the JSON-LD schema block: {{"@context":"https://schema.org","@type":"WebApplication","name":"{item['name']}","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{{"@type":"Offer","price":"0","priceCurrency":"USD"}}}}
+   9. Include the JSON-LD schema block: {{"@context":"https://schema.org","@type":"WebApplication","name":"{item['name']}","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{{"@type":"Offer","price":"0","priceCurrency":"USD"}}}}
 10. Include this GA4 snippet in the head exactly:
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
