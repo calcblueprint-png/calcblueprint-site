@@ -3,27 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://calcblueprint.com/concrete-footing-calculator/">
     <title>Concrete Footing Calculator — CalcBlueprint</title>
     <meta name="description" content="Calculate cubic yards of concrete needed for footings and foundations based on width, depth, and total length.">
-    <link rel="canonical" href="https://calcblueprint.com/concrete-footing-calculator/">
-    
+
     <!-- Google Tag Manager (GA4) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
-    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-DHN9J7B497');
+    </script>
 
     <!-- JSON-LD Schema -->
     <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Concrete Footing Calculator",
-      "applicationCategory": "UtilityApplication",
-      "operatingSystem": "Web",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      }
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Concrete Footing Calculator",
+        "applicationCategory": "UtilityApplication",
+        "operatingSystem": "Web",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        }
     }
     </script>
 
@@ -34,21 +39,20 @@
             --accent-hover: #e09212;
             --bg: #f7f7f5;
             --card-bg: #ffffff;
-            --text: #2d3748;
-            --text-light: #718096;
-            --border: #e2e8f0;
-            --success: #2f855a;
-            --success-bg: #f0fff4;
+            --text: #333333;
+            --text-light: #666666;
+            --border: #dddddd;
+            --success: #2e7d32;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg);
             color: var(--text);
             line-height: 1.6;
@@ -58,10 +62,18 @@
             background-color: var(--primary);
             color: #ffffff;
             padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-container {
+            max-width: 1100px;
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .logo {
@@ -69,8 +81,7 @@
             font-weight: 700;
             text-decoration: none;
             color: #ffffff;
-            display: flex;
-            align-items: center;
+            letter-spacing: -0.5px;
         }
 
         .logo span {
@@ -81,7 +92,7 @@
             color: #ffffff;
             text-decoration: none;
             margin-left: 1.5rem;
-            font-size: 0.95rem;
+            font-weight: 500;
             transition: color 0.2s;
         }
 
@@ -89,43 +100,72 @@
             color: var(--accent);
         }
 
-        main {
+        .container {
             max-width: 800px;
             margin: 2rem auto;
             padding: 0 1.5rem;
         }
 
-        .calculator-container {
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        h1 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 2.2rem;
+            text-align: center;
+        }
+
+        .tagline {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .calculator-box {
+            background: var(--card-bg);
+            border-radius: 12px;
             padding: 2rem;
-            margin-bottom: 2.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .toggle-container {
+            display: flex;
+            background: #eef1f5;
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 2rem;
             border: 1px solid var(--border);
         }
 
-        h1 {
-            color: var(--primary);
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .intro-text {
-            color: var(--text-light);
-            margin-bottom: 1.5rem;
+        .toggle-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 600;
             font-size: 1rem;
+            color: var(--text-light);
+            border-radius: 6px;
+            transition: all 0.2s ease;
         }
 
-        .form-group {
-            margin-bottom: 1.25rem;
+        .toggle-btn.active {
+            background: var(--accent);
+            color: var(--primary);
+            box-shadow: 0 2px 8px rgba(245, 166, 35, 0.3);
         }
 
-        label {
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
             display: block;
             font-weight: 600;
             margin-bottom: 0.5rem;
             color: var(--primary);
-            font-size: 0.95rem;
         }
 
         .input-wrapper {
@@ -134,70 +174,72 @@
             align-items: center;
         }
 
-        input[type="number"] {
+        .input-wrapper input {
             width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 1rem;
-            color: var(--text);
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1.1rem;
+            outline: none;
             transition: border-color 0.2s;
         }
 
-        input[type="number"]:focus {
-            outline: none;
-            border-color: var(--accent);
+        .input-wrapper input:focus {
+            border-color: var(--primary);
         }
 
-        .unit {
+        .input-unit {
             position: absolute;
-            right: 1rem;
+            right: 16px;
+            font-weight: 600;
             color: var(--text-light);
-            font-size: 0.9rem;
             pointer-events: none;
         }
 
-        .btn-calculate {
-            display: block;
+        .calculate-btn {
             width: 100%;
             background-color: var(--accent);
             color: var(--primary);
             border: none;
-            padding: 1rem;
-            font-size: 1.1rem;
+            padding: 16px;
+            font-size: 1.2rem;
             font-weight: 700;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.2s;
-            margin-top: 1.5rem;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 4px 12px rgba(245, 166, 35, 0.2);
         }
 
-        .btn-calculate:hover {
+        .calculate-btn:hover {
             background-color: var(--accent-hover);
         }
 
+        .calculate-btn:active {
+            transform: scale(0.98);
+        }
+
         .result-box {
-            display: none;
             margin-top: 2rem;
             padding: 1.5rem;
-            background-color: var(--success-bg);
-            border: 1px solid #c6f6d5;
-            border-radius: 6px;
+            background: #f0f4f8;
+            border-radius: 8px;
+            border-left: 5px solid var(--accent);
+            display: none;
         }
 
         .result-box h3 {
-            color: var(--success);
+            color: var(--primary);
             margin-bottom: 1rem;
-            font-size: 1.2rem;
-            border-bottom: 2px solid #c6f6d5;
+            font-size: 1.3rem;
+            border-bottom: 2px solid var(--border);
             padding-bottom: 0.5rem;
         }
 
         .result-row {
             display: flex;
             justify-content: space-between;
-            padding: 0.5rem 0;
-            border-bottom: 1px dashed #e2e8f0;
+            padding: 0.75rem 0;
+            border-bottom: 1px dashed var(--border);
         }
 
         .result-row:last-child {
@@ -206,11 +248,13 @@
 
         .result-label {
             font-weight: 500;
+            color: var(--text-light);
         }
 
         .result-value {
             font-weight: 700;
             color: var(--primary);
+            font-size: 1.1rem;
         }
 
         .result-value.highlight {
@@ -218,86 +262,111 @@
             font-size: 1.2rem;
         }
 
+        details {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        summary {
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--primary);
+            outline: none;
+        }
+
+        details p {
+            margin-top: 0.75rem;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
         .content-section {
             margin-bottom: 2.5rem;
-            background-color: var(--card-bg);
-            padding: 2rem;
-            border-radius: 8px;
-            border: 1px solid var(--border);
         }
 
         .content-section h2 {
             color: var(--primary);
-            font-size: 1.4rem;
             margin-bottom: 1rem;
-            border-bottom: 2px solid var(--accent);
+            font-size: 1.6rem;
+            border-bottom: 2px solid var(--primary);
             padding-bottom: 0.3rem;
-            display: inline-block;
         }
 
         .content-section p {
             margin-bottom: 1rem;
             color: var(--text);
-            font-size: 0.95rem;
+            font-size: 1.05rem;
         }
 
         .faq-item {
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.5rem;
         }
 
         .faq-question {
             font-weight: 700;
             color: var(--primary);
-            margin-bottom: 0.25rem;
-            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
         }
 
         .faq-answer {
             color: var(--text-light);
-            font-size: 0.95rem;
+            font-size: 1rem;
         }
 
         footer {
             background-color: var(--primary);
             color: #ffffff;
-            text-align: center;
-            padding: 2rem;
+            padding: 3rem 2rem 1.5rem;
             margin-top: 4rem;
             font-size: 0.9rem;
         }
 
-        .footer-links {
-            margin-bottom: 1rem;
+        .footer-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            text-align: center;
         }
 
-        .footer-links a {
+        .footer-nav {
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-nav a {
             color: #ffffff;
             text-decoration: none;
-            margin: 0 0.75rem;
+            margin: 0 1rem;
+            transition: color 0.2s;
         }
 
-        .footer-links a:hover {
+        .footer-nav a:hover {
             color: var(--accent);
         }
 
-        .error-msg {
-            color: #e53e3e;
-            font-size: 0.85rem;
-            margin-top: 0.25rem;
-            display: none;
+        .citation {
+            color: #a0aec0;
+            font-size: 0.8rem;
+            margin-top: 1.5rem;
+            border-top: 1px solid #2d3748;
+            padding-top: 1.5rem;
         }
 
         @media (max-width: 600px) {
-            header {
+            h1 {
+                font-size: 1.8rem;
+            }
+            .calculator-box {
+                padding: 1.2rem;
+            }
+            .header-container {
                 flex-direction: column;
                 gap: 1rem;
-                text-align: center;
             }
             nav a {
                 margin: 0 0.75rem;
-            }
-            main {
-                margin: 1rem auto;
             }
         }
     </style>
@@ -305,176 +374,227 @@
 <body>
 
     <header>
-        <a href="/" class="logo">Calc<span>Blueprint</span></a>
-        <nav>
-            <a href="#about">About</a>
-            <a href="#contact">Contact</a>
-        </nav>
+        <div class="header-container">
+            <a href="/" class="logo">Calc<span>Blueprint</span></a>
+            <nav>
+                <a href="/about/">About</a>
+                <a href="/contact/">Contact</a>
+            </nav>
+        </div>
     </header>
 
-    <main>
-        <div class="calculator-container">
-            <h1>Concrete Footing Calculator</h1>
-            <p class="intro-text">Accurately estimate the volume of concrete required for your foundation footings. Enter your dimensions below to calculate cubic yards with an optional waste factor.</p>
-            
-            <div class="calculator-box">
-                <div class="form-group">
-                    <label for="width">Footing Width</label>
-                    <div class="input-wrapper">
-                        <input type="number" id="width" min="1" step="any" placeholder="e.g., 16">
-                        <span class="unit">inches</span>
-                    </div>
-                    <div class="error-msg" id="width-error">Please enter a valid width.</div>
-                </div>
+    <main class="container">
+        <h1>Concrete Footing Calculator</h1>
+        <p class="tagline">Accurately estimate the volume and weight of concrete required for structural footings and foundations.</p>
 
-                <div class="form-group">
-                    <label for="depth">Footing Depth (Thickness)</label>
-                    <div class="input-wrapper">
-                        <input type="number" id="depth" min="1" step="any" placeholder="e.g., 12">
-                        <span class="unit">inches</span>
-                    </div>
-                    <div class="error-msg" id="depth-error">Please enter a valid depth.</div>
-                </div>
-
-                <div class="form-group">
-                    <label for="length">Total Footing Length</label>
-                    <div class="input-wrapper">
-                        <input type="number" id="length" min="1" step="any" placeholder="e.g., 50">
-                        <span class="unit">feet</span>
-                    </div>
-                    <div class="error-msg" id="length-error">Please enter a valid length.</div>
-                </div>
-
-                <button class="btn-calculate" onclick="calculateFooting()">Calculate Volume</button>
+        <div class="calculator-box">
+            <div class="toggle-container">
+                <button type="button" id="btn-imperial" class="toggle-btn active" onclick="setUnit('imperial')">Imperial (US)</button>
+                <button type="button" id="btn-metric" class="toggle-btn" onclick="setUnit('metric')">Metric</button>
             </div>
 
-            <div class="result-box" id="resultBox">
+            <form id="calc-form" onsubmit="event.preventDefault(); calculate();">
+                <div class="input-group">
+                    <label id="label-width" for="width">Footing Width (inches)</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="width" step="any" required min="0.1" placeholder="e.g., 16">
+                        <span id="unit-width" class="input-unit">in</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label id="label-depth" for="depth">Footing Depth (inches)</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="depth" step="any" required min="0.1" placeholder="e.g., 12">
+                        <span id="unit-depth" class="input-unit">in</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label id="label-length" for="length">Total Length (feet)</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="length" step="any" required min="0.1" placeholder="e.g., 50">
+                        <span id="unit-length" class="input-unit">ft</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="calculate-btn">Calculate Requirements</button>
+            </form>
+
+            <div id="result-box" class="result-box">
                 <h3>Calculation Results</h3>
                 <div class="result-row">
-                    <span class="result-label">Total Volume (Cubic Feet):</span>
-                    <span class="result-value" id="resCF">0.00</span>
+                    <span class="result-label">Net Concrete Volume:</span>
+                    <span id="res-net-vol" class="result-value">0.00</span>
                 </div>
                 <div class="result-row">
-                    <span class="result-label">Net Concrete Required:</span>
-                    <span class="result-value" id="resCY">0.00 Cubic Yards</span>
+                    <span class="result-label">Total Volume (with 10% waste):</span>
+                    <span id="res-total-vol" class="result-value highlight">0.00</span>
                 </div>
                 <div class="result-row">
-                    <span class="result-label">Recommended Order (with 10% waste):</span>
-                    <span class="result-value highlight" id="resCYWaste">0.00 Cubic Yards</span>
+                    <span class="result-label">Estimated Net Weight:</span>
+                    <span id="res-net-weight" class="result-value">0.00</span>
                 </div>
                 <div class="result-row">
-                    <span class="result-label">Estimated 80lb Bags Needed:</span>
-                    <span class="result-value" id="resBags80">0</span>
-                </div>
-                <div class="result-row">
-                    <span class="result-label">Estimated 60lb Bags Needed:</span>
-                    <span class="result-value" id="resBags60">0</span>
+                    <span class="result-label">Total Weight (with 10% waste):</span>
+                    <span id="res-total-weight" class="result-value">0.00</span>
                 </div>
             </div>
         </div>
 
-        <section class="content-section" id="how-to">
-            <h2>How to Calculate Concrete Footings</h2>
-            <p>Calculating the volume of concrete needed for structural footings is a straightforward process based on volume geometry. To find the cubic footage of your footing, you must first convert all measurements into feet. Divide your footing width in inches by 12, and divide your footing depth in inches by 12. Once you have these decimal values, multiply them by the total continuous length of the footing in feet.</p>
-            <p>The formula is expressed as: <strong>Volume (Cubic Feet) = (Width / 12) × (Depth / 12) × Length</strong>. Because commercial concrete is ordered and delivered in cubic yards, you must convert this figure by dividing the total cubic feet by 27 (since there are 27 cubic feet in a cubic yard). Finally, always add a 10% waste factor to account for uneven excavation trenches, spillage, and settling.</p>
+        <details>
+            <summary>How this calculator works</summary>
+            <p>This tool calculates the volume of a continuous footing by multiplying the cross-sectional area (width multiplied by depth) by the total linear length. It then converts this cubic volume into standard ordering units (cubic yards for Imperial, cubic meters for Metric) and automatically applies a recommended 10% waste margin to account for excavation variances and spillage.</p>
+            <p><strong>Formula source:</strong> ACI 318 Building Code Requirements for Structural Concrete</p>
+        </details>
+
+        <section class="content-section">
+            <h2>How to Calculate Concrete Footing Volume</h2>
+            <p>Calculating the volume of concrete required for a continuous footing is a straightforward process of finding the total cubic volume of the trench. In the imperial system, first convert the footing width and depth from inches to feet by dividing by 12. Multiply these dimensions (Width in feet × Depth in feet × Length in feet) to find the volume in cubic feet, then divide by 27 to convert to cubic yards. For example, a footing measuring 18 inches (45.7 cm) wide, 12 inches (30.5 cm) deep, and 100 feet (30.5 meters) long has a cross-section of 1.5 feet by 1 foot, yielding 150 cubic feet or approximately 5.56 cubic yards (4.25 m³).</p>
+            <p>In the metric system, convert centimeters to meters by dividing by 100, then multiply the width, depth, and length directly to obtain cubic meters. Always add a 10% waste factor to account for excavation variances, soil absorption, and minor spillage. Ordering exactly the theoretical volume often results in running short on-site, which can lead to cold joints and expensive secondary delivery charges.</p>
         </section>
 
-        <section class="content-section" id="what-affects">
+        <section class="content-section">
             <h2>What Affects Concrete Footing Requirements</h2>
-            <p>Several real-world factors can significantly alter the actual amount of concrete your project demands compared to theoretical calculations. Soil conditions play a massive role; rough, hand-dug, or machine-excavated trenches rarely have perfectly smooth, straight walls. Loose soil can cave in or compress under the weight of wet concrete, increasing the volume required to fill the space.</p>
-            <p>Additionally, local building codes dictate the depth of footings based on the regional frost line. Footings must be placed below this line to prevent frost heaving, which can require deeper excavations and more concrete. Structural loads from the building itself determine the required width and thickness. Lastly, formwork deflection—where wooden forms bow outward under the intense hydrostatic pressure of wet concrete—can easily consume an extra 5% to 10% of material beyond your initial estimates.</p>
+            <p>Several critical real-world factors influence the exact volume and specifications of concrete footings. Soil bearing capacity dictates the required width; weaker soils like clay require wider footings (often 24 inches or 61 cm) to distribute the structural load safely, whereas stable soils may only require 12 to 16 inches (30 to 41 cm). Local climate determines the frost line depth. To prevent frost heave, footings must be placed below this line, which can range from a shallow 12 inches (30 cm) in southern regions to over 48 inches (122 cm) in northern climates.</p>
+            <p>Additionally, trench excavation is rarely perfectly uniform. Rough, hand-dug, or machine-excavated trenches often have irregular walls and bottoms, which can easily increase the actual concrete volume needed by 5% to 15% over the theoretical mathematical calculation. Proper formwork and soil compaction are essential to prevent the trench walls from bowing under the immense weight of wet concrete, which is approximately 150 lbs/cu ft (2,400 kg/m³).</p>
         </section>
 
-        <section class="content-section" id="faq">
+        <section class="content-section">
             <h2>Frequently Asked Questions</h2>
-            
             <div class="faq-item">
-                <div class="faq-question">1. How deep do concrete footings need to be?</div>
-                <div class="faq-answer">Footing depth is primarily determined by your local climate's frost line and local building codes. In cold climates, footings must extend below the frost depth (often 36 to 48 inches) to prevent shifting. For standard residential structures, a minimum thickness of 12 inches is common, but always consult your local building department.</div>
+                <div class="faq-question">What is the standard size for a residential concrete footing?</div>
+                <div class="faq-answer">Standard residential footings for single-family homes are typically 16 to 20 inches (41 to 51 cm) wide and 8 to 12 inches (20 to 30 cm) deep. However, local building codes and specific soil conditions always dictate the final dimensions.</div>
             </div>
-
             <div class="faq-item">
-                <div class="faq-question">2. Why should I add a 10% waste factor to my order?</div>
-                <div class="faq-answer">Adding 10% is standard industry practice. Excavations are never perfectly uniform, and concrete can easily escape through gaps in formwork or sink into soft subgrade soils. Ordering exactly the theoretical amount almost always results in running short, which requires an expensive second delivery and creates weak cold joints in your foundation.</div>
+                <div class="faq-question">How much extra concrete should I order for waste?</div>
+                <div class="faq-answer">It is highly recommended to add a 10% waste factor to your net calculation. For very irregular trenches or rough excavations, increasing this margin to 15% is safer to prevent short-pouring, which can cause structural joints and costly delivery delays.</div>
             </div>
-
             <div class="faq-item">
-                <div class="faq-question">3. When should I use pre-mixed bags versus ordering a ready-mix truck?</div>
-                <div class="faq-answer">For small projects requiring less than 1 cubic yard (approx. 45 bags of 80lb concrete), mixing bags on-site with a portable mixer is highly cost-effective. For any project exceeding 1 cubic yard, ordering ready-mix concrete from a local batch plant saves immense physical labor and ensures structural consistency throughout the pour.</div>
+                <div class="faq-question">How heavy is the concrete poured into a footing?</div>
+                <div class="faq-answer">Standard wet concrete weighs approximately 150 pounds per cubic foot (2,400 kg/m³). A single cubic yard of concrete weighs about 4,050 pounds (1,837 kg), which requires robust formwork and proper safety planning during the pour.</div>
             </div>
         </section>
     </main>
 
-    <footer id="contact">
-        <div class="footer-links">
-            <a href="/">Home</a>
-            <a href="#how-to">About</a>
-            <a href="#faq">FAQ</a>
-            <a href="/privacy/">Privacy Policy</a>
+    <footer>
+        <div class="footer-container">
+            <div class="footer-nav">
+                <a href="/">Home</a>
+                <a href="/about/">About</a>
+                <a href="/contact/">Contact</a>
+                <a href="/privacy/">Privacy Policy</a>
+            </div>
+            <p class="citation">Formula source: ACI 318 Building Code Requirements for Structural Concrete. Results are estimates for planning — verify with a licensed professional before ordering materials. &copy; 2026 CalcBlueprint.</p>
         </div>
-        <p>&copy; 2026 CalcBlueprint. All rights reserved. Professional construction estimation tools.</p>
     </footer>
 
     <script>
-        function calculateFooting() {
-            // Reset errors
-            document.getElementById('width-error').style.display = 'none';
-            document.getElementById('depth-error').style.display = 'none';
-            document.getElementById('length-error').style.display = 'none';
+        let currentUnit = 'imperial';
 
+        function setUnit(unit) {
+            if (currentUnit === unit) return;
+
+            const widthInput = document.getElementById('width');
+            const depthInput = document.getElementById('depth');
+            const lengthInput = document.getElementById('length');
+
+            const wVal = parseFloat(widthInput.value);
+            const dVal = parseFloat(depthInput.value);
+            const lVal = parseFloat(lengthInput.value);
+
+            currentUnit = unit;
+
+            // Toggle button active classes
+            document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+            document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+
+            // Update labels and units
+            if (unit === 'imperial') {
+                document.getElementById('label-width').innerText = "Footing Width (inches)";
+                document.getElementById('unit-width').innerText = "in";
+                document.getElementById('label-depth').innerText = "Footing Depth (inches)";
+                document.getElementById('unit-depth').innerText = "in";
+                document.getElementById('label-length').innerText = "Total Length (feet)";
+                document.getElementById('unit-length').innerText = "ft";
+
+                if (!isNaN(wVal)) widthInput.value = (wVal / 2.54).toFixed(1);
+                if (!isNaN(dVal)) depthInput.value = (dVal / 2.54).toFixed(1);
+                if (!isNaN(lVal)) lengthInput.value = (lVal / 0.3048).toFixed(1);
+            } else {
+                document.getElementById('label-width').innerText = "Footing Width (centimeters)";
+                document.getElementById('unit-width').innerText = "cm";
+                document.getElementById('label-depth').innerText = "Footing Depth (centimeters)";
+                document.getElementById('unit-depth').innerText = "cm";
+                document.getElementById('label-length').innerText = "Total Length (meters)";
+                document.getElementById('unit-length').innerText = "m";
+
+                if (!isNaN(wVal)) widthInput.value = (wVal * 2.54).toFixed(1);
+                if (!isNaN(dVal)) depthInput.value = (dVal * 2.54).toFixed(1);
+                if (!isNaN(lVal)) lengthInput.value = (lVal * 0.3048).toFixed(1);
+            }
+
+            // If results are already shown, recalculate
+            if (document.getElementById('result-box').style.display === 'block') {
+                calculate();
+            }
+        }
+
+        function calculate() {
             const width = parseFloat(document.getElementById('width').value);
             const depth = parseFloat(document.getElementById('depth').value);
             const length = parseFloat(document.getElementById('length').value);
 
-            let hasError = false;
-
-            if (isNaN(width) || width <= 0) {
-                document.getElementById('width-error').style.display = 'block';
-                hasError = true;
-            }
-            if (isNaN(depth) || depth <= 0) {
-                document.getElementById('depth-error').style.display = 'block';
-                hasError = true;
-            }
-            if (isNaN(length) || length <= 0) {
-                document.getElementById('length-error').style.display = 'block';
-                hasError = true;
-            }
-
-            if (hasError) {
-                document.getElementById('resultBox').style.display = 'none';
+            if (isNaN(width) || isNaN(depth) || isNaN(length) || width <= 0 || depth <= 0 || length <= 0) {
+                alert("Please enter valid positive numbers for all fields.");
                 return;
             }
 
-            // Calculations
-            // Volume (cubic feet) = (width/12) * (depth/12) * length
-            const volumeCF = (width / 12) * (depth / 12) * length;
-            
-            // Cubic yards = cubic feet / 27
-            const volumeCY = volumeCF / 27;
-            
-            // Add 10% waste
-            const volumeCYWaste = volumeCY * 1.10;
+            let netVolume, totalVolume, netWeight, totalWeight;
+            let volUnit, weightUnit;
 
-            // Bag estimations
-            // An 80lb bag yields approx 0.60 cubic feet
-            // A 60lb bag yields approx 0.45 cubic feet
-            // We calculate based on the volume with 10% waste to ensure they buy enough bags
-            const volumeCFWaste = volumeCF * 1.10;
-            const bags80 = Math.ceil(volumeCFWaste / 0.60);
-            const bags60 = Math.ceil(volumeCFWaste / 0.45);
+            if (currentUnit === 'imperial') {
+                // Width & Depth in inches, Length in feet
+                const widthFt = width / 12;
+                const depthFt = depth / 12;
+                const netCuFt = widthFt * depthFt * length;
+                
+                netVolume = netCuFt / 27; // Cubic Yards
+                totalVolume = netVolume * 1.10; // 10% waste
+                
+                netWeight = netCuFt * 150; // lbs (standard concrete is ~150 lbs/cu ft)
+                totalWeight = netWeight * 1.10;
 
-            // Display Results
-            document.getElementById('resCF').innerText = volumeCF.toFixed(2);
-            document.getElementById('resCY').innerText = volumeCY.toFixed(2) + " Cubic Yards";
-            document.getElementById('resCYWaste').innerText = volumeCYWaste.toFixed(2) + " Cubic Yards";
-            document.getElementById('resBags80').innerText = bags80.toLocaleString() + " bags";
-            document.getElementById('resBags60').innerText = bags60.toLocaleString() + " bags";
+                volUnit = "cu yd";
+                weightUnit = "lbs";
 
-            document.getElementById('resultBox').style.display = 'block';
-            
-            // Smooth scroll to results
-            document.getElementById('resultBox').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById('res-net-vol').innerText = netVolume.toFixed(2) + " " + volUnit + " (" + netCuFt.toFixed(2) + " cu ft)";
+                document.getElementById('res-total-vol').innerText = totalVolume.toFixed(2) + " " + volUnit + " (" + (netCuFt * 1.10).toFixed(2) + " cu ft)";
+                document.getElementById('res-net-weight').innerText = Math.round(netWeight).toLocaleString() + " " + weightUnit;
+                document.getElementById('res-total-weight').innerText = Math.round(totalWeight).toLocaleString() + " " + weightUnit;
+            } else {
+                // Width & Depth in cm, Length in meters
+                const widthM = width / 100;
+                const depthM = depth / 100;
+                
+                netVolume = widthM * depthM * length; // Cubic Meters
+                totalVolume = netVolume * 1.10; // 10% waste
+
+                netWeight = netVolume * 2400; // kg (standard concrete is ~2400 kg/m³)
+                totalWeight = netWeight * 1.10;
+
+                volUnit = "m³";
+                weightUnit = "kg";
+
+                document.getElementById('res-net-vol').innerText = netVolume.toFixed(2) + " " + volUnit;
+                document.getElementById('res-total-vol').innerText = totalVolume.toFixed(2) + " " + volUnit;
+                document.getElementById('res-net-weight').innerText = Math.round(netWeight).toLocaleString() + " " + weightUnit;
+                document.getElementById('res-total-weight').innerText = Math.round(totalWeight).toLocaleString() + " " + weightUnit;
+            }
+
+            const resultBox = document.getElementById('result-box');
+            resultBox.style.display = 'block';
+            resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
     </script>
 </body>

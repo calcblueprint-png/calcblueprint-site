@@ -23,7 +23,8 @@
     "description": "Calculate cubic yards of concrete needed for footings and foundations based on width, depth, and total length.",
     "inputs": "Footing width, footing depth, total length (with unit toggle)",
     "formula": "Volume (cubic feet) = (width/12) * (depth/12) * length. Cubic yards = cubic feet / 27. Add 10% waste.",
-    "status": "pending"
+    "status": "done",
+    "regenerated_at": "2026-09-19T04:54:44.626353Z"
   },
   {
     "slug": "roof-pitch-calculator",
