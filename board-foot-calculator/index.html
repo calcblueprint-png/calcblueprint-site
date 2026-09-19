@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Board Foot Calculator — CalcBlueprint</title>
+    <meta name="description" content="Calculate board feet for lumber purchases. Enter thickness, width, length, and quantity to get total board feet and cost.">
+    <link rel="canonical" href="https://calcblueprint.com/board-foot-calculator/">
+    
+    <!-- GA4 Snippet -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"WebApplication","name":"Board Foot Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+    </script>
+
+    <style>
+        :root {
+            --primary: #1a2332;
+            --accent: #f5a623;
+            --bg: #f7f7f5;
+            --text: #333333;
+            --card-bg: #ffffff;
+            --border: #dddddd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: #ffffff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        .tagline {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .calculator-box {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .toggle-container {
+            display: flex;
+            background-color: #eee;
+            border-radius: 6px;
+            padding: 4px;
+            margin-bottom: 1.5rem;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #555;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .toggle-btn.active {
+            background-color: var(--accent);
+            color: #ffffff;
+        }
+
+        .grid-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        @media (max-width: 600px) {
+            .grid-inputs {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group.full-width {
+            grid-column: span 2;
+        }
+
+        @media (max-width: 600px) {
+            .input-group.full-width {
+                grid-column: span 1;
+            }
+        }
+
+        label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        input {
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+        }
+
+        .btn-calculate {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--primary);
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 1rem;
+        }
+
+        .btn-calculate:hover {
+            background-color: #2c3a52;
+        }
+
+        .result-box {
+            display: none;
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background-color: #f0f4f8;
+            border-left: 4px solid var(--accent);
+            border-radius: 4px;
+        }
+
+        .result-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #d0dbe5;
+            padding-bottom: 0.5rem;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            font-size: 1.05rem;
+        }
+
+        .result-row:not(:last-child) {
+            border-bottom: 1px dashed #d0dbe5;
+        }
+
+        .result-label {
+            font-weight: 500;
+            color: #555;
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        details {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+
+        summary {
+            font-weight: 700;
+            color: var(--primary);
+            cursor: pointer;
+            outline: none;
+            user-select: none;
+        }
+
+        details p {
+            margin-top: 0.75rem;
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .content-section {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+
+        .content-section h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .content-section p {
+            margin-bottom: 1rem;
+            color: #444;
+            font-size: 1rem;
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .faq-question {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .faq-answer {
+            color: #555;
+            font-size: 1rem;
+        }
+
+        footer {
+            background-color: var(--primary);
+            color: #ffffff;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+
+        .footer-nav {
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 1rem;
+            transition: color 0.2s;
+        }
+
+        .footer-nav a:hover {
+            color: var(--accent);
+        }
+
+        .citation {
+            color: #a0aec0;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.4;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="/" class="logo">Calc<span>Blueprint</span></a>
+        <nav>
+            <a href="/about/">About</a>
+            <a href="/contact/">Contact</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Board Foot Calculator</h1>
+        <p class="tagline">Quickly estimate lumber volume and cost for your construction and woodworking projects.</p>
+
+        <div class="calculator-box">
+            <div class="toggle-container">
+                <button type="button" class="toggle-btn active" id="btn-imperial" onclick="setUnit('imperial')">Imperial (US)</button>
+                <button type="button" class="toggle-btn" id="btn-metric" onclick="setUnit('metric')">Metric</button>
+            </div>
+
+            <form id="calc-form" onsubmit="calculate(event)">
+                <div class="grid-inputs">
+                    <div class="input-group">
+                        <label id="lbl-thickness" for="thickness">Thickness (inches)</label>
+                        <input type="number" id="thickness" step="any" required min="0.01" placeholder="e.g., 2">
+                    </div>
+                    <div class="input-group">
+                        <label id="lbl-width" for="width">Width (inches)</label>
+                        <input type="number" id="width" step="any" required min="0.01" placeholder="e.g., 6">
+                    </div>
+                    <div class="input-group">
+                        <label id="lbl-length" for="length">Length (feet)</label>
+                        <input type="number" id="length" step="any" required min="0.01" placeholder="e.g., 10">
+                    </div>
+                    <div class="input-group">
+                        <label for="quantity">Quantity</label>
+                        <input type="number" id="quantity" step="1" required min="1" value="1" placeholder="e.g., 5">
+                    </div>
+                    <div class="input-group full-width">
+                        <label id="lbl-price" for="price">Price per Board Foot ($)</label>
+                        <input type="number" id="price" step="any" min="0" placeholder="e.g., 4.50 (optional)">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-calculate">Calculate</button>
+            </form>
+
+            <div class="result-box" id="result-box">
+                <div class="result-title">Calculation Results</div>
+                <div class="result-row" id="row-vol" style="display: none;">
+                    <span class="result-label">Total Volume:</span>
+                    <span class="result-value" id="val-vol">-</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Total Board Feet:</span>
+                    <span class="result-value" id="val-bf">-</span>
+                </div>
+                <div class="result-row" id="row-cost">
+                    <span class="result-label">Total Estimated Cost:</span>
+                    <span class="result-value" id="val-cost">-</span>
+                </div>
+            </div>
+        </div>
+
+        <details>
+            <summary>How this calculator works</summary>
+            <p>To find the board footage of a piece of lumber, multiply its thickness in inches by its width in inches, then multiply by its length in feet, and divide the result by 12. For multiple pieces, multiply this result by the total quantity. If using metric inputs, dimensions are converted to imperial equivalents (1 inch = 2.54 cm, 1 foot = 0.3048 m) to compute the standardized board feet volume.</p>
+            <p>Formula source: AWC (American Wood Council) NDS and SPIB grading rules.</p>
+        </details>
+
+        <div class="content-section">
+            <h2>How to Calculate Board Feet</h2>
+            <p>A board foot is a specialized unit of volume used in the United States and Canada for measuring rough lumber. One board foot represents the volume of a board that is 12 inches wide, 12 inches long, and 1 inch thick, which equals 144 cubic inches. To calculate the board footage of any piece of wood, you use the standard formula: <strong>Board Feet = (Thickness in inches × Width in inches × Length in feet) / 12</strong>.</p>
+            <p>When dealing with rough-sawn lumber, particularly hardwoods, thickness is often expressed in quarters of an inch. For example, a 1-inch thick board is referred to as "four-quarter" (4/4), while a 2-inch thick board is "eight-quarter" (8/4). It is important to note that softwood lumber is typically sold by nominal dimensions (the size before planing, such as a 2x4), whereas hardwood lumber is often measured by its actual rough dimensions before surfacing. Always clarify with your supplier whether they are billing based on nominal or actual dimensions.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>What Affects Lumber Yield and Cost</h2>
+            <p>Several critical factors influence the final yield and cost of lumber in construction and woodworking projects. First and foremost is the lumber grade. Hardwoods graded by the National Hardwood Lumber Association (NHLA) range from FAS (First and Seconds), which offers the highest yield of clear cuttings, down to Common grades that contain more knots and defects. Choosing a lower grade may reduce the initial price per board foot but will significantly increase your waste factor.</p>
+            <p>Milling and drying also play a massive role in pricing. Kiln-dried lumber is more stable but carries a premium over green or air-dried lumber due to the energy costs of running dry kilns. When planning a purchase, always factor in a waste allowance. For standard projects using high-grade lumber, a 10% to 15% waste factor is typical. However, if you are working with lower-grade wood or require highly specific grain matching, you should increase your waste estimate to 20% or even 30% to avoid running short mid-project.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <div class="faq-question">1. What is the difference between nominal and actual dimensions?</div>
+                <div class="faq-answer">Nominal dimensions are the sizes of the lumber before it is surfaced and planed smooth. For example, a nominal 2x4 actually measures 1.5 inches by 3.5 inches. Softwood board footage is calculated using these nominal dimensions, while hardwood board footage is calculated using actual rough dimensions before final surfacing.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">2. How do I convert square feet to board feet?</div>
+                <div class="faq-answer">To convert square feet to board feet, multiply the square footage by the nominal thickness of the lumber in inches. For example, 150 square feet of 2-inch thick lumber equals 300 board feet. If the lumber is less than 1 inch thick, it is standard practice in the industry to calculate it as 1 inch thick.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">3. Why does my lumber order cost more than the calculated board footage?</div>
+                <div class="faq-answer">Lumber yards often charge extra fees for surfacing (planing the wood flat) or straight-line ripping (creating a perfectly straight edge). Additionally, taxes, delivery fees, and minimum order requirements can increase the final invoice beyond the base price per board foot.</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-nav">
+            <a href="/">Home</a>
+            <a href="/about/">About</a>
+            <a href="/contact/">Contact</a>
+            <a href="/privacy/">Privacy</a>
+        </div>
+        <p class="citation">Formula source: AWC (American Wood Council) NDS and SPIB grading rules. Results are estimates for planning — verify with a licensed professional before ordering materials. &copy; 2026 CalcBlueprint.</p>
+    </footer>
+
+    <script>
+        let currentUnit = 'imperial';
+
+        function setUnit(unit) {
+            currentUnit = unit;
+            
+            // Update active state of buttons
+            document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+            document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+
+            // Update input labels
+            if (unit === 'imperial') {
+                document.getElementById('lbl-thickness').innerText = 'Thickness (inches)';
+                document.getElementById('lbl-width').innerText = 'Width (inches)';
+                document.getElementById('lbl-length').innerText = 'Length (feet)';
+                document.getElementById('lbl-price').innerText = 'Price per Board Foot ($)';
+                document.getElementById('thickness').placeholder = 'e.g., 2';
+                document.getElementById('width').placeholder = 'e.g., 6';
+                document.getElementById('length').placeholder = 'e.g., 10';
+                document.getElementById('price').placeholder = 'e.g., 4.50 (optional)';
+            } else {
+                document.getElementById('lbl-thickness').innerText = 'Thickness (cm)';
+                document.getElementById('lbl-width').innerText = 'Width (cm)';
+                document.getElementById('lbl-length').innerText = 'Length (meters)';
+                document.getElementById('lbl-price').innerText = 'Price per Cubic Meter ($)';
+                document.getElementById('thickness').placeholder = 'e.g., 5.08';
+                document.getElementById('width').placeholder = 'e.g., 15.24';
+                document.getElementById('length').placeholder = 'e.g., 3.05';
+                document.getElementById('price').placeholder = 'e.g., 1900.00 (optional)';
+            }
+
+            // Recalculate if there are already values filled
+            const thickness = document.getElementById('thickness').value;
+            const width = document.getElementById('width').value;
+            const length = document.getElementById('length').value;
+            if (thickness && width && length) {
+                document.getElementById('calc-form').requestSubmit();
+            }
+        }
+
+        function calculate(event) {
+            event.preventDefault();
+
+            const thickness = parseFloat(document.getElementById('thickness').value);
+            const width = parseFloat(document.getElementById('width').value);
+            const length = parseFloat(document.getElementById('length').value);
+            const quantity = parseInt(document.getElementById('quantity').value) || 1;
+            const price = parseFloat(document.getElementById('price').value) || 0;
+
+            if (isNaN(thickness) || isNaN(width) || isNaN(length) || thickness <= 0 || width <= 0 || length <= 0) {
+                alert('Please enter valid positive numbers for thickness, width, and length.');
+                return;
+            }
+
+            let totalBF = 0;
+            let totalVolumeM3 = 0;
+            let totalCost = 0;
+
+            if (currentUnit === 'imperial') {
+                // Imperial formula: BF = (T_in * W_in * L_ft) / 12
+                const bfPerPiece = (thickness * width * length) / 12;
+                totalBF = bfPerPiece * quantity;
+                totalCost = totalBF * price;
+
+                document.getElementById('row-vol').style.display = 'none';
+            } else {
+                // Metric formula
+                // Convert inputs to Imperial for BF calculation:
+                // 1 inch = 2.54 cm -> thickness_in = thickness_cm / 2.54
+                // 1 inch = 2.54 cm -> width_in = width_cm / 2.54
+                // 1 foot = 0.3048 m -> length_ft = length_m / 0.3048
+                const thicknessIn = thickness / 2.54;
+                const widthIn = width / 2.54;
+                const lengthFt = length / 0.3048;
+
+                const bfPerPiece = (thicknessIn * widthIn * lengthFt) / 12;
+                totalBF = bfPerPiece * quantity;
+
+                // Calculate actual volume in cubic meters
+                // Volume (m3) = (T_cm/100) * (W_cm/100) * L_m * Qty
+                totalVolumeM3 = (thickness / 100) * (width / 100) * length * quantity;
+                totalCost = totalVolumeM3 * price;
+
+                document.getElementById('row-vol').style.display = 'flex';
+                document.getElementById('val-vol').innerText = totalVolumeM3.toFixed(4) + ' m³';
+            }
+
+            // Update display
+            document.getElementById('val-bf').innerText = totalBF.toFixed(2) + ' BF';
+            
+            if (price > 0) {
+                document.getElementById('row-cost').style.display = 'flex';
+                document.getElementById('val-cost').innerText = '$' + totalCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            } else {
+                document.getElementById('row-cost').style.display = 'none';
+            }
+
+            document.getElementById('result-box').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

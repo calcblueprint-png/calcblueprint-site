@@ -23,7 +23,8 @@
     "description": "Calculate board feet for lumber purchases. Enter thickness, width, length, and quantity to get total board feet and cost.",
     "inputs": "Thickness (inches), width (inches), length (feet), quantity, price per board foot",
     "formula": "Board feet = (thickness * width * length) / 12. Total = board feet * quantity. Cost = total * price per board foot.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-09-19T04:21:49.221425Z"
   },
   {
     "slug": "deck-calculator",
