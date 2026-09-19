@@ -1,118 +1,623 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tile Calculator — CalcBlueprint</title>
-<meta name="description" content="Calculate how many tiles you need for any floor or wall. Includes tile count, boxes, thinset, and grout estimates.">
-<link rel="canonical" href="https://calcblueprint.com/tile-calculator/">
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Tile Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.6;color:#1a1a1a;background:#f7f7f5}
-header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 1.5rem}
-.container{max-width:720px;margin:0 auto;padding:0 1.5rem}
-header .container{display:flex;align-items:center;justify-content:space-between;max-width:960px}
-.logo{font-size:1.4rem;font-weight:800;color:#fff;text-decoration:none;letter-spacing:-.02em}
-.logo span{color:#f5a623}
-nav a{margin-left:1.5rem;color:#b8c1cc;text-decoration:none;font-size:.95rem}
-main{padding:3rem 0}
-h1{font-size:2.2rem;line-height:1.2;margin-bottom:1rem;color:#1a2332;letter-spacing:-.02em}
-h2{font-size:1.4rem;margin:2rem 0 1rem;color:#1a2332}
-h3{font-size:1.1rem;margin:1.5rem 0 .5rem;color:#1a2332}
-p{margin-bottom:1rem;color:#333}
-.calculator-box{background:#fff;border:1px solid #e0ddd6;border-radius:10px;padding:1.5rem;margin:2rem 0}
-.form-group{margin-bottom:1.25rem}
-label{display:block;font-weight:600;margin-bottom:.4rem;font-size:.95rem;color:#1a2332}
-input,select{width:100%;padding:.75rem;border:1px solid #c9c4bb;border-radius:6px;font-size:1rem;font-family:inherit}
-input:focus,select:focus{outline:2px solid #f5a623;border-color:transparent}
-button{background:#f5a623;color:#1a2332;border:none;padding:1rem 2rem;font-size:1.05rem;font-weight:700;border-radius:6px;cursor:pointer;width:100%;margin-top:.5rem}
-button:hover{background:#e09515}
-.result-box{background:#1a2332;border-radius:10px;padding:1.5rem;margin-top:1.5rem;display:none}
-.result-box.show{display:block}
-.result-row{display:flex;justify-content:space-between;padding:.6rem 0;border-bottom:1px solid #2d3a4d;font-size:.95rem}
-.result-row:last-child{border-bottom:none;padding-top:1rem;margin-top:.5rem;border-top:2px solid #f5a623}
-.result-row .label{color:#b8c1cc}
-.result-row .value{color:#fff;font-weight:700;font-family:"SF Mono",Monaco,monospace}
-.result-row.total .value{font-size:1.5rem;color:#f5a623}
-footer{background:#1a2332;color:#b8c1cc;padding:2rem 0;margin-top:4rem;font-size:.9rem}
-footer .container{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;max-width:960px}
-footer a{color:#b8c1cc;text-decoration:none;margin-right:1rem}
-@media(max-width:600px){h1{font-size:1.6rem}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tile Calculator — CalcBlueprint</title>
+    <meta name="description" content="Calculate how many tiles you need for any floor or wall. Includes tile count, boxes, thinset, and grout estimates.">
+    <link rel="canonical" href="https://calcblueprint.com/tile-calculator/">
+    
+    <!-- Google Tag Manager (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"WebApplication","name":"Tile Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+    </script>
+
+    <style>
+        :root {
+            --primary: #1a2332;
+            --accent: #f5a623;
+            --accent-hover: #e0951d;
+            --bg: #f7f7f5;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --text-light: #666666;
+            --border: #dddddd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: #ffffff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        nav a {
+            margin-left: 1.5rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        main {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.25rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .tagline {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .calculator-box {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .unit-toggle {
+            display: flex;
+            background-color: #eee;
+            border-radius: 6px;
+            padding: 4px;
+            margin-bottom: 2rem;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            border: none;
+            background: none;
+            padding: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+            color: var(--text-light);
+        }
+
+        .toggle-btn.active {
+            background-color: var(--accent);
+            color: var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .grid-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .grid-inputs {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group.full-width {
+            grid-column: span 2;
+        }
+
+        @media (max-width: 600px) {
+            .input-group.full-width {
+                grid-column: span 1;
+            }
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="number"]:focus, select:focus {
+            border-color: var(--accent);
+        }
+
+        .unit-addon {
+            position: absolute;
+            right: 12px;
+            color: var(--text-light);
+            font-weight: 500;
+            pointer-events: none;
+        }
+
+        .btn-calculate {
+            width: 100%;
+            background-color: var(--accent);
+            color: var(--primary);
+            border: none;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 1rem;
+        }
+
+        .btn-calculate:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .result-box {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--bg);
+            display: none;
+        }
+
+        .result-box.active {
+            display: block;
+        }
+
+        .result-title {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--bg);
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-weight: 500;
+            color: var(--text-light);
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        details {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+
+        summary {
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--primary);
+            outline: none;
+        }
+
+        details p {
+            margin-top: 0.75rem;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .content-section {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+
+        .content-section h2 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--bg);
+            padding-bottom: 0.5rem;
+        }
+
+        .content-section p {
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .faq-item {
+            margin-bottom: 1.25rem;
+        }
+
+        .faq-item h3 {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        footer {
+            background-color: var(--primary);
+            color: #ffffff;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+            margin: 0 0.5rem;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        .citation {
+            font-size: 0.8rem;
+            color: #aaa;
+            margin-top: 1rem;
+        }
+    </style>
 </head>
 <body>
-<header><div class="container"><a href="/" class="logo">Calc<span>Blueprint</span></a><nav><a href="/about/">About</a><a href="/contact/">Contact</a></nav></div></header>
-<main><div class="container">
-<h1>Tile Calculator</h1>
-<p>Calculate how many tiles you need for any floor or wall, plus thinset and grout estimates. Just enter your room size and tile dimensions.</p>
 
-<div class="calculator-box">
-<div class="form-group"><label for="roomLength">Room Length (feet)</label><input type="number" id="roomLength" placeholder="e.g., 12" min="0" step="0.1"></div>
-<div class="form-group"><label for="roomWidth">Room Width (feet)</label><input type="number" id="roomWidth" placeholder="e.g., 10" min="0" step="0.1"></div>
-<div class="form-group"><label for="tileWidth">Tile Width (inches)</label><input type="number" id="tileWidth" placeholder="e.g., 12" min="0.1" step="0.1" value="12"></div>
-<div class="form-group"><label for="tileHeight">Tile Height (inches)</label><input type="number" id="tileHeight" placeholder="e.g., 12" min="0.1" step="0.1" value="12"></div>
-<div class="form-group"><label for="waste">Waste factor (%)</label><select id="waste"><option value="5">5%</option><option value="10" selected>10% (recommended)</option><option value="15">15% (diagonal or complex)</option></select></div>
-<button onclick="calculate()">Calculate</button>
-</div>
+    <header>
+        <a href="/" class="logo">Calc<span>Blueprint</span></a>
+        <nav>
+            <a href="/about/">About</a>
+            <a href="/contact/">Contact</a>
+        </nav>
+    </header>
 
-<div class="result-box" id="resultBox">
-<div class="result-row"><span class="label">Room area</span><span class="value" id="areaOut">—</span></div>
-<div class="result-row"><span class="label">Tile area</span><span class="value" id="tileAreaOut">—</span></div>
-<div class="result-row"><span class="label">Tiles needed (with waste)</span><span class="value" id="tilesOut">—</span></div>
-<div class="result-row"><span class="label">Thinset (50 lb bags)</span><span class="value" id="thinsetOut">—</span></div>
-<div class="result-row"><span class="label">Grout (25 lb bags)</span><span class="value" id="groutOut">—</span></div>
-<div class="result-row total"><span class="label">Boxes to order</span><span class="value" id="boxesOut">—</span></div>
-</div>
+    <main>
+        <h1>Tile Calculator</h1>
+        <p class="tagline">Accurately estimate tiles, boxes, thinset, and grout for your flooring or wall project.</p>
 
-<h2>How to Calculate Tile Quantity</h2>
-<p>The formula is: <strong>Room Area ÷ Tile Area = Number of Tiles</strong>. Measure room dimensions in feet, convert to inches, and divide. Always add 10% for cuts, breakage, and future repairs.</p>
+        <div class="calculator-box">
+            <div class="unit-toggle">
+                <button type="button" class="toggle-btn active" id="btn-imperial" onclick="setUnitSystem('imperial')">Imperial (US)</button>
+                <button type="button" class="toggle-btn" id="btn-metric" onclick="setUnitSystem('metric')">Metric</button>
+            </div>
 
-<h2>Coverage by Tile Size</h2>
-<h3>12×12 tiles (12" × 12")</h3>
-<p>One tile = 1 sq ft. Easy math — a 200 sq ft room needs 200 tiles plus waste.</p>
-<h3>18×18 tiles</h3>
-<p>One tile = 2.25 sq ft. Popular for large rooms because grout lines are fewer.</p>
-<h3>6×6 tiles</h3>
-<p>One tile = 0.25 sq ft. Used in bathrooms and smaller spaces. More grout lines = more grout needed.</p>
-<h3>12×24 tiles</h3>
-<p>One tile = 2 sq ft. Popular for modern kitchens and bathrooms. Requires level substrate.</p>
+            <form id="tile-form" onsubmit="calculateTile(event)">
+                <div class="grid-inputs">
+                    <div class="input-group">
+                        <label id="lbl-length" for="length">Room Length</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="length" step="any" required value="12">
+                            <span class="unit-addon" id="unit-length">ft</span>
+                        </div>
+                    </div>
 
-<h2>Frequently Asked Questions</h2>
-<h3>How many tiles in a box?</h3>
-<p>Box contents vary by manufacturer. Common box sizes: 12×12 = 10–15 tiles per box; 18×18 = 6–8 tiles per box; 12×24 = 4–6 tiles per box. Always check the box label.</p>
-<h3>How much thinset do I need?</h3>
-<p>Plan on one 50 lb bag of thinset for every 30–50 sq ft of floor, depending on trowel size and tile thickness. Large-format tiles need more thinset per square foot.</p>
-<h3>How much grout do I need?</h3>
-<p>Grout quantity depends on tile size and joint width. Smaller tiles with wider joints need more grout. A 25 lb bag typically covers 50–200 sq ft depending on tile format.</p>
-</div></main>
-<footer><div class="container"><div><a href="/">Home</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="/privacy/">Privacy</a></div><div>© 2026 CalcBlueprint.</div></div></footer>
-<script>
-function calculate(){
-const L=parseFloat(document.getElementById('roomLength').value)||0;
-const W=parseFloat(document.getElementById('roomWidth').value)||0;
-const tw=parseFloat(document.getElementById('tileWidth').value)||12;
-const th=parseFloat(document.getElementById('tileHeight').value)||12;
-const waste=parseFloat(document.getElementById('waste').value)||10;
-if(L===0||W===0){alert('Enter room length and width');return;}
-const roomArea=L*W;
-const tileArea=(tw*th)/144;
-const tilesRaw=roomArea/tileArea;
-const tilesWaste=Math.ceil(tilesRaw*(1+waste/100));
-const thinsetBags=Math.ceil(roomArea/40);
-const groutBags=Math.ceil(roomArea/80);
-const tilesPerBox=10;
-const boxes=Math.ceil(tilesWaste/tilesPerBox);
-document.getElementById('areaOut').textContent=roomArea.toFixed(1)+' sq ft';
-document.getElementById('tileAreaOut').textContent=tileArea.toFixed(2)+' sq ft';
-document.getElementById('tilesOut').textContent=tilesWaste+' tiles';
-document.getElementById('thinsetOut').textContent=thinsetBags+' bags';
-document.getElementById('groutOut').textContent=groutBags+' bags';
-document.getElementById('boxesOut').textContent=boxes+' boxes (est. '+tilesPerBox+'/box)';
-document.getElementById('resultBox').classList.add('show');
-}
-</script>
+                    <div class="input-group">
+                        <label id="lbl-width" for="width">Room Width</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="width" step="any" required value="10">
+                            <span class="unit-addon" id="unit-width">ft</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label id="lbl-tile-w" for="tile-w">Tile Width</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="tile-w" step="any" required value="12">
+                            <span class="unit-addon" id="unit-tile-w">in</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label id="lbl-tile-h" for="tile-h">Tile Height</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="tile-h" step="any" required value="12">
+                            <span class="unit-addon" id="unit-tile-h">in</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="waste">Waste Factor</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="waste" step="any" required value="10">
+                            <span class="unit-addon">%</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label id="lbl-box-size" for="box-size">Tile Box Size</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="box-size" step="any" required value="15">
+                            <span class="unit-addon" id="unit-box-size">sq ft</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-calculate">Calculate Materials</button>
+            </form>
+
+            <div class="result-box" id="results">
+                <div class="result-title">Estimation Results</div>
+                <div class="result-row">
+                    <span class="result-label">Total Area</span>
+                    <span class="result-value" id="res-area">0.00 sq ft</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Single Tile Area</span>
+                    <span class="result-value" id="res-tile-area">0.00 sq ft</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Base Tiles Needed</span>
+                    <span class="result-value" id="res-base-tiles">0</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Total Tiles (with waste)</span>
+                    <span class="result-value" id="res-total-tiles">0</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Boxes of Tile Required</span>
+                    <span class="result-value" id="res-boxes">0</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Estimated Thinset Mortar</span>
+                    <span class="result-value" id="res-thinset">0 bags</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Estimated Grout</span>
+                    <span class="result-value" id="res-grout">0 lbs</span>
+                </div>
+            </div>
+        </div>
+
+        <details>
+            <summary>How this calculator works</summary>
+            <p>This calculator determines the total area of your space by multiplying the length and width. It then calculates the individual surface area of one tile and divides the total room area by the tile area to find the base quantity. Finally, it applies your selected waste percentage and estimates standard thinset and grout requirements based on typical coverage rates.</p>
+            <p><strong>Authoritative Source:</strong> TCNA Handbook for Ceramic, Glass, and Stone Tile Installation.</p>
+        </details>
+
+        <section class="content-section">
+            <h2>How to Calculate Tile Needs</h2>
+            <p>To calculate how many tiles you need for a floor or wall, you must first determine the total area of the surface. For a standard rectangular room, multiply the length by the width. For example, a room measuring 12 feet by 10 feet (approximately 3.6 meters by 3.0 meters) has an area of 120 square feet (11.1 square meters).</p>
+            <p>Next, calculate the area of a single tile. If you are using standard 12x12 inch (30x30 cm) tiles, each tile covers exactly 1 square foot (0.09 square meters). Divide the total room area by the single tile area to find the base number of tiles required. In this example, 120 square feet divided by 1 square foot equals 120 tiles.</p>
+            <p>Always add a waste factor to account for cuts, breaks, and mistakes. A standard straight layout typically requires a 10% waste factor, whereas diagonal or herringbone patterns require 15% to 20% extra material. Multiplying your base tile count by 1.10 gives you the final target number of tiles to purchase.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>What Affects Tile and Material Quantities</h2>
+            <p>Several variables impact the actual volume of tile, mortar, and grout you will need to order. The layout pattern is the most significant factor; complex designs like herringbone or chevron require intricate diagonal cuts along the perimeter, which increases waste compared to a standard grid layout.</p>
+            <p>The size and type of tile also dictate your thinset mortar requirements. Large format tiles—defined as any tile with one side longer than 15 inches (38 cm)—require a thicker mortar bed and a larger trowel, such as a 1/2 inch (12 mm) square-notched trowel. This increases thinset consumption compared to smaller mosaic tiles that only require a 1/4 inch (6 mm) trowel.</p>
+            <p>Substrate flatness is another critical variable. If your concrete slab or backer board has dips or high spots, you will use significantly more thinset to level the surface during installation. Grout quantities are determined by the depth and width of the grout joints, which typically range from 1/16 inch (1.5 mm) for rectified tiles to 1/4 inch (6 mm) or wider for rustic pavers.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <h3>How much extra tile should I buy for waste?</h3>
+                <p>For standard square or rectangular installations, we recommend adding 10% to your total area. If you are installing tiles diagonally, in a herringbone pattern, or working in a room with many corners and obstacles, increase the waste factor to 15% or 20% to ensure you do not run out of material mid-project.</p>
+            </div>
+            <div class="faq-item">
+                <h3>How many bags of thinset mortar do I need?</h3>
+                <p>On average, a standard 50-pound (22.7 kg) bag of dry thinset mortar covers approximately 50 to 95 square feet (4.6 to 8.8 square meters) when using a standard 1/4 inch (6 mm) trowel. Larger trowels used for heavy tiles will reduce this coverage to about 40 to 50 square feet (3.7 to 4.6 square meters) per bag.</p>
+            </div>
+            <div class="faq-item">
+                <h3>How do I calculate tiles for an irregular room?</h3>
+                <p>For L-shaped or highly irregular rooms, break the floor plan down into smaller, manageable rectangles. Calculate the area of each individual rectangle (Length x Width), add those areas together to get the total square footage (or square meters), and then proceed with the standard tile size calculations.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>
+            <a href="/">Home</a> | 
+            <a href="/about/">About</a> | 
+            <a href="/contact/">Contact</a> | 
+            <a href="/privacy/">Privacy Policy</a>
+        </p>
+        <p class="citation">Formula source: TCNA Handbook for Ceramic, Glass, and Stone Tile Installation. Results are estimates for planning — verify with a licensed professional before ordering materials. &copy; 2026 CalcBlueprint.</p>
+    </footer>
+
+    <script>
+        let currentSystem = 'imperial';
+
+        function setUnitSystem(system) {
+            if (currentSystem === system) return;
+            
+            const prevSystem = currentSystem;
+            currentSystem = system;
+
+            // Update active button state
+            document.getElementById('btn-imperial').classList.toggle('active', system === 'imperial');
+            document.getElementById('btn-metric').classList.toggle('active', system === 'metric');
+
+            // Get current inputs
+            let length = parseFloat(document.getElementById('length').value);
+            let width = parseFloat(document.getElementById('width').value);
+            let tileW = parseFloat(document.getElementById('tile-w').value);
+            let tileH = parseFloat(document.getElementById('tile-h').value);
+            let boxSize = parseFloat(document.getElementById('box-size').value);
+
+            // Convert values between systems
+            if (system === 'metric') {
+                // Imperial to Metric
+                if (!isNaN(length)) document.getElementById('length').value = (length * 0.3048).toFixed(2);
+                if (!isNaN(width)) document.getElementById('width').value = (width * 0.3048).toFixed(2);
+                if (!isNaN(tileW)) document.getElementById('tile-w').value = (tileW * 2.54).toFixed(1);
+                if (!isNaN(tileH)) document.getElementById('tile-h').value = (tileH * 2.54).toFixed(1);
+                if (!isNaN(boxSize)) document.getElementById('box-size').value = (boxSize * 0.092903).toFixed(2);
+
+                // Update labels and addons
+                document.getElementById('lbl-length').innerText = "Room Length";
+                document.getElementById('unit-length').innerText = "m";
+                document.getElementById('lbl-width').innerText = "Room Width";
+                document.getElementById('unit-width').innerText = "m";
+                document.getElementById('lbl-tile-w').innerText = "Tile Width";
+                document.getElementById('unit-tile-w').innerText = "cm";
+                document.getElementById('lbl-tile-h').innerText = "Tile Height";
+                document.getElementById('unit-tile-h').innerText = "cm";
+                document.getElementById('lbl-box-size').innerText = "Tile Box Size";
+                document.getElementById('unit-box-size').innerText = "sq m";
+            } else {
+                // Metric to Imperial
+                if (!isNaN(length)) document.getElementById('length').value = (length / 0.3048).toFixed(2);
+                if (!isNaN(width)) document.getElementById('width').value = (width / 0.3048).toFixed(2);
+                if (!isNaN(tileW)) document.getElementById('tile-w').value = (tileW / 2.54).toFixed(1);
+                if (!isNaN(tileH)) document.getElementById('tile-h').value = (tileH / 2.54).toFixed(1);
+                if (!isNaN(boxSize)) document.getElementById('box-size').value = (boxSize / 0.092903).toFixed(2);
+
+                // Update labels and addons
+                document.getElementById('lbl-length').innerText = "Room Length";
+                document.getElementById('unit-length').innerText = "ft";
+                document.getElementById('lbl-width').innerText = "Room Width";
+                document.getElementById('unit-width').innerText = "ft";
+                document.getElementById('lbl-tile-w').innerText = "Tile Width";
+                document.getElementById('unit-tile-w').innerText = "in";
+                document.getElementById('lbl-tile-h').innerText = "Tile Height";
+                document.getElementById('unit-tile-h').innerText = "in";
+                document.getElementById('lbl-box-size').innerText = "Tile Box Size";
+                document.getElementById('unit-box-size').innerText = "sq ft";
+            }
+
+            // Recalculate if results are already visible
+            if (document.getElementById('results').classList.contains('active')) {
+                calculateTile(null);
+            }
+        }
+
+        function calculateTile(event) {
+            if (event) event.preventDefault();
+
+            const length = parseFloat(document.getElementById('length').value);
+            const width = parseFloat(document.getElementById('width').value);
+            const tileW = parseFloat(document.getElementById('tile-w').value);
+            const tileH = parseFloat(document.getElementById('tile-h').value);
+            const waste = parseFloat(document.getElementById('waste').value);
+            const boxSize = parseFloat(document.getElementById('box-size').value);
+
+            if (isNaN(length) || isNaN(width) || isNaN(tileW) || isNaN(tileH) || isNaN(waste) || isNaN(boxSize)) {
+                alert("Please fill in all fields with valid numbers.");
+                return;
+            }
+
+            let roomArea, tileArea, baseTiles, totalTiles, boxes, thinsetBags, groutAmount;
+
+            if (currentSystem === 'imperial') {
+                // Room Area in sq ft
+                roomArea = length * width;
+                // Tile Area in sq ft (tile dimensions are in inches)
+                tileArea = (tileW * tileH) / 144;
+                
+                baseTiles = roomArea / tileArea;
+                totalTiles = Math.ceil(baseTiles * (1 + waste / 100));
+                boxes = Math.ceil((roomArea * (1 + waste / 100)) / boxSize);
+                
+                // Thinset: 1 bag (50 lbs) covers ~60 sq ft
+                thinsetBags = Math.ceil(roomArea / 60);
+                // Grout: ~15 sq ft per lb of grout
+                groutAmount = Math.ceil(roomArea / 15);
+
+                // Display outputs
+                document.getElementById('res-area').innerText = roomArea.toFixed(2) + " sq ft";
+                document.getElementById('res-tile-area').innerText = tileArea.toFixed(3) + " sq ft";
+                document.getElementById('res-base-tiles').innerText = Math.ceil(baseTiles).toLocaleString();
+                document.getElementById('res-total-tiles').innerText = totalTiles.toLocaleString();
+                document.getElementById('res-boxes').innerText = boxes.toLocaleString();
+                document.getElementById('res-thinset').innerText = thinsetBags + " bags (50 lbs)";
+                document.getElementById('res-grout').innerText = groutAmount + " lbs";
+            } else {
+                // Room Area in sq m
+                roomArea = length * width;
+                // Tile Area in sq m (tile dimensions are in cm)
+                tileArea = (tileW * tileH) / 10000;
+                
+                baseTiles = roomArea / tileArea;
+                totalTiles = Math.ceil(baseTiles * (1 + waste / 100));
+                boxes = Math.ceil((roomArea * (1 + waste / 100)) / boxSize);
+                
+                // Thinset: 1 bag (22.68 kg) covers ~5.57 sq m (equivalent to 60 sq ft)
+                thinsetBags = Math.ceil(roomArea / 5.57);
+                // Grout: ~3.07 sq m per kg of grout (equivalent to 15 sq ft/lb)
+                groutAmount = Math.ceil(roomArea / 3.07);
+
+                // Display outputs
+                document.getElementById('res-area').innerText = roomArea.toFixed(2) + " sq m";
+                document.getElementById('res-tile-area').innerText = tileArea.toFixed(4) + " sq m";
+                document.getElementById('res-base-tiles').innerText = Math.ceil(baseTiles).toLocaleString();
+                document.getElementById('res-total-tiles').innerText = totalTiles.toLocaleString();
+                document.getElementById('res-boxes').innerText = boxes.toLocaleString();
+                document.getElementById('res-thinset').innerText = thinsetBags + " bags (22.7 kg)";
+                document.getElementById('res-grout').innerText = groutAmount + " kg";
+            }
+
+            document.getElementById('results').classList.add('active');
+        }
+    </script>
 </body>
 </html>

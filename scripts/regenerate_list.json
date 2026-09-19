@@ -50,7 +50,8 @@
     "description": "Calculate how many tiles you need for any floor or wall. Includes tile count, boxes, thinset, and grout estimates.",
     "inputs": "Room length, room width, tile dimensions, waste factor (with unit toggle)",
     "formula": "Room area = length * width. Tile area = (tile_width * tile_height) / 144. Tiles = ceil(room_area / tile_area * (1 + waste/100)). Thinset bags based on trowel size.",
-    "status": "pending"
+    "status": "done",
+    "regenerated_at": "2026-09-19T05:00:14.939043Z"
   },
   {
     "slug": "paint-calculator",
