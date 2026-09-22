@@ -32,7 +32,8 @@
     "description": "Calculate deck boards, joists, and posts needed for your deck project. Enter dimensions to get a complete material list.",
     "inputs": "Deck length (feet), deck width (feet), board width (inches), joist spacing (inches)",
     "formula": "Deck area = length * width. Boards = deck area / ((board_width/12) * length_of_deck). Joists = length / (joist_spacing/12) + 1.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-09-22T12:57:03.794936Z"
   },
   {
     "slug": "fence-calculator",

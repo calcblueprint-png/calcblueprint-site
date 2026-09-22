@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/deck-calculator/">
+<title>Deck Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate deck boards, joists, and posts needed for your deck project. Enter dimensions to get a complete material list.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{color:#fff;font-size:1.5rem;font-weight:700;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{max-width:900px;margin:2rem auto;padding:0 1rem}
+.container{width:100%}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+h1{color:#1a2332;margin-bottom:1.5rem;font-size:1.8rem}
+.unit-toggle{display:flex;margin-bottom:1.5rem;background:#f0f2f5;padding:4px;border-radius:6px;width:fit-content}
+.unit-btn{background:transparent;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;font-weight:600;color:#555}
+.unit-btn.active{background:#f5a623;color:#1a2332}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input{width:100%;padding:10px;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+.calc-btn{background:#f5a623;color:#1a2332;border:none;padding:12px 24px;border-radius:4px;font-size:1rem;font-weight:700;cursor:pointer;width:100%;margin-top:1rem}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#f8f9fa;border-left:4px solid #f5a623;padding:1.5rem;margin-top:2rem;border-radius:4px;display:none}
+.result-box h3{color:#1a2332;margin-bottom:1rem}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #e5e7eb}
+.result-row:last-child{border-bottom:none}
+.content-section { background-color: #ffffff; border-radius: 8px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+.content-section h2 { color: #1a2332; margin-bottom: 1rem; font-size: 1.4rem; }
+.content-section p { margin-bottom: 1rem; color: #4a5568; }
+.content-section h3 { color: #1a2332; margin-top: 1.2rem; margin-bottom: 0.5rem; font-size: 1.1rem; }
+details { background: #f8f9fa; padding: 1rem; border-radius: 6px; margin-bottom: 2rem; border: 1px solid #e5e7eb; }
+summary { font-weight: 600; color: #1a2332; cursor: pointer; }
+details p { margin-top: 0.75rem; color: #4a5568; font-size: 0.95rem; }
+footer { background: #1a2332; color: #fff; text-align: center; padding: 2rem; margin-top: 3rem; }
+footer nav { margin-bottom: 1rem; }
+footer nav a { color: #fff; text-decoration: none; margin: 0 1rem; }
+footer nav a:hover { color: #f5a623; }
+.citation { font-size: 0.85rem; color: #a0aec0; max-width: 700px; margin: 0 auto; }
+@media(max-width:600px){header{flex-direction:column;align-items:flex-start}nav{margin-top:1rem}}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Deck Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Calc<span>Blueprint</span></a>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <div class="container">
+    <div class="calculator-box">
+      <h1>Deck Material Calculator</h1>
+      
+      <div class="unit-toggle">
+        <button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+        <button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+      </div>
+
+      <div class="form-group">
+        <label id="label-length" for="input-length">Deck Length (feet)</label>
+        <input type="number" id="input-length" value="16" min="1" step="0.5">
+      </div>
+
+      <div class="form-group">
+        <label id="label-width" for="input-width">Deck Width (feet)</label>
+        <input type="number" id="input-width" value="12" min="1" step="0.5">
+      </div>
+
+      <div class="form-group">
+        <label id="label-board-width" for="input-board-width">Board Width (inches)</label>
+        <input type="number" id="input-board-width" value="5.5" min="1" step="0.1">
+      </div>
+
+      <div class="form-group">
+        <label id="label-joist-spacing" for="input-joist-spacing">Joist Spacing (inches)</label>
+        <input type="number" id="input-joist-spacing" value="16" min="1" step="1">
+      </div>
+
+      <button type="button" class="calc-btn" onclick="calculateDeck()">Calculate Materials</button>
+
+      <div class="result-box" id="result-box">
+        <h3>Estimated Materials Required</h3>
+        <div class="result-row">
+          <span>Total Deck Area:</span>
+          <strong id="res-area">0</strong>
+        </div>
+        <div class="result-row">
+          <span>Deck Boards Needed:</span>
+          <strong id="res-boards">0</strong>
+        </div>
+        <div class="result-row">
+          <span>Floor Joists Needed:</span>
+          <strong id="res-joists">0</strong>
+        </div>
+        <div class="result-row">
+          <span>Estimated Posts Needed:</span>
+          <strong id="res-posts">0</strong>
+        </div>
+      </div>
+    </div>
+
+    <details>
+      <summary>How this calculator works</summary>
+      <p>The total deck area is calculated by multiplying the length by the width. The required number of deck boards is determined by dividing the deck area by the effective square footage of a single board based on its width and length, while joists are calculated by spacing requirements plus an end member. Formula based on IRC (International Residential Code) and AWPA standards.</p>
+    </details>
+
+    <section class="content-section">
+      <h2>How to Calculate Deck Materials</h2>
+      <p>Planning an outdoor living space begins with an accurate material take-off to prevent costly lumber shortages or excessive waste. To estimate your project correctly, you must first determine the overall footprint dimensions of the structure. Length multiplied by width yields the gross surface area. From there, accounting for gaps between boards and standard lumber lengths ensures you order precisely what is required.</p>
+      <p>When calculating framing components like joists and rim boards, structural load requirements dictate the spacing intervals. Standard framing typically spaces joists at 16 inches on center, though heavy-duty applications or composite decking manufacturers may require 12-inch spacing. Posts and beams must then be mapped out based on maximum allowable spans dictated by local building codes and wood species strength properties.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>What Affects Deck Material Estimates</h2>
+      <p>Several variables can significantly alter your final material list. The layout pattern of your decking—such as a standard perpendicular run, diagonal installation, or intricate herringbone designs—drastically changes the waste factor. Diagonal decking, for example, typically requires a 15% waste allowance compared to the standard 10% for straight runs due to angled cuts at the perimeter headers.</p>
+      <p>Furthermore, the choice of decking material heavily impacts structural framing layouts. Natural hardwoods and heavy composite boards weigh considerably more than traditional pressure-treated southern yellow pine, often requiring tighter joist spacing or larger dimensional lumber sizes to maintain structural integrity and prevent surface sagging over time.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>Frequently Asked Questions</h2>
+      <h3>What size lumber should I use for deck joists?</h3>
+      <p>Standard deck joists typically use 2x8 or 2x10 pressure-treated lumber depending on the span length and load requirements specified by residential building codes.</p>
+      <h3>Should I add extra boards for waste?</h3>
+      <p>Yes, it is standard industry practice to add 10% extra material for standard straight-run installations and 15% to 20% extra if you are installing boards diagonally.</p>
+      <h3>How far apart should deck support posts be placed?</h3>
+      <p>Post spacing is determined by beam size, joist span, and local load ratings, but typical spans for standard 4x4 or 6x6 posts range between 6 to 8 feet apart.</p>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+    <a href="/privacy/">Privacy</a>
+  </nav>
+  <div class="citation">
+    Formula source: IRC (International Residential Code) and AWPA standards. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.
+  </div>
+</footer>
+
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(unit) {
+  currentUnit = unit;
+  document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+  document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+  
+  const lenInput = document.getElementById('input-length');
+  const widInput = document.getElementById('input-width');
+  const boardInput = document.getElementById('input-board-width');
+  const joistInput = document.getElementById('input-joist-spacing');
+
+  if (unit === 'metric') {
+    document.getElementById('label-length').innerText = 'Deck Length (meters)';
+    document.getElementById('label-width').innerText = 'Deck Width (meters)';
+    document.getElementById('label-board-width').innerText = 'Board Width (centimeters)';
+    document.getElementById('label-joist-spacing').innerText = 'Joist Spacing (centimeters)';
+    
+    lenInput.value = (parseFloat(lenInput.value) * 0.3048).toFixed(1);
+    widInput.value = (parseFloat(widInput.value) * 0.3048).toFixed(1);
+    boardInput.value = (parseFloat(boardInput.value) * 2.54).toFixed(1);
+    joistInput.value = (parseFloat(joistInput.value) * 2.54).toFixed(1);
+  } else {
+    document.getElementById('label-length').innerText = 'Deck Length (feet)';
+    document.getElementById('label-width').innerText = 'Deck Width (feet)';
+    document.getElementById('label-board-width').innerText = 'Board Width (inches)';
+    document.getElementById('label-joist-spacing').innerText = 'Joist Spacing (inches)';
+    
+    lenInput.value = (parseFloat(lenInput.value) / 0.3048).toFixed(1);
+    widInput.value = (parseFloat(widInput.value) / 0.3048).toFixed(1);
+    boardInput.value = (parseFloat(boardInput.value) / 2.54).toFixed(1);
+    joistInput.value = (parseFloat(joistInput.value) / 2.54).toFixed(1);
+  }
+}
+
+function calculateDeck() {
+  let length = parseFloat(document.getElementById('input-length').value);
+  let width = parseFloat(document.getElementById('input-width').value);
+  let boardWidth = parseFloat(document.getElementById('input-board-width').value);
+  let joistSpacing = parseFloat(document.getElementById('input-joist-spacing').value);
+
+  if (isNaN(length) || isNaN(width) || isNaN(boardWidth) || isNaN(joistSpacing) || length <= 0 || width <= 0 || boardWidth <= 0 || joistSpacing <= 0) {
+    alert('Please enter valid positive numbers for all fields.');
+    return;
+  }
+
+  let area, boards, joists, posts;
+
+  if (currentUnit === 'metric') {
+    // Convert metric inputs to internal imperial calculations for formula consistency, then display metric results
+    let lengthFt = length / 0.3048;
+    let widthFt = width / 0.3048;
+    let boardWidthIn = boardWidth / 2.54;
+    let joistSpacingIn = joistSpacing / 2.54;
+
+    let deckAreaSqFt = lengthFt * widthFt;
+    let boardsCount = Math.ceil(deckAreaSqFt / ((boardWidthIn / 12) * lengthFt));
+    let joistsCount = Math.ceil(lengthFt / (joistSpacingIn / 12)) + 1;
+    let postsCount = Math.max(4, Math.ceil((lengthFt * widthFt) / 80));
+
+    let areaSqM = deckAreaSqFt * 0.092903;
+
+    document.getElementById('res-area').innerText = areaSqM.toFixed(2) + ' sq meters';
+    document.getElementById('res-boards').innerText = boardsCount + ' boards';
+    document.getElementById('res-joists').innerText = joistsCount + ' joists';
+    document.getElementById('res-posts').innerText = postsCount + ' posts';
+  } else {
+    let deckArea = length * width;
+    let boardsCount = Math.ceil(deckArea / ((boardWidth / 12) * length));
+    let joistsCount = Math.ceil(length / (joistSpacing / 12)) + 1;
+    let postsCount = Math.max(4, Math.ceil(deckArea / 80));
+
+    document.getElementById('res-area').innerText = deckArea.toFixed(1) + ' sq feet';
+    document.getElementById('res-boards').innerText = boardsCount + ' boards';
+    document.getElementById('res-joists').innerText = joistsCount + ' joists';
+    document.getElementById('res-posts').innerText = postsCount + ' posts';
+  }
+
+  document.getElementById('result-box').style.display = 'block';
+}
+</script>
+
+</body>
+</html>
