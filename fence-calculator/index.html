@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/fence-calculator/">
+<title>Fence Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate fence posts, rails, and pickets needed for any fence project. Supports wood, vinyl, and chain link.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{color:#fff;font-size:1.5rem;font-weight:700;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2rem 1rem}
+.container{max-width:800px;margin:0 auto}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);margin-bottom:2rem}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:2px solid #ddd;background:#fff;border-radius:6px;cursor:pointer;font-weight:600;font-size:0.95rem;transition:all 0.2s}
+.unit-btn.active{background:#f5a623;color:#1a2332;border-color:#f5a623}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;font-size:0.95rem;color:#1a2332}
+.form-group input,.form-group select{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:6px;font-size:1rem}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:#f5a623}
+.calc-btn{width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;border-radius:6px;font-size:1.05rem;font-weight:700;cursor:pointer;transition:background 0.2s}
+.calc-btn:hover{background:#e0951e}
+.result-box{background:#1a2332;color:#fff;border-radius:8px;padding:2rem;margin-top:2rem;display:none}
+.result-box h3{color:#f5a623;margin-bottom:1rem;font-size:1.25rem}
+.result-row{display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid rgba(255,255,255,0.1)}
+.result-row:last-child{border-bottom:none}
+.calc-details{background:#fff;border-radius:8px;padding:1.5rem;margin-bottom:2rem;box-shadow:0 2px 4px rgba(0,0,0,0.03)}
+.calc-details summary{font-weight:600;cursor:pointer;color:#1a2332}
+.calc-details p{margin-top:0.75rem;font-size:0.95rem;color:#555}
+.calc-details .source{margin-top:0.5rem;font-size:0.85rem;color:#777;font-style:italic}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 2px 4px rgba(0,0,0,0.03)}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
+.content-section h3{color:#1a2332;margin-top:1.25rem;margin-bottom:0.5rem;font-size:1.1rem}
+.content-section p{margin-bottom:1rem;color:#444}
+footer{background:#1a2332;color:#fff;text-align:center;padding:2rem 1rem;margin-top:3rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#bbb;margin:0 0.75rem}
+footer nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#99np3;color:#aaa;max-width:600px;margin:0 auto}
+@media(max-width:600px){header{flex-direction:column;gap:1rem}nav a{margin:0 0.5rem}}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Fence Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+</head>
+<body>
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+</nav>
+</header>
+<main>
+<div class="container">
+<div class="calculator-box">
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+</div>
+<div class="form-group">
+<label id="lbl-length" for="fence-length">Total Fence Length (feet)</label>
+<input type="number" id="fence-length" step="any" min="0" placeholder="e.g. 150">
+</div>
+<div class="form-group">
+<label id="lbl-height" for="fence-height">Fence Height (feet)</label>
+<input type="number" id="fence-height" step="any" min="0" placeholder="e.g. 6">
+</div>
+<div class="form-group">
+<label id="lbl-spacing" for="post-spacing">Post Spacing (feet)</label>
+<input type="number" id="post-spacing" step="any" min="0" value="8">
+</div>
+<div class="form-group">
+<label for="fence-type">Fence Type</label>
+<select id="fence-type" onchange="togglePicketWidth()">
+<option value="wood-picket">Wood Picket</option>
+<option value="wood-privacy">Wood Privacy</option>
+<option value="vinyl">Vinyl Privacy</option>
+<option value="chain-link">Chain Link</option>
+</select>
+</div>
+<div class="form-group" id="group-picket-width">
+<label id="lbl-picket-width" for="picket-width">Picket Width (inches)</label>
+<input type="number" id="picket-width" step="any" min="0" value="5.5">
+</div>
+<button type="button" class="calc-btn" onclick="calculateFence()">Calculate Materials</button>
+<div class="result-box" id="result-box">
+<h3>Estimated Materials Required</h3>
+<div id="result-rows"></div>
+</div>
+</div>
+
+<details class="calc-details">
+<summary>How this calculator works</summary>
+<p>This calculator determines the required structural and decorative components for your fence line. Post count is calculated by dividing total fence length by post spacing and adding an anchor post, rails are determined by height tiers, and pickets are derived from linear coverage based on individual slat width.</p>
+<p class="source">Formula source: IRC (International Residential Code) and AWPA standards</p>
+</details>
+
+<section class="content-section">
+<h2>How to Calculate Fence Materials</h2>
+<p>Planning a fence installation requires precise material estimation to prevent costly project delays or excess waste. The foundation of any accurate fence takeoff begins with measuring the perimeter boundaries and accounting for gates, slopes, and corner turning points. Once the total linear run is established, you can break down the individual components.</p>
+<p>Corner, end, and line posts form the rigid structural skeleton of the assembly, requiring exact layout spacing to maintain wind resistance and aesthetic alignment. Horizontal rails tie the structural posts together, providing backing support for panel infill or wire fabric. Finally, surface pickets or chain link mesh are calculated using the net linear footage minus standard hardware clearances. Incorporating a standard 5% to 10% waste factor ensures you cover field cuts and minor grading irregularities.</p>
+</section>
+
+<section class="content-section">
+<h2>What Affects Fence Material Requirements</h2>
+<p>Several site-specific variables directly influence the quantities and dimensions of fencing components required for a successful build. Soil conditions and local frost lines dictate post depth and concrete footing volume, which subsequently affects overall post length specifications. High wind load exposures often necessitate tighter post spacing intervals or heavier-gauge framing members to prevent structural failure.</p>
+<p>Topography also plays a critical role; sloped terrain requires either stepped or racked panel configurations, which can alter rail lengths and picket counts. Furthermore, municipal zoning laws, homeowner association (HOA) covenants, and property line setbacks restrict maximum allowable heights and material selections, fundamentally altering the total material scope of your residential or commercial fencing project.</p>
+</section>
+
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>How deep should fence posts be buried?</h3>
+<p>As a general rule of thumb derived from standard building codes, fence posts should be buried at least one-third to one-half of their total above-ground height, with a minimum depth of 24 to 36 inches to clear local frost lines and provide adequate lateral stability.</p>
+<h3>Do I need extra posts for gates and corners?</h3>
+<p>Yes, corners, end terminals, and gate openings require specialized post placement and often thicker gauge or larger dimension lumber to support heavier hanging loads and hardware stress without sagging over time.</p>
+<h3>How do I account for slopes when calculating fence materials?</h3>
+<p>Sloped terrain stretches the diagonal run of the fence line, requiring slightly more linear material. Additionally, racked or stepped installations demand precise measuring to ensure rails remain parallel or level while maintaining uniform ground clearance.</p>
+</section>
+</div>
+</main>
+<footer>
+<nav>
+<a href="/">Home</a>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+<a href="/privacy/">Privacy</a>
+</nav>
+<div class="citation">Formula source: IRC (International Residential Code) and AWPA standards. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint</div>
+</footer>
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(unit) {
+    currentUnit = unit;
+    document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+    document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+    
+    if (unit === 'metric') {
+        document.getElementById('lbl-length').innerText = 'Total Fence Length (meters)';
+        document.getElementById('lbl-height').innerText = 'Fence Height (meters)';
+        document.getElementById('lbl-spacing').innerText = 'Post Spacing (meters)';
+        document.getElementById('lbl-picket-width').innerText = 'Picket Width (centimeters)';
+        
+        if (document.getElementById('fence-length').value) {
+            document.getElementById('fence-length').value = (parseFloat(document.getElementById('fence-length').value) * 0.3048).toFixed(2);
+        }
+        if (document.getElementById('fence-height').value) {
+            document.getElementById('fence-height').value = (parseFloat(document.getElementById('fence-height').value) * 0.3048).toFixed(2);
+        }
+        if (document.getElementById('post-spacing').value) {
+            document.getElementById('post-spacing').value = (parseFloat(document.getElementById('post-spacing').value) * 0.3048).toFixed(2);
+        }
+        if (document.getElementById('picket-width').value) {
+            document.getElementById('picket-width').value = (parseFloat(document.getElementById('picket-width').value) * 2.54).toFixed(1);
+        }
+    } else {
+        document.getElementById('lbl-length').innerText = 'Total Fence Length (feet)';
+        document.getElementById('lbl-height').innerText = 'Fence Height (feet)';
+        document.getElementById('lbl-spacing').innerText = 'Post Spacing (feet)';
+        document.getElementById('lbl-picket-width').innerText = 'Picket Width (inches)';
+        
+        if (document.getElementById('fence-length').value) {
+            document.getElementById('fence-length').value = (parseFloat(document.getElementById('fence-length').value) / 0.3048).toFixed(1);
+        }
+        if (document.getElementById('fence-height').value) {
+            document.getElementById('fence-height').value = (parseFloat(document.getElementById('fence-height').value) / 0.3048).toFixed(1);
+        }
+        if (document.getElementById('post-spacing').value) {
+            document.getElementById('post-spacing').value = (parseFloat(document.getElementById('post-spacing').value) / 0.3048).toFixed(1);
+        }
+        if (document.getElementById('picket-width').value) {
+            document.getElementById('picket-width').value = (parseFloat(document.getElementById('picket-width').value) / 2.54).toFixed(1);
+        }
+    }
+}
+
+function togglePicketWidth() {
+    const type = document.getElementById('fence-type').value;
+    const group = document.getElementById('group-picket-width');
+    if (type === 'chain-link') {
+        group.style.display = 'none';
+    } else {
+        group.style.display = 'block';
+    }
+}
+
+function calculateFence() {
+    let length = parseFloat(document.getElementById('fence-length').value);
+    let height = parseFloat(document.getElementById('fence-height').value);
+    let spacing = parseFloat(document.getElementById('post-spacing').value);
+    let fenceType = document.getElementById('fence-type').value;
+    let picketWidth = parseFloat(document.getElementById('picket-width').value);
+
+    if (isNaN(length) || isNaN(height) || isNaN(spacing) || length <= 0 || height <= 0 || spacing <= 0) {
+        alert('Please enter valid positive numbers for length, height, and spacing.');
+        return;
+    }
+
+    // Convert to imperial internally for standard formula execution if in metric
+    let lengthFt = currentUnit === 'metric' ? length / 0.3048 : length;
+    let heightFt = currentUnit === 'metric' ? height / 0.3048 : height;
+    let spacingFt = currentUnit === 'metric' ? spacing / 0.3048 : spacing;
+    let picketWidthIn = currentUnit === 'metric' ? picketWidth / 2.54 : picketWidth;
+
+    let posts = Math.ceil(lengthFt / spacingFt) + 1;
+    let rails = posts * (heightFt / 8);
+    
+    let html = '';
+    html += `<div class="result-row"><span>Total Posts Needed:</span><span><strong>${posts}</strong> units</span></div>`;
+    html += `<div class="result-row"><span>Horizontal Rails Needed:</span><span><strong>${Math.ceil(rails)}</strong> units</span></div>`;
+
+    if (fenceType !== 'chain-link') {
+        if (isNaN(picketWidthIn) || picketWidthIn <= 0) {
+            alert('Please enter a valid picket width.');
+            return;
+        }
+        let pickets = (lengthFt * 12) / picketWidthIn;
+        html += `<div class="result-row"><span>Pickets / Slats Needed:</span><span><strong>${Math.ceil(pickets)}</strong> units</span></div>`;
+    } else {
+        let rollLength = currentUnit === 'metric' ? (lengthFt * 0.3048) : lengthFt;
+        let unitLabel = currentUnit === 'metric' ? 'meters' : 'linear feet';
+        html += `<div class="result-row"><span>Chain Link Fabric:</span><span><strong>${rollLength.toFixed(1)}</strong> ${unitLabel}</span></div>`;
+    }
+
+    document.getElementById('result-rows').innerHTML = html;
+    document.getElementById('result-box').style.display = 'block';
+}
+</script>
+</body>
+</html>

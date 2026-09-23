@@ -41,7 +41,8 @@
     "description": "Calculate fence posts, rails, and pickets needed for any fence project. Supports wood, vinyl, and chain link.",
     "inputs": "Total fence length (feet), fence height (feet), post spacing (feet), fence type",
     "formula": "Posts = ceil(length / post_spacing) + 1. Rails = posts * (height / 8). Pickets = length * 12 / picket_width (for picket fences).",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-09-23T02:12:55.745867Z"
   },
   {
     "slug": "drywall-calculator",
