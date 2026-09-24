@@ -7,17 +7,19 @@ import json
 SKIP = {"scripts", ".github", "node_modules"}
 
 
+def clean(text):
+    text = re.sub(r"<[^>]+>", "", text)
+    text = text.replace("&pi;", "pi").replace("&amp;", "&")
+    text = text.replace("&nbsp;", " ").replace("&lt;", "<").replace("&gt;", ">")
+    return text.strip()
+
+
 def extract_faqs(html):
-    """Extract 3 Q&A pairs from the FAQ section using multiple pattern attempts."""
+    """Try every known FAQ structure and return the first 3 Q&A pairs found."""
     faqs = []
 
-    # Try multiple section heading variations
-    section_markers = [
-        "Frequently Asked Questions",
-        "FAQ",
-        "Common Questions",
-    ]
-
+    # Find FAQ section
+    section_markers = ["Frequently Asked Questions", "FAQ", "Common Questions"]
     idx = -1
     for marker in section_markers:
         idx = html.find(marker)
@@ -27,16 +29,25 @@ def extract_faqs(html):
     if idx == -1:
         return faqs
 
-    section = html[idx:idx + 12000]
+    section = html[idx:idx + 15000]
 
-    # Pattern 1: <h3>Question</h3><p>Answer</p>
+    # Pattern 1: <p class="faq-question">Q</p><p class="faq-answer">A</p>
     matches = re.findall(
-        r"<h[234][^>]*>(.*?)</h[234]>\s*<p[^>]*>(.*?)</p>",
+        r'<p[^>]*class="faq-question"[^>]*>(.*?)</p>\s*<p[^>]*class="faq-answer"[^>]*>(.*?)</p>',
         section,
-        re.DOTALL
+        re.DOTALL | re.IGNORECASE
     )
 
-    # Pattern 2: <details><summary>Question</summary><p>Answer</p></details>
+    # Pattern 2: <h3>Q</h3><p>A</p> or <h4>Q</h4><p>A</p>
+    if len(matches) < 3:
+        h_matches = re.findall(
+            r"<h[234][^>]*>(.*?)</h[234]>\s*<p[^>]*>(.*?)</p>",
+            section,
+            re.DOTALL
+        )
+        matches.extend(h_matches)
+
+    # Pattern 3: <details><summary>Q</summary><p>A</p>
     if len(matches) < 3:
         details_matches = re.findall(
             r"<summary[^>]*>(.*?)</summary>\s*<p[^>]*>(.*?)</p>",
@@ -45,22 +56,14 @@ def extract_faqs(html):
         )
         matches.extend(details_matches)
 
-    # Pattern 3: <strong>Question</strong> followed by <p>Answer</p>
-    if len(matches) < 3:
-        strong_matches = re.findall(
-            r"<strong[^>]*>(.*?)</strong>\s*(?:<br\s*/?>)?\s*<p[^>]*>(.*?)</p>",
-            section,
-            re.DOTALL
-        )
-        matches.extend(strong_matches)
-
-    for q, a in matches[:3]:
-        q_clean = re.sub(r"<[^>]+>", "", q).strip()
-        a_clean = re.sub(r"<[^>]+>", "", a).strip()
-        # Skip if question doesn't look like a question
+    for q, a in matches:
+        q_clean = clean(q)
+        a_clean = clean(a)
         if not q_clean or not a_clean:
             continue
         if len(q_clean) < 10 or len(q_clean) > 200:
+            continue
+        if len(a_clean) < 20:
             continue
         faqs.append((q_clean, a_clean))
         if len(faqs) >= 3:
