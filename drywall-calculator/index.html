@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/drywall-calculator/">
+<title>Drywall Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate drywall sheets, screws, and joint compound needed for any room. Enter dimensions for complete material list.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Drywall Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{color:#fff;font-size:1.5rem;font-weight:bold;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2rem 1rem}
+.container{max-width:800px;margin:0 auto}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);margin-bottom:2rem}
+h1{font-size:2rem;color:#1a2332;margin-bottom:0.5rem}
+.calc-desc{color:#666;margin-bottom:1.5rem}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:1px solid #ccc;background:#f8f9fa;cursor:pointer;border-radius:4px;font-weight:600;color:#333}
+.unit-btn.active{background:#f5a623;color:#1a2332;border-color:#f5a623}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input, .form-group select{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+.calc-btn{width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;font-size:1rem;font-weight:bold;border-radius:4px;cursor:pointer;transition:background 0.2s}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#f8f9fa;border-left:4px solid #f5a623;padding:1.5rem;border-radius:4px;margin-top:1.5rem;display:none}
+.result-box h3{color:#1a2332;margin-bottom:1rem}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #e5e5e5}
+.result-row:last-child{border-bottom:none}
+.result-label{color:#555}
+.result-value{font-weight:bold;color:#1a2332}
+details{background:#fff;border-radius:8px;padding:1rem 1.5rem;margin-bottom:2rem;box-shadow:0 2px 4px rgba(0,0,0,0.03);cursor:pointer}
+summary{font-weight:600;color:#1a2332;outline:none}
+details p{margin-top:1rem;color:#555;font-size:0.95rem}
+.content-section { background-color: #ffffff; border-radius: 8px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.03); }
+.content-section h2 { color: #1a2332; margin-bottom: 1rem; font-size: 1.5rem; }
+.content-section h3 { color: #1a2332; margin-top: 1.2rem; margin-bottom: 0.5rem; font-size: 1.1rem; }
+.content-section p { color: #555; margin-bottom: 1rem; }
+footer{background:#1a2332;color:#fff;padding:2rem;text-align:center;margin-top:4rem}
+.footer-nav{margin-bottom:1rem}
+.footer-nav a{color:#fff;text-decoration:none;margin:0 1rem;font-size:0.9rem}
+.footer-nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#aaa;max-width:700px;margin:0 auto;line-height:1.5}
+@media(max-width:600px){header{flex-direction:column;align-items:flex-start}nav{margin-top:1rem}}
+</style>
+</head>
+<body>
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+</nav>
+</header>
+<main>
+<div class="container">
+<div class="calculator-box">
+<h1>Drywall Calculator</h1>
+<p class="calc-desc">Calculate drywall sheets, screws, and joint compound needed for any room. Enter dimensions for complete material list.</p>
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnit('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnit('metric')">Metric</button>
+</div>
+<form id="drywall-form">
+<div class="form-group">
+<label id="label-length" for="room-length">Room length (feet)</label>
+<input type="number" id="room-length" step="any" min="0" required placeholder="e.g. 12">
+</div>
+<div class="form-group">
+<label id="label-width" for="room-width">Room width (feet)</label>
+<input type="number" id="room-width" step="any" min="0" required placeholder="e.g. 10">
+</div>
+<div class="form-group">
+<label id="label-height" for="ceiling-height">Ceiling height (feet)</label>
+<input type="number" id="ceiling-height" step="any" min="0" required placeholder="e.g. 8">
+</div>
+<div class="form-group">
+<label for="include-ceiling">Include ceiling?</label>
+<select id="include-ceiling">
+<option value="yes">Yes</option>
+<option value="no">No</option>
+</select>
+</div>
+<button type="submit" class="calc-btn">Calculate Materials</button>
+</form>
+<div class="result-box" id="result-box">
+<h3>Estimated Material List</h3>
+<div class="result-row">
+<span class="result-label">Total Surface Area</span>
+<span class="result-value" id="res-area">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Drywall Sheets (4'x8')</span>
+<span class="result-value" id="res-sheets">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Drywall Screws</span>
+<span class="result-value" id="res-screws">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Joint Compound (Mud)</span>
+<span class="result-value" id="res-mud">0</span>
+</div>
+</div>
+</div>
+
+<details>
+<summary>How this calculator works</summary>
+<p>This calculator determines material requirements by computing the total perimeter wall area and optional ceiling area based on your room dimensions. Standard 4x8 foot drywall sheets (32 square feet) are accounted for along with standard fastener counts and joint compound weights per sheet coverage. Material coverage per ASTM standards.</p>
+</details>
+
+<section class="content-section">
+<h2>How to Calculate Drywall</h2>
+<p>Calculating drywall requires finding the total surface area of the room's walls and, if applicable, the ceiling. Measure the length and width of the room, then multiply the perimeter by the ceiling height to get total wall square footage. Add the ceiling area by multiplying the room length by the width if you are finishing the ceiling.</p>
+<p>Once you have the total square footage, divide by 32 to determine the number of standard 4-foot by 8-foot drywall sheets needed. It is always wise to add a 5 to 10 percent waste factor for cuts, corners, and potential breakage during installation and transport.</p>
+</section>
+
+<section class="content-section">
+<h2>What Affects Drywall Estimates</h2>
+<p>Several architectural factors can significantly alter your total drywall estimation. Rooms with vaulted or cathedral ceilings increase surface area far beyond standard calculations. Additionally, rooms with numerous windows, doors, or built-in openings reduce the required material surface area, though framing and cutting complexity may increase.</p>
+<p>Sheet size choice also matters. While 4x8 sheets are standard, opting for 4x10 or 4x12 panels can reduce horizontal seams in rooms with high ceilings, altering the overall fastener spacing and joint compound quantities required for proper finishing.</p>
+</section>
+
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>How many drywall screws do I need per sheet?</h3>
+<p>Standard installation guidelines recommend approximately 32 screws per standard 4x8 drywall sheet when hung on ceilings or walls with regular framing spacing.</p>
+<h3>How much joint compound is needed per sheet?</h3>
+<p>A standard estimate is roughly 4.5 pounds of joint compound per drywall sheet to adequately tape, bed, and finish all joints and fastener heads.</p>
+<h3>Should I include extra material for waste?</h3>
+<p>Yes, contractors typically add 5% to 10% extra material to account for cutting errors, outlet cutouts, and damaged edges during delivery and hanging.</p>
+</section>
+
+</div>
+</main>
+<footer>
+<div class="footer-nav">
+<a href="/">Home</a>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+<a href="#privacy">Privacy</a>
+</div>
+<p class="citation">Formula source: Material coverage per ASTM standards. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.</p>
+</footer>
+<script>
+let currentUnit = 'imperial';
+
+function setUnit(unit) {
+  currentUnit = unit;
+  const btnImp = document.getElementById('btn-imperial');
+  const btnMet = document.getElementById('btn-metric');
+  const lblLen = document.getElementById('label-length');
+  const lblWid = document.getElementById('label-width');
+  const lblHgt = document.getElementById('label-height');
+  
+  const inLen = document.getElementById('room-length');
+  const inWid = document.getElementById('room-width');
+  const inHgt = document.getElementById('ceiling-height');
+
+  if (unit === 'imperial') {
+    btnImp.classList.add('active');
+    btnMet.classList.remove('active');
+    lblLen.textContent = 'Room length (feet)';
+    lblWid.textContent = 'Room width (feet)';
+    lblHgt.textContent = 'Ceiling height (feet)';
+    if(inLen.value) inLen.value = (parseFloat(inLen.value) / 0.3048).toFixed(2);
+    if(inWid.value) inWid.value = (parseFloat(inWid.value) / 0.3048).toFixed(2);
+    if(inHgt.value) inHgt.value = (parseFloat(inHgt.value) / 0.3048).toFixed(2);
+  } else {
+    btnMet.classList.add('active');
+    btnImp.classList.remove('active');
+    lblLen.textContent = 'Room length (meters)';
+    lblWid.textContent = 'Room width (meters)';
+    lblHgt.textContent = 'Ceiling height (meters)';
+    if(inLen.value) inLen.value = (parseFloat(inLen.value) * 0.3048).toFixed(2);
+    if(inWid.value) inWid.value = (parseFloat(inWid.value) * 0.3048).toFixed(2);
+    if(inHgt.value) inHgt.value = (parseFloat(inHgt.value) * 0.3048).toFixed(2);
+  }
+}
+
+document.getElementById('drywall-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  let length = parseFloat(document.getElementById('room-length').value);
+  let width = parseFloat(document.getElementById('room-width').value);
+  let height = parseFloat(document.getElementById('ceiling-height').value);
+  const includeCeiling = document.getElementById('include-ceiling').value;
+
+  if (isNaN(length) || isNaN(width) || isNaN(height)) return;
+
+  let wallAreaImp = 2 * (length + width) * height;
+  let ceilingAreaImp = includeCeiling === 'yes' ? (length * width) : 0;
+  let totalAreaImp = wallAreaImp + ceilingAreaImp;
+
+  let sheets = Math.ceil(totalAreaImp / 32);
+  let screws = sheets * 32;
+  let mudLbs = sheets * 4.5;
+
+  let displayArea, areaUnit, mudValue, mudUnit;
+
+  if (currentUnit === 'imperial') {
+    displayArea = totalAreaImp.toFixed(1);
+    areaUnit = ' sq ft';
+    mudValue = mudLbs.toFixed(1);
+    mudUnit = ' lbs';
+  } else {
+    let totalAreaMet = totalAreaImp * 0.092903; // sq ft to sq meters
+    let mudKg = mudLbs * 0.4536;
+    displayArea = totalAreaMet.toFixed(1);
+    areaUnit = ' sq m';
+    mudValue = mudKg.toFixed(1);
+    mudUnit = ' kg';
+  }
+
+  document.getElementById('res-area').textContent = displayArea + areaUnit;
+  document.getElementById('res-sheets').textContent = sheets + ' sheets';
+  document.getElementById('res-screws').textContent = screws + ' screws';
+  document.getElementById('res-mud').textContent = mudValue + mudUnit;
+
+  document.getElementById('result-box').style.display = 'block';
+});
+</script>
+</body>
+</html>

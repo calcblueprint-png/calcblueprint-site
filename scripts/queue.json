@@ -50,7 +50,8 @@
     "description": "Calculate drywall sheets, screws, and joint compound needed for any room. Enter dimensions for complete material list.",
     "inputs": "Room length (feet), room width (feet), ceiling height (feet), include ceiling (yes/no)",
     "formula": "Wall area = 2 * (length + width) * height. Ceiling area = length * width if included. Sheets = ceil(total_area / 32). Screws = sheets * 32. Mud = sheets * 4.5 lbs.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-09-24T02:12:31.314862Z"
   },
   {
     "slug": "insulation-calculator",
