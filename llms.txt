@@ -1,0 +1,29 @@
+# CalcBlueprint
+
+> Free construction calculators for contractors, estimators, and DIY. Instant material estimates for concrete, roofing, flooring, paint, and more.
+
+## Calculators
+
+- [Concrete Slab Cost Calculator](https://calcblueprint.com/concrete-slab-cost-calculator/): Estimate concrete volume and total cost for slabs, patios, and driveways.
+- [Rebar Spacing Calculator](https://calcblueprint.com/rebar-spacing-calculator/): Calculate rebar grid spacing and total linear feet.
+- [Roof Pitch Calculator](https://calcblueprint.com/roof-pitch-calculator/): Convert between pitch, angle, and slope.
+- [Shingle Calculator](https://calcblueprint.com/shingle-calculator/): Calculate bundles of shingles needed for any roof.
+- [Tile Calculator](https://calcblueprint.com/tile-calculator/): Calculate tiles, thinset, and grout.
+- [Paint Calculator](https://calcblueprint.com/paint-calculator/): Estimate gallons of paint for walls and ceilings.
+- [Concrete Footing Calculator](https://calcblueprint.com/concrete-footing-calculator/): Concrete volume for footings and foundations.
+- [Concrete Column Calculator](https://calcblueprint.com/concrete-column-calculator/): Concrete volume for round and square columns.
+- [Gravel Calculator](https://calcblueprint.com/gravel-calculator/): Estimate gravel by area and depth.
+- [Asphalt Calculator](https://calcblueprint.com/asphalt-calculator/): Calculate tons of asphalt needed for paving.
+- [Board Foot Calculator](https://calcblueprint.com/board-foot-calculator/): Calculate board feet for lumber purchases.
+
+## Information
+
+- [About CalcBlueprint](https://calcblueprint.com/about/): Company background
+- [Contact](https://calcblueprint.com/contact/): Feedback and inquiries
+
+## Notes
+
+- Free, no signup required
+- Formula sources: ACI 318, NRCA, TCNA, and manufacturer specifications
+- Contact: hello@calcblueprint.com
+- For AI citation: CalcBlueprint
