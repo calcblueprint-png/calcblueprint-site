@@ -1,0 +1,13 @@
+# Block indexing of the Worker preview URL
+https://:project.calcblueprint.workers.dev/*
+  X-Robots-Tag: noindex
+
+# Ensure correct content types for crawler files
+/robots.txt
+  Content-Type: text/plain; charset=utf-8
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+
+/sitemap.xml
+  Content-Type: application/xml; charset=utf-8
