@@ -19,7 +19,6 @@ def extract_faqs(html):
     """Try every known FAQ structure and return the first 3 Q&A pairs found."""
     faqs = []
 
-    # Find FAQ section
     section_markers = ["Frequently Asked Questions", "FAQ", "Common Questions"]
     idx = -1
     for marker in section_markers:
@@ -32,26 +31,32 @@ def extract_faqs(html):
 
     section = html[idx:idx + 15000]
 
-    # Pattern 1: <p class="faq-question">Q</p><p class="faq-answer">A</p>
+    # Pattern 1: <div class="faq-question">Q</div><div class="faq-answer">A</div>
     matches = re.findall(
-        r'<p[^>]*class="faq-question"[^>]*>(.*?)</p>\s*<p[^>]*class="faq-answer"[^>]*>(.*?)</p>',
+        r'<div[^>]*class="faq-question"[^>]*>(.*?)</div>\s*<div[^>]*class="faq-answer"[^>]*>(.*?)</div>',
         section,
         re.DOTALL | re.IGNORECASE
     )
 
-    # Pattern 2: <p class="faq-question">Q</p><p>A</p> (plain answer paragraph)
+    # Pattern 2: <p class="faq-question">Q</p><p class="faq-answer">A</p>
     if len(matches) < 3:
         p_matches = re.findall(
+            r'<p[^>]*class="faq-question"[^>]*>(.*?)</p>\s*<p[^>]*class="faq-answer"[^>]*>(.*?)</p>',
+            section,
+            re.DOTALL | re.IGNORECASE
+        )
+        matches.extend(p_matches)
+
+    # Pattern 3: <p class="faq-question">Q</p><p>A</p> (plain answer paragraph)
+    if len(matches) < 3:
+        plain_p = re.findall(
             r'<p[^>]*class="faq-question"[^>]*>(.*?)</p>\s*<p[^>]*>(.*?)</p>',
             section,
             re.DOTALL | re.IGNORECASE
         )
-        for q, a in p_matches:
-            # Skip if this is already captured (answer with faq-answer class)
-            if not any(q.strip() == existing[0].strip() for existing in matches):
-                matches.append((q, a))
+        matches.extend(plain_p)
 
-    # Pattern 3: <h3>Q</h3><p>A</p> or <h4>Q</h4><p>A</p>
+    # Pattern 4: <h3>Q</h3><p>A</p> or <h4>
     if len(matches) < 3:
         h_matches = re.findall(
             r"<h[234][^>]*>(.*?)</h[234]>\s*<p[^>]*>(.*?)</p>",
@@ -60,7 +65,7 @@ def extract_faqs(html):
         )
         matches.extend(h_matches)
 
-    # Pattern 4: <details><summary>Q</summary><p>A</p>
+    # Pattern 5: <details><summary>Q</summary><p>A</p>
     if len(matches) < 3:
         details_matches = re.findall(
             r"<summary[^>]*>(.*?)</summary>\s*<p[^>]*>(.*?)</p>",
@@ -78,7 +83,6 @@ def extract_faqs(html):
             continue
         if len(a_clean) < 20:
             continue
-        # Skip if the "answer" is actually another question
         if a_clean.lower().endswith("?") and len(a_clean) < 100:
             continue
         faqs.append((q_clean, a_clean))
