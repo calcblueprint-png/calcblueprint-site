@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/insulation-calculator/">
+<title>Insulation Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate insulation needed for walls, ceilings, and attics. Enter area and R-value target for bag or roll estimates.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{color:#fff;font-size:1.5rem;font-weight:700;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2rem 1rem;max-width:900px;margin:0 auto}
+.container{width:100%}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.05);margin-bottom:2rem}
+.calculator-box h1{font-size:1.8rem;color:#1a2332;margin-bottom:1.5rem}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:1px solid #ccc;background:#f8f9fa;cursor:pointer;font-weight:600;border-radius:4px;transition:all 0.2s}
+.unit-btn.active{background:#f5a623;color:#1a2332;border-color:#f5a623}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input,.form-group select{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+.calc-btn{background:#f5a623;color:#1a2332;border:none;padding:1rem;width:100%;font-size:1.1rem;font-weight:700;border-radius:4px;cursor:pointer;margin-top:1rem;transition:background 0.2s}
+.calc-btn:hover{background:#e0951c}
+.result-box{background:#f8f9fa;border-left:4px solid #f5a623;padding:1.5rem;border-radius:4px;margin-top:2rem;display:none}
+.result-box h2{font-size:1.3rem;color:#1a2332;margin-bottom:1rem}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #e1e4e8}
+.result-row:last-child{border-bottom:none}
+.result-label{font-weight:600;color:#555}
+.result-value{font-weight:700;color:#1a2332}
+.methodology{margin:1.5rem 0;background:#f8f9fa;border:1px solid #e1e4e8;border-radius:4px;padding:1rem}
+.methodology summary{font-weight:600;cursor:pointer;color:#1a2332}
+.methodology p{margin-top:0.75rem;font-size:0.95rem;color:#555}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.05)}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.4rem}
+.content-section p{margin-bottom:1rem;color:#4a5568}
+.content-section h3{color:#1a2332;margin-top:1.5rem;margin-bottom:0.5rem;font-size:1.1rem}
+footer{background:#1a2332;color:#fff;padding:2rem;text-align:center;margin-top:4rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#fff;margin:0 1rem;text-decoration:none}
+footer nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#a0aec0;max-width:800px;margin:0 auto}
+@media(max-width:600px){header{flex-direction:column;gap:1rem}nav a{margin:0 0.5rem}}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Insulation Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+</head>
+<body>
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+</nav>
+</header>
+<main>
+<div class="container">
+<div class="calculator-box">
+<h1>Insulation Calculator</h1>
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnit('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnit('metric')">Metric</button>
+</div>
+<form id="insulation-form">
+<div class="form-group">
+<label id="label-area" for="area">Area (square feet)</label>
+<input type="number" id="area" step="any" min="0" required placeholder="e.g., 500">
+</div>
+<div class="form-group">
+<label for="insulation-type">Insulation Type</label>
+<select id="insulation-type">
+<option value="batts">Fiberglass Batts</option>
+<option value="blown">Blown-in Insulation</option>
+<option value="spray">Spray Foam</option>
+</select>
+</div>
+<div class="form-group">
+<label id="label-rval" for="r-value">R-Value Target</label>
+<input type="number" id="r-value" step="any" min="0" required placeholder="e.g., R-30">
+</div>
+<button type="button" class="calc-btn" onclick="calculateInsulation()">Calculate Material</button>
+</form>
+
+<details class="methodology">
+<summary>How this calculator works</summary>
+<p>For fiberglass batts, the required number of rolls is calculated by dividing total surface area by the standard coverage area per roll and rounding up. For blown-in and spray foam insulation, the calculation scales material volume or bag count based on the desired R-value target and manufacturer packaging efficiency ratings.</p>
+<p style="margin-top:0.5rem;font-style:italic;">Formula based on DOE (Department of Energy) recommended R-values and manufacturer specs</p>
+</details>
+
+<div class="result-box" id="result-box">
+<h2>Insulation Estimates</h2>
+<div class="result-row">
+<span class="result-label">Total Coverage Area:</span>
+<span class="result-value" id="res-area">0</span>
+</div>
+<div class="result-row">
+<span class="result-label" id="res-material-label">Estimated Rolls Needed:</span>
+<span class="result-value" id="res-material">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Target R-Value:</span>
+<span class="result-value" id="res-rval">0</span>
+</div>
+</div>
+</div>
+
+<section class="content-section">
+<h2>How to Calculate Insulation</h2>
+<p>Calculating the correct amount of insulation for walls, crawlspaces, or attic cavities ensures optimal thermal performance and energy efficiency. To begin, measure the total square footage of the space by multiplying the length by the height or width of the surfaces being treated. Subtract major openings like large windows and doors for wall projects, but include standard framing cavities for framing factor adjustments.</p>
+<p>Next, determine your local building code requirements or regional Department of Energy climate zone recommendations for target R-values. For fiberglass batts, divide the net square footage by the specific square footage covered by a single roll or package. For blown-in loose-fill cellulose or fiberglass, multiply the area by the R-value factor and divide by the manufacturer's bag coverage factor to determine total bag requirements. Always purchase an extra 5 to 10 percent to account for cutting waste, awkward corners, and settling over time.</p>
+</section>
+
+<section class="content-section">
+<h2>What Affects Insulation Requirements</h2>
+<p>Several structural and environmental variables impact your total insulation needs and material selection. Your geographic location and local climate zone dictate the minimum recommended R-value, with colder northern regions demanding significantly higher thermal resistance values for roofs and exterior walls compared to mild southern zones.</p>
+<p>The framing structure and cavity depth also play a major role. Standard 2x4 wood studs limit batt thickness and maximum achievable R-value unless continuous exterior insulation is added, whereas 2x6 framing or deep attic joists accommodate higher performance batts and deeper loose-fill applications. Additionally, material choice affects performance; blown-in insulation fills irregular cavities tightly without gaps, reducing thermal bridging, while faced batts provide integral vapor retarders crucial for managing moisture transfer in humid climates.</p>
+</section>
+
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>What R-value do I need for my attic?</h3>
+<p>Most attics in temperate to cold climates require an R-value between R-49 and R-60, which translates to roughly 16 to 20 inches of loose-fill insulation or a combination of batts and blown-in material.</p>
+<h3>Can I install fiberglass batts over existing insulation?</h3>
+<p>Yes, you can lay unfaced fiberglass batts across existing attic insulation to boost thermal performance, provided you ensure the older layer does not have an active vapor barrier facing upward that could trap moisture.</p>
+<h3>How much extra insulation should I buy for waste?</h3>
+<p>It is standard industry practice to purchase an additional 5% to 10% more material than your calculated net square footage to account for cutting errors, joist bays, and odd angles.</p>
+</section>
+</div>
+</main>
+<footer>
+<nav>
+<a href="/">Home</a>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+<a href="/privacy/">Privacy</a>
+</nav>
+<div class="citation">Formula source: DOE (Department of Energy) recommended R-values and manufacturer specs. Results are estimates for planning — verify with a licensed professional before ordering materials.</div>
+</footer>
+<script>
+let currentUnit = 'imperial';
+
+function setUnit(unit) {
+    currentUnit = unit;
+    document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+    document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+    
+    if (unit === 'metric') {
+        document.getElementById('label-area').innerText = 'Area (square meters)';
+        document.getElementById('area').placeholder = 'e.g., 50';
+    } else {
+        document.getElementById('label-area').innerText = 'Area (square feet)';
+        document.getElementById('area').placeholder = 'e.g., 500';
+    }
+    
+    let resBox = document.getElementById('result-box');
+    if (resBox.style.display === 'block') {
+        calculateInsulation();
+    }
+}
+
+function calculateInsulation() {
+    let areaInput = parseFloat(document.getElementById('area').value);
+    let rValInput = parseFloat(document.getElementById('r-value').value);
+    let typeInput = document.getElementById('insulation-type').value;
+
+    if (isNaN(areaInput) || areaInput <= 0 || isNaN(rValInput) || rValInput <= 0) {
+        alert('Please enter valid positive numbers for area and R-value.');
+        return;
+    }
+
+    let areaSqFt = currentUnit === 'metric' ? areaInput * 10.7639 : areaInput;
+    let materialCount = 0;
+    let materialLabelText = '';
+
+    if (typeInput === 'batts') {
+        let coveragePerRollSqFt = 75;
+        materialCount = Math.ceil(areaSqFt / coveragePerRollSqFt);
+        materialLabelText = 'Estimated Rolls Needed:';
+    } else if (typeInput === 'blown') {
+        let bagCoverageFactor = 450;
+        materialCount = Math.ceil((areaSqFt * rValInput) / bagCoverageFactor);
+        materialLabelText = 'Estimated Bags Needed:';
+    } else {
+        let sprayCoverageFactor = 300;
+        materialCount = Math.ceil((areaSqFt * rValInput) / sprayCoverageFactor);
+        materialLabelText = 'Estimated Kits/Units Needed:';
+    }
+
+    document.getElementById('res-area').innerText = areaInput.toFixed(1) + (currentUnit === 'metric' ? ' m²' : ' sq ft');
+    document.getElementById('res-material-label').innerText = materialLabelText;
+    document.getElementById('res-material').innerText = materialCount;
+    document.getElementById('res-rval').innerText = 'R-' + rValInput;
+
+    document.getElementById('result-box').style.display = 'block';
+}
+</script>
+</body>
+</html>

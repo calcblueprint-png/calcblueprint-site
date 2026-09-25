@@ -59,7 +59,8 @@
     "description": "Calculate insulation needed for walls, ceilings, and attics. Enter area and R-value target for bag or roll estimates.",
     "inputs": "Area (square feet), insulation type (fiberglass batts, blown-in, spray foam), R-value target",
     "formula": "Rolls for batts = ceil(area / coverage_per_roll). For blown-in: bags = ceil(area * R_value / bag_coverage_factor).",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-09-25T02:11:57.073306Z"
   },
   {
     "slug": "mulch-calculator",
