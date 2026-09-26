@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/mulch-calculator/">
+<title>Mulch Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate how many bags or cubic yards of mulch you need for garden beds and landscaping.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f8;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{color:#fff;font-size:1.5rem;font-weight:bold;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2.5rem 1rem;max-width:900px;margin:0 auto}
+.container{width:100%}
+.calculator-box{background:#ffffff;border-radius:8px;padding:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.05);margin-bottom:2rem}
+.calculator-box h1{font-size:1.8rem;color:#1a2332;margin-bottom:1.5rem}
+.unit-toggle{display:flex;gap:1rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:2px solid #1a2332;background:#fff;color:#1a2332;font-weight:bold;border-radius:4px;cursor:pointer;transition:all 0.2s}
+.unit-btn.active{background:#1a2332;color:#fff}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input, .form-group select{width:100%;padding:0.75rem;border:1px solid #cbd5e1;border-radius:4px;font-size:1rem}
+.calc-btn{background:#f5a623;color:#1a2332;border:none;width:100%;padding:1rem;font-size:1.1rem;font-weight:bold;border-radius:4px;cursor:pointer;transition:background 0.2s;margin-top:1rem}
+.calc-btn:hover{background:#e0951b}
+.result-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:1.5rem;margin-top:1.5rem;display:none}
+.result-box h3{color:#1a2332;margin-bottom:1rem;font-size:1.2rem}
+.result-row{display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid #e2e8f0;font-size:1.05rem}
+.result-row:last-child{border-bottom:none}
+.result-value{font-weight:bold;color:#1a2332}
+details{background:#ffffff;border-radius:8px;padding:1.5rem;margin-bottom:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.05);cursor:pointer}
+summary{font-weight:bold;color:#1a2332;font-size:1.1rem}
+details p{margin-top:1rem;color:#475569;font-size:0.95rem;line-height:1.5}
+details .source-line{margin-top:0.75rem;font-style:italic;color:#64748b;font-size:0.9rem}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.05)}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.4rem}
+.content-section p{color:#475569;margin-bottom:1rem;line-height:1.6}
+.content-section h3{color:#1a2332;margin-top:1.25rem;margin-bottom:0.5rem;font-size:1.1rem}
+footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:3rem}
+footer .footer-nav{margin-bottom:1rem}
+footer .footer-nav a{color:#fff;text-decoration:none;margin:0 1rem;font-size:0.9rem}
+footer .footer-nav a:hover{color:#f5a623}
+footer .citation{font-size:0.85rem;color:#94a3b8;max-width:800px;margin:0 auto}
+@media(max-width:600px){header{flex-direction:column;gap:1rem}nav a{margin:0 0.5rem}}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Mulch Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Calc<span>Blueprint</span></a>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <div class="container">
+    <div class="calculator-box">
+      <h1>Mulch Calculator</h1>
+      
+      <div class="unit-toggle">
+        <button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnitSystem('imperial')">Imperial (US)</button>
+        <button type="button" class="unit-btn" id="btn-metric" onclick="setUnitSystem('metric')">Metric</button>
+      </div>
+
+      <div class="form-group">
+        <label id="label-length" for="input-length">Bed length (feet)</label>
+        <input type="number" id="input-length" step="any" placeholder="e.g. 20">
+      </div>
+
+      <div class="form-group">
+        <label id="label-width" for="input-width">Bed width (feet)</label>
+        <input type="number" id="input-width" step="any" placeholder="e.g. 4">
+      </div>
+
+      <div class="form-group">
+        <label id="label-depth" for="input-depth">Mulch depth (inches)</label>
+        <input type="number" id="input-depth" step="any" placeholder="e.g. 3" value="3">
+      </div>
+
+      <div class="form-group">
+        <label id="label-bag-size" for="input-bag-size">Bag size (cubic feet)</label>
+        <select id="input-bag-size">
+          <option value="1.5">1.5 cubic feet (Standard)</option>
+          <option value="2.0">2.0 cubic feet (Large)</option>
+          <option value="3.0">3.0 cubic feet (Bulk Bag)</option>
+          <option value="0.75">0.75 cubic feet (Small)</option>
+        </select>
+      </div>
+
+      <button type="button" class="calc-btn" onclick="calculateMulch()">Calculate Mulch</button>
+
+      <div class="result-box" id="result-box">
+        <h3>Required Materials</h3>
+        <div class="result-row">
+          <span>Total Volume</span>
+          <span class="result-value" id="res-volume">0</span>
+        </div>
+        <div class="result-row">
+          <span>Total Volume (Alternative Unit)</span>
+          <span class="result-value" id="res-volume-alt">0</span>
+        </div>
+        <div class="result-row">
+          <span>Bags Required</span>
+          <span class="result-value" id="res-bags">0</span>
+        </div>
+        <div class="result-row">
+          <span>Estimated Total Weight</span>
+          <span class="result-value" id="res-weight">0</span>
+        </div>
+      </div>
+    </div>
+
+    <details>
+      <summary>How this calculator works</summary>
+      <p>This calculator determines total mulch volume by multiplying your garden bed length, width, and desired depth converted into consistent units. It then converts total cubic measurements into standard landscape cubic yards and calculates total bag quantities by dividing the volume by the chosen bag capacity, rounding up to ensure you do not run short. Material coverage per State agricultural extension service recommendations.</p>
+      <div class="source-line">Formula source: State agricultural extension service recommendations.</div>
+    </details>
+
+    <section class="content-section">
+      <h2>How to Calculate Mulch</h2>
+      <p>Calculating the correct amount of mulch for your landscape beds prevents costly over-purchasing while ensuring your plants receive adequate weed suppression and moisture retention. To calculate manually in imperial units, measure the length and width of your garden bed in feet, and determine your desired depth in inches (typically 3 inches for standard applications). Multiply the length by the width to find the square footage. Next, convert the depth into feet by dividing the inch value by 12. Multiply the square footage by this fractional depth to yield total cubic feet. Because bulk materials are routinely sold by the cubic yard, divide your total cubic feet by 27 to find the required cubic yards. If purchasing bagged mulch, divide the total cubic feet by the bag capacity (commonly 1.5 or 2.0 cubic feet) and round up to the nearest whole bag.</p>
+      <p>When working in metric units, convert all linear measurements to meters and depth to centimeters (or meters). Multiply length, width, and depth directly to get cubic meters. When transitioning between units, remember that 1 foot equals 0.3048 meters and 1 cubic yard equals approximately 0.7646 cubic meters. Always account for bed irregularities, permanent plantings, and slight settling when finalizing your bulk or bagged material totals.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>What Affects Mulch Requirements</h2>
+      <p>Several crucial environmental and physical installation factors influence how much mulch you will ultimately need on a project site. First and foremost is the desired installation depth. While annual refresh applications may only require 1 to 2 inches of fresh material, establishing a brand-new landscape bed usually demands a robust 3-inch layer to suppress persistent weed germination and retain soil moisture through summer heat waves. Exceeding a 4-inch depth can suffocate plant root systems and restrict necessary oxygen exchange in the topsoil.</p>
+      <p>Bed configuration and contouring also play a major role. Curving borders, irregular layout shapes, and dense clusters of existing trees or perennial shrubs mean that actual surface area coverage will be less than a strict rectangular calculation suggests. Conversely, sloped terrain can cause mulch to migrate downward over time, requiring periodic redistribution or slightly deeper applications at the crests. Finally, mulch material type matters: fine shredded barks compact densely, whereas chunky nuggets leave larger air pockets, altering the net volume required to achieve proper ground coverage.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>Frequently Asked Questions</h2>
+      <h3>How deep should I apply mulch to garden beds?</h3>
+      <p>For standard maintenance and fresh installations, a depth of 3 inches is widely recommended by landscaping professionals. This thickness is sufficient to block sunlight from reaching weed seeds and insulates plant roots against temperature fluctuations without suffocating the soil ecosystem.</p>
+      <h3>Should I remove old mulch before adding new mulch?</h3>
+      <p>In most cases, you do not need to completely strip away old decomposing mulch unless it has built up beyond 4 inches deep or shows signs of severe fungal disease. Instead, thoroughly rake and break up the existing crust, then apply a fresh 1-to-2-inch top layer to restore a uniform, vibrant appearance.</p>
+      <h3>How many square feet does a standard bag of mulch cover?</h3>
+      <p>A standard 1.5-cubic-foot bag of mulch will cover approximately 6 square feet when applied at the recommended 3-inch depth. If you are using 2.0-cubic-foot bags, a single bag will cover roughly 8 square feet at the same 3-inch depth.</p>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="footer-nav">
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+    <a href="/privacy/">Privacy</a>
+  </div>
+  <div class="citation">Formula source: State agricultural extension service recommendations. Results are estimates for planning — verify with a licensed professional before ordering materials. &copy; 2026 CalcBlueprint</div>
+</footer>
+
+<script>
+let currentSystem = 'imperial';
+
+function setUnitSystem(system) {
+  currentSystem = system;
+  const btnImp = document.getElementById('btn-imperial');
+  const btnMet = document.getElementById('btn-metric');
+  
+  const lblLen = document.getElementById('label-length');
+  const lblWid = document.getElementById('label-width');
+  const lblDep = document.getElementById('label-depth');
+  const lblBag = document.getElementById('label-bag-size');
+  
+  if (system === 'imperial') {
+    btnImp.classList.add('active');
+    btnMet.classList.remove('active');
+    lblLen.textContent = 'Bed length (feet)';
+    lblWid.textContent = 'Bed width (feet)';
+    lblDep.textContent = 'Mulch depth (inches)';
+    lblBag.textContent = 'Bag size (cubic feet)';
+    
+    // Update bag size options for imperial
+    lblBag.nextElementSibling.innerHTML = `
+      <option value="1.5">1.5 cubic feet (Standard)</option>
+      <option value="2.0">2.0 cubic feet (Large)</option>
+      <option value="3.0">3.0 cubic feet (Bulk Bag)</option>
+      <option value="0.75">0.75 cubic feet (Small)</option>
+    `;
+  } else {
+    btnMet.classList.add('active');
+    btnImp.classList.remove('active');
+    lblLen.textContent = 'Bed length (meters)';
+    lblWid.textContent = 'Bed width (meters)';
+    lblDep.textContent = 'Mulch depth (centimeters)';
+    lblBag.textContent = 'Bag size (liters / cubic meters)';
+    
+    // Update bag size options for metric (approximate standard bag volumes in cubic meters)
+    lblBag.nextElementSibling.innerHTML = `
+      <option value="0.0425">42.5 Liters (~0.0425 m³)</option>
+      <option value="0.0566">56.6 Liters (~0.0566 m³)</option>
+      <option value="0.0850">85.0 Liters (~0.0850 m³)</option>
+    `;
+  }
+  
+  // Clear results on switch
+  document.getElementById('result-box').style.display = 'none';
+}
+
+function calculateMulch() {
+  const lengthInput = parseFloat(document.getElementById('input-length').value);
+  const widthInput = parseFloat(document.getElementById('input-width').value);
+  const depthInput = parseFloat(document.getElementById('input-depth').value);
+  const bagSizeInput = parseFloat(document.getElementById('input-bag-size').value);
+  
+  if (isNaN(lengthInput) || isNaN(widthInput) || isNaN(depthInput) || lengthInput <= 0 || widthInput <= 0 || depthInput <= 0) {
+    alert('Please enter valid positive numbers for all dimensions.');
+    return;
+  }
+  
+  let volumeCuFt = 0;
+  let volumeCuM = 0;
+  let cubicYards = 0;
+  let bags = 0;
+  let weightVal = 0;
+  
+  if (currentSystem === 'imperial') {
+    // Formula: Volume (cubic feet) = length * width * (depth/12)
+    volumeCuFt = lengthInput * widthInput * (depthInput / 12);
+    cubicYards = volumeCuFt / 27;
+    volumeCuM = volumeCuFt * 0.0283168;
+    bags = Math.ceil(volumeCuFt / bagSizeInput);
+    // Average mulch weight ~ 25 lbs per cubic foot
+    let weightLbs = volumeCuFt * 25;
+    weightVal = weightLbs.toFixed(1) + ' lbs (' + (weightLbs * 0.4536).toFixed(1) + ' kg)';
+    
+    document.getElementById('res-volume').textContent = volumeCuFt.toFixed(2) + ' cubic feet';
+    document.getElementById('res-volume-alt').textContent = cubicYards.toFixed(2) + ' cubic yards (' + volumeCuM.toFixed(2) + ' m³)';
+    document.getElementById('res-bags').textContent = bags + ' bags';
+    document.getElementById('res-weight').textContent = weightVal;
+    
+  } else {
+    // Metric inputs: length in meters, width in meters, depth in centimeters
+    // Convert depth in cm to meters: depth / 100
+    volumeCuM = lengthInput * widthInput * (depthInput / 100);
+    volumeCuFt = volumeCuM * 35.3147;
+    cubicYards = volumeCuFt / 27;
+    bags = Math.ceil(volumeCuM / bagSizeInput);
+    // Average mulch weight ~ 400 kg per cubic meter
+    let weightKg = volumeCuM * 400;
+    weightVal = weightKg.toFixed(1) + ' kg (' + (weightKg * 2.20462).toFixed(1) + ' lbs)';
+    
+    document.getElementById('res-volume').textContent = volumeCuM.toFixed(2) + ' cubic meters';
+    document.getElementById('res-volume-alt').textContent = volumeCuFt.toFixed(2) + ' cubic feet (' + cubicYards.toFixed(2) + ' cu yd)';
+    document.getElementById('res-bags').textContent = bags + ' bags';
+    document.getElementById('res-weight').textContent = weightVal;
+  }
+  
+  document.getElementById('result-box').style.display = 'block';
+}
+</script>
+
+</body>
+</html>
