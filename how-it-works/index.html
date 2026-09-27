@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How CalcBlueprint Calculates Materials — Methodology</title>
+<meta name="description" content="Every formula, standard, and data source behind CalcBlueprint's construction calculators. Transparent methodology you can verify.">
+<link rel="canonical" href="https://calcblueprint.com/how-it-works/">
+<meta name="robots" content="index, follow">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://calcblueprint.com/how-it-works/">
+<meta property="og:title" content="How CalcBlueprint Works — Methodology">
+<meta property="og:description" content="Every formula and standard behind our construction calculators.">
+<meta property="og:image" content="https://calcblueprint.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://calcblueprint.com/how-it-works/">
+<meta name="twitter:title" content="How CalcBlueprint Works">
+<meta name="twitter:description" content="Every formula and standard behind our construction calculators.">
+<meta name="twitter:image" content="https://calcblueprint.com/og-image.png">
+<link rel="icon" href="/favicon.ico">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"AboutPage","name":"How CalcBlueprint Works","url":"https://calcblueprint.com/how-it-works/","description":"Methodology for CalcBlueprint's construction calculators."}
+</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.6;color:#1a1a1a;background:#f7f7f5}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 1.5rem}
+.container{max-width:720px;margin:0 auto;padding:0 1.5rem}
+header .container{display:flex;align-items:center;justify-content:space-between;max-width:960px}
+.logo{font-size:1.4rem;font-weight:800;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{margin-left:1.5rem;color:#b8c1cc;text-decoration:none;font-size:.95rem}
+nav a:hover{color:#f5a623}
+main{padding:3rem 0}
+h1{font-size:2rem;margin-bottom:1rem;color:#1a2332}
+h2{font-size:1.2rem;margin:2.5rem 0 .75rem;color:#1a2332}
+h3{font-size:1.05rem;margin:1.5rem 0 .5rem;color:#1a2332}
+p{margin-bottom:1rem;color:#333}
+ul,ol{margin:0 0 1.25rem 1.5rem;color:#333}
+li{margin-bottom:.5rem}
+strong{color:#1a2332}
+a{color:#e09515}
+a:hover{text-decoration:underline}
+.lead{font-size:1.15rem;color:#555;margin-bottom:2rem}
+.callout{background:#fff;border-left:4px solid #f5a623;border-radius:8px;padding:1.25rem 1.5rem;margin:1.5rem 0}
+.callout p{margin:0;color:#333}
+table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.95rem;background:#fff;border:1px solid #e5e5e5;border-radius:8px;overflow:hidden}
+th,td{text-align:left;padding:.75rem 1rem;border-bottom:1px solid #e5e5e5}
+th{background:#1a2332;font-weight:600;color:#fff;font-size:.85rem;text-transform:uppercase;letter-spacing:.03em}
+td{color:#333}
+tr:last-child td{border-bottom:none}
+.updated{color:#777;font-size:.9rem;margin-top:3rem;padding-top:1.5rem;border-top:1px solid #e5e5e5}
+footer{background:#1a2332;color:#b8c1cc;padding:2rem 0;margin-top:3rem;font-size:.9rem}
+footer .container{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;max-width:960px}
+footer a{color:#b8c1cc;text-decoration:none;margin-right:1rem}
+footer a:hover{color:#f5a623}
+</style>
+</head>
+<body>
+
+<header>
+<div class="container">
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="/how-it-works/">How It Works</a>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+</nav>
+</div>
+</header>
+
+<main>
+<div class="container">
+
+<h1>How CalcBlueprint calculates your estimate</h1>
+<p class="lead">Every calculator on this site uses published formulas from industry standards bodies — ACI, NRCA, ICC, ASTM, and manufacturer specifications. No proprietary algorithms, no hidden assumptions. This page explains exactly how each calculation works.</p>
+
+<h2>The core principle: published standards, not secret formulas</h2>
+<p>Construction math isn't proprietary. The formulas for concrete volume, roof pitch, tile coverage, and paint quantity are all defined in publicly available standards. Our job is to apply them correctly and let you adjust the inputs.</p>
+<p>That's the opposite of how most construction sites work. They hide their formulas and give you vague ranges. We show you the source standard for every calculator so you can verify it yourself.</p>
+
+<div class="callout">
+<p><strong>Bottom line:</strong> our calculators tell you what the published formula says, given your inputs. For engineering decisions or code compliance, always confirm with a licensed contractor or engineer.</p>
+</div>
+
+<h2>The formulas behind each calculator</h2>
+<table>
+<tr><th>Calculator</th><th>Source standard</th></tr>
+<tr><td>Concrete Slab</td><td>ACI 318 — Standard Building Code for Structural Concrete</td></tr>
+<tr><td>Concrete Footings</td><td>ACI 318 + IRC Table R403.1 (minimum footing sizes)</td></tr>
+<tr><td>Roofing Materials</td><td>NRCA Roofing Manual + manufacturer coverage specs</td></tr>
+<tr><td>Paint Calculator</td><td>Manufacturer spread-rate specs (typically 350 sq ft/gal)</td></tr>
+<tr><td>Tile Calculator</td><td>TCNA (Tile Council of North America) installation guidelines</td></tr>
+<tr><td>Drywall Calculator</td><td>Gypsum Association GA-216 application standard</td></tr>
+<tr><td>Framing Lumber</td><td>IRC Table R602.3(5) — spans for dimensional lumber</td></tr>
+<tr><td>Insulation Calculator</td><td>IECC R-values + manufacturer coverage charts</td></tr>
+<tr><td>Mulch/Sod Calculator</td><td>Manufacturer coverage specs for bulk materials</td></tr>
+<tr><td>Gravel Calculator</td><td>Aggregate weight standards (typically 1.4 tons/yd³)</td></tr>
+</table>
+
+<h2>How the general formula works</h2>
+<p>Most material calculators follow a similar structure:</p>
+<ol>
+<li><strong>Calculate volume or area</strong> from your dimensions (length × width × depth, or length × width)</li>
+<li><strong>Apply a material-specific constant</strong> (e.g., 27 cubic feet per cubic yard for concrete)</li>
+<li><strong>Add a waste factor</strong> (typically 5–10% depending on material)</li>
+<li><strong>Convert to orderable units</strong> (cubic yards, bags, sheets, gallons)</li>
+<li><strong>Multiply by your unit price</strong> to estimate total cost</li>
+</ol>
+<p>Each calculator tailors these steps to its specific material. The waste factor and unit conversion differ by material — for example, tile requires 10% waste for cuts, while concrete typically uses 5–8% for spillage.</p>
+
+<h2>Where the numbers come from</h2>
+<ul>
+<li><strong>American Concrete Institute (ACI)</strong> — volume and strength standards for concrete</li>
+<li><strong>National Roofing Contractors Association (NRCA)</strong> — roofing material coverage and installation</li>
+<li><strong>International Code Council (ICC)</strong> — IRC and IBC for framing, footings, and structural spans</li>
+<li><strong>ASTM International</strong> — material testing and density standards</li>
+<li><strong>Manufacturer data</strong> — spread rates, coverage specs, and packaging sizes for specific products</li>
+</ul>
+
+<h2>How to verify a calculation yourself</h2>
+<p>You don't have to trust this page. Here's how to sanity-check any of our estimates:</p>
+<ol>
+<li>Run a calculation (e.g., <a href="/concrete-slab-calculator/">Concrete Slab Calculator</a>) with simple inputs — say, 10 ft × 10 ft × 4 in.</li>
+<li>Work the math by hand: 10 × 10 × 0.333 ft = 33.3 cubic feet; 33.3 ÷ 27 = 1.23 cubic yards.</li>
+<li>Compare with our result. With a 5% waste factor, we'll show ~1.30 cubic yards.</li>
+<li>Cross-check the standard — ACI 318 publishes the same conversion (1 yd³ = 27 ft³).</li>
+</ol>
+
+<h2>What our calculators do NOT do</h2>
+<ul>
+<li><strong>They don't replace an engineer.</strong> Structural loads, soil conditions, and code requirements need a licensed professional.</li>
+<li><strong>They don't check local codes.</strong> Building codes vary by jurisdiction. Always verify with your local building department.</li>
+<li><strong>They don't account for site conditions.</strong> Slope, access, and ground stability can all change material requirements.</li>
+<li><strong>They don't include waste you can't predict.</strong> Complex cuts, pattern matching, and damaged material add extra waste we can't foresee.</li>
+<li><strong>They don't guarantee pricing.</strong> Material prices vary by region, supplier, and market conditions.</li>
+</ul>
+
+<h2>Who runs CalcBlueprint</h2>
+<p>CalcBlueprint is built and maintained by Emiliano, a developer based in Bangkok. There is no construction company or supplier behind the site — it's an independent tool built for contractors and DIYers who want a fast, clean number. See the <a href="/about/">About page</a> for more.</p>
+
+<h2>Report an error</h2>
+<p>If a calculator gives a wrong result, <a href="/contact/">let us know</a>. Include the calculator URL, your inputs, and what you expected. We take accuracy seriously and update formulas quickly when errors are reported.</p>
+
+<p class="updated">Last updated: 2026-09-27. Maintained by Emiliano.</p>
+
+</div>
+</main>
+
+<footer>
+<div class="container">
+<div>
+<a href="/">Home</a>
+<a href="/how-it-works/">How It Works</a>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+<a href="/privacy/">Privacy</a>
+<a href="/terms/">Terms</a>
+</div>
+<div>© 2026 CalcBlueprint.</div>
+</div>
+</footer>
+
+</body>
+</html>
