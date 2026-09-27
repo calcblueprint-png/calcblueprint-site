@@ -77,7 +77,8 @@
     "description": "Calculate concrete volume and bag count for outdoor steps and stairways. Enter rise, run, and width for instant estimates.",
     "inputs": "Number of steps, rise per step (inches), run per step (inches), step width (feet)",
     "formula": "Volume per step = (width) * (run/12) * (rise/12). Total volume = sum across all steps using average rise. Cubic yards = cubic feet / 27.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-09-27T02:12:38.989128Z"
   },
   {
     "slug": "concrete-block-calculator",

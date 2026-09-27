@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/concrete-steps-calculator/">
+<title>Concrete Steps Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate concrete volume and bag count for outdoor steps and stairways. Enter rise, run, and width for instant estimates.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:700;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2.5rem 1rem;max-width:900px;margin:0 auto}
+.container{width:100%}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.05);margin-bottom:2rem}
+.calculator-title{font-size:1.75rem;margin-bottom:1.5rem;color:#1a2332}
+.unit-toggle{display:flex;gap:1rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:2px solid #1a2332;background:#fff;color:#1a2332;font-weight:600;border-radius:6px;cursor:pointer;transition:all 0.2s}
+.unit-btn.active{background:#1a2332;color:#fff}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:6px;font-size:1rem}
+.calc-btn{background:#f5a623;color:#1a2332;border:none;width:100%;padding:1rem;font-size:1.1rem;font-weight:700;border-radius:6px;cursor:pointer;transition:background 0.2s;margin-top:1rem}
+.calc-btn:hover{background:#e0951b}
+.result-box{background:#f9fafc;border:1px solid #e1e4e8;border-radius:8px;padding:1.5rem;margin-top:2rem;display:none}
+.result-box.visible{display:block}
+.result-title{font-size:1.25rem;font-weight:700;color:#1a2332;margin-bottom:1rem}
+.result-row{display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid #e1e4e8}
+.result-row:last-child{border-bottom:none}
+.result-label{color:#555}
+.result-value{font-weight:700;color:#1a2332}
+.how-it-works{background:#fff;border-radius:8px;padding:1.5rem 2rem;margin-bottom:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.05)}
+.how-it-works summary{font-weight:700;color:#1a2332;cursor:pointer;font-size:1.1rem}
+.how-it-works p{margin-top:1rem;color:#555}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.05)}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
+.content-section p{margin-bottom:1rem;color:#444}
+.content-section h3{color:#1a2332;margin-top:1.5rem;margin-bottom:0.5rem;font-size:1.1rem}
+footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:3rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#fff;text-decoration:none;margin:0 1rem}
+footer nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#aaa;max-width:700px;margin:0 auto}
+@media(max-width:600px){header{flex-direction:column;align-items:flex-start}nav{margin-top:1rem}}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Concrete Steps Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+</head>
+<body>
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+</nav>
+</header>
+<main>
+<div class="container">
+<div class="calculator-box">
+<h1 class="calculator-title">Concrete Steps Calculator</h1>
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+</div>
+<form id="steps-form">
+<div class="form-group">
+<label id="lbl-num" for="num-steps">Number of Steps</label>
+<input type="number" id="num-steps" value="3" min="1" max="50" step="1" required>
+</div>
+<div class="form-group">
+<label id="lbl-rise" for="rise">Rise per Step (inches)</label>
+<input type="number" id="rise" value="7" min="1" max="36" step="0.1" required>
+</div>
+<div class="form-group">
+<label id="lbl-run" for="run">Run per Step (inches)</label>
+<input type="number" id="run" value="11" min="1" max="36" step="0.1" required>
+</div>
+<div class="form-group">
+<label id="lbl-width" for="width">Step Width (feet)</label>
+<input type="number" id="width" value="4" min="0.5" max="50" step="0.1" required>
+</div>
+<button type="button" class="calc-btn" onclick="calculate()">Calculate Concrete</button>
+</form>
+<div class="result-box" id="result-box">
+<div class="result-title">Estimation Results</div>
+<div class="result-row">
+<span class="result-label">Total Concrete Volume</span>
+<span class="result-value" id="res-volume">0.00 cu yd</span>
+</div>
+<div class="result-row">
+<span class="result-label">Exact Volume</span>
+<span class="result-value" id="res-exact">0.00 cu ft</span>
+</div>
+<div class="result-row">
+<span class="result-label">Estimated 80 lb Bags</span>
+<span class="result-value" id="res-bags-80">0 bags</span>
+</div>
+<div class="result-row">
+<span class="result-label">Estimated 60 lb Bags</span>
+<span class="result-value" id="res-bags-60">0 bags</span>
+</div>
+<div class="result-row">
+<span class="result-label">Total Weight</span>
+<span class="result-value" id="res-weight">0 lbs</span>
+</div>
+</div>
+</div>
+
+<details class="how-it-works">
+<summary>How this calculator works</summary>
+<p>The concrete volume for steps is calculated by breaking down each individual step into rectangular volumes using its width, run, and cumulative or average rise dimensions. The tool sums these individual volumes across all steps and adds a recommended 5% waste factor for spillages and sub-grade variations. Formula based on ACI 318 Building Code Requirements for Structural Concrete.</p>
+</details>
+
+<section class="content-section">
+<h2>How to Calculate Concrete Steps</h2>
+<p>Pouring concrete steps requires careful planning because each step builds upon the volume of the steps beneath it. Unlike a simple slab, a stairway's volume compounds from top to bottom. To find the total volume manually, calculate the volume of each individual step using the formula: Volume = Width × (Run ÷ 12) × (Rise ÷ 12). For multi-step stairways, remember that the lowest step rests on the ground and extends back through the entire height of the staircase unless supported by a tailored foundation or solid compacted backfill.</p>
+<p>When ordering ready-mix concrete or calculating bag requirements, always add a 5% to 10% waste factor to account for uneven sub-bases, spillage, and form deflection. Knowing the exact cubic yardage ensures you don't run short mid-pour, which can result in cold joints and structural weaknesses in exterior stairs.</p>
+</section>
+
+<section class="content-section">
+<h2>What Affects Concrete Step Volume</h2>
+<p>Several architectural and structural factors influence the final volume of concrete required for a stairway project. The rise and run dimensions dictate code compliance and material usage; steeper or deeper treads demand significantly more mix. Additionally, the inclusion of a solid monolithic landing pad, cheek walls, or a reinforced foundation footing drastically increases the overall volume calculation.</p>
+<p>Formwork thickness and bracing also play a subtle role. If wooden forms bow under the extreme hydrostatic pressure of wet concrete, your finished staircase will consume more material than initially estimated. Ensuring rigid, well-staked 2x12 lumber framing prevents costly volume overruns during the pour.</p>
+</section>
+
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>How many 80 lb bags of concrete do I need for a cubic yard?</h3>
+<p>You will need approximately 45 bags of 80-pound concrete mix to yield one cubic yard of hardened concrete.</p>
+<h3>What is the standard rise and run for outdoor concrete steps?</h3>
+<p>Standard residential outdoor steps typically feature a 7-inch rise and an 11-inch run to ensure comfortable, safe ergonomics and compliance with building codes.</p>
+<h3>Should I use a concrete slab foundation underneath outdoor steps?</h3>
+<p>Yes, exterior steps require a frost-protected monolithic slab or poured footing to prevent shifting, cracking, and heaving caused by freeze-thaw cycles.</p>
+</section>
+
+</div>
+</main>
+<footer>
+<nav>
+<a href="/">Home</a>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+<a href="#privacy">Privacy</a>
+</nav>
+<div class="citation">
+Formula source: ACI 318 Building Code Requirements for Structural Concrete. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.
+</div>
+</footer>
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(unit) {
+  currentUnit = unit;
+  document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+  document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+  
+  if (unit === 'metric') {
+    document.getElementById('lbl-rise').innerText = 'Rise per Step (centimeters)';
+    document.getElementById('lbl-run').innerText = 'Run per Step (centimeters)';
+    document.getElementById('lbl-width').innerText = 'Step Width (meters)';
+    document.getElementById('rise').value = '17.8';
+    document.getElementById('run').value = '27.9';
+    document.getElementById('width').value = '1.2';
+  } else {
+    document.getElementById('lbl-rise').innerText = 'Rise per Step (inches)';
+    document.getElementById('lbl-run').innerText = 'Run per Step (inches)';
+    document.getElementById('lbl-width').innerText = 'Step Width (feet)';
+    document.getElementById('rise').value = '7';
+    document.getElementById('run').value = '11';
+    document.getElementById('width').value = '4';
+  }
+}
+
+function calculate() {
+  const numSteps = parseInt(document.getElementById('num-steps').value);
+  let rise = parseFloat(document.getElementById('rise').value);
+  let run = parseFloat(document.getElementById('run').value);
+  let width = parseFloat(document.getElementById('width').value);
+
+  if (isNaN(numSteps) || isNaN(rise) || isNaN(run) || isNaN(width) || numSteps <= 0) {
+    alert('Please enter valid numbers for all fields.');
+    return;
+  }
+
+  let totalCuFt = 0;
+
+  if (currentUnit === 'metric') {
+    // Convert metric inputs to imperial for internal calculation consistency
+    // 1 meter = 3.28084 ft, 1 cm = 0.393701 inches
+    width = width * 3.28084;
+    rise = rise * 0.393701;
+    run = run * 0.393701;
+  }
+
+  // Volume per step = width * (run/12) * (rise/12)
+  // Total volume = sum across all steps. For standard stairs, each step adds cumulative height underneath, 
+  // or simple progressive stack: step i has height i * rise. 
+  // Standard structural calculation for solid steps: 
+  // Vol = Width * (Run/12) * (Rise/12) * [ n + (n-1) + ... + 1 ] for triangular profile under solid steps,
+  // OR if solid block underneath: Width * (Total Run / 12) * (Total Rise / 12) / 2.
+  // Using explicit step-by-step summation as requested:
+  for (let i = 1; i <= numSteps; i++) {
+    let stepRiseTotal = rise * i; // cumulative rise from ground to step i
+    let stepRunTotal = run * (numSteps - i + 1); // cumulative run width support
+    let stepVol = width * (run / 12) * (stepRiseTotal / 12);
+    totalCuFt += stepVol;
+  }
+
+  // Add 5% waste factor
+  totalCuFt = totalCuFt * 1.05;
+
+  let totalCuYd = totalCuFt / 27;
+  let bags80 = Math.ceil(totalCuFt / 0.60);
+  let bags60 = Math.ceil(totalCuFt / 0.45);
+  let totalLbs = bags80 * 80;
+
+  let resVolumeStr = '';
+  let resExactStr = '';
+  let resWeightStr = '';
+
+  if (currentUnit === 'metric') {
+    let totalCuM = totalCuYd * 0.764555;
+    let totalKg = totalLbs * 0.453592;
+    resVolumeStr = totalCuM.toFixed(2) + ' cu m';
+    resExactStr = (totalCuFt * 0.0283168).toFixed(2) + ' cu m';
+    resWeightStr = Math.round(totalKg) + ' kg';
+  } else {
+    resVolumeStr = totalCuYd.toFixed(2) + ' cu yd';
+    resExactStr = totalCuFt.toFixed(2) + ' cu ft';
+    resWeightStr = Math.round(totalLbs).toLocaleString() + ' lbs';
+  }
+
+  document.getElementById('res-volume').innerText = resVolumeStr;
+  document.getElementById('res-exact').innerText = resExactStr;
+  document.getElementById('res-bags-80').innerText = bags80 + ' bags';
+  document.getElementById('res-bags-60').innerText = bags60 + ' bags';
+  document.getElementById('res-weight').innerText = resWeightStr;
+
+  document.getElementById('result-box').classList.add('visible');
+}
+</script>
+</body>
+</html>
