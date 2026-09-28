@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/concrete-block-calculator/">
+<title>Concrete Block Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate how many concrete blocks (CMUs) you need for any wall. Includes mortar and block count with waste factor.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Concrete Block Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:700;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+.container{max-width:900px;margin:2rem auto;padding:0 1rem}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+h1{font-size:1.8rem;margin-bottom:1.5rem;color:#1a2332}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:2px solid #ddd;background:#f9f9f9;border-radius:6px;cursor:pointer;font-weight:600;font-size:0.95rem;transition:all 0.2s}
+.unit-btn.active{border-color:#f5a623;background:#fff9ef;color:#1a2332}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;font-size:0.9rem;color:#4a5568}
+.form-group input,.form-group select{width:100%;padding:0.75rem;border:1px solid #cbd5e0;border-radius:6px;font-size:1rem}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:#f5a623;box-shadow:0 0 0 3px rgba(245,166,35,0.15)}
+.calc-btn{width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;border-radius:6px;font-size:1.1rem;font-weight:700;cursor:pointer;transition:background 0.2s;margin-top:0.5rem}
+.calc-btn:hover{background:#e0951c}
+.result-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:1.5rem;margin-top:1.5rem;display:none}
+.result-box.visible{display:block}
+.result-row{display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid #e2e8f0;font-size:1rem}
+.result-row:last-child{border-bottom:none}
+.result-value{font-weight:700;color:#1a2332}
+details{background:#fff;border-radius:8px;padding:1rem 1.5rem;margin-bottom:2rem;box-shadow:0 2px 4px rgba(0,0,0,0.03);cursor:pointer}
+summary{font-weight:600;color:#1a2332;font-size:1.05rem}
+details p{margin-top:1rem;color:#4a5568;font-size:0.95rem;line-height:1.7}
+.content-section { background-color: #ffffff; border-radius: 8px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.03); }
+.content-section h2 { font-size: 1.4rem; color: #1a2332; margin-bottom: 1rem; }
+.content-section p { color: #4a5568; margin-bottom: 1rem; font-size: 0.95rem; }
+.content-section h3 { font-size: 1.1rem; color: #1a2332; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+footer{background:#1a2332;color:#fff;padding:2rem;text-align:center;margin-top:4rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#cbd5e0;margin:0 1rem;font-size:0.9rem}
+footer nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#a0aec0;max-width:700px;margin:0 auto;line-height:1.5}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Calc<span>Blueprint</span></a>
+  <nav>
+    <a href="/">Home</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <div class="container">
+    <div class="calculator-box">
+      <h1>Concrete Block Calculator</h1>
+      
+      <div class="unit-toggle">
+        <button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+        <button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+      </div>
+
+      <div class="form-group">
+        <label id="label-length" for="wall-length">Wall Length (feet)</label>
+        <input type="number" id="wall-length" value="20" step="0.1" min="0">
+      </div>
+
+      <div class="form-group">
+        <label id="label-height" for="wall-height">Wall Height (feet)</label>
+        <input type="number" id="wall-height" value="8" step="0.1" min="0">
+      </div>
+
+      <div class="form-group">
+        <label for="block-size">Block Size</label>
+        <select id="block-size">
+          <option value="standard">Standard 8" x 8" x 16" (Nominal)</option>
+          <option value="half">Half-High 8" x 4" x 16" (Nominal)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="waste-pct">Waste Percentage (%)</label>
+        <input type="number" id="waste-pct" value="5" step="1" min="0" max="50">
+      </div>
+
+      <button type="button" class="calc-btn" onclick="calculateBlocks()">Calculate Blocks</button>
+
+      <div class="result-box" id="result-box">
+        <div class="result-row">
+          <span>Total Wall Area:</span>
+          <span class="result-value" id="res-area">0 sq ft</span>
+        </div>
+        <div class="result-row">
+          <span>Concrete Blocks Needed (with waste):</span>
+          <span class="result-value" id="res-blocks">0 blocks</span>
+        </div>
+        <div class="result-row">
+          <span>Estimated Mortar Needed:</span>
+          <span class="result-value" id="res-mortar">0 bags</span>
+        </div>
+      </div>
+    </div>
+
+    <details>
+      <summary>How this calculator works</summary>
+      <p>This calculator determines the number of concrete masonry units (CMUs) required for a wall by multiplying the wall length by its height to find the total square footage. It then divides that area by the face area of a single standard block and applies your chosen waste percentage factor to account for cuts and breakage. Formula based on TMS 402/602 (Masonry Standards Joint Committee) and ASTM C270.</p>
+    </details>
+
+    <section class="content-section">
+      <h2>How to Calculate Concrete Blocks</h2>
+      <p>Calculating the precise number of concrete blocks, or concrete masonry units (CMUs), required for a building project begins with measuring the exact linear length and finished height of the wall structure. Multiplying these two dimensions yields the gross surface area of the wall. When accounting for openings like doors and windows, subtract their total surface area from the gross wall area to find the net coverage area.</p>
+      <p>Next, determine the face dimensions of the blocks you are utilizing. Standard modular concrete blocks have a nominal dimension of 8 inches high by 16 inches long, accounting for a standard 3/8-inch mortar joint. By dividing the net wall area by the individual block face area, you establish the baseline quantity. Finally, integrating a standard waste factor between 5% and 10% ensures you have sufficient materials on hand to compensate for job-site breakage, corner adjustments, and cuts.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>What Affects Concrete Block Requirements</h2>
+      <p>Several vital construction variables influence the final material count for masonry walls. The choice of block size is the primary factor; while standard 8x8x16 blocks are most common for structural load-bearing applications, half-high units (8x4x16) or specialized bond beam blocks alter both unit quantities and corresponding mortar volumes. Wall thickness—ranging from nominal 4-inch partitions up to 12-inch heavy-duty commercial walls—also dictates structural reinforcement needs.</p>
+      <p>Additionally, masonry construction complexity heavily impacts material efficiency. Walls featuring numerous corners, pilasters, architectural curves, or structural penetrations generate significantly more cut waste than long, straight foundation runs. The thickness and consistency of mortar joints, reinforcing steel placement, and core fill requirements further dictate how closely material estimates will match actual site consumption during construction execution.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>Frequently Asked Questions</h2>
+      
+      <h3>How many standard concrete blocks are in a square foot?</h3>
+      <p>In standard masonry construction using nominal 8x8x16 inch blocks with 3/8-inch mortar joints, it takes approximately 1.125 concrete blocks to cover one square foot of wall surface area.</p>
+
+      <h3>Should I include doors and windows in my wall measurements?</h3>
+      <p>You should calculate the gross wall area first, then calculate the total area of all structural openings such as doors and windows, and subtract that square footage from your total before calculating block quantities.</p>
+
+      <h3>What waste percentage should I add when ordering CMUs?</h3>
+      <p>For standard rectangular walls with minimal cuts, a 5% waste factor is usually sufficient. For complex layouts with many corners, arches, or frequent cuts, increase the waste factor to 10% to prevent project delays.</p>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <nav>
+    <a href="/">Home</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <a href="#privacy">Privacy</a>
+  </nav>
+  <div class="citation">
+    Formula source: TMS 402/602 (Masonry Standards Joint Committee) and ASTM C270. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.
+  </div>
+</footer>
+
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(unit) {
+  currentUnit = unit;
+  const btnImp = document.getElementById('btn-imperial');
+  const btnMet = document.getElementById('btn-metric');
+  const lblLen = document.getElementById('label-length');
+  const lblHgt = document.getElementById('label-height');
+  const lenInput = document.getElementById('wall-length');
+  const hgtInput = document.getElementById('wall-height');
+
+  if (unit === 'imperial') {
+    btnImp.classList.add('active');
+    btnMet.classList.remove('active');
+    lblLen.textContent = 'Wall Length (feet)';
+    lblHgt.textContent = 'Wall Height (feet)';
+    lenInput.value = (parseFloat(lenInput.value) / 0.3048).toFixed(1);
+    hgtInput.value = (parseFloat(hgtInput.value) / 0.3048).toFixed(1);
+  } else {
+    btnMet.classList.add('active');
+    btnImp.classList.remove('active');
+    lblLen.textContent = 'Wall Length (meters)';
+    lblHgt.textContent = 'Wall Height (meters)';
+    lenInput.value = (parseFloat(lenInput.value) * 0.3048).toFixed(1);
+    hgtInput.value = (parseFloat(hgtInput.value) * 0.3048).toFixed(1);
+  }
+}
+
+function calculateBlocks() {
+  let length = parseFloat(document.getElementById('wall-length').value);
+  let height = parseFloat(document.getElementById('wall-height').value);
+  const blockSize = document.getElementById('block-size').value;
+  const waste = parseFloat(document.getElementById('waste-pct').value) || 0;
+
+  if (isNaN(length) || isNaN(height) || length <= 0 || height <= 0) {
+    alert('Please enter valid positive numbers for wall dimensions.');
+    return;
+  }
+
+  let wallAreaSqFt = 0;
+  let blockFaceAreaSqIn = 0;
+
+  if (currentUnit === 'imperial') {
+    wallAreaSqFt = length * height;
+    if (blockSize === 'standard') {
+      blockFaceAreaSqIn = 8 * 16; // 128 sq in
+    } else {
+      blockFaceAreaSqIn = 4 * 16; // 64 sq in
+    }
+  } else {
+    // Convert meters to feet for calculation consistency
+    const lengthFt = length / 0.3048;
+    const heightFt = height / 0.3048;
+    wallAreaSqFt = lengthFt * heightFt;
+    if (blockSize === 'standard') {
+      blockFaceAreaSqIn = 8 * 16;
+    } else {
+      blockFaceAreaSqIn = 4 * 16;
+    }
+  }
+
+  const blockFaceAreaSqFt = blockFaceAreaSqIn / 144;
+  const rawBlocks = wallAreaSqFt / blockFaceAreaSqFt;
+  const totalBlocks = Math.ceil(rawBlocks * (1 + waste / 100));
+
+  // Approximate mortar bags (approx 1 bag of mortar mix per 30 standard blocks)
+  const mortarBags = Math.ceil(totalBlocks / 30);
+
+  const displayArea = currentUnit === 'imperial' ? wallAreaSqFt.toFixed(1) + ' sq ft' : (wallAreaSqFt * 0.092903).toFixed(1) + ' sq m';
+
+  document.getElementById('res-area').textContent = displayArea;
+  document.getElementById('res-blocks').textContent = totalBlocks + ' blocks';
+  document.getElementById('res-mortar').textContent = mortarBags + ' bags (80 lb)';
+
+  document.getElementById('result-box').classList.add('visible');
+}
+</script>
+
+</body>
+</html>

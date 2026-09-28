@@ -86,7 +86,8 @@
     "description": "Calculate how many concrete blocks (CMUs) you need for any wall. Includes mortar and block count with waste factor.",
     "inputs": "Wall length (feet), wall height (feet), block size (8x8x16 or 8x4x16), waste percentage",
     "formula": "Wall area = length * height. Block face area = block length * block height / 144. Blocks = ceil(wall_area / block_face_area * (1 + waste/100)).",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-09-28T02:12:16.940882Z"
   },
   {
     "slug": "concrete-mix-calculator",
