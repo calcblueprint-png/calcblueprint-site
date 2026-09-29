@@ -95,7 +95,8 @@
     "description": "Calculate cement, sand, and aggregate quantities for custom concrete mixes. Choose your PSI target and get exact ratios.",
     "inputs": "Total volume (cubic feet), target PSI (2500, 3000, 3500, 4000)",
     "formula": "For 3000 PSI: cement = volume * 6 bags/cu yd. Sand = cement * 2. Aggregate = cement * 3. Water = cement * 0.5. Adjust ratios by PSI target.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-09-29T02:11:52.363665Z"
   },
   {
     "slug": "mortar-calculator",
