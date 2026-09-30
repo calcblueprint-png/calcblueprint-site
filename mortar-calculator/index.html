@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/mortar-calculator/">
+<title>Mortar Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate mortar needed for bricklaying, block walls, and stone work. Enter wall dimensions for accurate bag counts.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#2c3e50;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:700;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#ecf0f1;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2.5rem 1rem;max-width:900px;margin:0 auto}
+.container{width:100%}
+h1{font-size:2rem;margin-bottom:0.5rem;color:#1a2332}
+.subtitle{color:#6c757d;margin-bottom:2rem}
+.calculator-box{background:#ffffff;border-radius:8px;padding:2rem;box-shadow:0 4px 15px rgba(0,0,0,0.05);margin-bottom:1.5rem}
+.unit-toggle{display:flex;gap:1rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:2px solid #e9ecef;background:#f8f9fa;border-radius:6px;cursor:pointer;font-weight:600;color:#495057;transition:all 0.2s}
+.unit-btn.active{background:#f5a623;border-color:#f5a623;color:#1a2332}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;font-size:0.95rem;color:#2c3e50}
+.form-group input, .form-group select{width:100%;padding:0.75rem;border:1px solid #ced4da;border-radius:6px;font-size:1rem}
+.form-group input:focus, .form-group select:focus{outline:none;border-color:#f5a623;box-shadow:0 0 0 3px rgba(245,166,35,0.15)}
+.calc-btn{width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;border-radius:6px;font-size:1.05rem;font-weight:700;cursor:pointer;transition:background 0.2s;margin-top:0.5rem}
+.calc-btn:hover{background:#e0951b}
+.result-box{background:#f8f9fa;border-left:4px solid #f5a623;padding:1.5rem;border-radius:0 8px 8px 0;margin-top:1.5rem;display:none}
+.result-box h3{margin-bottom:1rem;color:#1a2332}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #e9ecef;font-size:1.05rem}
+.result-row:last-child{border-bottom:none}
+.result-value{font-weight:700;color:#1a2332}
+details{background:#ffffff;border-radius:8px;padding:1.25rem;box-shadow:0 2px 8px rgba(0,0,0,0.03);margin-bottom:2rem;border:1px solid #e9ecef}
+summary{font-weight:600;cursor:pointer;color:#1a2332}
+details p{margin-top:0.75rem;color:#555;font-size:0.95rem}
+.content-section { background-color: #ffffff; border-radius: 8px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.03); border: 1px solid #e9ecef;}
+.content-section h2{margin-bottom:1rem;color:#1a2332;font-size:1.5rem}
+.content-section h3{margin-top:1.25rem;margin-bottom:0.5rem;color:#1a2332;font-size:1.1rem}
+.content-section p{margin-bottom:1rem;color:#555}
+footer{background:#1a2332;color:#ecf0f1;text-align:center;padding:2.5rem 1rem;margin-top:3rem}
+.footer-nav{margin-bottom:1rem}
+.footer-nav a{color:#ecf0f1;text-decoration:none;margin:0 1rem;font-size:0.9rem}
+.footer-nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#95a5a6;max-width:700px;margin:0 auto;line-height:1.5}
+@media(max-width:600px){header{flex-direction:column;gap:1rem;text-align:center}nav a{margin:0 0.5rem}}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Mortar Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+</head>
+<body>
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="/">Home</a>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+</nav>
+</header>
+<main>
+<div class="container">
+<h1>Mortar Calculator</h1>
+<p class="subtitle">Calculate mortar needed for bricklaying, block walls, and stone work. Enter wall dimensions for accurate bag counts.</p>
+
+<div class="calculator-box">
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+</div>
+
+<div class="form-group">
+<label id="label-area" for="wallArea">Wall Area (sq ft)</label>
+<input type="number" id="wallArea" placeholder="e.g. 200" min="1" step="any">
+</div>
+
+<div class="form-group">
+<label for="masonryType">Masonry Type</label>
+<select id="masonryType">
+<option value="1.3">Standard Brick (Factor 1.3)</option>
+<option value="0.5">Concrete Block - 8" (Factor 0.5)</option>
+<option value="1.0">Natural Stone / Thin Brick (Factor 1.0)</option>
+</select>
+</div>
+
+<div class="form-group">
+<label id="label-joint" for="jointThickness">Mortar Joint Thickness (inches)</label>
+<input type="number" id="jointThickness" value="0.375" min="0.1" max="2" step="0.05">
+</div>
+
+<button type="button" class="calc-btn" onclick="calculateMortar()">Calculate Mortar</button>
+
+<div class="result-box" id="resultBox">
+<h3>Required Materials</h3>
+<div class="result-row">
+<span>Total Mortar Volume:</span>
+<span class="result-value" id="resVolume">0</span>
+</div>
+<div class="result-row">
+<span>Estimated Bags Needed:</span>
+<span class="result-value" id="resBags">0</span>
+</div>
+<div class="result-row">
+<span>Total Weight:</span>
+<span class="result-value" id="resWeight">0</span>
+</div>
+</div>
+</div>
+
+<details>
+<summary>How this calculator works</summary>
+<p>The mortar volume is determined by multiplying the total wall area by the mortar joint thickness, adjusted for the specific masonry unit's coverage factor. This yields the total cubic volume of wet mortar required, which is then divided by the yield per bag (accounting for waste and mixing conversion) to estimate the total bag count. Formula based on TMS 402/602 (Masonry Standards Joint Committee) and ASTM C270.</p>
+</details>
+
+<section class="content-section">
+<h2>How to Calculate Mortar Requirements</h2>
+<p>Estimating masonry mortar accurately is essential to prevent project delays while minimizing costly material waste. The foundational calculation requires knowing the total square footage of the wall surface, the specified thickness of the mortar joints (typically 3/8 inch for standard brick and block), and a coverage factor dictated by the masonry unit type. Standard bricks require more mortar per square foot than large concrete masonry units (CMUs) because of the higher joint-to-unit ratio.</p>
+<p>To perform the math manually, multiply the square footage by the joint thickness in inches, then divide by 12 to convert to cubic feet. Next, apply the masonry type multiplier to account for bed and head joints. Finally, divide the total cubic footage of wet mortar by the yield of a standard pre-blended bag (an 80-lb bag yields approximately 0.6 to 0.7 cubic feet of mixed mortar) and add a 5% to 10% contingency factor for jobsite waste and spillage.</p>
+</section>
+
+<section class="content-section">
+<h2>What Affects Mortar Consumption?</h2>
+<p>Several jobsite variables significantly influence the exact volume of mortar consumed during construction. Joint thickness is the most critical factor; even a tiny deviation from a 3/8-inch joint to a 1/2-inch joint can increase total mortar consumption by over 25 percent across a large commercial or residential wall assembly.</p>
+<p>Unit size, shape irregularities, and masonry absorption rates also alter mortar usage. Irregular natural stone requires variable backing beds and extensive chinking, drastically increasing mortar demands compared to uniform extruded clay bricks or precision-manufactured concrete blocks. Additionally, extremely dry bricks or blocks can suction moisture out of the mortar too quickly, forcing masons to use more mud to achieve proper bond strength and joint tooling consistency.</p>
+</section>
+
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>How many 80-lb bags of mortar are in a cubic yard?</h3>
+<p>There are approximately 40 to 42 eighty-pound bags of pre-mixed mortar in a single cubic yard of wet mixed mortar, depending on the exact water-to-mix ratio and dry bulk density.</p>
+<h3>Should I add extra bags for waste?</h3>
+<p>Yes, it is standard industry practice to add a 5% to 10% waste factor to your final bag count to account for dropped mortar, cleanup waste, and minor calculation variances.</p>
+<h3>Can I reuse leftover mixed mortar?</h3>
+<p>No, mortar begins the hydration and setting process shortly after mixing with water. Retempering mortar that has begun to stiffen beyond initial set compromises its compressive and bond strength.</p>
+</section>
+
+</div>
+</main>
+<footer>
+<div class="footer-nav">
+<a href="/">Home</a>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+<a href="/privacy/">Privacy</a>
+</div>
+<p class="citation">Formula source: TMS 402/602 (Masonry Standards Joint Committee) and ASTM C270. Results are estimates for planning — verify with a licensed professional before ordering materials.</p>
+</footer>
+
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(unit) {
+currentUnit = unit;
+document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+
+const labelArea = document.getElementById('label-area');
+const labelJoint = document.getElementById('label-joint');
+const wallAreaInput = document.getElementById('wallArea');
+const jointInput = document.getElementById('jointThickness');
+
+if (unit === 'metric') {
+labelArea.textContent = 'Wall Area (square meters)';
+labelJoint.textContent = 'Mortar Joint Thickness (centimeters)';
+wallAreaInput.placeholder = 'e.g. 20';
+if (wallAreaInput.value) wallAreaInput.value = (parseFloat(wallAreaInput.value) * 0.092903).toFixed(2);
+jointInput.value = '0.95';
+} else {
+labelArea.textContent = 'Wall Area (sq ft)';
+labelJoint.textContent = 'Mortar Joint Thickness (inches)';
+wallAreaInput.placeholder = 'e.g. 200';
+if (wallAreaInput.value) wallAreaInput.value = (parseFloat(wallAreaInput.value) / 0.092903).toFixed(1);
+jointInput.value = '0.375';
+}
+document.getElementById('resultBox').style.display = 'none';
+}
+
+function calculateMortar() {
+const wallAreaInput = parseFloat(document.getElementById('wallArea').value);
+const masonryType = parseFloat(document.getElementById('masonryType').value);
+const jointThicknessInput = parseFloat(document.getElementById('jointThickness').value);
+
+if (!wallAreaInput || wallAreaInput <= 0 || !jointThicknessInput || jointThicknessInput <= 0) {
+alert('Please enter valid positive numbers for wall dimensions and joint thickness.');
+return;
+}
+
+let areaSqFt = currentUnit === 'metric' ? wallAreaInput * 10.7639 : wallAreaInput;
+let jointInches = currentUnit === 'metric' ? jointThicknessInput / 2.54 : jointThicknessInput;
+
+let mortarVolumeCuFt = areaSqFt * jointInches / 12 * masonryType;
+let bags = Math.ceil(mortarVolumeCuFt / 0.7);
+
+let resVolume, resWeight;
+if (currentUnit === 'metric') {
+let volumeCuM = mortarVolumeCuFt * 0.0283168;
+resVolume = volumeCuM.toFixed(2) + ' cubic meters';
+let totalWeightKg = bags * 36.2874; 
+resWeight = totalWeightKg.toFixed(0) + ' kg';
+} else {
+resVolume = mortarVolumeCuFt.toFixed(1) + ' cubic feet';
+let totalWeightLbs = bags * 80;
+resWeight = totalWeightLbs + ' lbs';
+}
+
+document.getElementById('resVolume').textContent = resVolume;
+document.getElementById('resBags').textContent = bags + ' bags (80 lb / ~36 kg)';
+document.getElementById('resWeight').textContent = resWeight;
+document.getElementById('resultBox').style.display = 'block';
+}
+</script>
+</body>
+</html>

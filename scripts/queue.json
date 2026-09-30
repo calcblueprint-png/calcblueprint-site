@@ -104,7 +104,8 @@
     "description": "Calculate mortar needed for bricklaying, block walls, and stone work. Enter wall dimensions for accurate bag counts.",
     "inputs": "Wall area (square feet), block/brick type, mortar joint thickness (inches)",
     "formula": "Mortar volume = wall_area * joint_thickness / 12 * coverage_factor. Bags = ceil(mortar_volume / 0.7 cu ft per 80-lb bag).",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-09-30T02:12:47.498122Z"
   },
   {
     "slug": "brick-calculator",
