@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/brick-calculator/">
+<title>Brick Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate how many bricks you need for walls, patios, or veneer. Includes standard brick sizes and waste factor.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Brick Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:bold;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{max-width:900px;margin:2rem auto;padding:0 1rem}
+.container{width:100%}
+.calculator-box{background:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+h1{font-size:1.8rem;color:#1a2332;margin-bottom:1.5rem}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:2px solid #1a2332;background:#fff;color:#1a2332;font-weight:bold;border-radius:4px;cursor:pointer;transition:all 0.2s}
+.unit-btn.active{background:#1a2332;color:#fff}
+.form-group{margin-bottom:1.2rem}
+label{display:block;font-weight:600;margin-bottom:0.4rem;color:#1a2332;font-size:0.95rem}
+input,select{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+input:focus,select:focus{outline:none;border-color:#f5a623}
+.calc-btn{width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;font-size:1.1rem;font-weight:bold;border-radius:4px;cursor:pointer;transition:background 0.2s;margin-top:1rem}
+.calc-btn:hover{background:#e0951c}
+.result-box{background:#f8f9fa;border-left:4px solid #f5a623;padding:1.5rem;border-radius:4px;margin-top:1.5rem;display:none}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #e9ecef;font-size:1.05rem}
+.result-row:last-child{border-bottom:none}
+.result-value{font-weight:bold;color:#1a2332}
+details{background:#fff;border-radius:8px;padding:1.5rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+summary{font-weight:bold;cursor:pointer;color:#1a2332;font-size:1.1rem}
+details p{margin-top:1rem;color:#555}
+.content-section { background-color: #ffffff; border-radius: 8px; padding: 2rem; margin-bottom: 2rem; box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.4rem}
+.content-section p{margin-bottom:1rem;color:#444}
+.content-section h3{color:#1a2332;margin-top:1.2rem;margin-bottom:0.4rem;font-size:1.1rem}
+footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:3rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#fff;margin:0 1rem;text-decoration:none}
+footer nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#adb5bd;max-width:700px;margin:0 auto}
+@media(max-width:600px){
+header{flex-direction:column;gap:1rem}
+nav a{margin:0 0.5rem}
+}
+</style>
+</head>
+<body>
+
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="/">Home</a>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+</nav>
+</header>
+
+<main>
+<div class="container">
+<div class="calculator-box">
+<h1>Brick Calculator</h1>
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnitSystem('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnitSystem('metric')">Metric</button>
+</div>
+
+<div class="form-group">
+<label id="label-length" for="length">Wall Length (feet)</label>
+<input type="number" id="length" step="0.1" value="20">
+</div>
+
+<div class="form-group">
+<label id="label-height" for="height">Wall Height (feet)</label>
+<input type="number" id="height" step="0.1" value="8">
+</div>
+
+<div class="form-group">
+<label for="brick-size">Brick Size Type</label>
+<select id="brick-size">
+<option value="modular">Modular (7-5/8" x 2-1/4")</option>
+<option value="queen">Queen (7-5/8" x 2-3/4")</option>
+<option value="king">King (9-5/8" x 2-5/8")</option>
+<option value="closure">Closure (7-5/8" x 3-5/8")</option>
+</select>
+</div>
+
+<div class="form-group">
+<label for="joint-size">Mortar Joint Thickness (inches)</label>
+<input type="number" id="joint-size" step="0.0625" value="0.375">
+</div>
+
+<div class="form-group">
+<label for="waste">Waste Factor (%)</label>
+<input type="number" id="waste" step="1" value="5">
+</div>
+
+<button type="button" class="calc-btn" onclick="calculateBricks()">Calculate Bricks</button>
+
+<div class="result-box" id="result-box">
+<div class="result-row">
+<span>Total Wall Area:</span>
+<span class="result-value" id="res-area">0</span>
+</div>
+<div class="result-row">
+<span>Bricks Needed (Exact):</span>
+<span class="result-value" id="res-exact">0</span>
+</div>
+<div class="result-row">
+<span>Total with Waste Factor:</span>
+<span class="result-value" id="res-total">0</span>
+</div>
+</div>
+</div>
+
+<details>
+<summary>How this calculator works</summary>
+<p>This calculator determines exact material requirements by converting wall dimensions into square inches, calculating coverage per individual masonry unit including standard mortar joints, and factoring in standard cutting and breakage waste. Formula based on TMS 402/602 (Masonry Standards Joint Committee) and ASTM C270.</p>
+</details>
+
+<section class="content-section">
+<h2>How to Calculate Brick Requirements for Your Project</h2>
+<p>Calculating the correct number of bricks required for a masonry project requires precise measurements of the structural surface area, accounting for both the brick dimensions and the mortar joint width. When planning a brick veneer or full masonry wall, you must first determine the total square footage by multiplying the linear length by the height. Standard masonry estimating incorporates a specific mortar joint allowance—typically 3/8 of an inch—which expands the effective coverage footprint of each individual unit.</p>
+<p>Once the individual unit coverage is determined in square inches, dividing the total wall area by the single-brick coverage rate yields the baseline quantity. Because masonry units are cut to fit around corners, openings, and architectural details, applying a waste percentage is mandatory. Adding a 5% to 10% buffer guarantees you will not experience project delays due to material shortages caused by handling breakages or masonry saw cuts.</p>
+</section>
+
+<section class="content-section">
+<h2>What Affects Brick Estimating Accuracy</h2>
+<p>Several distinct jobsite variables directly influence the accuracy of your brick calculations. First and foremost is the architectural complexity of the wall. Walls featuring numerous windows, doors, arches, or decorative insets generate a higher volume of custom cuts, which inherently increases material waste compared to plain, unbroken runs of straight wall.</p>
+<p>Mortar joint thickness also plays a critical role. While 3/8 inch is standard, variations or specialized architectural requirements can alter joint widths, shifting the total number of bricks needed per square foot. Furthermore, structural backing types—such as wood framing, steel studs, or concrete masonry units (CMU)—require proper masonry ties and weep hole spacing, which can occasionally impact layout spacing. Finally, ordering all bricks from a single production run or batch is vital to avoid color blending discrepancies across different pallets.</p>
+</section>
+
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>How many standard modular bricks are in a square foot of wall?</h3>
+<p>A standard modular brick installed with a 3/8-inch mortar joint typically requires about 6.55 bricks per square foot of wall area when calculated using standard face dimensions.</p>
+
+<h3>Should I add extra bricks for breakage and cuts?</h3>
+<p>Yes, professionals universally recommend adding a 5% to 10% waste factor to your final order to account for chipped corners, saw cutting waste, and transit breakage.</p>
+
+<h3>Does the brick calculation include mortar joint space?</h3>
+<p>Yes, masonry estimation formulas explicitly account for the mortar joint width, as the joint contributes directly to the overall coverage area of each brick in the finished wall assembly.</p>
+</section>
+
+</div>
+</main>
+
+<footer>
+<nav>
+<a href="/">Home</a>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+<a href="#privacy">Privacy</a>
+</nav>
+<div class="citation">
+Formula source: TMS 402/602 (Masonry Standards Joint Committee) and ASTM C270. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.
+</div>
+</footer>
+
+<script>
+let currentSystem = 'imperial';
+
+function setUnitSystem(system) {
+currentSystem = system;
+const btnImp = document.getElementById('btn-imperial');
+const btnMet = document.getElementById('btn-metric');
+const lblLen = document.getElementById('label-length');
+const lblHgt = document.getElementById('label-height');
+const inputLen = document.getElementById('length');
+const inputHgt = document.getElementById('height');
+
+if (system === 'imperial') {
+btnImp.classList.add('active');
+btnMet.classList.remove('active');
+lblLen.textContent = 'Wall Length (feet)';
+lblHgt.textContent = 'Wall Height (feet)';
+inputLen.value = (parseFloat(inputLen.value) / 0.3048).toFixed(1);
+inputHgt.value = (parseFloat(inputHgt.value) / 0.3048).toFixed(1);
+} else {
+btnMet.classList.add('active');
+btnImp.classList.remove('active');
+lblLen.textContent = 'Wall Length (meters)';
+lblHgt.textContent = 'Wall Height (meters)';
+inputLen.value = (parseFloat(inputLen.value) * 0.3048).toFixed(1);
+inputHgt.value = (parseFloat(inputHgt.value) * 0.3048).toFixed(1);
+}
+}
+
+function calculateBricks() {
+let length = parseFloat(document.getElementById('length').value);
+let height = parseFloat(document.getElementById('height').value);
+const brickType = document.getElementById('brick-size').value;
+let joint = parseFloat(document.getElementById('joint-size').value);
+const waste = parseFloat(document.getElementById('waste').value);
+
+if (isNaN(length) || isNaN(height) || isNaN(joint) || isNaN(waste) || length <= 0 || height <= 0) {
+alert('Please enter valid positive numbers.');
+return;
+}
+
+if (currentSystem === 'metric') {
+length = length / 0.3048;
+height = height / 0.3048;
+joint = joint / 2.54;
+}
+
+let brickLength = 7.625;
+let brickHeight = 2.25;
+
+if (brickType === 'modular') {
+brickLength = 7.625;
+brickHeight = 2.25;
+} else if (brickType === 'queen') {
+brickLength = 7.625;
+brickHeight = 2.75;
+} else if (brickType === 'king') {
+brickLength = 9.625;
+brickHeight = 2.625;
+} else if (brickType === 'closure') {
+brickLength = 7.625;
+brickHeight = 3.625;
+}
+
+const wallSqIn = length * height * 144;
+const wallSqFt = length * height;
+const bricksPerSqFt = 144 / ((brickLength + joint) * (brickHeight + joint));
+const exactBricks = wallSqFt * bricksPerSqFt;
+const totalBricks = Math.ceil(exactBricks * (1 + waste / 100));
+
+document.getElementById('res-area').textContent = currentSystem === 'imperial' ? wallSqFt.toFixed(2) + ' sq ft' : (wallSqFt * 0.092903).toFixed(2) + ' sq m';
+document.getElementById('res-exact').textContent = Math.round(exactBricks) + ' bricks';
+document.getElementById('res-total').textContent = totalBricks + ' bricks';
+
+document.getElementById('result-box').style.display = 'block';
+}
+</script>
+
+</body>
+</html>

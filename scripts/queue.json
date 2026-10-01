@@ -113,7 +113,8 @@
     "description": "Calculate how many bricks you need for walls, patios, or veneer. Includes standard brick sizes and waste factor.",
     "inputs": "Wall length (feet), wall height (feet), brick size (modular, queen, king, closure), waste percentage",
     "formula": "Wall area (sq in) = length * height * 144. Bricks per sq ft = 144 / ((brick_length + joint) * (brick_height + joint)). Total = ceil(wall_sqft * bricks_per_sqft * (1 + waste/100)).",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-01T02:13:21.290544Z"
   },
   {
     "slug": "roof-area-calculator",
