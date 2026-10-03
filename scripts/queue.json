@@ -122,7 +122,8 @@
     "description": "Calculate the actual surface area of your roof from footprint and pitch. Essential for ordering materials accurately.",
     "inputs": "Building length (feet), building width (feet), roof pitch (X:12)",
     "formula": "Footprint = length * width. Pitch multiplier = sqrt(1 + (rise/12)^2). Roof area = footprint * pitch multiplier. Add 5% for waste.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-03T02:12:55.420607Z"
   },
   {
     "slug": "gutter-calculator",

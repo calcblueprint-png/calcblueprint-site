@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/roof-area-calculator/">
+<title>Roof Area Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate the actual surface area of your roof from footprint and pitch. Essential for ordering materials accurately.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Roof Area Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:700;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+.container{max-width:800px;margin:2rem auto;padding:0 1rem}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+.unit-toggle{display:flex;gap:1rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:2px solid #1a2332;background:#fff;color:#1a2332;font-weight:600;border-radius:4px;cursor:pointer;transition:all 0.2s}
+.unit-btn.active{background:#1a2332;color:#fff}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+.calc-btn{width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;font-size:1.1rem;font-weight:700;border-radius:4px;cursor:pointer;transition:opacity 0.2s}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#1a2332;color:#fff;border-radius:8px;padding:1.5rem;margin-top:1.5rem;display:none}
+.result-box h3{color:#f5a623;margin-bottom:1rem;font-size:1.2rem}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.1)}
+.result-row:last-child{border-bottom:none}
+.calc-details{background:#fff;border:1px solid #e1e4e8;border-radius:6px;padding:1rem;margin-bottom:2rem}
+.calc-details summary{font-weight:600;cursor:pointer;color:#1a2332}
+.calc-details p{margin-top:0.75rem;font-size:0.95rem;color:#555}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
+.content-section h3{color:#1a2332;margin-top:1.5rem;margin-bottom:0.5rem;font-size:1.1rem}
+.content-section p{margin-bottom:1rem;color:#4a5568}
+footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:4rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#fff;text-decoration:none;margin:0 0.75rem}
+footer nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#a0aec0;max-width:600px;margin:0 auto}
+</style>
+</head>
+<body>
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+</nav>
+</header>
+<main>
+<div class="container">
+<div class="calculator-box">
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+</div>
+<div class="form-group">
+<label id="label-length" for="length">Building Length (feet)</label>
+<input type="number" id="length" step="any" placeholder="e.g. 40">
+</div>
+<div class="form-group">
+<label id="label-width" for="width">Building Width (feet)</label>
+<input type="number" id="width" step="any" placeholder="e.g. 24">
+</div>
+<div class="form-group">
+<label id="label-pitch" for="pitch">Roof Pitch (X:12)</label>
+<input type="number" id="pitch" step="any" placeholder="e.g. 6">
+</div>
+<button type="button" class="calc-btn" onclick="calculate()">Calculate Roof Area</button>
+<div class="result-box" id="result-box">
+<h3>Calculation Results</h3>
+<div class="result-row">
+<span>Building Footprint Area:</span>
+<strong id="res-footprint">-</strong>
+</div>
+<div class="result-row">
+<span>Pitch Multiplier:</span>
+<strong id="res-multiplier">-</strong>
+</div>
+<div class="result-row">
+<span>Net Roof Surface Area:</span>
+<strong id="res-net">-</strong>
+</div>
+<div class="result-row">
+<span>Total with 5% Waste Allowance:</span>
+<strong id="res-total">-</strong>
+</div>
+</div>
+</div>
+
+<details class="calc-details">
+<summary>How this calculator works</summary>
+<p>This calculator determines the true surface area of a sloped roof by multiplying the horizontal building footprint by a pitch multiplier derived from the Pythagorean theorem. A standard 5% waste factor is then added to account for cuts, overlaps, and hip/valley trimming during installation. Coverage rates per NRCA Roofing Manual and manufacturer specifications.</p>
+</details>
+
+<section class="content-section">
+<h2>How to Calculate Roof Area</h2>
+<p>Calculating your roof area accurately is critical when purchasing shingles, metal panels, underlayment, or hiring a roofing contractor. Simply measuring the footprint of the home is not enough because the slope increases the actual surface area. To find the correct dimensions, you must measure the total length and width of the building's exterior foundation, including any roof overhangs or eaves that you plan to cover.</p>
+<p>Next, you must determine the roof pitch, which is expressed as a ratio of vertical rise to 12 inches of horizontal run (for example, a 6:12 pitch rises 6 inches for every foot). By converting this ratio into a multiplier using square roots, you can scale the flat footprint up to match the true angled plane of the roof deck. Finally, adding a 5% waste factor ensures you do not run short of materials due to field cuts and starter course trimmings.</p>
+</section>
+
+<section class="content-section">
+<h2>What Affects Roof Area</h2>
+<p>Several architectural features and geometric complexities can alter the physical surface area of a roofing project compared to a simple gable calculation. Dormers, turrets, cross-gables, and complex valley configurations require additional cuts and generate higher scrap rates, sometimes necessitating an 8% to 10% waste factor instead of the standard 5%. Furthermore, overhangs and soffit extensions must be factored directly into the base building dimensions because roofing materials must cover the entire exposed deck extending past the exterior walls.</p>
+<p>The steepness of the pitch also plays a dramatic role; steeper roofs feature much higher pitch multipliers, drastically increasing the square footage of material required. Safety equipment and specialized labor costs often scale with steep pitches as well. Understanding these nuances guarantees that your material orders match field reality, preventing costly mid-project delivery delays or surplus waste.</p>
+</section>
+
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>Why do I need to add a waste factor to my roof measurement?</h3>
+<p>Roofing materials like asphalt shingles or metal sheets must be cut to fit around ridges, valleys, rakes, and penetrations like chimneys or plumbing vents. A 5% to 10% waste factor ensures you have sufficient material to complete the job without coming up short.</p>
+<h3>How is roof pitch measured?</h3>
+<p>Roof pitch is measured as the number of inches of vertical rise for every 12 inches of horizontal distance. You can measure this by holding a level horizontally against a rafter and measuring the vertical drop down to the roof surface.</p>
+<h3>Can I use this calculator for complex multi-tier roofs?</h3>
+<p>This calculator is designed for standard rectangular footprints and simple roof planes. For complex roofs with multiple sections, hips, and valleys, it is best to calculate each section independently and sum the total areas.</p>
+</section>
+</div>
+</main>
+<footer>
+<nav>
+<a href="/">Home</a>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+<a href="#privacy">Privacy</a>
+</nav>
+<div class="citation">Formula source: NRCA Roofing Manual and manufacturer installation guides. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.</div>
+</footer>
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(unit) {
+  currentUnit = unit;
+  document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+  document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+  
+  if (unit === 'imperial') {
+    document.getElementById('label-length').innerText = 'Building Length (feet)';
+    document.getElementById('label-width').innerText = 'Building Width (feet)';
+    document.getElementById('length').placeholder = 'e.g. 40';
+    document.getElementById('width').placeholder = 'e.g. 24';
+  } else {
+    document.getElementById('label-length').innerText = 'Building Length (meters)';
+    document.getElementById('label-width').innerText = 'Building Width (meters)';
+    document.getElementById('length').placeholder = 'e.g. 12';
+    document.getElementById('width').placeholder = 'e.g. 7.5';
+  }
+  
+  // Clear or recalculate if values exist
+  let l = parseFloat(document.getElementById('length').value);
+  let w = parseFloat(document.getElementById('width').value);
+  if (!isNaN(l) && !isNaN(w)) {
+    calculate();
+  }
+}
+
+function calculate() {
+  let length = parseFloat(document.getElementById('length').value);
+  let width = parseFloat(document.getElementById('width').value);
+  let pitch = parseFloat(document.getElementById('pitch').value);
+
+  if (isNaN(length) || isNaN(width) || isNaN(pitch) || length <= 0 || width <= 0 || pitch < 0) {
+    alert('Please enter valid positive numbers for length, width, and pitch.');
+    return;
+  }
+
+  let footprint = length * width;
+  let pitchMultiplier = Math.sqrt(1 + Math.pow(pitch / 12, 2));
+  let netArea = footprint * pitchMultiplier;
+  let totalArea = netArea * 1.05;
+
+  let areaUnit = currentUnit === 'imperial' ? 'sq ft' : 'sq meters';
+
+  document.getElementById('res-footprint').innerText = footprint.toFixed(2) + ' ' + areaUnit;
+  document.getElementById('res-multiplier').innerText = pitchMultiplier.toFixed(4);
+  document.getElementById('res-net').innerText = netArea.toFixed(2) + ' ' + areaUnit;
+  document.getElementById('res-total').innerText = totalArea.toFixed(2) + ' ' + areaUnit;
+
+  document.getElementById('result-box').style.display = 'block';
+}
+</script>
+</body>
+</html>
