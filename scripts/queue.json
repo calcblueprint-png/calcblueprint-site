@@ -131,7 +131,8 @@
     "description": "Calculate gutter length, downspouts, and hangers needed for your home. Enter roof edges and roof area.",
     "inputs": "Eave length (feet), number of downspout locations, gutter size, roof area (sq ft)",
     "formula": "Total gutter = eave_length. Downspouts = number_locations * (wall_height / 10). Hangers = ceil(eave_length / 2).",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-04T04:07:18.156034Z"
   },
   {
     "slug": "roof-truss-calculator",

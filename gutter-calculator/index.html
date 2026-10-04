@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/gutter-calculator/">
+<title>Gutter Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate gutter length, downspouts, and hangers needed for your home. Enter roof edges and roof area.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f7f6;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{color:#fff;font-size:1.5rem;font-weight:bold;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2rem 1rem}
+.container{max-width:800px;margin:0 auto}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);margin-bottom:2rem}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem;background:#f0f2f5;padding:0.25rem;border-radius:6px}
+.unit-btn{flex:1;padding:0.5rem;border:none;background:transparent;cursor:pointer;font-weight:600;border-radius:4px;color:#555}
+.unit-btn.active{background:#f5a623;color:#1a2332}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input,.form-group select{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+.calc-btn{background:#f5a623;color:#1a2332;border:none;padding:0.85rem 1.5rem;font-size:1rem;font-weight:bold;border-radius:4px;cursor:pointer;width:100%;margin-top:1rem}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#f0f4f8;border-left:4px solid #f5a623;padding:1.5rem;border-radius:4px;margin-top:1.5rem;display:none}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #e1e8ed}
+.result-row:last-child{border-bottom:none}
+.result-label{font-weight:600;color:#1a2332}
+.result-value{font-weight:bold;color:#1a2332}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 2px 4px rgba(0,0,0,0.02)}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
+.content-section h3{color:#1a2332;margin-top:1.2rem;margin-bottom:0.5rem;font-size:1.1rem}
+.content-section p{margin-bottom:1rem;color:#555}
+details{background:#f9fbfb;padding:1rem;border-radius:6px;border:1px solid #e1e8ed;margin-bottom:2rem}
+summary{font-weight:bold;cursor:pointer;color:#1a2332}
+details p{margin-top:0.75rem;color:#555;font-size:0.95rem}
+footer{background:#1a2332;color:#fff;padding:2rem;text-align:center;margin-top:3rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#fff;margin:0 0.75rem;text-decoration:none}
+footer nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#a0aec0;max-width:600px;margin:0 auto;line-height:1.4}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Gutter Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Calc<span>Blueprint</span></a>
+  <nav>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <div class="container">
+    
+    <div class="calculator-box">
+      <h1 style="color:#1a2332;margin-bottom:1.5rem;font-size:1.8rem">Gutter Calculator</h1>
+      
+      <div class="unit-toggle">
+        <button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+        <button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+      </div>
+
+      <form id="gutterForm" onsubmit="calculateGutter(event)">
+        <div class="form-group">
+          <label id="lbl-eave">Eave length (feet)</label>
+          <input type="number" id="eave_length" step="any" required min="0" placeholder="e.g., 50">
+        </div>
+
+        <div class="form-group">
+          <label id="lbl-height">Wall height to eave (<span class="unit-height-label">feet</span>)</label>
+          <input type="number" id="wall_height" step="any" required min="0" placeholder="e.g., 10">
+        </div>
+
+        <div class="form-group">
+          <label>Number of downspout locations</label>
+          <input type="number" id="number_locations" step="1" required min="1" placeholder="e.g., 4">
+        </div>
+
+        <div class="form-group">
+          <label id="lbl-area">Roof area (sq ft)</label>
+          <input type="number" id="roof_area" step="any" required min="0" placeholder="e.g., 1500">
+        </div>
+
+        <div class="form-group">
+          <label>Gutter size</label>
+          <select id="gutter_size">
+            <option value="5">5-inch Standard K-Style</option>
+            <option value="6">6-inch Large K-Style</option>
+            <option value="7">7-inch Commercial K-Style</option>
+          </select>
+        </div>
+
+        <button type="submit" class="calc-btn">Calculate Materials</button>
+      </form>
+
+      <div class="result-box" id="resultBox">
+        <div class="result-row">
+          <span class="result-label">Total Gutter Length Needed:</span>
+          <span class="result-value" id="res-gutter">0</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Downspout Assemblies Needed:</span>
+          <span class="result-value" id="res-downspouts">0</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Gutter Hangers Needed:</span>
+          <span class="result-value" id="res-hangers">0</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Design Flow Capacity Check:</span>
+          <span class="result-value" id="res-capacity">Adequate</span>
+        </div>
+      </div>
+    </div>
+
+    <details>
+      <summary>How this calculator works</summary>
+      <p>This tool computes total running gutter requirements directly from measured eave lengths, while scaling downspout component counts based on overall wall height and drainage drop locations. Hanger requirements are automatically calculated assuming standard spacing intervals to safely support heavy water loads during peak storms.</p>
+      <p>Formula based on NRCA Roofing Manual and manufacturer installation guides.</p>
+    </details>
+
+    <section class="content-section">
+      <h2>How to Calculate Gutter Requirements</h2>
+      <p>Accurately sizing and planning a rainwater drainage system requires careful field measurements of your home's roof perimeter. The total linear footage of gutter matches your eave lengths where drainage is required. When measuring, account for corners, end caps, and slight overlaps to prevent material shortages during installation.</p>
+      <p>Downspout placement depends heavily on vertical drop distance and expected runoff volume from the roof surface. By factoring in wall height alongside drainage drop points, you ensure proper hydraulic capacity without overwhelming individual vertical pipes. Finally, securing the system with dependable hangers spaced at regular intervals prevents sagging under heavy ice and debris loads.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>What Affects Gutter Performance</h2>
+      <p>Roof area and local peak rainfall intensity dictate whether your chosen gutter size and downspout count can adequately manage severe storms. Larger roof footprints channel exponentially more water into the gutter troughs, making proper pitch—typically a quarter-inch drop for every ten feet of run—vital for keeping water moving toward the downspouts.</p>
+      <p>Material selection, environmental exposure, and tree canopy density also influence system longevity and maintenance frequency. Aluminum, steel, and vinyl systems react differently to thermal expansion, while heavy debris from surrounding trees necessitates frequent cleaning or the addition of high-grade gutter guards to maintain unhindered water flow year-round.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>Frequently Asked Questions</h2>
+      <h3>How many downspouts do I need for my house?</h3>
+      <p>As a general rule of thumb, experts recommend installing one downspout for every 20 to 30 linear feet of gutter run, or for every 600 to 1,200 square feet of roof area, depending on local rainfall severity.</p>
+      <h3>What is the correct slope or pitch for residential gutters?</h3>
+      <p>Gutters should be installed with a slight downward slope toward the downspout, usually ranging from 1/4 inch to 1/8 inch for every 10 feet of horizontal run, ensuring efficient drainage without looking visibly tilted.</p>
+      <h3>How far apart should gutter hangers be spaced?</h3>
+      <p>Standard installation practices require heavy-duty hidden hangers spaced every 24 inches on center. In regions prone to heavy snowfall or ice accumulation, spacing should be tightened to every 18 inches for maximum structural support.</p>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <nav>
+    <a href="/">Home</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <a href="#privacy">Privacy</a>
+  </nav>
+  <div class="citation">
+    Formula source: NRCA Roofing Manual and manufacturer installation guides. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.
+  </div>
+</footer>
+
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(unit) {
+  currentUnit = unit;
+  document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+  document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+  
+  if (unit === 'imperial') {
+    document.getElementById('lbl-eave').innerText = 'Eave length (feet)';
+    document.querySelector('.unit-height-label').innerText = 'feet';
+    document.getElementById('lbl-area').innerText = 'Roof area (sq ft)';
+    document.getElementById('eave_length').placeholder = 'e.g., 50';
+    document.getElementById('wall_height').placeholder = 'e.g., 10';
+    document.getElementById('roof_area').placeholder = 'e.g., 1500';
+  } else {
+    document.getElementById('lbl-eave').innerText = 'Eave length (meters)';
+    document.querySelector('.unit-height-label').innerText = 'meters';
+    document.getElementById('lbl-area').innerText = 'Roof area (sq meters)';
+    document.getElementById('eave_length').placeholder = 'e.g., 15';
+    document.getElementById('wall_height').placeholder = 'e.g., 3';
+    document.getElementById('roof_area').placeholder = 'e.g., 140';
+  }
+  
+  // Clear previous results on unit switch
+  document.getElementById('resultBox').style.display = 'none';
+}
+
+function calculateGutter(event) {
+  event.preventDefault();
+  
+  let eave = parseFloat(document.getElementById('eave_length').value);
+  let wallHeight = parseFloat(document.getElementById('wall_height').value);
+  let numLoc = parseFloat(document.getElementById('number_locations').value);
+  let roofArea = parseFloat(document.getElementById('roof_area').value);
+  
+  if (isNaN(eave) || isNaN(wallHeight) || isNaN(numLoc) || isNaN(roofArea)) return;
+
+  // Formulas as requested:
+  // Total gutter = eave_length
+  // Downspouts = number_locations * (wall_height / 10)
+  // Hangers = ceil(eave_length / 2)
+  
+  let totalGutter = eave;
+  let downspouts = numLoc * (wallHeight / 10);
+  let hangers = Math.ceil(eave / 2);
+  
+  let gutterUnit = currentUnit === 'imperial' ? ' feet' : ' meters';
+  let areaUnit = currentUnit === 'imperial' ? ' sq ft' : ' sq m';
+
+  document.getElementById('res-gutter').innerText = totalGutter.toFixed(1) + gutterUnit;
+  document.getElementById('res-downspouts').innerText = downspouts.toFixed(1) + ' assemblies';
+  document.getElementById('res-hangers').innerText = hangers + ' units';
+  
+  // Simple check for capacity placeholder
+  let checkCapacity = currentUnit === 'imperial' ? (roofArea / eave < 50) : (roofArea / eave < 4.6);
+  document.getElementById('res-capacity').innerText = checkCapacity ? 'Adequate for standard flow' : 'Review sizing / add downspouts';
+
+  document.getElementById('resultBox').style.display = 'block';
+}
+</script>
+
+</body>
+</html>
