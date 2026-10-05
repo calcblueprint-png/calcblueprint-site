@@ -140,7 +140,8 @@
     "description": "Calculate the number of roof trusses needed and spacing for your building. For gable, hip, and shed roofs.",
     "inputs": "Building length (feet), roof type (gable, hip, shed), truss spacing (16, 24 inches)",
     "formula": "Number of trusses = ceil(building_length * 12 / truss_spacing) + 1. Add one truss per gable end if applicable.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-05T02:13:41.938438Z"
   },
   {
     "slug": "ridge-vent-calculator",

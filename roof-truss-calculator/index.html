@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/roof-truss-calculator/">
+<title>Roof Truss Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate the number of roof trusses needed and spacing for your building. For gable, hip, and shed roofs.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f7f6;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:bold;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2.5rem 1rem;max-width:900px;margin:0 auto}
+.container{width:100%}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+h1{font-size:1.8rem;color:#1a2332;margin-bottom:0.5rem}
+.calc-desc{color:#666;margin-bottom:1.5rem;font-size:0.95rem}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:1px solid #ccc;background:#f8f9fa;cursor:pointer;font-weight:600;border-radius:4px;transition:0.2s}
+.unit-btn.active{background:#f5a623;color:#1a2332;border-color:#f5a623}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input, .form-group select{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+.calc-btn{width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;font-size:1rem;font-weight:bold;border-radius:4px;cursor:pointer;transition:background 0.2s}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#f8f9fa;border-left:4px solid #f5a623;padding:1.5rem;margin-top:1.5rem;border-radius:0 4px 4px 0;display:none}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #e1e4e8}
+.result-row:last-child{border-bottom:none}
+.result-label{font-weight:600;color:#1a2332}
+.result-value{font-weight:bold;color:#1a2332}
+details{background:#fff;border-radius:8px;padding:1.5rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);cursor:pointer}
+summary{font-weight:bold;color:#1a2332;font-size:1.1rem}
+details p{margin-top:1rem;color:#555}
+.content-section { background-color: #ffffff; border-radius: 8px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+.content-section h2 { color: #1a2332; margin-bottom: 1rem; font-size: 1.4rem; }
+.content-section p { margin-bottom: 1rem; color: #444; }
+.content-section h3 { color: #1a2332; margin-top: 1.2rem; margin-bottom: 0.4rem; font-size: 1.1rem; }
+footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:3rem;font-size:0.9rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#f5a623;margin:0 0.75rem;text-decoration:none}
+.citation{color:#adb5bd;font-size:0.8rem;max-width:700px;margin:0 auto;line-height:1.4}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Roof Truss Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+</head>
+<body>
+<header>
+  <a href="/" class="logo">Calc<span>Blueprint</span></a>
+  <nav>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+<main>
+  <div class="container">
+    <div class="calculator-box">
+      <h1>Roof Truss Calculator</h1>
+      <p class="calc-desc">Calculate the number of roof trusses needed and spacing for your building. For gable, hip, and shed roofs.</p>
+      
+      <div class="unit-toggle">
+        <button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnit('imperial')">Imperial (US)</button>
+        <button type="button" class="unit-btn" id="btn-metric" onclick="setUnit('metric')">Metric</button>
+      </div>
+
+      <div class="form-group">
+        <label id="label-length" for="building-length">Building Length (feet)</label>
+        <input type="number" id="building-length" step="0.1" value="40">
+      </div>
+
+      <div class="form-group">
+        <label for="roof-type">Roof Type</label>
+        <select id="roof-type">
+          <option value="gable">Gable Roof</option>
+          <option value="hip">Hip Roof</option>
+          <option value="shed">Shed Roof</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label id="label-spacing" for="truss-spacing">Truss Spacing (inches)</label>
+        <select id="truss-spacing">
+          <option value="16">16 inches (Standard)</option>
+          <option value="24" selected>24 inches (Standard)</option>
+        </select>
+      </div>
+
+      <button type="button" class="calc-btn" onclick="calculateTrusses()">Calculate Trusses</button>
+
+      <div class="result-box" id="result-box">
+        <div class="result-row">
+          <span class="result-label">Total Trusses Needed:</span>
+          <span class="result-value" id="res-total">0</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Truss Spacing:</span>
+          <span class="result-value" id="res-spacing">0</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Building Length:</span>
+          <span class="result-value" id="res-length">0</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Roof Configuration Style:</span>
+          <span class="result-value" id="res-type">Gable</span>
+        </div>
+      </div>
+    </div>
+
+    <details>
+      <summary>How this calculator works</summary>
+      <p>The number of trusses is determined by converting the overall building length into inches, dividing by the specified on-center truss spacing interval, taking the ceiling value, and adding one for the terminal end. Gable roofs require an extra truss allowance per gable end configuration, while shed and hip roofs incorporate layout specifics matching standard carpentry practices.</p>
+      <p>Formula based on AWC (American Wood Council) NDS and SPIB grading rules</p>
+    </details>
+
+    <section class="content-section">
+      <h2>How to Calculate Roof Trusses</h2>
+      <p>Calculating roof trusses accurately requires understanding your total building run and the structural spacing requirements mandated by local building codes. Standard framing layouts typically utilize either 16-inch or 24-inch on-center (OC) spacing depending on the roof load, sheathing material thickness, and structural engineering designs. To begin your estimate, measure the total exterior wall length parallel to the ridge line.</p>
+      <p>Once you have the total length, convert measurements into a consistent unit format. Divide the total span length by your chosen spacing distance and round up to the next whole integer to account for the full span coverage. Additional structural elements such as gable end overhangs, outlookers, or specialized hip jack trusses must also be factored into your final order to ensure complete framing continuity from wall plate to peak.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>What Affects Roof Truss Requirements</h2>
+      <p>Several critical variables influence the total quantity, design, and spacing requirements of roof trusses for any construction project. Environmental load factors—including heavy snow accumulation, high wind zones, and seismic activity ratings—directly dictate lumber sizing, plate connection specifications, and whether your layout requires tighter 16-inch spacing instead of standard 24-inch spacing.</p>
+      <p>Additionally, the architectural roof style fundamentally alters framing demands. Gable roofs require uniform common trusses coupled with specialized gable-end frames. Hip roofs introduce complex corner framing arrays, hip rafters, and decreasing jack trusses, whereas shed roofs rely on single-slope mono-trusses anchored securely across asymmetrical wall heights. Material selection and clear-span distances further dictate whether standard prefab wood plates or engineered heavy timber systems are required.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>Frequently Asked Questions</h2>
+      <h3>What is the standard spacing for roof trusses?</h3>
+      <p>The two most common standard spacing intervals for residential roof trusses are 16 inches and 24 inches on-center. Spacing choice depends on roof load ratings, roofing material weight, and roof sheathing thickness requirements.</p>
+      <h3>Do gable roofs need extra trusses?</h3>
+      <p>Yes, gable roofs typically require specialized gable-end trusses that feature vertical studs designed to support exterior siding materials rather than standard open webs found in common interior roof trusses.</p>
+      <h3>Can I change truss spacing halfway down a building?</h3>
+      <p>No, roof truss spacing must remain consistent across the entire length of the building to maintain structural integrity, align with roof sheathing panels, and ensure uniform load transfer down to the load-bearing wall studs.</p>
+    </section>
+  </div>
+</main>
+<footer>
+  <nav>
+    <a href="/">Home</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <a href="#privacy">Privacy</a>
+  </nav>
+  <div class="citation">
+    Formula source: AWC (American Wood Council) NDS and SPIB grading rules. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.
+  </div>
+</footer>
+
+<script>
+let currentUnit = 'imperial';
+
+function setUnit(unit) {
+  currentUnit = unit;
+  const btnImp = document.getElementById('btn-imperial');
+  const btnMet = document.getElementById('btn-metric');
+  const lblLength = document.getElementById('label-length');
+  const lblSpacing = document.getElementById('label-spacing');
+  const inputLength = document.getElementById('building-length');
+
+  if (unit === 'imperial') {
+    btnImp.classList.add('active');
+    btnMet.classList.remove('active');
+    lblLength.textContent = 'Building Length (feet)';
+    lblSpacing.textContent = 'Truss Spacing (inches)';
+    inputLength.value = (parseFloat(inputLength.value) / 0.3048).toFixed(1);
+  } else {
+    btnMet.classList.add('active');
+    btnImp.classList.remove('active');
+    lblLength.textContent = 'Building Length (meters)';
+    lblSpacing.textContent = 'Truss Spacing (centimeters)';
+    inputLength.value = (parseFloat(inputLength.value) * 0.3048).toFixed(1);
+    // Switch select options for metric
+    const spacingSelect = document.getElementById('truss-spacing');
+    spacingSelect.innerHTML = `
+      <option value="40.64">40.64 cm (~16 in)</option>
+      <option value="60.96" selected>60.96 cm (~24 in)</option>
+    `;
+  }
+  if (unit === 'imperial') {
+    const spacingSelect = document.getElementById('truss-spacing');
+    spacingSelect.innerHTML = `
+      <option value="16">16 inches (Standard)</option>
+      <option value="24" selected>24 inches (Standard)</option>
+    `;
+  }
+}
+
+function calculateTrusses() {
+  const lengthInput = parseFloat(document.getElementById('building-length').value);
+  const roofType = document.getElementById('roof-type').value;
+  const spacingInput = parseFloat(document.getElementById('truss-spacing').value);
+  const resultBox = document.getElementById('result-box');
+
+  if (isNaN(lengthInput) || lengthInput <= 0) {
+    alert('Please enter a valid building length.');
+    return;
+  }
+
+  let lengthInInches, spacingInInches;
+
+  if (currentUnit === 'imperial') {
+    lengthInInches = lengthInput * 12;
+    spacingInInches = spacingInput;
+  } else {
+    // metric input is in meters, spacing in cm
+    const lengthInFeet = lengthInput / 0.3048;
+    lengthInInches = lengthInFeet * 12;
+    spacingInInches = spacingInput / 2.54;
+  }
+
+  let baseTrusses = Math.ceil(lengthInInches / spacingInInches) + 1;
+  
+  if (roofType === 'gable') {
+    baseTrusses += 2; // Add one truss per gable end
+  }
+
+  const displayLength = currentUnit === 'imperial' ? lengthInput + ' ft' : lengthInput + ' m';
+  const displaySpacing = currentUnit === 'imperial' ? spacingInput + ' in' : spacingInput + ' cm';
+  const displayType = roofType.charAt(0).toUpperCase() + roofType.slice(1) + ' Roof';
+
+  document.getElementById('res-total').textContent = baseTrusses;
+  document.getElementById('res-spacing').textContent = displaySpacing;
+  document.getElementById('res-length').textContent = displayLength;
+  document.getElementById('res-type').textContent = displayType;
+
+  resultBox.style.display = 'block';
+}
+</script>
+</body>
+</html>
