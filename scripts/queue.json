@@ -149,7 +149,8 @@
     "description": "Calculate linear feet of ridge vent needed for proper attic ventilation. Ensures code-compliant airflow.",
     "inputs": "Attic floor area (square feet), roof pitch",
     "formula": "Required net free area = attic_area / 150. Ridge vent length = required_NFA / 18 sq in per linear foot.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-07T02:13:32.332890Z"
   },
   {
     "slug": "vinyl-siding-calculator",

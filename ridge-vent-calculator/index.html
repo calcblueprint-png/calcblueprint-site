@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/ridge-vent-calculator/">
+<title>Ridge Vent Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate linear feet of ridge vent needed for proper attic ventilation. Ensures code-compliant airflow.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Ridge Vent Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:700;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2rem 1rem;max-width:900px;margin:0 auto}
+.container{width:100%}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);margin-bottom:2rem}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem;background:#f4f6f9;padding:0.25rem;border-radius:6px}
+.unit-btn{flex:1;padding:0.5rem;border:none;background:transparent;cursor:pointer;font-weight:600;border-radius:4px;color:#555}
+.unit-btn.active{background:#f5a623;color:#1a2332}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input,.form-group select{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+.calc-btn{width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;font-size:1.1rem;font-weight:700;border-radius:4px;cursor:pointer;transition:opacity 0.2s}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;padding:1.5rem;margin-top:1.5rem;display:none}
+.result-box.visible{display:block}
+.result-row{display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid #e5e7eb}
+.result-row:last-child{border-bottom:none}
+.result-label{font-weight:600;color:#4b5563}
+.result-value{font-weight:700;color:#1a2332}
+.content-section { background-color: #ffffff; border-radius: 8px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+.content-section h2 { color: #1a2332; margin-bottom: 1rem; font-size: 1.5rem; }
+.content-section h3 { color: #1a2332; margin-top: 1.25rem; margin-bottom: 0.5rem; font-size: 1.1rem; }
+.content-section p { margin-bottom: 1rem; color: #4b5563; }
+details { background: #fff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 1rem; margin-bottom: 2rem; }
+summary { font-weight: 600; color: #1a2332; cursor: pointer; }
+details p { margin-top: 0.75rem; color: #4b5563; font-size: 0.95rem; }
+footer { background: #1a2332; color: #fff; text-align: center; padding: 2rem; margin-top: 3rem; }
+footer nav { margin-bottom: 1rem; }
+footer nav a { color: #fff; text-decoration: none; margin: 0 0.75rem; }
+footer nav a:hover { color: #f5a623; }
+.citation { font-size: 0.85rem; color: #9ca3af; max-width: 600px; margin: 0 auto; }
+@media(max-width:600px){header{flex-direction:column;text-align:center}nav{margin-top:1rem}}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Calc<span>Blueprint</span></a>
+  <nav>
+    <a href="/">Home</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <div class="container">
+    <div class="calculator-box">
+      <h1 style="color:#1a2332; margin-bottom:1.5rem; font-size:1.75rem;">Ridge Vent Calculator</h1>
+      
+      <div class="unit-toggle">
+        <button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+        <button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+      </div>
+
+      <div class="form-group">
+        <label id="label-area" for="attic-area">Attic Floor Area (sq ft)</label>
+        <input type="number" id="attic-area" placeholder="e.g. 1500" min="0" step="any">
+      </div>
+
+      <div class="form-group">
+        <label for="roof-pitch">Roof Pitch</label>
+        <select id="roof-pitch">
+          <option value="4">4/12 Pitch</option>
+          <option value="5">5/12 Pitch</option>
+          <option value="6" selected>6/12 Pitch</option>
+          <option value="8">8/12 Pitch</option>
+          <option value="10">10/12 Pitch</option>
+          <option value="12">12/12 Pitch</option>
+        </select>
+      </div>
+
+      <button type="button" class="calc-btn" onclick="calculateVent()">Calculate Ridge Vent</button>
+
+      <div class="result-box" id="result-box">
+        <div class="result-row">
+          <span class="result-label">Required Net Free Area (NFA):</span>
+          <span class="result-value" id="res-nfa">0 sq in</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Recommended Ridge Vent Length:</span>
+          <span class="result-value" id="res-length">0 ft</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Balanced Intake Needed (50%):</span>
+          <span class="result-value" id="res-intake">0 sq in</span>
+        </div>
+      </div>
+    </div>
+
+    <details>
+      <summary>How this calculator works</summary>
+      <p>This calculator determines your attic's required net free ventilation area by dividing the total attic floor area by 150, following standard building codes. It then divides that required area by the standard rating of 18 square inches per linear foot for ridge vents to give you the exact run length needed. Coverage rates per NRCA Roofing Manual and manufacturer specifications.</p>
+    </details>
+
+    <section class="content-section">
+      <h2>How to Calculate Ridge Vent Requirements</h2>
+      <p>Proper attic ventilation is critical for extending the life of your roofing system and preventing moisture accumulation, mold growth, and ice dams. Building codes typically require a 1:150 ventilation ratio when unbalanced, or 1:300 when balanced equally between intake (soffit) and exhaust (ridge) vents. To calculate your requirement, multiply the building footprint length by the width to get your total attic floor square footage.</p>
+      <p>Next, divide that total area by 150 to find the required Net Free Area (NFA) measured in square inches. Because standard ridge vents typically exhaust 18 square inches of NFA per linear foot, you divide your total required NFA by 18 to find the minimum linear footage of ridge vent you must install along the peak of your roof.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>What Affects Attic Ventilation Requirements</h2>
+      <p>Roof pitch and geometry significantly influence ventilation dynamics. Steeper roofs feature larger interior volumes and greater surface areas, though code calculations primarily tie baseline NFA strictly to the horizontal attic floor footprint rather than the slanted roof deck area. Complex roof designs featuring multiple gables, hips, and dormers can create isolated attic pockets that restrict cross-ventilation, requiring supplemental gable or box vents.</p>
+      <p>Climate zones also dictate performance demands. Homes in regions with high humidity or heavy winter snowfall require strict adherence to balanced ventilation formulas to purge warm interior moisture before it condenses on cold roof decking. Additionally, the presence of radiant barriers, continuous insulation layers, and airtight ceiling drywall assemblies interact directly with airflow requirements to maintain a healthy building envelope.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>Frequently Asked Questions</h2>
+      <h3>Do I need intake vents if I install a ridge vent?</h3>
+      <p>Yes, ridge vents function effectively only when paired with balanced intake ventilation, such as soffit vents, at the lower edge of the roof.</p>
+      <h3>Can I mix ridge vents with other exhaust vents like box vents or turbines?</h3>
+      <p>Mixing exhaust types on the same roof plane is discouraged because low-pressure zones created by ridge vents can pull outside air through nearby box vents rather than drawing fresh air from the soffits.</p>
+      <h3>What happens if my attic is over-ventilated?</h3>
+      <p>While severe over-ventilation is rare, excessive exhaust capacity can theoretically draw conditioned air from the living space into the attic if ceiling air sealing is inadequate, driving up utility bills.</p>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <nav>
+    <a href="/">Home</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <a href="#privacy">Privacy</a>
+  </nav>
+  <div class="citation">Formula source: NRCA Roofing Manual and manufacturer installation guides. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.</div>
+</footer>
+
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(unit) {
+  currentUnit = unit;
+  document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+  document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+  
+  const areaLabel = document.getElementById('label-area');
+  const areaInput = document.getElementById('attic-area');
+  
+  if (unit === 'metric') {
+    areaLabel.textContent = 'Attic Floor Area (sq meters)';
+    if(areaInput.value) {
+      areaInput.value = (parseFloat(areaInput.value) * 0.092903).toFixed(1);
+    } else {
+      areaInput.value = '140';
+    }
+  } else {
+    areaLabel.textContent = 'Attic Floor Area (sq ft)';
+    if(areaInput.value) {
+      areaInput.value = (parseFloat(areaInput.value) / 0.092903).toFixed(0);
+    } else {
+      areaInput.value = '1500';
+    }
+  }
+}
+
+// Initialize default value
+document.getElementById('attic-area').value = '1500';
+
+function calculateVent() {
+  let area = parseFloat(document.getElementById('attic-area').value);
+  if (isNaN(area) || area <= 0) {
+    alert('Please enter a valid attic floor area.');
+    return;
+  }
+
+  let areaSqIn;
+  if (currentUnit === 'metric') {
+    // Convert sq meters to sq inches: 1 sq meter = 1550 inches
+    areaSqIn = area * 1550;
+  } else {
+    // 1 sq ft = 144 sq in
+    areaSqIn = area * 144;
+  }
+
+  // Required net free area = attic_area / 150 (in sq inches)
+  let requiredNFA = areaSqIn / 150;
+  
+  // Ridge vent length = required_NFA / 18 sq in per linear foot
+  let ridgeLengthFt = requiredNFA / 18;
+  let intakeNFA = requiredNFA / 2;
+
+  let displayLength = ridgeLengthFt;
+  let lengthUnit = 'linear feet';
+  let nfaUnit = 'sq in';
+
+  if (currentUnit === 'metric') {
+    displayLength = ridgeLengthFt * 0.3048; // convert feet to meters
+    lengthUnit = 'linear meters';
+    requiredNFA = requiredNFA * 6.4516; // sq in to sq cm
+    intakeNFA = intakeNFA * 6.4516;
+    nfaUnit = 'sq cm';
+  }
+
+  document.getElementById('res-nfa').textContent = `${requiredNFA.toFixed(1)} ${nfaUnit}`;
+  document.getElementById('res-length').textContent = `${displayLength.toFixed(1)} ${lengthUnit}`;
+  document.getElementById('res-intake').textContent = `${intakeNFA.toFixed(1)} ${nfaUnit}`;
+  
+  document.getElementById('result-box').classList.add('visible');
+}
+</script>
+
+</body>
+</html>
