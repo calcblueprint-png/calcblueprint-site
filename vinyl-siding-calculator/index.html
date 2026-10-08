@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/vinyl-siding-calculator/">
+<title>Vinyl Siding Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate vinyl siding squares, starter strips, and trim needed. Enter wall dimensions for complete material list.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Vinyl Siding Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f7f6;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:700;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2rem 1rem;max-width:900px;margin:0 auto}
+.container{width:100%}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+h1{font-size:1.8rem;color:#1a2332;margin-bottom:1.5rem}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:2px solid #1a2332;background:#fff;color:#1a2332;font-weight:600;border-radius:6px;cursor:pointer;transition:all 0.2s}
+.unit-btn.active{background:#f5a623;border-color:#f5a623;color:#1a2332}
+.form-group{margin-bottom:1.2rem}
+.form-group label{display:block;font-weight:600;margin-bottom:0.5rem;color:#1a2332}
+.form-group input{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:6px;font-size:1rem}
+.calc-btn{width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;font-size:1.1rem;font-weight:700;border-radius:6px;cursor:pointer;transition:background 0.2s;margin-top:1rem}
+.calc-btn:hover{background:#e0951b}
+.result-box{background:#1a2332;color:#fff;border-radius:8px;padding:2rem;margin-top:2rem;display:none}
+.result-box h2{color:#f5a623;margin-bottom:1rem;font-size:1.3rem}
+.result-row{display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid rgba(255,255,255,0.1)}
+.result-row:last-child{border-bottom:none}
+.details-box{background:#fff;border-radius:8px;padding:1.5rem;margin-bottom:2rem;border:1px solid #e2e8f0}
+.details-box summary{font-weight:700;color:#1a2332;cursor:pointer;font-size:1.1rem}
+.details-box p{margin-top:1rem;color:#4a5568}
+.content-section { background-color: #ffffff; border-radius: 8px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+.content-section h2 { color: #1a2332; margin-bottom: 1rem; font-size: 1.4rem; }
+.content-section h3 { color: #1a2332; margin-top: 1.2rem; margin-bottom: 0.5rem; font-size: 1.1rem; }
+.content-section p { margin-bottom: 1rem; color: #4a5568; }
+footer{background:#1a2332;color:#fff;padding:2rem;text-align:center;margin-top:4rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#fff;text-decoration:none;margin:0 1rem}
+footer nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#a0aec0;max-width:800px;margin:0 auto;line-height:1.4}
+@media(max-width:600px){header{flex-direction:column;gap:1rem}nav a{margin:0 0.5rem}}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Calc<span>Blueprint</span></a>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <div class="container">
+    <div class="calculator-box">
+      <h1>Vinyl Siding Calculator</h1>
+      
+      <div class="unit-toggle">
+        <button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+        <button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+      </div>
+
+      <form id="siding-form" onsubmit="calculateSiding(event)">
+        <div class="form-group">
+          <label id="label-length" for="wall-length">Wall Length (<span class="unit-dim">feet</span>)</label>
+          <input type="number" id="wall-length" step="0.1" min="0" required value="40">
+        </div>
+        <div class="form-group">
+          <label id="label-height" for="wall-height">Wall Height (<span class="unit-dim">feet</span>)</label>
+          <input type="number" id="wall-height" step="0.1" min="0" required value="9">
+        </div>
+        <div class="form-group">
+          <label for="wall-count">Number of Walls</label>
+          <input type="number" id="wall-count" step="1" min="1" required value="4">
+        </div>
+        <div class="form-group">
+          <label for="window-count">Number of Windows</label>
+          <input type="number" id="window-count" step="1" min="0" required value="6">
+        </div>
+        <div class="form-group">
+          <label for="door-count">Number of Doors</label>
+          <input type="number" id="door-count" step="1" min="0" required value="2">
+        </div>
+        <button type="submit" class="calc-btn">Calculate Materials</button>
+      </form>
+
+      <div class="result-box" id="result-box">
+        <h2>Material Estimation Results</h2>
+        <div class="result-row">
+          <span>Gross Wall Area:</span>
+          <span id="res-gross">0 sq ft</span>
+        </div>
+        <div class="result-row">
+          <span>Openings Deduction:</span>
+          <span id="res-deduct">0 sq ft</span>
+        </div>
+        <div class="result-row">
+          <span>Net Wall Area:</span>
+          <span id="res-net">0 sq ft</span>
+        </div>
+        <div class="result-row">
+          <span>Siding Squares (incl. 10% waste):</span>
+          <span id="res-squares">0 squares</span>
+        </div>
+        <div class="result-row">
+          <span>Starter Strips (Linear):</span>
+          <span id="res-starter">0 ft</span>
+        </div>
+        <div class="result-row">
+          <span>J-Channel Trim (Linear):</span>
+          <span id="res-jchannel">0 ft</span>
+        </div>
+      </div>
+    </div>
+
+    <details class="details-box">
+      <summary>How this calculator works</summary>
+      <p>This calculator determines your total exterior wall area by multiplying the wall length, height, and total number of walls, then subtracting standard deductions for windows and doors. A standard 10% waste factor is added to the net square footage to account for cuts, overlaps, and gable ends, translating the final total into industry-standard siding squares (100 sq ft per square). Material coverage per VSI (Vinyl Siding Institute) standards and manufacturer installation specifications.</p>
+    </details>
+
+    <section class="content-section">
+      <h2>How to Calculate Vinyl Siding Requirements</h2>
+      <p>Accurately estimating vinyl siding requires measuring the gross exterior surface area of your structure and removing openings like windows and doors. Professional contractors measure each wall separately, calculating length times height to find individual wall areas before summing them up. Gable ends are calculated separately using the triangle area formula (one-half base times height) if your roofline features peaks.</p>
+      <p>Once you establish the baseline net square footage, you convert this figure into siding squares by dividing by 100. Adding a 10 percent waste buffer is standard industry practice to compensate for jobsite cutting errors, panel overlaps, and mitered corners. Furthermore, perimeter trim components such as starter strips, utility trim, and J-channels must be calculated by measuring the linear feet of wall bases, roof rakes, and window perimeters respectively.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>What Affects Vinyl Siding Quantities</h2>
+      <p>Several architectural variables significantly impact total vinyl siding material needs. Complex structural designs featuring multiple gables, bay windows, and architectural offsets create additional cutting waste, often requiring contractors to increase the safety margin from 10% up to 15%. Conversely, simple rectangular box structures minimize cut waste and adhere closely to standard mathematical estimations.</p>
+      <p>The profile and orientation of the siding panel also play a role. Standard horizontal double-four or traditional lap profiles install differently than vertical board-and-batten systems, affecting how trim accessories and starter components interface with the structure. Additionally, local building codes and manufacturer installation guidelines may dictate specific flashing, underlayment, and fastener requirements that influence supplementary accessory orders.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>Frequently Asked Questions</h2>
+      <h3>What is a siding square in construction terms?</h3>
+      <p>A siding square is a standard unit of measurement in the exterior remodeling industry equal to 100 square feet of surface area. Siding panels are typically packaged and sold by the square, making it easy to calculate exact box requirements once your net square footage is established.</p>
+      <h3>Why do I need to add 10% for waste?</h3>
+      <p>The 10% waste factor accounts for material loss resulting from end cuts, fitting around complex architectural details, starter course overlaps, and jobsite damage. Standard rectangular walls may generate less waste, while complicated multi-gable roofs may require slightly higher safety margins.</p>
+      <h3>How do I account for triangular gable walls?</h3>
+      <p>Gable peaks are calculated by multiplying the width of the gable base by its peak height, then dividing by two. This triangular area is added to your rectangular wall measurements before subtracting window and door openings to ensure complete coverage.</p>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+    <a href="/privacy/">Privacy</a>
+  </nav>
+  <div class="citation">Formula source: VSI (Vinyl Siding Institute) standards and manufacturer installation specifications. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.</div>
+</footer>
+
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(unit) {
+  currentUnit = unit;
+  document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+  document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+  
+  const lengthLabel = document.getElementById('label-length');
+  const heightLabel = document.getElementById('label-height');
+  const lengthInput = document.getElementById('wall-length');
+  const heightInput = document.getElementById('wall-height');
+  
+  if (unit === 'metric') {
+    lengthLabel.innerHTML = 'Wall Length (<span class="unit-dim">meters</span>)';
+    heightLabel.innerHTML = 'Wall Height (<span class="unit-dim">meters</span>)';
+    lengthInput.value = (lengthInput.value * 0.3048).toFixed(2);
+    heightInput.value = (heightInput.value * 0.3048).toFixed(2);
+  } else {
+    lengthLabel.innerHTML = 'Wall Length (<span class="unit-dim">feet</span>)';
+    heightLabel.innerHTML = 'Wall Height (<span class="unit-dim">feet</span>)';
+    lengthInput.value = (lengthInput.value / 0.3048).toFixed(1);
+    heightInput.value = (heightInput.value / 0.3048).toFixed(1);
+  }
+}
+
+function calculateSiding(event) {
+  event.preventDefault();
+  
+  let length = parseFloat(document.getElementById('wall-length').value);
+  let height = parseFloat(document.getElementById('wall-height').value);
+  const walls = parseInt(document.getElementById('wall-count').value);
+  const windows = parseInt(document.getElementById('window-count').value);
+  const doors = parseInt(document.getElementById('door-count').value);
+  
+  let grossArea, deductArea, netArea, squares, starterLinear, jchannelLinear;
+  let areaUnit = currentUnit === 'imperial' ? 'sq ft' : 'sq meters';
+  let lengthUnit = currentUnit === 'imperial' ? 'ft' : 'meters';
+  
+  if (currentUnit === 'metric') {
+    length = length / 0.3048;
+    height = height / 0.3048;
+  }
+  
+  grossArea = length * height * walls;
+  let deductSqFt = (windows * 15) + (doors * 20);
+  let netSqFt = grossArea - deductSqFt;
+  if (netSqFt < 0) netSqFt = 0;
+  
+  let sidingSquares = (netSqFt / 100) * 1.1;
+  let starterFeet = (length * walls);
+  let jchannelFeet = (windows * 20) + (doors * 18);
+  
+  if (currentUnit === 'metric') {
+    grossArea = grossArea * 0.092903;
+    deductArea = deductSqFt * 0.092903;
+    netArea = netSqFt * 0.092903;
+    squares = sidingSquares; // Squares concept translates directly or can be shown in metric area
+    starterLinear = starterFeet * 0.3048;
+    jchannelLinear = jchannelFeet * 0.3048;
+  } else {
+    grossArea = grossArea;
+    deductArea = deductSqFt;
+    netArea = netSqFt;
+    squares = sidingSquares;
+    starterLinear = starterFeet;
+    jchannelLinear = jchannelFeet;
+  }
+  
+  document.getElementById('res-gross').textContent = `${grossArea.toFixed(1)} ${areaUnit}`;
+  document.getElementById('res-deduct').textContent = `${deductArea.toFixed(1)} ${areaUnit}`;
+  document.getElementById('res-net').textContent = `${netArea.toFixed(1)} ${areaUnit}`;
+  document.getElementById('res-squares').textContent = `${squares.toFixed(2)} squares`;
+  document.getElementById('res-starter').textContent = `${starterLinear.toFixed(1)} ${lengthUnit}`;
+  document.getElementById('res-jchannel').textContent = `${jchannelLinear.toFixed(1)} ${lengthUnit}`;
+  
+  document.getElementById('result-box').style.display = 'block';
+}
+</script>
+
+</body>
+</html>

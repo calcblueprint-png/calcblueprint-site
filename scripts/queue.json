@@ -158,7 +158,8 @@
     "description": "Calculate vinyl siding squares, starter strips, and trim needed. Enter wall dimensions for complete material list.",
     "inputs": "Wall length (feet), wall height (feet), number of walls, number of windows, number of doors",
     "formula": "Wall area = length * height * number_of_walls. Subtract 15 sq ft per window and 20 sq ft per door. Siding squares = net_area / 100 * 1.1.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-08T02:12:41.029617Z"
   },
   {
     "slug": "hardie-plank-calculator",
