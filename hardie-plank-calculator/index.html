@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/hardie-plank-calculator/">
+<title>Hardie Plank Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate fiber cement siding boards needed for your project. Includes starter strips and trim allowance.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Hardie Plank Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:700;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2rem 1rem;max-width:900px;margin:0 auto}
+.container{width:100%}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);margin-bottom:2rem}
+.calculator-title{font-size:1.75rem;margin-bottom:1.5rem;color:#1a2332}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:1px solid #ccc;background:#f9f9f9;cursor:pointer;font-weight:600;border-radius:4px;transition:all 0.2s}
+.unit-btn.active{background:#f5a623;color:#1a2332;border-color:#f5a623}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+.calc-btn{width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;font-size:1rem;font-weight:700;border-radius:4px;cursor:pointer;transition:background 0.2s}
+.calc-btn:hover{background:#e0951e}
+.result-box{background:#eef2f7;border-left:4px solid #f5a623;padding:1.5rem;border-radius:0 8px 8px 0;margin-top:2rem;display:none}
+.result-box.visible{display:block}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #dcdfe6;font-size:1.05rem}
+.result-row:last-child{border-bottom:none}
+.result-label{font-weight:600;color:#1a2332}
+.result-value{font-weight:700;color:#1a2332}
+details{background:#fff;border-radius:8px;padding:1.25rem;margin-bottom:2rem;box-shadow:0 2px 4px rgba(0,0,0,0.03);cursor:pointer}
+summary{font-weight:600;color:#1a2332;font-size:1.1rem}
+details p{margin-top:1rem;color:#555}
+.content-section { background-color: #ffffff; border-radius: 8px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.03); }
+.content-section h2 { color: #1a2332; margin-bottom: 1rem; font-size: 1.5rem; }
+.content-section h3 { color: #1a2332; margin-top: 1.25rem; margin-bottom: 0.5rem; font-size: 1.1rem; }
+.content-section p { margin-bottom: 1rem; color: #4a5568; }
+footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:3rem}
+.footer-nav{margin-bottom:1rem}
+.footer-nav a{color:#fff;text-decoration:none;margin:0 1rem;font-size:0.9rem}
+.footer-nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#a0aec0;max-width:700px;margin:0 auto;line-height:1.4}
+@media(max-width:600px){header{flex-direction:column;gap:1rem}nav{margin-top:0.5rem}.calculator-box{padding:1rem}}
+</style>
+</head>
+<body>
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+</nav>
+</header>
+<main>
+<div class="container">
+<div class="calculator-box">
+<h1 class="calculator-title">Hardie Plank Calculator</h1>
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnitSystem('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnitSystem('metric')">Metric</button>
+</div>
+<form id="calc-form" onsubmit="calculateSiding(event)">
+<div class="form-group">
+<label id="label-wall-area" for="wall-area">Wall Area (square feet)</label>
+<input type="number" id="wall-area" step="any" min="0" required value="1500">
+</div>
+<div class="form-group">
+<label id="label-board-width" for="board-width">Board Width (inches)</label>
+<input type="number" id="board-width" step="any" min="0" required value="8.25">
+</div>
+<div class="form-group">
+<label id="label-board-length" for="board-length">Board Length (feet)</label>
+<input type="number" id="board-length" step="any" min="0" required value="12">
+</div>
+<div class="form-group">
+<label id="label-overlap" for="overlap">Overlap (inches)</label>
+<input type="number" id="overlap" step="any" min="0" required value="1.25">
+</div>
+<button type="submit" class="calc-btn">Calculate Boards</button>
+</form>
+<div class="result-box" id="result-box">
+<div class="result-row">
+<span class="result-label">Coverage per Board:</span>
+<span class="result-value" id="res-coverage">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Net Boards Required:</span>
+<span class="result-value" id="res-net-boards">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Total with 10% Waste/Trim:</span>
+<span class="result-value" id="res-total-boards">0</span>
+</div>
+</div>
+</div>
+
+<details>
+<summary>How this calculator works</summary>
+<p>This calculator determines the number of fiber cement siding boards needed by first computing the net exposed coverage area per individual board based on its dimensions and overlap. It divides the total wall area by this coverage rate and applies a standard 10% waste and trim allowance factor, rounding up to ensure you have enough material to complete the job.</p>
+<p>Formula based on manufacturer installation guidelines and ASTM standards for fiber cement siding estimation.</p>
+</details>
+
+<section class="content-section">
+<h2>How to Calculate Hardie Plank Siding Requirements</h2>
+<p>Estimating fiber cement siding accurately prevents costly delays and excessive material surplus. To start, you must calculate the total exterior surface area of the walls to be covered, subtracting the square footage of all windows and doors. Once you have the net wall area, determine the exposed face of each board. Because Hardie plank siding overlaps, you subtract the overlap dimension from the total board width to find the effective vertical coverage per course.</p>
+<p>Next, multiply the exposed board width by its length to find the square footage coverage of a single board. Dividing your net wall area by the single board coverage gives you the exact number of pieces required under perfect conditions. However, real-world installation involves cuts, end-matching, fitting around complex architectural elements, and potential breakages. Therefore, professional contractors always add a 10% waste and trim allowance to the final board count to account for field cutting and starter strip requirements.</p>
+</section>
+
+<section class="content-section">
+<h2>What Affects Fiber Cement Siding Quantities</h2>
+<p>Several architectural and logistical variables influence the actual volume of siding materials required for a construction project. Gable walls, dormers, and architectural curves generate significantly more offcuts and waste than simple rectangular wall structures. A home with intricate framing details, numerous corners, and extensive window trim will require a higher waste factor—sometimes up to 15%—compared to a straightforward rectangular layout.</p>
+<p>Board sizing and installation pattern choices also alter material quantities. Selecting wider planks, such as 8.25-inch or 12-inch profiles, changes the exposure amount and overall coverage per square foot relative to narrower profiles. Additionally, local building codes and manufacturer installation specifications dictate specific minimum overlap requirements—typically 1.25 inches—which must be strictly maintained to ensure warranty compliance and moisture resistance, directly affecting your final board calculations.</p>
+</section>
+
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>What is the standard waste factor for Hardie plank siding?</h3>
+<p>A 10% waste factor is the industry standard for standard rectangular walls with minimal cuts. For homes featuring complex geometries, numerous gables, or heavy fenestration, increasing the waste allowance to 12% or 15% is strongly recommended.</p>
+<h3>How much overlap is required for James Hardie siding?</h3>
+<p>James Hardie installation guidelines typically require a minimum 1.25-inch headlap overlap for standard horizontal lap siding products to ensure proper weather shedding and structural integrity.</p>
+<h3>Can I install Hardie plank siding directly over existing siding?</h3>
+<p>While some building codes permit installing fiber cement over existing flat wood siding if structurally sound, it is generally recommended to remove old materials to inspect the structural framing and install a proper weather-resistive barrier.</p>
+</section>
+
+</div>
+</main>
+<footer>
+<div class="footer-nav">
+<a href="/">Home</a>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+<a href="#privacy">Privacy</a>
+</div>
+<p class="citation">Formula source: NRCA Roofing Manual and manufacturer installation guides. Results are estimates for planning — verify with a licensed professional before ordering materials.</p>
+</footer>
+<script>
+let currentSystem = 'imperial';
+
+function setUnitSystem(system) {
+currentSystem = system;
+document.getElementById('btn-imperial').classList.toggle('active', system === 'imperial');
+document.getElementById('btn-metric').classList.toggle('active', system === 'metric');
+
+const wallAreaInput = document.getElementById('wall-area');
+const boardWidthInput = document.getElementById('board-width');
+const boardLengthInput = document.getElementById('board-length');
+const overlapInput = document.getElementById('overlap');
+
+if (system === 'metric') {
+document.getElementById('label-wall-area').textContent = 'Wall Area (square meters)';
+document.getElementById('label-board-width').textContent = 'Board Width (centimeters)';
+document.getElementById('label-board-length').textContent = 'Board Length (meters)';
+document.getElementById('label-overlap').textContent = 'Overlap (centimeters)';
+
+wallAreaInput.value = (parseFloat(wallAreaInput.value) * 0.092903).toFixed(2);
+boardWidthInput.value = (parseFloat(boardWidthInput.value) * 2.54).toFixed(2);
+boardLengthInput.value = (parseFloat(boardLengthInput.value) * 0.3048).toFixed(2);
+overlapInput.value = (parseFloat(overlapInput.value) * 2.54).toFixed(2);
+} else {
+document.getElementById('label-wall-area').textContent = 'Wall Area (square feet)';
+document.getElementById('label-board-width').textContent = 'Board Width (inches)';
+document.getElementById('label-board-length').textContent = 'Board Length (feet)';
+document.getElementById('label-overlap').textContent = 'Overlap (inches)';
+
+wallAreaInput.value = (parseFloat(wallAreaInput.value) / 0.092903).toFixed(2);
+boardWidthInput.value = (parseFloat(boardWidthInput.value) / 2.54).toFixed(2);
+boardLengthInput.value = (parseFloat(boardLengthInput.value) / 0.3048).toFixed(2);
+overlapInput.value = (parseFloat(overlapInput.value) / 2.54).toFixed(2);
+}
+}
+
+function calculateSiding(event) {
+event.preventDefault();
+let wallArea = parseFloat(document.getElementById('wall-area').value);
+let boardWidth = parseFloat(document.getElementById('board-width').value);
+let boardLength = parseFloat(document.getElementById('board-length').value);
+let overlap = parseFloat(document.getElementById('overlap').value);
+
+let coveragePerBoard, unitCoverageLabel;
+
+if (currentSystem === 'metric') {
+let wallAreaSqFt = wallArea / 0.092903;
+let boardWidthInches = boardWidth / 2.54;
+let boardLengthFeet = boardLength / 0.3048;
+let overlapInches = overlap / 2.54;
+
+let coveragePerBoardSqFt = boardLengthFeet * (boardWidthInches - overlapInches) / 12;
+let netBoards = wallAreaSqFt / coveragePerBoardSqFt;
+let totalBoards = Math.ceil(netBoards * 1.1);
+let netBoardsRounded = Math.ceil(netBoards);
+
+coveragePerBoard = (coveragePerBoardSqFt * 0.092903).toFixed(2);
+unitCoverageLabel = ' sq meters';
+
+document.getElementById('res-coverage').textContent = coveragePerBoard + unitCoverageLabel;
+document.getElementById('res-net-boards').textContent = netBoardsRounded + ' boards';
+document.getElementById('res-total-boards').textContent = totalBoards + ' boards';
+} else {
+let coveragePerBoardSqFt = boardLength * (boardWidth - overlap) / 12;
+let netBoards = wallArea / coveragePerBoardSqFt;
+let totalBoards = Math.ceil(netBoards * 1.1);
+let netBoardsRounded = Math.ceil(netBoards);
+
+coveragePerBoard = coveragePerBoardSqFt.toFixed(2);
+unitCoverageLabel = ' sq ft';
+
+document.getElementById('res-coverage').textContent = coveragePerBoard + unitCoverageLabel;
+document.getElementById('res-net-boards').textContent = netBoardsRounded + ' boards';
+document.getElementById('res-total-boards').textContent = totalBoards + ' boards';
+}
+
+document.getElementById('result-box').classList.add('visible');
+}
+</script>
+</body>
+</html>

@@ -167,7 +167,8 @@
     "description": "Calculate fiber cement siding boards needed for your project. Includes starter strips and trim allowance.",
     "inputs": "Wall area (square feet), board width (inches), board length (feet), overlap (inches)",
     "formula": "Coverage per board = board_length * (board_width - overlap) / 12. Boards = ceil(wall_area / coverage_per_board * 1.1).",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-09T02:13:28.155124Z"
   },
   {
     "slug": "hardwood-flooring-calculator",
