@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/hardwood-flooring-calculator/">
+<title>Hardwood Flooring Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate square feet of hardwood flooring needed for any room. Includes waste factor and box count.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:#333;background:#f4f6f9;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{color:#fff;font-size:1.5rem;font-weight:700;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2.5rem 1rem;max-width:900px;margin:0 auto}
+.container{width:100%}
+h1{color:#1a2332;font-size:2rem;margin-bottom:0.5rem}
+.subtitle{color:#666;font-size:1rem;margin-bottom:2rem}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.05);margin-bottom:2rem}
+.unit-toggle{display:flex;margin-bottom:1.5rem;background:#f4f6f9;padding:4px;border-radius:6px;width:fit-content}
+.unit-btn{background:transparent;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;font-weight:600;color:#666;font-size:0.9rem}
+.unit-btn.active{background:#f5a623;color:#1a2332}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332;font-size:0.95rem}
+.form-group input{width:100%;padding:0.75rem;border:1px solid #d1d5db;border-radius:6px;font-size:1rem}
+.form-group input:focus{outline:none;border-color:#f5a623;box-shadow:0 0 0 3px rgba(245,166,35,0.15)}
+.calc-btn{background:#f5a623;color:#1a2332;border:none;width:100%;padding:0.875rem;border-radius:6px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:0.5rem;transition:background 0.2s}
+.calc-btn:hover{background:#e0951b}
+.result-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:1.5rem;margin-top:2rem;display:none}
+.result-box.visible{display:block}
+.result-row{display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid #e2e8f0;font-size:1rem}
+.result-row:last-child{border-bottom:none}
+.result-label{color:#475569}
+.result-value{font-weight:700;color:#1a2332}
+details{background:#fff;border-radius:8px;padding:1rem 1.5rem;margin-bottom:2rem;box-shadow:0 2px 6px rgba(0,0,0,0.03);border:1px solid #e2e8f0}
+summary{font-weight:600;color:#1a2332;cursor:pointer;font-size:1rem}
+details p{margin-top:0.75rem;color:#475569;font-size:0.95rem}
+details .source-line{margin-top:0.5rem;font-style:italic;font-size:0.85rem;color:#64748b}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 2px 6px rgba(0,0,0,0.03);border:1px solid #e2e8f0}
+.content-section h2{color:#1a2332;font-size:1.5rem;margin-bottom:1rem}
+.content-section p{color:#475569;margin-bottom:1rem;font-size:0.95rem}
+.content-section h3{color:#1a2332;font-size:1.1rem;margin-top:1.5rem;margin-bottom:0.5rem}
+footer{background:#1a2332;color:#94a3b8;padding:2.5rem 2rem;text-align:center;font-size:0.9rem}
+.footer-nav{margin-bottom:1rem}
+.footer-nav a{color:#fff;text-decoration:none;margin:0 1rem}
+.footer-nav a:hover{color:#f5a623}
+.citation{font-size:0.8rem;color:#64748b;max-width:700px;margin:0 auto}
+@media(max-width:600px){header{flex-direction:column;gap:1rem}nav a{margin:0 0.5rem}}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Hardwood FlooringCalculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+</head>
+<body>
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="/">Home</a>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+</nav>
+</header>
+<main>
+<div class="container">
+<h1>Hardwood Flooring Calculator</h1>
+<p class="subtitle">Calculate square feet of hardwood flooring needed for any room. Includes waste factor and box count.</p>
+
+<div class="calculator-box">
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnit('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnit('metric')">Metric</button>
+</div>
+
+<div class="form-group">
+<label id="label-length" for="input-length">Room Length (feet)</label>
+<input type="number" id="input-length" step="any" placeholder="e.g. 15">
+</div>
+
+<div class="form-group">
+<label id="label-width" for="input-width">Room Width (feet)</label>
+<input type="number" id="input-width" step="any" placeholder="e.g. 12">
+</div>
+
+<div class="form-group">
+<label for="input-waste">Waste Percentage (%)</label>
+<input type="number" id="input-waste" step="any" value="10" placeholder="e.g. 10">
+</div>
+
+<div class="form-group">
+<label id="label-box" for="input-box">Box Coverage per Box (<span id="unit-box-label">sq ft</span>)</label>
+<input type="number" id="input-box" step="any" value="20" placeholder="e.g. 20">
+</div>
+
+<button type="button" class="calc-btn" onclick="calculateFlooring()">Calculate Materials</button>
+
+<div class="result-box" id="result-box">
+<div class="result-row">
+<span class="result-label">Base Room Area:</span>
+<span class="result-value" id="res-area">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Total Area with Waste:</span>
+<span class="result-value" id="res-total">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Total Boxes Required:</span>
+<span class="result-value" id="res-boxes">0</span>
+</div>
+</div>
+</div>
+
+<details>
+<summary>How this calculator works</summary>
+<p>This calculator determines your exact flooring requirements by multiplying the room's length and width to find the foundational square footage, then adding a designated percentage to account for cuts, trimming mistakes, and board defects. Finally, it divides the adjusted square footage by the box coverage area and rounds up to ensure you never run short mid-installation.</p>
+<p class="source-line">Formula based on NWFA (National Wood Flooring Association) installation guidelines.</p>
+</details>
+
+<section class="content-section">
+<h2>How to Calculate Hardwood Flooring</h2>
+<p>Calculating hardwood flooring accurately ensures you purchase enough material to finish your project without accumulating excess surplus. Start by measuring the length and width of the room using a reliable tape measure. Multiply these two measurements together to get the baseline square footage of the space. For irregularly shaped rooms, divide the space into smaller rectangular sections, calculate the square footage of each section individually, and add them together to determine the total net area.</p>
+<p>Once you have the base area, you must factor in installation waste. Cutting boards to fit around corners, doorways, and wall irregularities inevitably generates offcuts that cannot be reused. Standard practice is to add 5 to 10 percent extra material for straight-lay installations, and 12 to 15 percent or more if you are installing boards diagonally or in complex patterns like herringbone. Multiply your baseline area by one plus the decimal form of your waste percentage. Finally, check your flooring manufacturer's box specifications and divide your total required square footage by the coverage per box, rounding up to the nearest whole box to complete your estimate.</p>
+</section>
+
+<section class="content-section">
+<h2>What Affects Hardwood Flooring Requirements</h2>
+<p>Several critical variables influence how much hardwood flooring you need to order for a successful installation. Room layout complexity is the primary factor; a simple square room generates very little waste, whereas a room featuring multiple pillars, alcoves, custom trim profiles, or angled walls creates significant offcuts that demand a higher waste percentage buffer.</p>
+<p>The chosen installation pattern also dramatically impacts material needs. Traditional parallel installations require standard waste margins, but diagonal layouts, chevron patterns, and custom borders require considerably more trimming, often pushing recommended waste allowances up to 15 or 20 percent. Additionally, board dimensions play a role; wider and longer planks can create more unusable offcuts when fitting into tight spaces compared to narrow, short strips. Finally, product quality and grading can affect yield. Lower grade flooring featuring knots, splits, and natural defects requires discarding more unusable portions of boards, whereas select grades offer higher clean-yield percentages, minimizing overall waste.</p>
+</section>
+
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>Why do I need to add a waste percentage to my flooring order?</h3>
+<p>During any hardwood flooring installation, boards must be cut to fit securely against walls, door jambs, and vents, creating offcuts that are frequently too short to reuse. Adding a waste percentage ensures you account for these cuts, board defects, and fitting mistakes so you do not run out of material before finishing the room.</p>
+<h3>How much extra flooring should I order for a diagonal installation?</h3>
+<p>For diagonal installations, parquet patterns, or complex room layouts, you should generally increase your waste factor to 15 percent. The angled cuts required at every single wall generate significantly more scrap material than standard straight-lay flooring patterns.</p>
+<h3>What should I do with leftover unopened boxes of hardwood flooring?</h3>
+<p>It is highly recommended to keep one or two unopened boxes of flooring stored flat in the installation environment for future repairs. If you have a larger surplus of unopened boxes, most flooring retailers allow returns within a specified window, provided the packaging is undamaged and in resalable condition.</p>
+</section>
+
+</div>
+</main>
+<footer>
+<div class="footer-nav">
+<a href="/">Home</a>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+<a href="/privacy/">Privacy</a>
+</div>
+<p class="citation">Formula source: NWFA (National Wood Flooring Association) installation guidelines. Results are estimates for planning — verify with a licensed professional before ordering materials.</p>
+<p style="margin-top:1rem;font-size:0.8rem;color:#64748b">&copy; 2026 CalcBlueprint. All rights reserved.</p>
+</footer>
+
+<script>
+let currentUnit = 'imperial';
+
+function setUnit(unit) {
+    currentUnit = unit;
+    document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+    document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+    
+    if (unit === 'imperial') {
+        document.getElementById('label-length').innerText = 'Room Length (feet)';
+        document.getElementById('label-width').innerText = 'Room Width (feet)';
+        document.getElementById('label-box').innerHTML = 'Coverage per Box (<span id="unit-box-label">sq ft</span>)';
+    } else {
+        document.getElementById('label-length').innerText = 'Room Length (meters)';
+        document.getElementById('label-width').innerText = 'Room Width (meters)';
+        document.getElementById('label-box').innerHTML = 'Coverage per Box (<span id="unit-box-label">sq meters</span>)';
+    }
+    
+    // Clear results or recalculate if inputs exist
+    let l = parseFloat(document.getElementById('input-length').value);
+    let w = parseFloat(document.getElementById('input-width').value);
+    if (!isNaN(l) && !isNaN(w)) {
+        calculateFlooring();
+    }
+}
+
+function calculateFlooring() {
+    let length = parseFloat(document.getElementById('input-length').value);
+    let width = parseFloat(document.getElementById('input-width').value);
+    let waste = parseFloat(document.getElementById('input-waste').value);
+    let boxCoverage = parseFloat(document.getElementById('input-box').value);
+
+    if (isNaN(length) || isNaN(width) || isNaN(waste) || isNaN(boxCoverage) || length <= 0 || width <= 0 || boxCoverage <= 0) {
+        alert('Please enter valid positive numbers for all fields.');
+        return;
+    }
+
+    let area = length * width;
+    let totalWithWaste = area * (1 + waste / 100);
+    let boxes = Math.ceil(totalWithWaste / boxCoverage);
+
+    let areaUnit = currentUnit === 'imperial' ? 'sq ft' : 'sq meters';
+
+    document.getElementById('res-area').innerText = area.toFixed(2) + ' ' + areaUnit;
+    document.getElementById('res-total').innerText = totalWithWaste.toFixed(2) + ' ' + areaUnit;
+    document.getElementById('res-boxes').innerText = boxes + ' boxes';
+
+    document.getElementById('result-box').classList.add('visible');
+}
+</script>
+</body>
+</html>

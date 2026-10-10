@@ -176,7 +176,8 @@
     "description": "Calculate square feet of hardwood flooring needed for any room. Includes waste factor and box count.",
     "inputs": "Room length (feet), room width (feet), waste percentage, box coverage (square feet)",
     "formula": "Area = length * width. Total with waste = area * (1 + waste/100). Boxes = ceil(total / box_coverage).",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-10T02:13:00.362972Z"
   },
   {
     "slug": "laminate-flooring-calculator",
