@@ -185,7 +185,8 @@
     "description": "Calculate laminate planks and boxes for your room. Includes underlayment and transition strips.",
     "inputs": "Room length (feet), room width (feet), plank dimensions (inches), waste percentage",
     "formula": "Area = length * width. Plank coverage = plank_length * plank_width / 144. Planks = ceil(area / plank_coverage * (1 + waste/100)).",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-11T02:12:05.143247Z"
   },
   {
     "slug": "carpet-calculator",
