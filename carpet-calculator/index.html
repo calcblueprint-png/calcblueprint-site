@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/carpet-calculator/">
+<title>Carpet Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate carpet square yards and padding needed for any room. Account for seams and directional layout.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f8;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:bold;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+.container{max-width:900px;margin:2rem auto;padding:0 1rem}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.05);margin-bottom:2rem}
+.unit-toggle{display:flex;margin-bottom:1.5rem;background:#f0f2f5;border-radius:6px;padding:4px}
+.unit-btn{flex:1;background:transparent;border:none;padding:10px;font-weight:600;cursor:pointer;border-radius:4px;color:#555}
+.unit-btn.active{background:#f5a623;color:#1a2332}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input{width:100%;padding:10px 12px;border:1px solid #ccd0d5;border-radius:4px;font-size:1rem}
+.calc-btn{background:#f5a623;color:#1a2332;border:none;padding:12px 20px;font-size:1rem;font-weight:bold;border-radius:4px;cursor:pointer;width:100%;margin-top:1rem}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#f8f9fa;border-left:4px solid #f5a623;padding:1.5rem;margin-top:1.5rem;border-radius:0 8px 8px 0;display:none}
+.result-box.visible{display:block}
+.result-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e9ecef}
+.result-row:last-child{border-bottom:none}
+.result-label{font-weight:500;color:#555}
+.result-value{font-weight:bold;color:#1a2332}
+details{background:#fff;border-radius:8px;padding:1.5rem;margin-bottom:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.05)}
+summary{font-weight:bold;cursor:pointer;color:#1a2332;font-size:1.1rem}
+details p{margin-top:1rem;color:#555}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.05)}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
+.content-section p{margin-bottom:1rem;color:#4a5568}
+.content-section h3{color:#1a2332;margin-top:1.5rem;margin-bottom:0.5rem;font-size:1.1rem}
+footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:4rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#fff;margin:0 10px;text-decoration:none}
+footer nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#a0aec0;max-width:700px;margin:0 auto}
+@media(max-width:600px){header{flex-direction:column;text-align:center}nav{margin-top:1rem}}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Carpet Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Calc<span>Blueprint</span></a>
+  <nav>
+    <a href="/">Home</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <div class="container">
+    <div class="calculator-box">
+      <div class="unit-toggle">
+        <button type="button" class="unit-btn active" id="btnImperial" onclick="setUnitSystem('imperial')">Imperial (US)</button>
+        <button type="button" class="unit-btn" id="btnMetric" onclick="setUnitSystem('metric')">Metric</button>
+      </div>
+
+      <div class="form-group">
+        <label id="labelLength" for="inputLength">Room Length (feet)</label>
+        <input type="number" id="inputLength" step="0.1" min="0" placeholder="e.g. 15">
+      </div>
+
+      <div class="form-group">
+        <label id="labelWidth" for="inputWidth">Room Width (feet)</label>
+        <input type="number" id="inputWidth" step="0.1" min="0" placeholder="e.g. 12">
+      </div>
+
+      <div class="form-group">
+        <label id="labelRoll" for="inputRoll">Carpet Roll Width (feet)</label>
+        <input type="number" id="inputRoll" step="any" min="0" value="12">
+      </div>
+
+      <button type="button" class="calc-btn" onclick="calculateCarpet()">Calculate Carpet & Padding</button>
+
+      <div class="result-box" id="resultBox">
+        <div class="result-row">
+          <span class="result-label">Net Room Area:</span>
+          <span class="result-value" id="resNetArea">0</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Carpet Required (with seams/waste):</span>
+          <span class="result-value" id="resCarpet">0</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Carpet Padding Required:</span>
+          <span class="result-value" id="resPadding">0</span>
+        </div>
+      </div>
+    </div>
+
+    <details>
+      <summary>How this calculator works</summary>
+      <p>This tool determines total material requirements by taking your room dimensions, calculating baseline area, and factoring in standard installation waste, pattern matching allowances, and seaming constraints. Carpet padding is estimated with an additional safety margin to account for tack strip placement and trimming.</p>
+      <p>Formula based on NWFA (National Wood Flooring Association) installation guidelines and standard textile industry estimation practices.</p>
+    </details>
+
+    <section class="content-section">
+      <h2>How to Calculate Carpet</h2>
+      <p>Calculating carpet quantities accurately requires more than simply multiplying room length by room width and dividing by nine. Because broadloom carpet is manufactured in fixed roll widths—typically 12 feet or 15 feet—layout planning is critical. If your room dimensions exceed standard roll widths, seams become necessary, requiring extra material to align patterns correctly and ensure proper directional flow across all adjoining spaces.</p>
+      <p>To begin, measure the longest and widest points of your space, including any alcoves or closets. Multiply these figures to find total square footage, then divide by nine to convert to square yards. Industry standards dictate adding a 10% waste factor to accommodate perimeter trimming, seaming allowances, and directional constraints. Carpet padding is calculated similarly, though it typically requires an additional 5% margin to ensure complete subfloor coverage beneath all stretched carpet boundaries.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>What Affects Carpet Calculations</h2>
+      <p>Several distinct architectural and material factors influence your final carpet and padding requirements. Pattern matching represents one of the most significant variables; patterned carpets require precise alignment at seams, forcing installers to purchase extra yardage to match designs across adjacent strips. Room geometry also plays a vital role. Irregularly shaped rooms, L-shaped spaces, and multiple doorways increase cutting waste compared to simple, rectangular living rooms.</p>
+      <p>Additionally, roll width constraints dictate how efficiently carpet can be cut from the roll. Choosing between a 12-foot or 15-foot roll can drastically alter the amount of leftover scrap material generated during installation. Subfloor conditions, staircases, and heavy traffic transition areas may also necessitate specific padding thicknesses and heavier tack strip placements, slightly shifting overall material usage estimates.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>Frequently Asked Questions</h2>
+      <h3>Why do I need to add 10 percent for waste and seams?</h3>
+      <p>Carpet installation inevitably generates scrap material from perimeter trimming and fitting around architectural obstacles. Furthermore, seaming pieces together requires extra yardage to ensure patterns align perfectly and backing materials overlap securely without fraying.</p>
+      <h3>Can I measure my rooms myself or should I hire a professional?</h3>
+      <p>Homeowners can easily measure simple rectangular rooms using a reliable tape measure. However, professional installation technicians should verify complex floor plans, multi-room layouts involving hallways, and patterned carpets before ordering custom materials.</p>
+      <h3>Is carpet padding calculated differently than the carpet itself?</h3>
+      <p>Carpet padding follows the same baseline square footage calculations as carpet, but generally includes a slightly higher contingency margin of roughly 5% to account for perimeter fitting, stapling, and trimming waste along tack strips.</p>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <nav>
+    <a href="/">Home</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <a href="#privacy">Privacy</a>
+  </nav>
+  <div class="citation">
+    Formula source: NWFA (National Wood Flooring Association) installation guidelines. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.
+  </div>
+</footer>
+
+<script>
+let currentUnit = 'imperial';
+
+function setUnitSystem(unit) {
+  currentUnit = unit;
+  const btnImp = document.getElementById('btnImperial');
+  const btnMet = document.getElementById('btnMetric');
+  const lblLen = document.getElementById('labelLength');
+  const lblWid = document.getElementById('labelWidth');
+  const lblRol = document.getElementById('labelRoll');
+  
+  if (unit === 'imperial') {
+    btnImp.classList.add('active');
+    btnMet.classList.remove('active');
+    lblLen.innerText = 'Room Length (feet)';
+    lblWid.innerText = 'Room Width (feet)';
+    lblRol.innerText = 'Carpet Roll Width (feet)';
+    document.getElementById('inputRoll').value = 12;
+  } else {
+    btnMet.classList.add('active');
+    btnImp.classList.remove('active');
+    lblLen.innerText = 'Room Length (meters)';
+    lblWid.innerText = 'Room Width (meters)';
+    lblRol.innerText = 'Carpet Roll Width (meters)';
+    document.getElementById('inputRoll').value = 3.66;
+  }
+  document.getElementById('resultBox').classList.remove('visible');
+}
+
+function calculateCarpet() {
+  let length = parseFloat(document.getElementById('inputLength').value) || 0;
+  let width = parseFloat(document.getElementById('inputWidth').value) || 0;
+  
+  if (length <= 0 || width <= 0) {
+    alert('Please enter valid positive numbers for length and width.');
+    return;
+  }
+
+  let netAreaSqYd, carpetSqYd, paddingSqYd;
+
+  if (currentUnit === 'imperial') {
+    netAreaSqYd = (length * width) / 9;
+    carpetSqYd = netAreaSqYd * 1.10;
+    paddingSqYd = netAreaSqYd * 1.05;
+
+    document.getElementById('resNetArea').innerText = netAreaSqYd.toFixed(2) + ' sq yd';
+    document.getElementById('resCarpet').innerText = carpetSqYd.toFixed(2) + ' sq yd';
+    document.getElementById('resPadding').innerText = paddingSqYd.toFixed(2) + ' sq yd';
+  } else {
+    // Metric conversion: 1 sq meter = 1.19599 sq yards
+    let netAreaSqM = length * width;
+    let carpetSqM = netAreaSqM * 1.10;
+    let paddingSqM = netAreaSqM * 1.05;
+
+    netAreaSqYd = netAreaSqM * 1.19599;
+    carpetSqYd = carpetSqM * 1.19599;
+    paddingSqYd = paddingSqM * 1.19599;
+
+    document.getElementById('resNetArea').innerText = netAreaSqM.toFixed(2) + ' sq m (' + netAreaSqYd.toFixed(2) + ' sq yd)';
+    document.getElementById('resCarpet').innerText = carpetSqM.toFixed(2) + ' sq m (' + carpetSqYd.toFixed(2) + ' sq yd)';
+    document.getElementById('resPadding').innerText = paddingSqM.toFixed(2) + ' sq m (' + paddingSqYd.toFixed(2) + ' sq yd)';
+  }
+
+  document.getElementById('resultBox').classList.add('visible');
+}
+</script>
+
+</body>
+</html>

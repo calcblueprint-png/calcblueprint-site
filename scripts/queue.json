@@ -194,7 +194,8 @@
     "description": "Calculate carpet square yards and padding needed for any room. Account for seams and directional layout.",
     "inputs": "Room length (feet), room width (feet), carpet roll width (12 or 15 feet)",
     "formula": "Area (sq yd) = length * width / 9. Add 10% for seams and waste. Padding = area + 5%.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-12T02:15:23.369657Z"
   },
   {
     "slug": "grout-calculator",
