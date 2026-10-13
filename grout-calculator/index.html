@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/grout-calculator/">
+<title>Grout Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate grout needed for tile installations. Enter tile size and joint width for accurate bag count.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Grout Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f8;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:700;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{max-width:900px;margin:2rem auto;padding:0 1rem}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+h1{font-size:2rem;color:#1a2332;margin-bottom:1.5rem}
+.unit-toggle{display:flex;gap:1rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:2px solid #1a2332;background:#fff;color:#1a2332;font-weight:600;border-radius:4px;cursor:pointer;transition:all 0.2s}
+.unit-btn.active{background:#f5a623;border-color:#f5a623;color:#1a2332}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+.form-group input:focus{outline:none;border-color:#f5a623}
+.calc-btn{width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;font-size:1.1rem;font-weight:700;border-radius:4px;cursor:pointer;transition:opacity 0.2s;margin-top:1rem}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#f4f6f8;border-radius:6px;padding:1.5rem;margin-top:1.5rem;display:none}
+.result-box.visible{display:block}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #e1e4e8;font-size:1.05rem}
+.result-row:last-child{border-bottom:none}
+.result-row span:last-weight{font-weight:700}
+.calc-details{margin-bottom:2rem;background:#fff;border-radius:8px;padding:1.5rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+.calc-details summary{font-weight:700;cursor:pointer;color:#1a2332;font-size:1.1rem}
+.calc-details p{margin-top:1rem;color:#555}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
+.content-section p{margin-bottom:1rem;color:#444}
+.content-section h3{color:#1a2332;margin-top:1.5rem;margin-bottom:0.5rem;font-size:1.1rem}
+footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:4rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#fff;text-decoration:none;margin:0 0.75rem}
+footer nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#aaa;max-width:700px;margin:0 auto;line-height:1.4}
+@media(max-width:600px){header{flex-direction:column;gap:1rem}nav a{margin:0 0.5rem}}
+</style>
+</head>
+<body>
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="/">Home</a>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+</nav>
+</header>
+<main>
+<div class="container">
+<div class="calculator-box">
+<h1>Grout Calculator</h1>
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+</div>
+<form id="grout-form" onsubmit="calculateGrout(event)">
+<div class="form-group">
+<label id="lbl-area" for="input-area">Tile Area (sq ft)</label>
+<input type="number" id="input-area" step="any" min="0" required placeholder="e.g. 150">
+</div>
+<div class="form-group">
+<label id="lbl-length" for="input-length">Tile Length (inches)</label>
+<input type="number" id="input-length" step="any" min="0" required placeholder="e.g. 12">
+</div>
+<div class="form-group">
+<label id="lbl-width" for="input-width">Tile Width (inches)</label>
+<input type="number" id="input-width" step="any" min="0" required placeholder="e.g. 12">
+</div>
+<div class="form-group">
+<label id="lbl-joint" for="input-joint">Joint Width (inches)</label>
+<input type="number" id="input-joint" step="any" min="0" required placeholder="e.g. 0.25">
+</div>
+<div class="form-group">
+<label id="lbl-thickness" for="input-thickness">Tile Thickness (inches)</label>
+<input type="number" id="input-thickness" step="any" min="0" required placeholder="e.g. 0.375">
+</div>
+<button type="submit" class="calc-btn">Calculate Grout Needed</button>
+</form>
+<div class="result-box" id="result-box">
+<div class="result-row">
+<span>Total Grout Volume:</span>
+<span id="res-volume">0</span>
+</div>
+<div class="result-row">
+<span>Estimated Bags Required (25 lb / 10 kg):</span>
+<span id="res-bags">0</span>
+</div>
+</div>
+</div>
+
+<details class="calc-details">
+<summary>How this calculator works</summary>
+<p>This calculator determines the required amount of tile grout by calculating the total volume of the grout joints based on tile dimensions, joint width, and tile thickness. The formula multiplies the combined tile perimeter factors by joint width and thickness, then divides by standard bag coverage rates with a recommended waste factor applied.</p>
+<p>Formula based on TCNA Handbook for Ceramic, Glass, and Stone Tile Installation.</p>
+</details>
+
+<section class="content-section">
+<h2>How to Calculate Grout for Tile Installations</h2>
+<p>Calculating the correct amount of grout for a tile installation project is critical to prevent mid-project delays and unnecessary expenses. Too little grout leaves joints vulnerable to moisture infiltration and structural shifting, while excess material can lead to wasted product. The calculation requires precise measurements of your tile's length, width, and thickness, alongside the intended grout joint width and total installation area.</p>
+<p>By determining the exact volume of the grout channels per square foot, professionals can accurately forecast material requirements. Standard industry practice always advises purchasing an extra 10% to 15% to account for trial mixes, spills, complex cuts, and varying joint depths during installation. Utilizing structured formulas eliminates guesswork and ensures consistent coverage across ceramic, porcelain, natural stone, and glass tile surfaces.</p>
+</section>
+
+<section class="content-section">
+<h2>What Affects Tile Grout Requirements</h2>
+<p>Several variables impact the final volume of grout required for any given flooring or wall application. Tile dimensions play a primary role; smaller mosaic tiles possess drastically more joint space per square foot than large-format tiles, multiplying your material needs exponentially. Conversely, larger tiles require less grout overall due to fewer intersecting joints.</p>
+<p>Joint width and tile thickness are equally influential parameters. Even a fractional increase in joint spacing noticeably expands overall volume capacity. Additionally, variations in tile thickness directly alter the depth of the grout channel. Other factors include substrate unevenness, mixing consistency, and tile edge profiles—such as pressed versus rectified edges—which dictate how tightly tiles can be set and how deeply grout settles into the gaps.</p>
+</section>
+
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>How do I account for waste when purchasing grout?</h3>
+<p>It is standard industry practice to add a 10% to 15% waste factor to your total calculated grout requirement. Complex layouts, diagonal patterns, and textured tiles often require additional material.</p>
+<h3>Does tile thickness change the amount of grout needed?</h3>
+<p>Yes, thicker tiles create deeper grout joints, which directly increases the total volume of grout required to fill the spaces completely from bottom to top.</p>
+<h3>What standard bag sizes are used for these calculations?</h3>
+<p>Most manufacturers package dry grout in standard 10 lb, 25 lb, or 50 lb bags. Coverage depends heavily on the specific density of sanded versus unsanded formulas.</p>
+</section>
+
+</div>
+</main>
+<footer>
+<nav>
+<a href="/">Home</a>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+<a href="/privacy/">Privacy</a>
+</nav>
+<div class="citation">
+Formula source: TCNA Handbook for Ceramic, Glass, and Stone Tile Installation. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.
+</div>
+</footer>
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(unit) {
+    currentUnit = unit;
+    document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+    document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+    
+    if (unit === 'metric') {
+        document.getElementById('lbl-area').innerText = 'Tile Area (square meters)';
+        document.getElementById('lbl-length').innerText = 'Tile Length (centimeters)';
+        document.getElementById('lbl-width').innerText = 'Tile Width (centimeters)';
+        document.getElementById('lbl-joint').innerText = 'Joint Width (millimeters)';
+        document.getElementById('lbl-thickness').innerText = 'Tile Thickness (millimeters)';
+        
+        document.getElementById('input-area').placeholder = 'e.g. 15';
+        document.getElementById('input-length').placeholder = 'e.g. 30';
+        document.getElementById('input-width').placeholder = 'e.g. 30';
+        document.getElementById('input-joint').placeholder = 'e.g. 3';
+        document.getElementById('input-thickness').placeholder = 'e.g. 9';
+    } else {
+        document.getElementById('lbl-area').innerText = 'Tile Area (sq ft)';
+        document.getElementById('lbl-length').innerText = 'Tile Length (inches)';
+        document.getElementById('lbl-width').innerText = 'Tile Width (inches)';
+        document.getElementById('lbl-joint').innerText = 'Joint Width (inches)';
+        document.getElementById('lbl-thickness').innerText = 'Tile Thickness (inches)';
+        
+        document.getElementById('input-area').placeholder = 'e.g. 150';
+        document.getElementById('input-length').placeholder = 'e.g. 12';
+        document.getElementById('input-width').placeholder = 'e.g. 12';
+        document.getElementById('input-joint').placeholder = 'e.g. 0.25';
+        document.getElementById('input-thickness').placeholder = 'e.g. 0.375';
+    }
+    document.getElementById('result-box').classList.remove('visible');
+}
+
+function calculateGrout(event) {
+    event.preventDefault();
+    
+    let area = parseFloat(document.getElementById('input-area').value);
+    let length = parseFloat(document.getElementById('input-length').value);
+    let width = parseFloat(document.getElementById('input-width').value);
+    let joint = parseFloat(document.getElementById('input-joint').value);
+    let thickness = parseFloat(document.getElementById('input-thickness').value);
+    
+    if (isNaN(area) || isNaN(length) || isNaN(width) || isNaN(joint) || isNaN(thickness)) return;
+
+    let volumePerSqFt = 0;
+    let totalVolume = 0;
+    let unitsVolLabel = '';
+    let bagWeightLabel = '';
+
+    if (currentUnit === 'metric') {
+        // Convert metric inputs to imperial equivalents for formula consistency, or apply metric equivalent formula
+        // length/width in cm -> inches = cm / 2.54
+        // joint in mm -> inches = mm / 25.4
+        // thickness in mm -> inches = mm / 25.4
+        // area in sq meters -> sq ft = sq meters * 10.7639
+        let lengthIn = length / 2.54;
+        let widthIn = width / 2.54;
+        let jointIn = joint / 25.4;
+        let thicknessIn = thickness / 25.4;
+        let areaSqFt = area * 10.7639;
+
+        let volumePerSqFtImperial = ((lengthIn + widthIn) / (lengthIn * widthIn)) * jointIn * thicknessIn; // cubic inches per sq ft
+        let totalCuInches = volumePerSqFtImperial * areaSqFt;
+        let totalCuMeters = totalCuInches * 0.000016387064;
+        totalVolume = totalCuMeters * 1.1; // 10% waste factor
+        unitsVolLabel = 'cubic meters';
+        bagWeightLabel = '10 kg bags';
+        
+        // Standard coverage approx 10kg bag covers ~0.0075 cu meters depending on tile
+        let bags = Math.ceil(totalVolume / 0.0075);
+
+        document.getElementById('res-volume').innerText = totalVolume.toFixed(4) + ' ' + unitsVolLabel;
+        document.getElementById('res-bags').innerText = bags + ' (' + bagWeightLabel + ')';
+    } else {
+        let volumePerSqFt = ((length + width) / (length * width)) * joint * thickness; // cubic inches per sq ft of grout per sq ft area
+        let totalCuInches = volumePerSqFt * area;
+        let totalCuFeet = totalCuInches / 1728;
+        totalVolume = totalCuFeet * 1.1; // 10% waste
+        unitsVolLabel = 'cubic feet';
+        bagWeightLabel = '25 lb bags';
+
+        // 25 lb bag of tile grout covers roughly 0.25 cubic feet (approx 90-100 sq ft of standard 12x12 tile with 1/4 joint)
+        let bags = Math.ceil(totalVolume / 0.23);
+
+        document.getElementById('res-volume').innerText = totalVolume.toFixed(2) + ' ' + unitsVolLabel;
+        document.getElementById('res-bags').innerText = bags + ' (' + bagWeightLabel + ')';
+    }
+
+    document.getElementById('result-box').classList.add('visible');
+}
+</script>
+</body>
+</html>

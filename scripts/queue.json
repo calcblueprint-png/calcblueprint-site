@@ -203,7 +203,8 @@
     "description": "Calculate grout needed for tile installations. Enter tile size and joint width for accurate bag count.",
     "inputs": "Tile area (square feet), tile length (inches), tile width (inches), joint width (inches), tile thickness (inches)",
     "formula": "Grout volume per sq ft = ((tile_length + tile_width) / (tile_length * tile_width)) * joint_width * tile_thickness. Bags = ceil(total / coverage_per_bag).",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-13T02:15:09.057029Z"
   },
   {
     "slug": "thinset-calculator",
