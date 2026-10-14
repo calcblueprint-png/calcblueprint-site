@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/thinset-calculator/">
+<title>Thinset Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate thinset mortar needed for tile installation. Choose trowel size and tile format for accurate coverage.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Thinset Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.6;background:#f4f7f6;color:#333}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 0;color:#fff}
+.container{max-width:900px;margin:0 auto;padding:0 1rem}
+.logo{font-size:1.5rem;font-weight:bold;text-decoration:none;color:#fff}
+.logo span{color:#f5a623}
+nav{float:right;margin-top:0.5rem}
+nav a{color:#fff;text-decoration:none;margin-left:1rem}
+.calculator-box{background:#fff;padding:2rem;border-radius:8px;margin:2rem 0;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
+.unit-toggle{display:flex;margin-bottom:1.5rem;gap:10px}
+.unit-btn{padding:0.5rem 1rem;border:1px solid #1a2332;background:#fff;cursor:pointer;border-radius:4px}
+.unit-btn.active{background:#f5a623;color:#1a2332;border-color:#f5a623}
+.form-group{margin-bottom:1rem}
+label{display:block;margin-bottom:0.5rem}
+input,select{width:100%;padding:0.5rem;border:1px solid #ccc;border-radius:4px}
+button#calc-btn{width:100%;padding:1rem;background:#f5a623;color:#1a2332;border:none;border-radius:4px;font-weight:bold;cursor:pointer;margin-top:1rem}
+.result-box{margin-top:2rem;padding:1rem;background:#eef;border-radius:4px;display:none}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #ddd}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem}
+footer{padding:2rem 0;text-align:center;font-size:0.9rem}
+</style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <a href="/" class="logo">Calc<span>Blueprint</span></a>
+        <nav><a href="/about">About</a><a href="/contact">Contact</a></nav>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <div class="calculator-box">
+            <div class="unit-toggle">
+                <button class="unit-btn active" id="btn-imp" onclick="setUnits('imp')">Imperial (US)</button>
+                <button class="unit-btn" id="btn-met" onclick="setUnits('met')">Metric</button>
+            </div>
+            <div class="form-group">
+                <label id="label-area">Tile Area (sq ft)</label>
+                <input type="number" id="area" placeholder="e.g. 100">
+            </div>
+            <div class="form-group">
+                <label>Trowel Size</label>
+                <select id="trowel">
+                    <option value="0.25">1/4 inch</option>
+                    <option value="0.375">3/8 inch</option>
+                    <option value="0.5">1/2 inch</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Tile Type</label>
+                <select id="tile-type">
+                    <option value="1">Standard</option>
+                    <option value="0.8">Large Format / Stone</option>
+                </select>
+            </div>
+            <button id="calc-btn" onclick="calculate()">Calculate</button>
+
+            <div class="result-box" id="results">
+                <div class="result-row"><span>Bags Needed:</span> <strong id="res-bags">0</strong></div>
+                <div class="result-row"><span>Total Coverage:</span> <span id="res-cov">0</span></div>
+            </div>
+        </div>
+
+        <details style="margin-bottom:2rem">
+            <summary>How this calculator works</summary>
+            <p>This calculator determines mortar requirements based on trowel notch size and tile format. It applies a 20% coverage reduction for large format or natural stone tiles to account for back-buttering and uneven substrates. Formula based on TCNA Handbook for Ceramic, Glass, and Stone Tile Installation.</p>
+        </details>
+
+        <section class="content-section">
+            <h2>How to Calculate Thinset</h2>
+            <p>Calculating the correct amount of thinset mortar is critical to a successful tile installation. Start by measuring the square footage of your substrate. Next, determine the appropriate trowel size based on your tile dimensions; larger tiles generally require larger notches to ensure adequate coverage. Once you have these figures, apply the coverage rate of your chosen mortar—typically provided in square feet per 50-lb bag. Remember to account for the tile type, as large format tiles and natural stone often require back-buttering, which consumes significantly more material. Always round up your final bag count to account for waste, substrate irregularities, and potential spills during the mixing process.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>What Affects Thinset Coverage</h2>
+            <p>Several variables impact the actual coverage of thinset mortar on a job site. The most significant factor is the trowel notch size, which dictates the volume of mortar applied to the substrate. Substrate flatness is equally important; if the floor is uneven, you will need more mortar to level the surface, which can quickly deplete your supply. Additionally, the absorption rate of the tile and the substrate can affect how quickly the mortar sets and how much is absorbed. Large format tiles require more mortar to achieve the necessary 80-95% contact coverage required by industry standards to prevent cracking and debonding. Environmental factors like temperature and humidity also play a role, as they affect the open time and workability of the mortar.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>Frequently Asked Questions</h2>
+            <h3>How much extra thinset should I buy?</h3>
+            <p>It is standard industry practice to add 10% to your final calculation to account for waste, cleaning, and potential substrate leveling needs.</p>
+            <h3>Does tile size change the trowel choice?</h3>
+            <p>Yes, larger tiles require larger trowel notches to ensure sufficient mortar transfer and proper support for the tile's weight.</p>
+            <h3>Can I use the same thinset for stone and ceramic?</h3>
+            <p>Not always; natural stone often requires specific polymer-modified mortars to prevent staining and ensure proper adhesion to the porous surface.</p>
+        </section>
+    </div>
+</main>
+
+<footer>
+    <nav><a href="/">Home</a> <a href="/about">About</a> <a href="/contact">Contact</a> <a href="/privacy">Privacy</a></nav>
+    <p style="margin-top:1rem">Formula source: TCNA Handbook for Ceramic, Glass, and Stone Tile Installation. Results are estimates for planning — verify with a licensed professional before ordering materials. 2026.</p>
+</footer>
+
+<script>
+let unit = 'imp';
+function setUnits(u) {
+    unit = u;
+    document.getElementById('btn-imp').className = (u === 'imp') ? 'unit-btn active' : 'unit-btn';
+    document.getElementById('btn-met').className = (u === 'met') ? 'unit-btn active' : 'unit-btn';
+    document.getElementById('label-area').innerText = (u === 'imp') ? 'Tile Area (sq ft)' : 'Tile Area (sq m)';
+}
+function calculate() {
+    let area = parseFloat(document.getElementById('area').value);
+    let trowel = parseFloat(document.getElementById('trowel').value);
+    let type = parseFloat(document.getElementById('tile-type').value);
+    if(isNaN(area)) return;
+    
+    let baseCov;
+    if(trowel === 0.25) baseCov = 90;
+    else if(trowel === 0.375) baseCov = 60;
+    else baseCov = 40;
+    
+    let finalCov = baseCov * type;
+    if(unit === 'met') {
+        area = area / 0.092903; // convert m2 to sq ft for formula
+        let bags = Math.ceil(area / finalCov);
+        document.getElementById('res-bags').innerText = bags + " bags";
+        document.getElementById('res-cov').innerText = (finalCov * 0.092903).toFixed(2) + " sq m/bag";
+    } else {
+        let bags = Math.ceil(area / finalCov);
+        document.getElementById('res-bags').innerText = bags + " bags";
+        document.getElementById('res-cov').innerText = finalCov + " sq ft/bag";
+    }
+    document.getElementById('results').style.display = 'block';
+}
+</script>
+</body>
+</html>

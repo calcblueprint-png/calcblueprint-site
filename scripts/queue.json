@@ -212,7 +212,8 @@
     "description": "Calculate thinset mortar needed for tile installation. Choose trowel size and tile format for accurate coverage.",
     "inputs": "Tile area (square feet), trowel size (1/4, 3/8, 1/2 inch), tile type (standard, large format, stone)",
     "formula": "Coverage per 50-lb bag: 1/4 inch = 90 sq ft, 3/8 inch = 60 sq ft, 1/2 inch = 40 sq ft. Large format reduces 20%. Bags = ceil(area / coverage).",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-14T02:23:20.956163Z"
   },
   {
     "slug": "backsplash-calculator",
