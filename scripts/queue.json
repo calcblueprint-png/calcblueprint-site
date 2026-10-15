@@ -221,7 +221,8 @@
     "description": "Calculate tile needed for a kitchen backsplash. Account for outlets, windows, and tile size.",
     "inputs": "Counter length (feet), backsplash height (inches), number of outlets, tile size (inches)",
     "formula": "Area (sq in) = counter_length * 12 * backsplash_height. Subtract 30 sq in per outlet. Tiles = ceil(area / tile_area * 1.1).",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-15T02:24:44.554934Z"
   },
   {
     "slug": "wallpaper-calculator",

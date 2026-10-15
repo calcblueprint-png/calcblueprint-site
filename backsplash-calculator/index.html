@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/backsplash-calculator/">
+<title>Backsplash Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate tile needed for a kitchen backsplash. Account for outlets, windows, and tile size.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Backsplash Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background-color:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{color:#fff;font-size:1.5rem;font-weight:700;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+.container{max-width:800px;margin:2rem auto;padding:0 1rem}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);margin-bottom:2rem}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:1px solid #ccc;background:#f9f9f9;cursor:pointer;font-weight:600;border-radius:4px;transition:all 0.2s}
+.unit-btn.active{background:#f5a623;color:#1a2332;border-color:#f5a623}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+.calc-btn{width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;font-size:1.1rem;font-weight:700;border-radius:4px;cursor:pointer;transition:opacity 0.2s}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#1a2332;color:#fff;padding:1.5rem;border-radius:8px;margin-top:1.5rem;display:none}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.1)}
+.result-row:last-child{border-bottom:none}
+.result-value{font-weight:700;color:#f5a623}
+.details-box{background:#fff;border-radius:8px;padding:1.5rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+.details-box summary{font-weight:700;cursor:pointer;color:#1a2332}
+.details-box p{margin-top:1rem;color:#555}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
+.content-section p{margin-bottom:1rem;color:#4a5568}
+.content-section h3{color:#1a2332;margin-top:1.5rem;margin-bottom:0.5rem;font-size:1.1rem}
+footer{background:#1a2332;color:#fff;padding:2rem;text-align:center;margin-top:4rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#fff;margin:0 0.75rem;text-decoration:none}
+footer nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#a0aec0;max-width:600px;margin:0 auto}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Calc<span>Blueprint</span></a>
+  <nav>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <div class="container">
+    <div class="calculator-box">
+      <div class="unit-toggle">
+        <button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+        <button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+      </div>
+
+      <div class="form-group">
+        <label id="lbl-length" for="counter-length">Counter Length (feet)</label>
+        <input type="number" id="counter-length" step="any" min="0" value="8">
+      </div>
+
+      <div class="form-group">
+        <label id="lbl-height" for="backsplash-height">Backsplash Height (inches)</label>
+        <input type="number" id="backsplash-height" step="any" min="0" value="18">
+      </div>
+
+      <div class="form-group">
+        <label for="outlets-count">Number of Outlets / Switches</label>
+        <input type="number" id="outlets-count" step="1" min="0" value="3">
+      </div>
+
+      <div class="form-group">
+        <label id="lbl-tile" for="tile-size">Tile Size (width × height in inches)</label>
+        <input type="text" id="tile-size" value="3x6">
+      </div>
+
+      <button type="button" class="calc-btn" onclick="calculateBacksplash()">Calculate Tile Needed</button>
+
+      <div class="result-box" id="result-box">
+        <div class="result-row">
+          <span>Net Wall Area:</span>
+          <span class="result-value" id="res-area">0 sq ft</span>
+        </div>
+        <div class="result-row">
+          <span>Outlets Subtraction:</span>
+          <span class="result-value" id="res-outlets">0 sq in</span>
+        </div>
+        <div class="result-row">
+          <span>Total Tiles Required (w/ 10% waste):</span>
+          <span class="result-value" id="res-tiles">0 tiles</span>
+        </div>
+      </div>
+    </div>
+
+    <details class="details-box">
+      <summary>How this calculator works</summary>
+      <p>This calculator determines the net surface area of your kitchen backsplash by multiplying the counter length by the backsplash height, then subtracting standard deductions for electrical boxes and outlets. It automatically factors in a standard 10% waste allowance for cuts, breakage, and pattern matching. Formula based on TCNA Handbook for Ceramic, Glass, and Stone Tile Installation.</p>
+    </details>
+
+    <section class="content-section">
+      <h2>How to Calculate Backsplash Tile</h2>
+      <p>Calculating tile for a kitchen backsplash requires careful measurement of your linear counter space and vertical clearance from the countertop to the underside of upper cabinets. Standard backsplashes typically span 18 inches in height, though custom installations may run higher behind ranges or up to the ceiling. To begin, measure the total length of your runs in feet and convert them to inches for consistency with your tile dimensions.</p>
+      <p>Once you have total square inches, subtract openings for electrical outlets, light switches, and windows. While some installers choose not to deduct small outlets because cuts around boxes consume extra tile, subtracting standard deductions ensures a realistic baseline before applying your waste factor. Always add 10% for standard installations or 15% to 20% if you are working with intricate herringbone patterns, diagonal layouts, or handmade tiles with high variation.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>What Affects Backsplash Calculations</h2>
+      <p>Tile layout patterns significantly impact material requirements. A straight stack or running bond layout generates minimal waste, hovering close to the standard 10% threshold. Conversely, diagonal layouts, chevron, and herringbone patterns require significantly more cuts along boundaries, increasing waste margins considerably. Additionally, the physical dimensions of the tile dictate how many pieces must be sliced at corners and edges.</p>
+      <p>Obstacles like range hoods, windows, and custom cabinetry transitions also alter the equation. Areas behind heavy cooking ranges often feature decorative accent tiles or stainless steel inserts that change field tile totals. Furthermore, batch dye lots mean you must order all required tile—plus extra attic stock—in a single purchase to prevent color matching discrepancies between manufacturing runs.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>Frequently Asked Questions</h2>
+      <h3>How much extra tile should I buy for a backsplash?</h3>
+      <p>It is standard practice to buy 10% extra tile for standard horizontal or vertical layouts to account for cuts and breakage. If you are installing tile in a herringbone or diagonal pattern, increase your overage order to 15% or 20%.</p>
+      <h3>Should I subtract electrical outlets from my total area?</h3>
+      <p>While mathematically you should subtract roughly 30 square inches per outlet, many professional tile setters recommend ignoring minor outlet deductions. The tile pieces cut out for outlets usually cannot be reused elsewhere, meaning the physical tile count often balances out.</p>
+      <h3>What is the standard height of a kitchen backsplash?</h3>
+      <p>The standard height from the top of the countertop to the bottom of the upper wall cabinets is 18 inches. However, installations often extend higher behind the stove range or up to the ceiling behind open shelving.</p>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <nav>
+    <a href="/">Home</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <a href="#privacy">Privacy</a>
+  </nav>
+  <div class="citation">
+    Formula source: TCNA Handbook for Ceramic, Glass, and Stone Tile Installation. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint
+  </div>
+</footer>
+
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(unit) {
+  currentUnit = unit;
+  document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+  document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+  
+  if (unit === 'metric') {
+    document.getElementById('lbl-length').innerText = 'Counter Length (meters)';
+    document.getElementById('lbl-height').innerText = 'Backsplash Height (centimeters)';
+    document.getElementById('lbl-tile').innerText = 'Tile Size (width × height in centimeters)';
+    document.getElementById('counter-length').value = (8 * 0.3048).toFixed(2);
+    document.getElementById('backsplash-height').value = (18 * 2.54).toFixed(1);
+    document.getElementById('tile-size').value = '7.6x15.2';
+  } else {
+    document.getElementById('lbl-length').innerText = 'Counter Length (feet)';
+    document.getElementById('lbl-height').innerText = 'Backsplash Height (inches)';
+    document.getElementById('lbl-tile').innerText = 'Tile Size (width × height in inches)';
+    document.getElementById('counter-length').value = 8;
+    document.getElementById('backsplash-height').value = 18;
+    document.getElementById('tile-size').value = '3x6';
+  }
+}
+
+function calculateBacksplash() {
+  let lengthInput = parseFloat(document.getElementById('counter-length').value) || 0;
+  let heightInput = parseFloat(document.getElementById('backsplash-height').value) || 0;
+  let outlets = parseInt(document.getElementById('outlets-count').value) || 0;
+  let tileSizeStr = document.getElementById('tile-size').value;
+
+  let lengthInInches = 0;
+  let heightInInches = 0;
+
+  if (currentUnit === 'metric') {
+    // length in meters to inches (1 meter = 39.3701 inches)
+    let lengthInches = lengthInput * 39.3701;
+    // height in cm to inches (1 cm = 0.393701 inches)
+    heightInInches = heightInput * 0.393701;
+    lengthInInches = lengthInches;
+  } else {
+    lengthInInches = lengthInput * 12;
+    heightInInches = heightInput;
+  }
+
+  // Parse tile size
+  let parts = tileSizeStr.toLowerCase().split('x');
+  let tileW = parseFloat(parts[0]) || 3;
+  let tileH = parseFloat(parts[1]) || 3;
+
+  if (currentUnit === 'metric') {
+    // convert metric tile sizes (cm) to inches
+    tileW = tileW * 0.393701;
+    tileH = tileH * 0.393701;
+  }
+
+  let tileArea = tileW * tileH;
+  if (tileArea <= 0) tileArea = 18;
+
+  let grossAreaSqIn = lengthInInches * heightInInches;
+  let outletDeduction = outlets * 30;
+  let netAreaSqIn = grossAreaSqIn - outletDeduction;
+  if (netAreaSqIn < 0) netAreaSqIn = 0;
+
+  let netAreaSqFt = netAreaSqIn / 144;
+  let tilesNeeded = Math.ceil((netAreaSqIn / tileArea) * 1.1);
+
+  document.getElementById('res-area').innerText = netAreaSqFt.toFixed(2) + ' sq ft (' + netAreaSqIn.toFixed(0) + ' sq in)';
+  document.getElementById('res-outlets').innerText = '-' + outletDeduction + ' sq in (' + outlets + ' outlets)';
+  document.getElementById('res-tiles').innerText = tilesNeeded + ' tiles';
+
+  document.getElementById('result-box').style.display = 'block';
+}
+</script>
+
+</body>
+</html>
