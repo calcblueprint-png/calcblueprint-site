@@ -230,7 +230,8 @@
     "description": "Calculate wallpaper rolls needed for any room. Enter wall dimensions and pattern repeat for accuracy.",
     "inputs": "Room length (feet), room width (feet), ceiling height (feet), pattern repeat (inches), windows and doors count",
     "formula": "Wall area = 2 * (length + width) * height. Subtract doors and windows. Rolls = ceil(wall_area / usable_area_per_roll).",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-16T02:24:51.806305Z"
   },
   {
     "slug": "wall-area-calculator",
