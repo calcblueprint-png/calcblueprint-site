@@ -239,7 +239,8 @@
     "description": "Calculate total wall area for painting, wallpaper, or siding. Subtract doors and windows automatically.",
     "inputs": "Room length (feet), room width (feet), ceiling height (feet), number of doors, number of windows",
     "formula": "Perimeter = 2 * (length + width). Gross wall area = perimeter * height. Subtract 20 sq ft per door and 15 sq ft per window.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-17T02:23:19.159498Z"
   },
   {
     "slug": "drywall-mud-calculator",
