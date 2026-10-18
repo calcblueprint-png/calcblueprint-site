@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/drywall-mud-calculator/">
+<title>Drywall Mud Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate joint compound needed for a drywall project. Includes taping, filling, and finishing coats.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{color:#fff;font-size:1.5rem;font-weight:bold;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2rem 1rem;max-width:900px;margin:0 auto}
+.container{width:100%}
+.calculator-box{background:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+.calc-title{font-size:1.75rem;color:#1a2332;margin-bottom:1.5rem}
+.unit-toggle{display:flex;margin-bottom:1.5rem;border:1px solid #ccc;border-radius:4px;overflow:hidden;width:fit-content}
+.unit-btn{background:#fff;border:none;padding:0.5rem 1rem;cursor:pointer;font-weight:600;color:#1a2332}
+.unit-btn.active{background:#f5a623;color:#1a2332}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input, .form-group select{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+.calc-btn{background:#f5a623;color:#1a2332;border:none;width:100%;padding:0.75rem;font-size:1.1rem;font-weight:bold;border-radius:4px;cursor:pointer;margin-top:1rem}
+.calc-btn:hover{opacity:0.9}
+.details-box{background:#fff;border-radius:8px;padding:1.5rem 2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+.details-box summary{font-weight:bold;cursor:pointer;color:#1a2332;font-size:1.1rem}
+.details-box p{margin-top:1rem}
+.result-box{background:#1a2332;color:#fff;padding:1.5rem;border-radius:8px;margin-top:1.5rem;display:none}
+.result-box.visible{display:block}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.1)}
+.result-row:last-child{border-bottom:none}
+.content-section { background-color: #ffffff; border-radius: 8px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+.content-section h2 { color: #1a2332; margin-bottom: 1rem; }
+.content-section p { margin-bottom: 1rem; }
+.content-section h3 { color: #1a2332; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:3rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#f5a623;margin:0 10px}
+.citation{font-size:0.85rem;color:#aaa;max-width:700px;margin:0 auto}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Drywall Mud Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Calc<span>Blueprint</span></a>
+  <nav>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <div class="container">
+    <div class="calculator-box">
+      <h1 class="calc-title">Drywall Mud Calculator</h1>
+      
+      <div class="unit-toggle">
+        <button type="button" class="unit-btn active" id="btn-imperial">Imperial (US)</button>
+        <button type="button" class="unit-btn" id="btn-metric">Metric</button>
+      </div>
+
+      <div class="form-group">
+        <label id="sheets-label" for="sheets-input">Number of Drywall Sheets (4' x 8')</label>
+        <input type="number" id="sheets-input" min="1" value="50">
+      </div>
+
+      <div class="form-group">
+        <label for="finish-level">Level of Finish</label>
+        <select id="finish-level">
+          <option value="3">Level 3 (Tape and fill - 2 lbs/sheet)</option>
+          <option value="4" selected>Level 4 (Standard finish - 4 lbs/sheet)</option>
+          <option value="5">Level 5 (Skim coat - 6 lbs/sheet)</option>
+        </select>
+      </div>
+
+      <button type="button" class="calc-btn" id="calculate-btn">Calculate Mud Needed</button>
+
+      <div class="result-box" id="result-box">
+        <div class="result-row">
+          <span>Total Joint Compound Required:</span>
+          <strong id="res-total">0 lbs</strong>
+        </div>
+        <div class="result-row">
+          <span>Estimated 4.5 Gal Buckets (~55 lbs):</span>
+          <strong id="res-buckets">0 buckets</strong>
+        </div>
+        <div class="result-row">
+          <span>Application Rate:</span>
+          <strong id="res-rate">0 lbs per sheet</strong>
+        </div>
+      </div>
+    </div>
+
+    <details class="details-box">
+      <summary>How this calculator works</summary>
+      <p>This calculator determines the required amount of joint compound (drywall mud) based on standard industry coverage factors per drywall sheet. The total quantity is determined by multiplying the number of sheets by the specific weight factor demanded by your chosen finish level, ranging from basic taping coats to premium full skim coats. Material coverage per GAWFA and Gypsum Association standards.</p>
+    </details>
+
+    <section class="content-section">
+      <h2>How to Calculate Drywall Mud</h2>
+      <p>Calculating joint compound requires evaluating the total surface area through standard drywall sheet counts, typically measuring 4 feet by 8 feet (or 32 square feet). Contractors estimate material needs by assigning a specific poundage per board based on the specified finish level. Level 3 finishes involve taping and fastener spotting, requiring roughly 2 pounds per sheet. Level 4 finishes introduce standard fill and finish coats over joints and corners, demanding about 4 pounds per sheet. Level 5 projects require a complete skim coat across the entire wall surface, increasing consumption to 6 pounds per sheet.</p>
+      <p>Once you determine the total pounds necessary, convert the weight into standard packaging sizes. Commercial joint compound is frequently sold in 4.5-gallon buckets weighing approximately 55 pounds, or smaller 35-pound cartons. Dividing your total calculated weight by 55 gives you the exact number of large buckets required for the job, ensuring you purchase enough material to complete taping, filling, and sanding phases without unexpected hardware store runs.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>What Affects Drywall Mud Requirements</h2>
+      <p>Several job-specific factors can dramatically alter the amount of joint compound required for a construction or remodeling project. First, framing quality and board hanging precision dictate gap widths. Poorly cut boards or uneven framing create oversized gaps between panels, forcing installers to use considerably more compound during the initial fill phase to bridge joints securely.</p>
+      <p>Environmental conditions and compound choice also play major roles. Lightweight joint compounds dry faster and shrink differently than all-purpose heavy compounds, sometimes requiring additional layers to achieve a flat plane. Furthermore, job site temperature and humidity affect application consistency; dry, hot environments cause mud to setup rapidly, occasionally leading to waste or extra sanding and skim adjustments to eliminate ridges.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>Frequently Asked Questions</h2>
+      <h3>How many pounds of mud are in a standard 4.5-gallon bucket?</h3>
+      <p>A standard 4.5-gallon bucket of ready-mix joint compound weighs approximately 55 pounds. Lightweight formulas will weigh slightly less per volume, but standard all-purpose mud conforms closely to this 55-pound threshold.</p>
+      <h3>Should I buy ready-mixed or powder joint compound?</h3>
+      <p>Ready-mixed mud is convenient and ideal for finishing coats, taping, and general hanging work. Setting-type powder compounds (hot mud) cure chemically and are preferred for deep fills and fast turnaround times because they do not shrink as much as ready-mix.</p>
+      <h3>Can I apply Level 5 finish over old textured walls?</h3>
+      <p>Achieving a true Level 5 finish over textured surfaces requires skimming out the entire wall plane with a heavy coat of compound or skim-coating plaster to completely bury the texture before sanding smooth and priming.</p>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+    <a href="/privacy/">Privacy</a>
+  </nav>
+  <p class="citation">Formula source: Gypsum Association and GAWFA standards. Results are estimates for planning — verify with a licensed professional before ordering materials.</p>
+  <p style="font-size:0.8rem; margin-top:1rem; color:#888;">© 2026 CalcBlueprint</p>
+</footer>
+
+<script>
+const btnImperial = document.getElementById('btn-imperial');
+const btnMetric = document.getElementById('btn-metric');
+const sheetsLabel = document.getElementById('sheets-label');
+const sheetsInput = document.getElementById('sheets-input');
+const finishLevel = document.getElementById('finish-level');
+const calculateBtn = document.getElementById('calculate-btn');
+const resultBox = document.getElementById('result-box');
+const resTotal = document.getElementById('res-total');
+const resBuckets = document.getElementById('res-buckets');
+const resRate = document.getElementById('res-rate');
+
+let isMetric = false;
+
+btnImperial.addEventListener('click', () => {
+  if (isMetric) {
+    isMetric = false;
+    btnImperial.classList.add('active');
+    btnMetric.classList.remove('active');
+    sheetsLabel.textContent = "Number of Drywall Sheets (4' x 8')";
+    sheetsInput.value = Math.round(parseFloat(sheetsInput.value) * 1.05);
+    calculateResults();
+  }
+});
+
+btnMetric.addEventListener('click', () => {
+  if (!isMetric) {
+    isMetric = true;
+    btnMetric.classList.add('active');
+    btnImperial.classList.remove('active');
+    sheetsLabel.textContent = "Number of Drywall Sheets (1.2m x 2.4m)";
+    sheetsInput.value = Math.round(parseFloat(sheetsInput.value) * 0.95);
+    calculateResults();
+  }
+});
+
+calculateBtn.addEventListener('click', calculateResults);
+
+function calculateResults() {
+  const count = parseFloat(sheetsInput.value) || 0;
+  const level = parseInt(finishLevel.value);
+  
+  let lbsPerSheet = 2;
+  if (level === 4) lbsPerSheet = 4;
+  if (level === 5) lbsPerSheet = 6;
+  
+  let totalLbs = count * lbsPerSheet;
+  let bucketWeightLbs = 55;
+  
+  if (isMetric) {
+    // Convert logic: 1 lb = 0.4536 kg
+    let totalKg = totalLbs * 0.4536;
+    let bucketWeightKg = bucketWeightLbs * 0.4536;
+    let totalBuckets = totalKg / bucketWeightKg;
+    let rateKg = lbsPerSheet * 0.4536;
+
+    resTotal.textContent = totalKg.toFixed(1) + " kg";
+    resBuckets.textContent = totalBuckets.toFixed(1) + " buckets (~" + bucketWeightKg.toFixed(1) + " kg each)";
+    resRate.textContent = rateKg.toFixed(2) + " kg per sheet";
+  } else {
+    let totalBuckets = totalLbs / bucketWeightLbs;
+    
+    resTotal.textContent = totalLbs.toFixed(1) + " lbs";
+    resBuckets.textContent = totalBuckets.toFixed(1) + " buckets (~55 lbs each)";
+    resRate.textContent = lbsPerSheet + " lbs per sheet";
+  }
+  
+  resultBox.classList.add('visible');
+}
+
+// Initial calculation run
+calculateResults();
+</script>
+
+</body>
+</html>

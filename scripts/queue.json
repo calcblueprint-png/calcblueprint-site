@@ -248,7 +248,8 @@
     "description": "Calculate joint compound needed for a drywall project. Includes taping, filling, and finishing coats.",
     "inputs": "Number of drywall sheets, level of finish (Level 3, 4, or 5)",
     "formula": "Level 3: 2 lbs per sheet. Level 4: 4 lbs per sheet. Level 5: 6 lbs per sheet. Buckets of 4.5 gallons weigh ~55 lbs.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-18T02:22:52.109644Z"
   },
   {
     "slug": "drywall-screws-calculator",
