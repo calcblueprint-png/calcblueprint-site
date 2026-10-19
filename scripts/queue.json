@@ -257,7 +257,8 @@
     "description": "Calculate how many drywall screws you need. Based on sheet count, stud spacing, and screw pattern.",
     "inputs": "Number of drywall sheets, stud spacing (16 or 24 inches), screw pattern (standard, ceiling, fire-rated)",
     "formula": "Standard on 16-inch studs: 32 screws per 4x8 sheet. Ceiling pattern: 40 per sheet. Fire-rated: 60 per sheet. Total = sheets * count.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-19T02:24:21.599184Z"
   },
   {
     "slug": "corner-bead-calculator",
