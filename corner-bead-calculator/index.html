@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/corner-bead-calculator/">
+<title>Drywall Corner Bead Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate linear feet of corner bead needed for your drywall project. Includes inside and outside corners.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{color:#fff;font-size:1.5rem;font-weight:700;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2rem 1rem;max-width:800px;margin:0 auto}
+.container{width:100%}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.05);margin-bottom:2rem}
+.calculator-box h1{font-size:1.8rem;color:#1a2332;margin-bottom:1.5rem}
+.unit-toggle{display:flex;margin-bottom:1.5rem;border:1px solid #ddd;border-radius:6px;overflow:hidden}
+.unit-btn{flex:1;padding:0.75rem;background:#f4f6f9;border:none;cursor:pointer;font-weight:600;color:#555}
+.unit-btn.active{background:#f5a623;color:#1a2332}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:6px;font-size:1rem}
+.calc-btn{width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;border-radius:6px;font-size:1.1rem;font-weight:700;cursor:pointer;margin-top:1rem}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#f4f6f9;border-left:4px solid #f5a623;padding:1.5rem;border-radius:6px;margin-top:2rem;display:none}
+.result-box h3{color:#1a2332;margin-bottom:1rem}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #ddd;font-size:1.05rem}
+.result-row:last-child{border-bottom:none}
+.result-value{font-weight:700;color:#1a2332}
+details{background:#fff;border-radius:8px;padding:1.5rem;margin-bottom:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.05)}
+summary{font-weight:700;cursor:pointer;color:#1a2332;font-size:1.1rem}
+details p{margin-top:1rem;color:#555}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.05)}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
+.content-section p{margin-bottom:1rem;color:#555}
+.content-section h3{color:#1a2332;margin-top:1.5rem;margin-bottom:0.5rem;font-size:1.1rem}
+footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:3rem}
+.footer-nav{margin-bottom:1rem}
+.footer-nav a{color:#fff;text-decoration:none;margin:0 1rem}
+.footer-nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#aaa;max-width:600px;margin:0 auto}
+@media(max-width:600px){header{flex-direction:column;text-align:center}nav{margin-top:1rem}nav a{margin:0 0.5rem}}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Drywall Corner Bead Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+</head>
+<body>
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="/">Home</a>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+</nav>
+</header>
+<main>
+<div class="container">
+<div class="calculator-box">
+<h1>Drywall Corner Bead Calculator</h1>
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnit('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnit('metric')">Metric</button>
+</div>
+<form id="calc-form" onsubmit="event.preventDefault(); calculate();">
+<div class="form-group">
+<label id="lbl-outside" for="outside-corners">Number of Outside Corners</label>
+<input type="number" id="outside-corners" min="0" step="1" value="4" required>
+</div>
+<div class="form-group">
+<label id="lbl-inside" for="inside-corners">Number of Inside Corners</label>
+<input type="number" id="inside-corners" min="0" step="1" value="2" required>
+</div>
+<div class="form-group">
+<label id="lbl-height" for="corner-height">Average Corner Height (feet)</label>
+<input type="number" id="corner-height" min="0" step="0.1" value="8" required>
+</div>
+<button type="submit" class="calc-btn">Calculate Corner Bead</button>
+</form>
+<div class="result-box" id="result-box">
+<h3>Calculation Results</h3>
+<div class="result-row">
+<span>Net Outside Corner Bead:</span>
+<span class="result-value" id="res-net-outside">0</span>
+</div>
+<div class="result-row">
+<span>Total with 5% Waste:</span>
+<span class="result-value" id="res-total-outside">0</span>
+</div>
+<div class="result-row">
+<span>Inside Corner Tape/Bead Needed:</span>
+<span class="result-value" id="res-inside">0</span>
+</div>
+</div>
+</div>
+
+<details>
+<summary>How this calculator works</summary>
+<p>This calculator determines the linear material requirements for drywall corner installations by multiplying the count of outside corners by the average wall height. A standard 5% waste factor is added to account for end cuts, miters, and jobsite errors. Material coverage per GA-216 specifications for gypsum board application and finishing.</p>
+</details>
+
+<section class="content-section">
+<h2>How to Calculate Drywall Corner Bead</h2>
+<p>Calculating corner bead for a residential or commercial drywall installation requires precise measurements to minimize waste while ensuring you do not run short mid-project. First, walk through the framing layout and count every 90-degree or specialized outside corner where drywall edges meet and project outward. Measure the vertical height from the subfloor or finished floor to the ceiling line for each corner, then compute an accurate average height if room dimensions vary.</p>
+<p>Multiply the total number of outside corners by your average corner height to find the baseline linear footage. Because professional installers inevitably face trim cuts, miters around headers, and occasional damaged sections, always incorporate a standard 5% waste factor into your final purchasing order. Inside corners typically utilize paper-faced tape or specialized flexible inside corner trim rather than rigid metal bead, but tracking these quantities helps plan joint compound and paper tape consumption accurately across the entire drywall finishing phase.</p>
+</section>
+
+<section class="content-section">
+<h2>What Affects Drywall Corner Bead Requirements</h2>
+<p>Several jobsite characteristics directly influence how much corner bead you will need to purchase and install. Ceiling height is the primary factor; standard eight-foot walls require significantly less linear material per vertical drop compared to custom nine, ten, or vaulted architectural ceilings. The overall architectural complexity of the floor plan also plays a massive role. Open-concept layouts with numerous columns, bulkheads, soffits, and architectural niches introduce dozens of additional short outside corners that dramatically increase material totals.</p>
+<p>Furthermore, the choice of corner bead material impacts your installation strategy and waste calculations. Traditional galvanized metal bead is sold in fixed lengths—typically eight, nine, or ten feet—requiring careful planning to minimize scrap. Modern alternatives like vinyl bullnose bead, paper-faced metal corner trim, and expandable archway beads each have unique handling requirements and standard stock lengths that can alter your optimal purchasing quantities and cutting waste percentages.</p>
+</section>
+
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>What is the standard length for metal drywall corner bead?</h3>
+<p>Standard metal corner bead is most commonly manufactured and sold in lengths of 8 feet, 9 feet, and 10 feet to match typical residential and commercial ceiling heights. When ordering materials, compare your exact ceiling heights against standard stock lengths to minimize unnecessary butt joints and scrap waste.</p>
+
+<h3>Should I add extra waste percentage for complex architectural details?</h3>
+<p>Yes, while a standard 5% waste factor is sufficient for simple rectangular rooms, complex architectural designs featuring arches, angled vaulted ceilings, or numerous short partition returns often warrant increasing your waste margin to 10% or even 15% to cover miter cuts and fitting errors.</p>
+
+<h3>Do inside corners require rigid metal corner bead?</h3>
+<p>No, inside corners are almost never finished with rigid metal corner bead. Instead, standard paper joint tape folded down the crease or composite paper-faced inside corner trim is embedded in joint compound to create sharp, durable interior angles that resist cracking.</p>
+</section>
+</div>
+</main>
+<footer>
+<div class="footer-nav">
+<a href="/">Home</a>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+<a href="/privacy/">Privacy</a>
+</div>
+<p class="citation">Formula source: GA-216 Specifications for the Application and Finishing of Gypsum Panel Products. Results are estimates for planning — verify with a licensed professional before ordering materials.</p>
+</footer>
+<script>
+let currentUnit = 'imperial';
+
+function setUnit(unit) {
+  currentUnit = unit;
+  document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+  document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+  
+  const heightLabel = document.getElementById('lbl-height');
+  const heightInput = document.getElementById('corner-height');
+  
+  if (unit === 'metric') {
+    heightLabel.textContent = 'Average Corner Height (meters)';
+    heightInput.value = (parseFloat(heightInput.value) * 0.3048).toFixed(2);
+  } else {
+    heightLabel.textContent = 'Average Corner Height (feet)';
+    heightInput.value = (parseFloat(heightInput.value) / 0.3048).toFixed(1);
+  }
+}
+
+function calculate() {
+  const outsideCount = parseFloat(document.getElementById('outside-corners').value) || 0;
+  const insideCount = parseFloat(document.getElementById('inside-corners').value) || 0;
+  const height = parseFloat(document.getElementById('corner-height').value) || 0;
+  
+  let netOutside = outsideCount * height;
+  let totalOutside = netOutside * 1.05;
+  let insideTotal = insideCount * height * 1.05;
+  
+  let unitLabel = currentUnit === 'imperial' ? ' ft' : ' m';
+  
+  document.getElementById('res-net-outside').textContent = netOutside.toFixed(2) + unitLabel;
+  document.getElementById('res-total-outside').textContent = totalOutside.toFixed(2) + unitLabel;
+  document.getElementById('res-inside').textContent = insideTotal.toFixed(2) + unitLabel;
+  
+  document.getElementById('result-box').style.display = 'block';
+}
+</script>
+</body>
+</html>

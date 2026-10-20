@@ -266,7 +266,8 @@
     "description": "Calculate linear feet of corner bead needed for your drywall project. Includes inside and outside corners.",
     "inputs": "Number of outside corners, number of inside corners, average corner height (feet)",
     "formula": "Outside corner bead = number_of_outside * corner_height. Add 5% waste for cuts.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-20T07:16:24.120237Z"
   },
   {
     "slug": "ac-unit-size-calculator",
