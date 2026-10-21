@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/ac-unit-size-calculator/">
+<title>AC Unit Size Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate the correct AC tonnage for any room. Based on square footage, climate, and insulation.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"AC Unit Size Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:700;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2.5rem 1rem;max-width:900px;margin:0 auto}
+.container{width:100%}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.05);margin-bottom:2rem}
+.calculator-box h1{font-size:1.8rem;color:#1a2332;margin-bottom:1.5rem}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem;background:#f4f6f9;padding:4px;border-radius:6px;width:fit-content}
+.unit-btn{background:transparent;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;font-weight:600;color:#555}
+.unit-btn.active{background:#f5a623;color:#1a2332}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;font-weight:600;margin-bottom:0.5rem;color:#1a2332}
+.form-group input, .form-group select{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+.calc-btn{background:#f5a623;color:#1a2332;border:none;width:100%;padding:0.85rem;font-size:1.1rem;font-weight:700;border-radius:4px;cursor:pointer;margin-top:1rem}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#1a2332;color:#fff;padding:1.5rem;border-radius:8px;margin-top:2rem;display:none}
+.result-box h3{font-size:1.3rem;margin-bottom:1rem;color:#f5a623}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.1)}
+.result-row:last-child{border-bottom:none}
+.details-box{background:#fff;border-radius:8px;padding:1.5rem;margin-bottom:2rem;border:1px solid #e1e4e8}
+.details-box summary{font-weight:700;cursor:pointer;color:#1a2332}
+.details-box p{margin-top:1rem;font-size:0.95rem;color:#555}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.05)}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
+.content-section p{margin-bottom:1rem;color:#444}
+.content-section h3{color:#1a2332;margin-top:1.2rem;margin-bottom:0.4rem;font-size:1.1rem}
+footer{background:#1a2332;color:#fff;padding:2rem;text-align:center;margin-top:3rem}
+.footer-nav{margin-bottom:1rem}
+.footer-nav a{color:#fff;text-decoration:none;margin:0 1rem}
+.footer-nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#aaa;max-width:700px;margin:0 auto}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Calc<span>Blueprint</span></a>
+  <nav>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <div class="container">
+    <div class="calculator-box">
+      <h1>AC Unit Size Calculator</h1>
+      
+      <div class="unit-toggle">
+        <button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+        <button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+      </div>
+
+      <div class="form-group">
+        <label id="label-length">Room Length (feet)</label>
+        <input type="number" id="length" placeholder="e.g., 20" step="any">
+      </div>
+
+      <div class="form-group">
+        <label id="label-width">Room Width (feet)</label>
+        <input type="number" id="width" placeholder="e.g., 15" step="any">
+      </div>
+
+      <div class="form-group">
+        <label id="label-height">Ceiling Height (feet)</label>
+        <input type="number" id="height" value="8" step="any">
+      </div>
+
+      <div class="form-group">
+        <label>Climate Zone</label>
+        <select id="climate">
+          <option value="mild">Mild / Cool</option>
+          <option value="moderate" selected>Moderate</option>
+          <option value="hot">Hot / Sunny</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Insulation Quality</label>
+        <select id="insulation">
+          <option value="good">Good / Well Insulated</option>
+          <option value="average" selected>Average</option>
+          <option value="poor">Poor / Drafty</option>
+        </select>
+      </div>
+
+      <button type="button" class="calc-btn" onclick="calculateAC()">Calculate AC Size</button>
+
+      <div class="result-box" id="resultBox">
+        <h3>Calculation Results</h3>
+        <div class="result-row">
+          <span>Required Cooling Capacity:</span>
+          <strong id="res-btu">0 BTU</strong>
+        </div>
+        <div class="result-row">
+          <span>Recommended AC Tonnage:</span>
+          <strong id="res-tons">0 Tons</strong>
+        </div>
+        <div class="result-row">
+          <span>Estimated Area:</span>
+          <strong id="res-area">0</strong>
+        </div>
+      </div>
+    </div>
+
+    <details class="details-box">
+      <summary>How this calculator works</summary>
+      <p>This calculator determines the baseline cooling capacity required by multiplying the room's square footage by a baseline factor of 25 BTUs. It then dynamically adjusts this baseline depending on local climate severity, insulation integrity, ceiling height variations, and potential thermal load multipliers. Formula based on ASHRAE Handbook of Fundamentals and ACCA Manual J.</p>
+    </details>
+
+    <section class="content-section">
+      <h2>How to Calculate AC Unit Size</h2>
+      <p>Sizing an air conditioning unit accurately is critical for maintaining indoor comfort and energy efficiency. An oversized unit will cool the space too quickly without properly dehumidifying the air, leading to clammy conditions and short-cycling, which degrades equipment lifespan. Conversely, an undersized unit will run continuously, struggling to maintain target temperatures on peak hot days while driving up electricity bills.</p>
+      <p>The calculation begins by determining the total square footage of the space by multiplying the length by the width. Standard sizing uses a baseline of 25 British Thermal Units (BTUs) per square foot under standard 8-foot ceilings. However, adjustments must be applied for extra-high ceilings, direct sunlight exposure through large windows, heavy occupant loads, and the specific thermal performance of the building envelope.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>What Affects AC Unit Size</h2>
+      <p>Several environmental and structural variables drastically shift the required cooling capacity for any given room or zone. Understanding these factors ensures you select equipment that handles peak outdoor temperatures without wasting energy.</p>
+      <p>Climate zone is one of the primary drivers; homes in hot, humid southern regions require significantly more thermal mitigation per square foot than structures located in temperate or cooler northern zones. Insulation quality dictates how effectively conditioned air stays trapped inside; older homes with minimal wall and attic insulation allow massive thermal heat gain. Additionally, window orientation, shading trees, appliances, and number of regular room occupants contribute internal and external heat loads that demand higher BTU outputs.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>Frequently Asked Questions</h2>
+      <h3>What happens if I install an oversized AC unit?</h3>
+      <p>An oversized air conditioner cools the room so rapidly that the thermostat shuts the system down before the air can be properly dehumidified. This leaves the room feeling cold and damp, and the constant starting and stopping places excessive mechanical wear on the compressor.</p>
+      <h3>Can I use room square footage alone to select a window unit?</h3>
+      <p>While basic square footage charts provide a rough starting point, ignoring ceiling height, sun exposure, and insulation can result in a poorly performing system. Always factor in environmental conditions for proper sizing.</p>
+      <h3>How many BTUs are in one ton of air conditioning?</h3>
+      <p>In HVAC terminology, one ton of cooling capacity equals 12,000 BTUs per hour. This historic measurement stems from the cooling power equivalent of melting one short ton of ice over a 24-hour period.</p>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-nav">
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+    <a href="/privacy/">Privacy</a>
+  </div>
+  <p class="citation">Formula source: ASHRAE Handbook of Fundamentals and ACCA Manual J. Results are estimates for planning — verify with a licensed professional before ordering materials.</p>
+</footer>
+
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(unit) {
+  currentUnit = unit;
+  document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+  document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+  
+  if (unit === 'metric') {
+    document.getElementById('label-length').innerText = 'Room Length (meters)';
+    document.getElementById('label-width').innerText = 'Room Width (meters)';
+    document.getElementById('label-height').innerText = 'Ceiling Height (meters)';
+    document.getElementById('height').value = '2.4';
+  } else {
+    document.getElementById('label-length').innerText = 'Room Length (feet)';
+    document.getElementById('label-width').innerText = 'Room Width (feet)';
+    document.getElementById('label-height').innerText = 'Ceiling Height (feet)';
+    document.getElementById('height').value = '8';
+  }
+}
+
+function calculateAC() {
+  let length = parseFloat(document.getElementById('length').value);
+  let width = parseFloat(document.getElementById('width').value);
+  let height = parseFloat(document.getElementById('height').value);
+  let climate = document.getElementById('climate').value;
+  let insulation = document.getElementById('insulation').value;
+
+  if (isNaN(length) || isNaN(width) || isNaN(height) || length <= 0 || width <= 0 || height <= 0) {
+    alert('Please enter valid positive numbers for dimensions.');
+    return;
+  }
+
+  let areaSqFt, heightFt;
+
+  if (currentUnit === 'metric') {
+    let lengthFt = length * 3.28084;
+    let widthFt = width * 3.28084;
+    heightFt = height * 3.28084;
+    areaSqFt = lengthFt * widthFt;
+  } else {
+    areaSqFt = length * width;
+    heightFt = height;
+  }
+
+  let btuBase = areaSqFt * 25;
+
+  let climateMultiplier = 1.0;
+  if (climate === 'mild') climateMultiplier = 0.9;
+  if (climate === 'hot') climateMultiplier = 1.2;
+
+  let insulationMultiplier = 1.0;
+  if (insulation === 'good') insulationMultiplier = 0.9;
+  if (insulation === 'poor') insulationMultiplier = 1.2;
+
+  let heightMultiplier = heightFt > 8 ? (heightFt / 8) : 1.0;
+
+  let totalBTU = btuBase * climateMultiplier * insulationMultiplier * heightMultiplier;
+  let tons = totalBTU / 12000;
+
+  document.getElementById('res-btu').innerText = Math.round(totalBTU).toLocaleString() + ' BTU/hr';
+  document.getElementById('res-tons').innerText = tons.toFixed(2) + ' Tons';
+
+  if (currentUnit === 'metric') {
+    let areaSqM = areaSqFt * 0.092903;
+    document.getElementById('res-area').innerText = areaSqM.toFixed(1) + ' m²';
+  } else {
+    document.getElementById('res-area').innerText = Math.round(areaSqFt).toLocaleString() + ' sq ft';
+  }
+
+  document.getElementById('resultBox').style.display = 'block';
+}
+</script>
+
+</body>
+</html>
