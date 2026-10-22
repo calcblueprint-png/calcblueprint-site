@@ -284,7 +284,8 @@
     "description": "Calculate heating and cooling BTUs needed for any space. Essential for sizing HVAC equipment correctly.",
     "inputs": "Room length (feet), room width (feet), ceiling height (feet), insulation level, climate",
     "formula": "Cooling BTU = area * 25 + adjustments. Heating BTU = area * 45 * climate_factor * insulation_factor.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-22T07:14:40.241906Z"
   },
   {
     "slug": "furnace-size-calculator",
