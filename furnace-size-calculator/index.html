@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/furnace-size-calculator/">
+<title>Furnace Size Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate the correct furnace size for your home. Based on square footage, climate, and insulation.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Furnace Size Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f7f6;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{color:#fff;font-size:1.5rem;font-weight:bold;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2rem 1rem}
+.container{max-width:800px;margin:0 auto}
+h1{font-size:2rem;color:#1a2332;margin-bottom:0.5rem}
+.subtitle{color:#666;margin-bottom:2rem}
+.calculator-box{background:#ffffff;border-radius:8px;padding:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);margin-bottom:2rem}
+.unit-toggle{display:flex;margin-bottom:1.5rem;border:1px solid #ccc;border-radius:4px;overflow:hidden}
+.unit-btn{flex:1;padding:0.75rem;background:#f0f0f0;border:none;cursor:pointer;font-weight:600;transition:background 0.2s}
+.unit-btn.active{background:#f5a623;color:#1a2332}
+.form-group{margin-bottom:1.25rem}
+label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+input, select{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+input:focus, select:focus{outline:none;border-color:#f5a623}
+.calc-btn{background:#f5a623;color:#1a2332;border:none;width:100%;padding:1rem;font-size:1.1rem;font-weight:bold;border-radius:4px;cursor:pointer;transition:background 0.2s;margin-top:1rem}
+.calc-btn:hover{background:#e0951b}
+.result-box{background:#1a2332;color:#fff;padding:1.5rem;border-radius:8px;margin-top:2rem;display:none}
+.result-box h3{color:#f5a623;margin-bottom:1rem;border-bottom:1px solid #334155;padding-bottom:0.5rem}
+.result-row{display:flex;justify-content:space-between;margin-bottom:0.75rem;font-size:1.1rem}
+.result-value{font-weight:bold;color:#f5a623}
+details{background:#ffffff;border-radius:8px;padding:1.5rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);cursor:pointer}
+summary{font-weight:bold;color:#1a2332;font-size:1.1rem}
+details p{margin-top:1rem;color:#555}
+.content-section { background-color: #ffffff; border-radius: 8px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+.content-section h2 { color: #1a2332; margin-bottom: 1rem; font-size: 1.5rem; }
+.content-section p { margin-bottom: 1rem; color: #4a5568; }
+.content-section h3 { color: #1a2332; margin-top: 1.25rem; margin-bottom: 0.5rem; font-size: 1.1rem; }
+footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:3rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#f5a623;margin:0 10px}
+.citation{font-size:0.85rem;color:#94a3b8;max-width:600px;margin:0 auto}
+</style>
+</head>
+<body>
+
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+</nav>
+</header>
+
+<main>
+<div class="container">
+<h1>Furnace Size Calculator</h1>
+<p class="subtitle">Calculate the correct furnace size for your home based on square footage, climate, and insulation.</p>
+
+<div class="calculator-box">
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+</div>
+
+<div class="form-group">
+<label id="label-sqft" for="sqft">Home Square Footage (sq ft)</label>
+<input type="number" id="sqft" placeholder="e.g. 2000" value="2000">
+</div>
+
+<div class="form-group">
+<label for="climate">Climate Zone</label>
+<select id="climate">
+<option value="0.8">Zone 1-2: Mild (South)</option>
+<option value="1.0" selected>Zone 3-4: Moderate (Central)</option>
+<option value="1.2">Zone 5-6: Cold (North)</option>
+<option value="1.3">Zone 7-8: Severe Cold (Far North)</option>
+</select>
+</div>
+
+<div class="form-group">
+<label for="insulation">Insulation Quality</label>
+<select id="insulation">
+<option value="0.9">Good (New construction, double pane windows)</option>
+<option value="1.0" selected>Average (Standard insulation)</option>
+<option value="1.2">Poor (Older home, drafts present)</option>
+</select>
+</div>
+
+<div class="form-group">
+<label for="afue">Furnace Efficiency (AFUE %)</label>
+<select id="afue">
+<option value="0.80">80% Standard Efficiency</option>
+<option value="0.90">90% High Efficiency</option>
+<option value="0.95" selected>95% Ultra-High Efficiency</option>
+<option value="0.98">98% Maximum Efficiency</option>
+</select>
+</div>
+
+<button type="button" class="calc-btn" onclick="calculateFurnace()">Calculate Furnace Size</button>
+
+<div class="result-box" id="resultBox">
+<h3>Calculation Results</h3>
+<div class="result-row">
+<span>Required Heating Output:</span>
+<span class="result-value" id="res-output">0 BTU/hr</span>
+</div>
+<div class="result-row">
+<span>Recommended Furnace Input:</span>
+<span class="result-value" id="res-input">0 BTU/hr</span>
+</div>
+<div class="result-row">
+<span>Estimated Tonnage:</span>
+<span class="result-value" id="res-tons">0 Tons</span>
+</div>
+</div>
+</div>
+
+<details>
+<summary>How this calculator works</summary>
+<p>The calculator determines the heating requirement by multiplying the conditioned floor area by a baseline factor of 35 BTU per square foot, adjusted for local climate severity and envelope insulation quality. This output BTU demand is then divided by the Annual Fuel Utilization Efficiency (AFUE) rating to determine the necessary total input capacity of the furnace unit. Formula based on ASHRAE Handbook of Fundamentals and ACCA Manual J.</p>
+</details>
+
+<section class="content-section">
+<h2>How to Calculate Furnace Size</h2>
+<p>Determining the proper furnace size involves evaluating the heat loss profile of a residential building. Rather than relying solely on a generic square footage rule of thumb, accurate sizing requires factoring in regional climate intensity, thermal boundary integrity, window specifications, and air infiltration rates. A system that is oversized will cycle on and off too frequently—a phenomenon known as short-cycling—which causes excessive wear on components, uneven indoor temperatures, and poor humidity control. Conversely, an undersized furnace will run continuously during extreme cold snaps, failing to maintain comfortable thermostat setpoints and driving up utility expenses.</p>
+<p>To perform a manual estimate, contractors start with the base heating load calculation: multiplying conditioned square footage by 35 BTU, then applying multipliers corresponding to local climate severity zones and the overall quality of wall, roof, and floor insulation. Adjustments must also be made for ceiling height if it deviates significantly from standard 8-foot heights. For absolute precision, a comprehensive Manual J load calculation accounts for every directional exposure, thermal bridging through studs, and specific duct leakage parameters.</p>
+</section>
+
+<section class="content-section">
+<h2>What Affects Furnace Sizing</h2>
+<p>Multiple variables influence the actual heating capacity required to maintain thermal comfort inside a residential structure. The primary driver is geographical location; homes situated in northern, heating-dominated climates require significantly higher thermal inputs per square foot compared to structures built in milder southern zones.</p>
+<p>Envelope construction quality plays an equally vital role. Superior insulation materials, tightly sealed vapour barriers, energy-efficient multi-pane windows, and minimal air leakage rates drastically reduce overall thermal transmission and heat loss. Conversely, older homes with minimal wall insulation, unsealed rim joists, and single-pane windows demand heavy-duty heating equipment. Additionally, architectural features such as vaulted ceilings, open-concept lofts, and extensive sunrooms increase the total conditioned volume of air, necessitating larger furnace input ratings to compensate for thermal stratification and larger mass volumes.</p>
+</section>
+
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>What happens if I install a furnace that is too large?</h3>
+<p>An oversized furnace heats the home far too quickly, satisfying the thermostat before the heat has time to distribute evenly through the ductwork. This causes short-cycling, which wears out the heat exchanger and blower motor prematurely while causing uncomfortable temperature swings and high humidity levels.</p>
+<h3>How does climate zone impact furnace selection?</h3>
+<p>Climate zones dictate the design temperature difference between the coldest expected outdoor winter air and your desired indoor temperature. Colder zones require larger multipliers to account for the rapid rate of heat transfer out of the building envelope through conduction and infiltration.</p>
+<h3>Can I replace my old furnace with one of the exact same physical size?</h3>
+<p>Not recommended. Older furnaces were frequently oversized by contractors using rough estimates. Furthermore, if you have recently upgraded your home insulation, replaced windows, or sealed air leaks, your current heating load may be substantially lower than when the original system was installed.</p>
+</section>
+
+</div>
+</main>
+
+<footer>
+<nav>
+<a href="#home">Home</a>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+<a href="#privacy">Privacy</a>
+</nav>
+<p class="citation">Formula source: ASHRAE Handbook of Fundamentals and ACCA Manual J. Results are estimates for planning — verify with a licensed professional before ordering materials.</p>
+<p style="margin-top:1rem;font-size:0.8rem;color:#64748b;">© 2026 CalcBlueprint. All rights reserved.</p>
+</footer>
+
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(unit) {
+currentUnit = unit;
+const sqftInput = document.getElementById('sqft');
+const labelSqft = document.getElementById('label-sqft');
+const btnImp = document.getElementById('btn-imperial');
+const btnMet = document.getElementById('btn-metric');
+
+if (unit === 'metric') {
+btnImp.classList.remove('active');
+btnMet.classList.add('active');
+labelSqft.textContent = 'Home Floor Area (square meters)';
+if(sqftInput.value && sqftInput.value != 2000) {
+sqftInput.value = Math.round(sqftInput.value * 0.092903);
+} else {
+sqftInput.value = 185;
+}
+} else {
+btnMet.classList.remove('active');
+btnImp.classList.add('active');
+labelSqft.textContent = 'Home Square Footage (sq ft)';
+if(sqftInput.value && sqftInput.value != 185) {
+sqftInput.value = Math.round(sqftInput.value / 0.092903);
+} else {
+sqftInput.value = 2000;
+}
+}
+}
+
+function calculateFurnace() {
+let area = parseFloat(document.getElementById('sqft').value);
+const climateMultiplier = parseFloat(document.getElementById('climate').value);
+const insulationFactor = parseFloat(document.getElementById('insulation').value);
+const afue = parseFloat(document.getElementById('afue').value);
+
+if (isNaN(area) || area <= 0) {
+alert('Please enter a valid area value.');
+return;
+}
+
+// If metric, convert square meters to sq ft for the standard BTU calculation formula
+let sqftForCalc = currentUnit === 'metric' ? area * 10.7639 : area;
+
+let outputBTU = sqftForCalc * 35 * climateMultiplier * insulationFactor;
+let inputBTU = outputBTU / afue;
+let tonnage = outputBTU / 12000;
+
+document.getElementById('res-output').textContent = Math.round(outputBTU).toLocaleString() + ' BTU/hr';
+document.getElementById('res-input').textContent = Math.round(inputBTU).toLocaleString() + ' BTU/hr';
+document.getElementById('res-tons').textContent = tonnage.toFixed(1) + ' Tons';
+
+document.getElementById('resultBox').style.display = 'block';
+}
+</script>
+
+</body>
+</html>

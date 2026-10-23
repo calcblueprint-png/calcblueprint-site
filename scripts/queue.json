@@ -293,7 +293,8 @@
     "description": "Calculate the correct furnace size for your home. Based on square footage, climate, and insulation.",
     "inputs": "Home square footage, climate zone, insulation quality, ceiling height",
     "formula": "Output BTU = square_footage * 35 * climate_multiplier * insulation_factor. Furnace input = output / AFUE.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-23T07:06:16.713626Z"
   },
   {
     "slug": "duct-size-calculator",
