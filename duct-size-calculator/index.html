@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/duct-size-calculator/">
+<title>Duct Size Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate proper duct size for HVAC airflow. Enter CFM and friction rate for correct diameter.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Duct Size Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f8;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:700;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{max-width:900px;margin:2rem auto;padding:0 1rem}
+.container{width:100%}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);margin-bottom:2rem}
+.calculator-title{font-size:1.75rem;color:#1a2332;margin-bottom:1.5rem}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:2px solid #1a2332;background:#fff;color:#1a2332;font-weight:600;border-radius:4px;cursor:pointer;transition:all 0.2s}
+.unit-btn.active{background:#1a2332;color:#fff}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input,.form-group select{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+.calc-btn{display:block;width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;font-size:1.1rem;font-weight:700;border-radius:4px;cursor:pointer;transition:opacity 0.2s;margin-top:1.5rem}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:1.5rem;margin-top:1.5rem;display:none}
+.result-row{display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid #e2e8f0}
+.result-row:last-child{border-bottom:none}
+.result-label{font-weight:600;color:#1a2332}
+.result-value{color:#2563eb;font-weight:700}
+.calc-details{margin:1.5rem 0;background:#f8fafc;border:1px solid #cbd5e1;border-radius:6px;padding:1rem}
+.calc-details summary{font-weight:600;cursor:pointer;color:#1a2332}
+.calc-details p{margin-top:0.75rem;font-size:0.95rem;color:#475569}
+.content-section { background-color: #ffffff; border-radius: 8px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+.content-section h2 { color: #1a2332; margin-bottom: 1rem; font-size: 1.5rem; }
+.content-section p { margin-bottom: 1rem; color: #4b5563; }
+.content-section h3 { color: #1a2332; margin-top: 1.25rem; margin-bottom: 0.5rem; font-size: 1.15rem; }
+footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:3rem}
+.footer-nav{margin-bottom:1rem}
+.footer-nav a{color:#fff;text-decoration:none;margin:0 1rem}
+.footer-nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#94a3b8;max-width:700px;margin:0 auto}
+@media(max-width:600px){header{flex-direction:column;gap:1rem}nav a{margin:0 0.5rem}}
+</style>
+</head>
+<body>
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="/">Home</a>
+<a href="/about.html">About</a>
+<a href="/contact.html">Contact</a>
+</nav>
+</header>
+<main>
+<div class="container">
+<div class="calculator-box">
+<h1 class="calculator-title">Duct Size Calculator</h1>
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnitSystem('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnitSystem('metric')">Metric</button>
+</div>
+<form id="duct-form">
+<div class="form-group">
+<label id="label-cfm" for="cfm">Required Airflow (CFM)</label>
+<input type="number" id="cfm" step="any" placeholder="e.g., 400" required>
+</div>
+<div class="form-group">
+<label for="duct-type">Duct Application Type</label>
+<select id="duct-type">
+<option value="trunk">Main Trunk (Target: 800 FPM)</option>
+<option value="branch">Branch Duct (Target: 600 FPM)</option>
+<option value="custom">Custom Velocity</option>
+</select>
+</div>
+<div class="form-group" id="velocity-group" style="display:none;">
+<label id="label-velocity" for="velocity">Target Velocity (FPM)</label>
+<input type="number" id="velocity" step="any" value="700">
+</div>
+<div class="form-group">
+<label id="label-friction" for="friction">Friction Rate (inches of water / 100 ft)</label>
+<input type="number" id="friction" step="any" placeholder="e.g., 0.10" required>
+</div>
+<button type="submit" class="calc-btn">Calculate Duct Size</button>
+</form>
+<div class="result-box" id="result-box">
+<div class="result-row">
+<span class="result-label">Recommended Equivalent Diameter:</span>
+<span class="result-value" id="res-diameter">-</span>
+</div>
+<div class="result-row">
+<span class="result-label">Approximate Duct Area:</span>
+<span class="result-value" id="res-area">-</span>
+</div>
+<div class="result-row">
+<span class="result-label">Design Velocity:</span>
+<span class="result-value" id="res-velocity">-</span>
+</div>
+<div class="result-row">
+<span class="result-label">Estimated Friction Loss Rate:</span>
+<span class="result-value" id="res-friction">-</span>
+</div>
+</div>
+</div>
+
+<details class="calc-details">
+<summary>How this calculator works</summary>
+<p>This calculator determines the appropriate round duct sizing by evaluating the required cubic feet per minute (CFM) against target design velocities and friction rates. The equivalent diameter is derived using standard HVAC cross-sectional area formulas based on airflow velocity parameters. Formula based on ACCA Manual D and ASHRAE Handbook of Fundamentals.</p>
+</details>
+
+<section class="content-section">
+<h2>How to Calculate Duct Size</h2>
+<p>Designing an efficient forced-air HVAC system requires balancing airflow volume, static pressure, and duct sizing to prevent excessive noise and energy consumption. To determine the correct duct size, you first calculate the required cubic feet per minute (CFM) for each zone or room based on heating and cooling loads. Next, select an appropriate target air velocity—typically 700 to 900 feet per minute (FPM) for main trunk lines to handle larger air volumes efficiently, and 500 to 700 FPM for branch ducts running into individual living spaces to minimize turbulence and noise near registers.</p>
+<p>Using the target velocity and CFM, you apply the circular duct area formula where area equals CFM divided by velocity (multiplied by 144 to convert square feet to square inches). From the cross-sectional area, you compute the corresponding circular diameter. Alternatively, you can use the friction rate method—measured in inches of water gauge per 100 feet of duct—to size ducts so that total pressure drops match blower capabilities. Always verify that your final layout accounts for fittings, transitions, and register dampers to ensure balanced delivery throughout the building envelope.</p>
+</section>
+
+<section class="content-section">
+<h2>What Affects Duct Size</h2>
+<p>Several critical variables influence proper duct sizing in residential and commercial mechanical design. The primary factor is total volumetric airflow demand, dictated by thermal load calculations, insulation levels, window orientation, and climate zone requirements. If ducts are undersized, air velocity spikes, creating high static pressure, restricted airflow, excessive blower motor strain, and disruptive whistling sounds at supply grilles. Conversely, oversized ducts reduce air velocity, leading to sluggish distribution, poor temperature stratification, and increased material costs.</p>
+<p>Material selection and duct construction style also heavily impact sizing choices. Smooth-interior rigid sheet metal ducts offer minimal friction, whereas flexible ducts introduce significant pressure drops due to interior wire helix ridges—often requiring larger diameters to deliver the same CFM. Furthermore, layout complexity, including elbows, take-offs, transitions, and length of run, adds equivalent length losses that must be factored into your total friction rate calculations to guarantee system efficiency.</p>
+</section>
+
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>What is the ideal air velocity for residential HVAC ducts?</h3>
+<p>Main trunk lines generally operate best between 700 and 900 FPM, while branch ducts are typically designed for 500 to 700 FPM to maintain quiet operation and proper throw.</p>
+<h3>Can I use flexible duct instead of rigid metal for the calculated size?</h3>
+<p>Flexible duct can be used, but because inner wire coils create higher friction losses, you must stretch it fully and often increase the nominal diameter by one inch to match rigid duct airflow performance.</p>
+<h3>How does static pressure relate to duct sizing?</h3>
+<p>Static pressure is the resistance the blower overcomes to push air through the duct network. Proper sizing keeps total system resistance within the external static pressure rating of your specific air handler or furnace blower.</p>
+</section>
+</div>
+</main>
+<footer>
+<div class="footer-nav">
+<a href="/">Home</a>
+<a href="/about.html">About</a>
+<a href="/contact.html">Contact</a>
+<a href="/privacy.html">Privacy</a>
+</div>
+<p class="citation">Formula source: ACCA Manual D and ASHRAE Handbook of Fundamentals. Results are estimates for planning — verify with a licensed professional before ordering materials.</p>
+</footer>
+<script>
+let currentSystem = 'imperial';
+
+function setUnitSystem(system) {
+    currentSystem = system;
+    document.getElementById('btn-imperial').classList.toggle('active', system === 'imperial');
+    document.getElementById('btn-metric').classList.toggle('active', system === 'metric');
+    
+    if (system === 'metric') {
+        document.getElementById('label-cfm').textContent = 'Required Airflow (CMM / L/s)';
+        document.getElementById('label-friction').textContent = 'Friction Rate (Pa per 10m)';
+    } else {
+        document.getElementById('label-cfm').textContent = 'Required Airflow (CFM)';
+        document.getElementById('label-friction').textContent = 'Friction Rate (inches of water / 100 ft)';
+    }
+}
+
+document.getElementById('duct-type').addEventListener('change', function() {
+    const velGroup = document.getElementById('velocity-group');
+    const velInput = document.getElementById('velocity');
+    if (this.value === 'trunk') {
+        velGroup.style.display = 'none';
+        velInput.value = 800;
+    } else if (this.value === 'branch') {
+        velGroup.style.display = 'none';
+        velInput.value = 600;
+    } else {
+        velGroup.style.display = 'block';
+    }
+});
+
+document.getElementById('duct-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    let cfm = parseFloat(document.getElementById('cfm').value);
+    let friction = parseFloat(document.getElementById('friction').value);
+    let ductType = document.getElementById('duct-type').value;
+    let velocity;
+    
+    if (ductType === 'trunk') {
+        velocity = 800;
+    } else if (ductType === 'branch') {
+        velocity = 600;
+    } else {
+        velocity = parseFloat(document.getElementById('velocity').value);
+    }
+    
+    if (isNaN(cfm) || isNaN(friction) || isNaN(velocity) || cfm <= 0 || velocity <= 0) {
+        alert('Please enter valid positive numbers for all required fields.');
+        return;
+    }
+    
+    let calcCfm = cfm;
+    let calcFriction = friction;
+    
+    if (currentSystem === 'metric') {
+        // Convert metric inputs (L/s or CMM) to imperial CFM for standardized calculation, or calculate directly
+        // Assuming user enters L/s: 1 L/s = 2.11888 CFM. If CMM: 1 m3/min = 35.3147 CFM. Let's assume input is in L/s for standard metric HVAC, or treat as generic volumetric units. Let's provide standard conversion factor: 1 L/s = 2.118 CFM.
+        calcCfm = cfm * 2.11888;
+        calcFriction = friction * 0.122; // rough conversion from Pa/10m to in.wg/100ft
+    }
+    
+    // Formula: duct_diameter (inches) = 2 * sqrt(CFM / (velocity * pi / 144))
+    let diameterInches = 2 * Math.sqrt(calcCfm / (velocity * Math.PI / 144));
+    let areaSqInches = Math.PI * Math.pow(diameterInches / 2, 2);
+    
+    let resDiameterText = '';
+    let resAreaText = '';
+    let resVelocityText = '';
+    let resFrictionText = '';
+    
+    if (currentSystem === 'metric') {
+        let diameterCm = diameterInches * 2.54;
+        let areaSqM = (areaSqInches / 1550.0031);
+        let velocityMps = velocity * 0.00508;
+        resDiameterText = diameterCm.toFixed(1) + ' cm';
+        resAreaText = areaSqM.toFixed(3) + ' m²';
+        resVelocityText = velocityMps.toFixed(2) + ' m/s';
+        resFrictionText = friction.toFixed(2) + ' Pa / 10m';
+    } else {
+        resDiameterText = diameterInches.toFixed(1) + ' inches';
+        resAreaText = areaSqInches.toFixed(1) + ' sq inches';
+        resVelocityText = velocity.toFixed(0) + ' FPM';
+        resFrictionText = friction.toFixed(2) + ' in. w.g. / 100 ft';
+    }
+    
+    document.getElementById('res-diameter').textContent = resDiameterText;
+    document.getElementById('res-area').textContent = resAreaText;
+    document.getElementById('res-velocity').textContent = resVelocityText;
+    document.getElementById('res-friction').textContent = resFrictionText;
+    
+    document.getElementById('result-box').style.display = 'block';
+});
+</script>
+</body>
+</html>

@@ -302,7 +302,8 @@
     "description": "Calculate proper duct size for HVAC airflow. Enter CFM and friction rate for correct diameter.",
     "inputs": "Required CFM, friction rate (inches of water per 100 ft)",
     "formula": "Approximate: duct_diameter (inches) = 2 * sqrt(CFM / (velocity * pi / 144)). Target velocity: 700-900 fpm for trunk, 500-700 for branches.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-24T06:57:25.152183Z"
   },
   {
     "slug": "electrical-load-calculator",
