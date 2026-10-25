@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/electrical-load-calculator/">
+<title>Electrical Load Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate the electrical load for a home or addition. Determines service panel requirements.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Electrical Load Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{color:#fff;font-size:1.5rem;font-weight:700;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+.container{max-width:800px;margin:2rem auto;padding:0 1rem}
+.calculator-box{background:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem;background:#f4f6f9;padding:0.25rem;border-radius:6px}
+.unit-btn{flex:1;padding:0.5rem;border:none;background:transparent;cursor:pointer;font-weight:600;border-radius:4px;color:#555}
+.unit-btn.active{background:#f5a623;color:#1a2332}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+.form-group input:focus{outline:none;border-color:#f5a623}
+.calc-btn{width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;font-size:1rem;font-weight:700;border-radius:4px;cursor:pointer;margin-top:1rem}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#1a2332;color:#fff;border-radius:8px;padding:2rem;margin-top:2rem;display:none}
+.result-box h3{color:#f5a623;margin-bottom:1rem;font-size:1.25rem}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.1)}
+.result-row:last-child{border-bottom:none}
+.details-box{background:#ffffff;border-radius:8px;padding:1.5rem 2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+.details-box summary{font-weight:700;cursor:pointer;color:#1a2332}
+.details-box p{margin-top:1rem;color:#555}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
+.content-section h3{color:#1a2332;margin:1.25rem 0 0.5rem 0;font-size:1.1rem}
+.content-section p{margin-bottom:1rem;color:#444}
+footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:4rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#fff;margin:0 0.75rem;text-decoration:none}
+footer nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#aaa;max-width:600px;margin:0 auto}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Calc<span>Blueprint</span></a>
+  <nav>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <div class="container">
+    <div class="calculator-box">
+      <h1 style="color:#1a2332;margin-bottom:1.5rem;font-size:1.75rem;">Electrical Load Calculator</h1>
+      
+      <div class="unit-toggle">
+        <button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+        <button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+      </div>
+
+      <div class="form-group">
+        <label id="lbl-area" for="area">Living Area (Square Feet)</label>
+        <input type="number" id="area" placeholder="e.g., 2000" min="0" step="any">
+      </div>
+
+      <div class="form-group">
+        <label for="smallApp">Number of Small Appliance Circuits</label>
+        <input type="number" id="smallApp" placeholder="e.g., 2" min="0" step="1">
+      </div>
+
+      <div class="form-group">
+        <label for="laundry">Number of Laundry Circuits</label>
+        <input type="number" id="laundry" placeholder="e.g., 1" min="0" step="1">
+      </div>
+
+      <div class="form-group">
+        <label for="largeApp">Large Appliances Total Rating (kW)</label>
+        <input type="number" id="largeApp" placeholder="e.g., 12" min="0" step="any">
+      </div>
+
+      <button type="button" class="calc-btn" onclick="calculateLoad()">Calculate Electrical Load</button>
+
+      <div class="result-box" id="resultBox">
+        <h3>Calculation Results</h3>
+        <div class="result-row">
+          <span>General Lighting Load:</span>
+          <strong id="resLighting">0 VA</strong>
+        </div>
+        <div class="result-row">
+          <span>Appliance & Laundry Load:</span>
+          <strong id="resAppliance">0 VA</strong>
+        </div>
+        <div class="result-row">
+          <span>Large Appliances Load:</span>
+          <strong id="resLarge">0 VA</strong>
+        </div>
+        <div class="result-row">
+          <span>Total Calculated Load (Demand Adjusted):</span>
+          <strong id="resTotalVA">0 VA</strong>
+        </div>
+        <div class="result-row">
+          <span>Minimum Service Amperage (240V):</span>
+          <strong id="resAmps">0 A</strong>
+        </div>
+        <div class="result-row">
+          <span>Recommended Service Panel Size:</span>
+          <strong id="resPanel">0 A</strong>
+        </div>
+      </div>
+    </div>
+
+    <details class="details-box">
+      <summary>How this calculator works</summary>
+      <p>This calculator determines residential electrical service requirements by assessing general lighting load based on square footage (3 VA per sq ft), standard small appliance and laundry circuits at 1,500 VA each, and fixed heavy-duty appliances. Standard demand factors are applied to the general lighting and small appliance loads, and the resulting aggregate VA is divided by 240 volts to establish the minimum continuous load amperage. Formula based on NEC (National Electrical Code) and NFPA 70.</p>
+    </details>
+
+    <section class="content-section">
+      <h2>How to Calculate Electrical Load</h2>
+      <p>Determining the correct electrical load for a home or addition is a fundamental step in designing a safe and reliable electrical distribution system. The calculation begins by evaluating the general lighting demand of the structure, which is standardized at 3 volt-amperes (VA) per square foot of living space. Next, specific branch circuits designated for small appliances in kitchens and pantries, as well as dedicated laundry circuits, are factored in at 1,500 VA each. Heavy fixed appliances—such as electric ranges, water heaters, and HVAC systems—are added using their nameplate rating values in kilowatts (kW).</p>
+      <p>Once the individual loads are compiled, standard demand factors prescribed by electrical safety codes are applied to account for the reality that all household lights and appliances are rarely operated at maximum capacity simultaneously. The first 3,000 VA of general lighting and small appliance load is calculated at 100% demand, while the remaining balance is calculated at a reduced 35% demand factor. Finally, the total adjusted volt-amperes are divided by the standard residential voltage of 240 volts to determine the minimum required service amperage, guiding whether a 100-amp, 200-amp, or larger service panel must be installed.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>What Affects Electrical Load</h2>
+      <p>Several variables directly influence the overall electrical load calculation for a residential building. Square footage is the most impactful baseline metric, as larger living spaces inherently require more extensive illumination, more general-purpose receptacles, and larger distribution networks. The prevalence of modern electrical conveniences—such as tankless water heaters, electric vehicle (EV) charging stations, heat pump HVAC systems, and high-end kitchen appliances—can drastically spike the connected load and necessitate service upgrades beyond traditional minimum standards.</p>
+      <p>Geographic climate also plays a critical role in sizing electrical services. Homes located in extreme climates rely heavily on electric resistance heating, central air conditioning, or multi-zone heat pumps, all of which draw substantial continuous current. Furthermore, future-proofing considerations are vital; modern installations frequently account for anticipated additions like detached workshops, home automation hubs, or solar-plus-storage integration, ensuring the chosen service panel can handle expanded electrical demands without overloading.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>Frequently Asked Questions</h2>
+      
+      <h3>What size electrical panel do I need for a standard home?</h3>
+      <p>Most modern single-family homes require a minimum 200-amp service panel to adequately support contemporary electrical loads, including central air conditioning, electric ranges, and modern electronics. Smaller homes or additions may qualify for 100-amp or 125-amp services, depending on the aggregate load calculation.</p>
+      
+      <h3>Are small appliance circuits calculated differently than general lighting?</h3>
+      <p>General lighting is calculated using a strict multiplier based on the square footage of the habitable area (3 VA per square foot). Small appliance circuits (minimum two required for kitchen areas) and laundry circuits are assigned fixed values of 1,500 VA each before demand factors are applied.</p>
+      
+      <h3>How do demand factors reduce the total calculated electrical load?</h3>
+      <p>Demand factors recognize that a home's entire electrical infrastructure is never utilized at 100% capacity all at once. By applying reduced percentages to portions of the lighting and appliance loads—such as 35% for general loads beyond the initial 3,000 VA—the calculation yields a realistic peak demand figure rather than an exaggerated theoretical maximum.</p>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+    <a href="/privacy/">Privacy</a>
+  </nav>
+  <div class="citation">Formula source: NEC (National Electrical Code) and NFPA 70. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.</div>
+</footer>
+
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(unit) {
+  currentUnit = unit;
+  const btnImp = document.getElementById('btn-imperial');
+  const btnMet = document.getElementById('btn-metric');
+  const lblArea = document.getElementById('lbl-area');
+  const areaInput = document.getElementById('area');
+
+  if (unit === 'imperial') {
+    btnImp.classList.add('active');
+    btnMet.classList.remove('active');
+    lblArea.textContent = 'Living Area (Square Feet)';
+    if(areaInput.value) {
+      areaInput.value = (parseFloat(areaInput.value) * 10.7639).toFixed(1);
+    }
+  } else {
+    btnMet.classList.add('active');
+    btnImp.classList.remove('active');
+    lblArea.textContent = 'Living Area (Square Meters)';
+    if(areaInput.value) {
+      areaInput.value = (parseFloat(areaInput.value) / 10.7639).toFixed(1);
+    }
+  }
+}
+
+function calculateLoad() {
+  let rawArea = parseFloat(document.getElementById('area').value) || 0;
+  const smallAppCount = parseFloat(document.getElementById('smallApp').value) || 0;
+  const laundryCount = parseFloat(document.getElementById('laundry').value) || 0;
+  const largeAppKW = parseFloat(document.getElementById('largeApp').value) || 0;
+
+  // Convert metric sq meters to sq feet if metric selected
+  let sqFeet = currentUnit === 'metric' ? rawArea * 10.7639 : rawArea;
+
+  // Formulas
+  // General lighting: 3 VA per sq ft
+  let generalLightingVA = sqFeet * 3;
+
+  // Small appliance & laundry: 1500 VA each
+  let smallAppVA = smallAppCount * 1500;
+  let laundryVA = laundryCount * 1500;
+
+  let lightingAndSmallAppTotal = generalLightingVA + smallAppVA + laundryVA;
+
+  // Demand factor standard application:
+  // First 3000 VA at 100%, remainder at 35%
+  let demandAdjustedGeneral = 0;
+  if (lightingAndSmallAppTotal <= 3000) {
+    demandAdjustedGeneral = lightingAndSmallAppTotal;
+  } else {
+    demandAdjustedGeneral = 3000 + (lightingAndSmallAppTotal - 3000) * 0.35;
+  }
+
+  // Large appliances in VA (kW * 1000)
+  let largeAppVAVal = largeAppKW * 1000;
+
+  // Total VA
+  let totalVA = demandAdjustedGeneral + largeAppVAVal;
+
+  // Amps = Total VA / 240
+  let totalAmps = totalVA / 240;
+
+  // Determine standard panel size
+  let panelSize = 100;
+  if (totalAmps > 200) {
+    panelSize = 400;
+  } else if (totalAmps > 150) {
+    panelSize = 200; // or 225
+  } else if (totalAmps > 100) {
+    panelSize = 150;
+  } else {
+    panelSize = 100;
+  }
+
+  // Display results
+  document.getElementById('resLighting').textContent = generalLightingVA.toLocaleString('en-US', {maximumFractionDigits: 0}) + ' VA';
+  document.getElementById('resAppliance').textContent = (smallAppVA + laundryVA).toLocaleString('en-US', {maximumFractionDigits: 0}) + ' VA';
+  document.getElementById('resLarge').textContent = largeAppVAVal.toLocaleString('en-US', {maximumFractionDigits: 0}) + ' VA';
+  document.getElementById('resTotalVA').textContent = totalVA.toLocaleString('en-US', {maximumFractionDigits: 0}) + ' VA';
+  document.getElementById('resAmps').textContent = totalAmps.toFixed(1) + ' A';
+  document.getElementById('resPanel').textContent = panelSize + ' A Service Panel';
+
+  document.getElementById('resultBox').style.display = 'block';
+}
+</script>
+
+</body>
+</html>

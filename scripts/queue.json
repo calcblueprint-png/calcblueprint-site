@@ -311,7 +311,8 @@
     "description": "Calculate the electrical load for a home or addition. Determines service panel requirements.",
     "inputs": "Square footage, number of small appliance circuits, number of laundry circuits, large appliances kW",
     "formula": "General lighting = 3 watts per sq ft. Small appliance circuits: 1500 VA each. Laundry: 1500 VA. Apply demand factors. Total / 240 = amps.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-25T07:21:21.953924Z"
   },
   {
     "slug": "wire-size-calculator",
