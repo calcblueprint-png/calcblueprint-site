@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/wire-size-calculator/">
+<title>Wire Size Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate the correct wire gauge for electrical runs. Based on amperage, distance, and voltage drop.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Wire Size Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:700;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2rem 1rem;max-width:900px;margin:0 auto}
+.container{width:100%}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:1px solid #ccc;background:#fff;cursor:pointer;font-weight:600;border-radius:4px;text-align:center}
+.unit-btn.active{background:#f5a623;color:#1a2332;border-color:#f5a623}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;font-size:0.95rem}
+.form-group input,.form-group select{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+.calc-btn{background:#f5a623;color:#1a2332;border:none;width:100%;padding:1rem;font-size:1rem;font-weight:700;border-radius:4px;cursor:pointer;margin-top:1rem}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;padding:1.5rem;margin-top:1.5rem;display:none}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #e5e7eb;font-size:1rem}
+.result-row:last-child{border-bottom:none}
+.result-value{font-weight:700;color:#1a2332}
+details{background:#fff;border-radius:8px;padding:1.5rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);cursor:pointer}
+summary{font-weight:700;font-size:1.1rem;color:#1a2332}
+details p{margin-top:1rem;color:#555}
+.content-section { background-color: #ffffff; border-radius: 8px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+.content-section h2 { margin-bottom: 1rem; color: #1a2332; }
+.content-section h3 { margin-top: 1.2rem; margin-bottom: 0.4rem; color: #1a2332; font-size: 1.1rem; }
+.content-section p { margin-bottom: 1rem; color: #555; }
+footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:3rem;font-size:0.9rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#fff;margin:0 1rem;text-decoration:none}
+footer nav a:hover{color:#f5a623}
+.citation{color:#aaa;font-size:0.8rem;max-width:700px;margin:0 auto}
+@media(max-width:600px){header{flex-direction:column;gap:1rem}}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Calc<span>Blueprint</span></a>
+  <nav>
+    <a href="/">Home</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <div class="container">
+    <div class="calculator-box">
+      <h1 style="margin-bottom:1.5rem;color:#1a2332;">Wire Size Calculator</h1>
+      
+      <div class="unit-toggle">
+        <button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnitSystem('imperial')">Imperial (US)</button>
+        <button type="button" class="unit-btn" id="btn-metric" onclick="setUnitSystem('metric')">Metric</button>
+      </div>
+
+      <div class="form-group">
+        <label id="label-amps" for="amperage">Amperage (Amps)</label>
+        <input type="number" id="amperage" placeholder="e.g., 30" min="1" step="any">
+      </div>
+
+      <div class="form-group">
+        <label id="label-distance" for="distance">Distance (Feet)</label>
+        <input type="number" id="distance" placeholder="e.g., 75" min="1" step="any">
+      </div>
+
+      <div class="form-group">
+        <label for="voltage">System Voltage</label>
+        <select id="voltage">
+          <option value="120">120V (Single Phase)</option>
+          <option value="240" selected>240V (Single Phase)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="allowable-drop">Allowable Voltage Drop (%)</label>
+        <input type="number" id="allowable-drop" value="3" min="0.5" max="10" step="0.5">
+      </div>
+
+      <button type="button" class="calc-btn" onclick="calculateWireSize()">Calculate Wire Size</button>
+
+      <div class="result-box" id="result-box">
+        <div class="result-row">
+          <span>Recommended Wire Gauge (AWG / Metric):</span>
+          <span class="result-value" id="res-gauge">-</span>
+        </div>
+        <div class="result-row">
+          <span>Estimated Voltage Drop:</span>
+          <span class="result-value" id="res-vdrop">-</span>
+        </div>
+        <div class="result-row">
+          <span>Maximum Circuit Ampacity:</span>
+          <span class="result-value" id="res-ampacity">-</span>
+        </div>
+      </div>
+    </div>
+
+    <details>
+      <summary>How this calculator works</summary>
+      <p>This calculator determines the appropriate copper conductor size by evaluating both NEC ampacity requirements and voltage drop over distance. For runs exceeding fifty feet, it calculates circular mil requirements based on current, conductor resistivity, and your target voltage drop threshold, automatically rounding up to the nearest standard wire gauge. Formula based on NEC (National Electrical Code) and NFPA 70.</p>
+    </details>
+
+    <section class="content-section">
+      <h2>How to Calculate Wire Size</h2>
+      <p>Determining the correct wire size for an electrical installation requires balancing current-carrying capacity against voltage loss over distance. Electrical current traveling through long wire runs encounters resistance, which converts electrical energy into heat and results in a voltage drop at the load end. To find the minimum acceptable conductor size, electricians evaluate the continuous load amperage, the one-way distance of the run, the system operating voltage, and the maximum permissible voltage drop percentage, which is typically restricted to three percent for branch circuits.</p>
+      <p>The calculation utilizes standard copper or aluminum resistivity constants factored against the total conductor length (round trip). First, the base ampacity is checked against National Electrical Code tables to ensure the wire can safely handle the current without overheating insulation. Next, the voltage drop formula computes the required cross-sectional area in circular mils. Finally, the calculated value is cross-referenced with standard American Wire Gauge sizes and rounded up to the nearest commercially available rating to ensure system safety and efficiency.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>What Affects Wire Size</h2>
+      <p>Several critical electrical and environmental factors directly dictate the necessary wire gauge for any given circuit. Amperage load is the primary driver; higher current demands physically thicker conductors to prevent excessive thermal buildup. Distance is equally influential because electrical resistance accumulates proportionally with length, meaning longer runs demand substantially larger wire sizes to combat severe voltage degradation.</p>
+      <p>Conductor material also plays a major role, as copper offers superior conductivity compared to aluminum, allowing smaller gauges for equivalent loads. Additionally, ambient temperature ratings, conduit fill counts, and insulation types impose ampacity correction factors that can force an installer to step up wire thickness to maintain compliance with safety codes and prevent premature insulation failure.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>Frequently Asked Questions</h2>
+      <h3>Why does distance matter when sizing electrical wire?</h3>
+      <p>Every foot of electrical wire possesses inherent electrical resistance. As distance increases, cumulative resistance causes voltage to drop before reaching the connected equipment, potentially causing appliances to malfunction, motors to overheat, and efficiency to drop significantly.</p>
+      <h3>What is the maximum recommended voltage drop for branch circuits?</h3>
+      <p>Standard electrical practices and the National Electrical Code recommend keeping total voltage drop under three percent for combined feeder and branch circuits, with a maximum of two percent on branch circuits alone, ensuring optimal equipment performance.</p>
+      <h3>Can I use aluminum wire instead of copper to save money?</h3>
+      <p>Yes, aluminum wire is frequently used for large feeder and service entrance installations due to cost advantages. However, because aluminum has lower conductivity, it requires a larger gauge size than copper to carry equivalent current safely.</p>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <nav>
+    <a href="/">Home</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <a href="#privacy">Privacy</a>
+  </nav>
+  <div class="citation">
+    Formula source: NEC (National Electrical Code) and NFPA 70. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.
+  </div>
+</footer>
+
+<script>
+let currentUnit = 'imperial';
+
+function setUnitSystem(system) {
+  currentUnit = system;
+  const btnImp = document.getElementById('btn-imperial');
+  const btnMet = document.getElementById('btn-metric');
+  const lblDist = document.getElementById('label-distance');
+  const distInput = document.getElementById('distance');
+
+  if (system === 'imperial') {
+    btnImp.classList.add('active');
+    btnMet.classList.remove('active');
+    lblDist.textContent = 'Distance (Feet)';
+    if(distInput.value) {
+      distInput.value = (parseFloat(distInput.value) / 0.3048).toFixed(1);
+    }
+  } else {
+    btnMet.classList.add('active');
+    btnImp.classList.remove('active');
+    lblDist.textContent = 'Distance (Meters)';
+    if(distInput.value) {
+      distInput.value = (parseFloat(distInput.value) * 0.3048).toFixed(1);
+    }
+  }
+}
+
+function calculateWireSize() {
+  const amps = parseFloat(document.getElementById('amperage').value);
+  let distance = parseFloat(document.getElementById('distance').value);
+  const voltage = parseFloat(document.getElementById('voltage').value);
+  const allowableDropPercent = parseFloat(document.getElementById('allowable-drop').value);
+
+  if (!amps || !distance || isNaN(amps) || isNaN(distance)) {
+    alert('Please enter valid amperage and distance values.');
+    return;
+  }
+
+  if (currentUnit === 'metric') {
+    distance = distance / 0.3048; // convert meters to feet for standard calc
+  }
+
+  const allowableDropVolts = voltage * (allowableDropPercent / 100);
+  const resistivity = 12.9; // Copper resistivity constant ohm-CM/ft roughly
+
+  // Basic NEC Ampacity estimation for base copper wire sizing
+  let baseAWG = '14 AWG';
+  let maxAmp = 15;
+  if (amps <= 15) { baseAWG = '14 AWG'; maxAmp = 15; }
+  else if (amps <= 20) { baseAWG = '12 AWG'; maxAmp = 20; }
+  else if (amps <= 30) { baseAWG = '10 AWG'; maxAmp = 30; }
+  else if (amps <= 40) { baseAWG = '8 AWG'; maxAmp = 40; }
+  else if (amps <= 55) { baseAWG = '6 AWG'; maxAmp = 55; }
+  else if (amps <= 65) { baseAWG = '4 AWG'; maxAmp = 65; }
+  else if (amps <= 85) { baseAWG = '2 AWG'; maxAmp = 85; }
+  else { baseAWG = '1 AWG or larger'; maxAmp = 100; }
+
+  // Voltage drop formula calculation for circular mils: CM = (2 * K * I * L) / VD
+  let requiredCM = (2 * resistivity * amps * distance) / allowableDropVolts;
+
+  let finalGauge = baseAWG;
+  if (requiredCM > 4110) finalGauge = '14 AWG';
+  if (requiredCM > 6530) finalGauge = '12 AWG';
+  if (requiredCM > 10380) finalGauge = '10 AWG';
+  if (requiredCM > 16510) finalGauge = '8 AWG';
+  if (requiredCM > 26240) finalGauge = '6 AWG';
+  if (requiredCM > 41740) finalGauge = '4 AWG';
+  if (requiredCM > 52620) finalGauge = '3 AWG';
+  if (requiredCM > 66360) finalGauge = '2 AWG';
+  if (requiredCM > 83690) finalGauge = '1 AWG';
+  if (requiredCM > 105600) finalGauge = '1/0 AWG';
+  if (requiredCM > 133100) finalGauge = '2/0 AWG';
+  if (requiredCM > 167800) finalGauge = '3/0 AWG';
+  if (requiredCM > 211600) finalGauge = '4/0 AWG';
+
+  let estimatedVDVolts = (2 * distance * amps * resistivity) / requiredCM;
+  let estimatedVDPercent = (estimatedVDVolts / voltage) * 100;
+
+  document.getElementById('res-gauge').textContent = finalGauge;
+  document.getElementById('res-vdrop').textContent = estimatedVDVolts.toFixed(2) + 'V (' + estimatedVDPercent.toFixed(1) + '%)';
+  document.getElementById('res-ampacity').textContent = maxAmp + ' Amps (NEC Copper 75°C)';
+
+  document.getElementById('result-box').style.display = 'block';
+}
+</script>
+
+</body>
+</html>

@@ -320,7 +320,8 @@
     "description": "Calculate the correct wire gauge for electrical runs. Based on amperage, distance, and voltage drop.",
     "inputs": "Amperage, distance (feet), voltage (120 or 240), allowable voltage drop (3% typical)",
     "formula": "Use NEC ampacity charts for base size. For voltage drop over 50 ft: wire_size = 2 * length * amperage * resistivity / allowable_drop. Round up.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-26T07:30:45.608994Z"
   },
   {
     "slug": "breaker-size-calculator",
