@@ -338,7 +338,8 @@
     "description": "Calculate number of electrical outlets needed per room. Follows NEC spacing requirements.",
     "inputs": "Room length (feet), room width (feet), room type (kitchen, bedroom, living room, bathroom)",
     "formula": "NEC rule: no point along wall more than 6 feet from an outlet. Outlets = ceil(perimeter / 12). Kitchen counters: every 4 ft. Bathrooms: one per sink plus GFCI.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-28T08:00:00.984799Z"
   },
   {
     "slug": "shower-tile-calculator",

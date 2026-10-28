@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/outlet-spacing-calculator/">
+<title>Outlet Spacing Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate number of electrical outlets needed per room. Follows NEC spacing requirements.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background-color:#f4f6f9;color:#333333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{color:#ffffff;font-size:1.5rem;font-weight:bold;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#ffffff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2.5rem 1rem;max-width:900px;margin:0 auto}
+.container{width:100%}
+h1{color:#1a2332;margin-bottom:1.5rem;font-size:2rem}
+.calculator-box{background:#ffffff;border-radius:8px;padding:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);margin-bottom:1.5rem}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:1px solid #d1d5db;background:#f9fafb;border-radius:4px;cursor:pointer;font-weight:600;color:#4b5563;transition:all 0.2s}
+.unit-btn.active{background:#f5a623;color:#1a2332;border-color:#f5a623}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input, .form-group select{width:100%;padding:0.75rem;border:1px solid #d1d5db;border-radius:4px;font-size:1rem}
+.calc-btn{background:#f5a623;color:#1a2332;border:none;width:100%;padding:0.85rem;border-radius:4px;font-size:1rem;font-weight:bold;cursor:pointer;transition:opacity 0.2s;margin-top:0.5rem}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:1.5rem;margin-top:1.5rem;display:none}
+.result-box h3{color:#1a2332;margin-bottom:1rem}
+.result-row{display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid #e2e8f0}
+.result-row:last-child{border-bottom:none}
+.result-label{color:#4b5563;font-weight:500}
+.result-value{color:#1a2332;font-weight:700}
+details{background:#ffffff;border-radius:8px;padding:1.25rem;margin-bottom:2rem;box-shadow:0 2px 4px rgba(0,0,0,0.03);border:1px solid #e2e8f0}
+summary{font-weight:600;cursor:pointer;color:#1a2332}
+details p{margin-top:0.75rem;color:#4b5563;font-size:0.95rem}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 2px 4px rgba(0,0,0,0.03);border:1px solid #e2e8f0}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
+.content-section h3{color:#1a2332;margin-top:1.25rem;margin-bottom:0.5rem;font-size:1.1rem}
+.content-section p{margin-bottom:1rem;color:#4b5563}
+footer{background:#1a2332;color:#ffffff;text-align:center;padding:2rem;margin-top:3rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#f5a623;margin:0 0.75rem}
+.citation{font-size:0.85rem;color:#94a3b8;max-width:700px;margin:0 auto}
+@media (max-width:600px){header{flex-direction:column;gap:1rem}nav{margin-left:0}}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Outlet Spacing Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+</head>
+<body>
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="/">Home</a>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+</nav>
+</header>
+<main>
+<div class="container">
+<h1>Outlet Spacing Calculator</h1>
+<div class="calculator-box">
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnit('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnit('metric')">Metric</button>
+</div>
+<div class="form-group">
+<label id="label-length" for="room-length">Room Length (feet)</label>
+<input type="number" id="room-length" step="0.1" min="0" placeholder="e.g., 15">
+</div>
+<div class="form-group">
+<label id="label-width" for="room-width">Room Width (feet)</label>
+<input type="number" id="room-width" step="0.1" min="0" placeholder="e.g., 12">
+</div>
+<div class="form-group">
+<label for="room-type">Room Type</label>
+<select id="room-type">
+<option value="living">Living Room / Bedroom / General</option>
+<option value="kitchen">Kitchen (Countertops & Walls)</option>
+<option value="bathroom">Bathroom</option>
+</select>
+</div>
+<button type="button" class="calc-btn" onclick="calculateOutlets()">Calculate Outlets</button>
+<div class="result-box" id="result-box">
+<h3>Calculation Results</h3>
+<div class="result-row">
+<span class="result-label" id="res-label-perimeter">Room Perimeter:</span>
+<span class="result-value" id="res-perimeter">0 ft</span>
+</div>
+<div class="result-row">
+<span class="result-label">General Receptacles Required:</span>
+<span class="result-value" id="res-general">0</span>
+</div>
+<div class="result-row" id="row-special" style="display:none;">
+<span class="result-label" id="res-special-label">Special Receptacles Required:</span>
+<span class="result-value" id="res-special">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Total Outlets Recommended:</span>
+<span class="result-value" id="res-total">0</span>
+</div>
+</div>
+</div>
+<details>
+<summary>How this calculator works</summary>
+<p>This calculator determines the minimum number of electrical receptacles required in a room based on the National Electrical Code (NEC) standard rule that no point along a wall can be more than 6 feet away from an outlet. For standard rooms, the perimeter is divided by 12. Kitchens and bathrooms incorporate dedicated spacing regulations for countertops and plumbing fixtures.</p>
+<p>Formula based on NEC (National Electrical Code) and NFPA 70.</p>
+</details>
+<section class="content-section">
+<h2>How to Calculate Electrical Outlet Spacing</h2>
+<p>Planning electrical layouts requires strict adherence to safety standards and building regulations. For general living spaces, bedrooms, and dens, the National Electrical Code dictates that any continuous wall space measuring 2 feet or wider must feature a receptacle. Furthermore, no point measured horizontally along the floor line of any wall space can be more than 6 feet from an outlet. This ensures that standard appliance and lamp cords easily reach power sources without requiring hazardous extension cords.</p>
+<p>To compute the baseline general-purpose receptacles for a standard room, you determine the total room perimeter in feet and divide by 12, rounding up to the next whole integer. Specialized spaces like kitchens and bathrooms use distinct criteria. Kitchen counters require receptacles along wall spaces 12 inches or wider so that no point along the counter edge is more than 24 inches from an outlet. Bathrooms must have at least one receptacle located within 3 feet of the outside edge of each basin, protected by a GFCI.</p>
+</section>
+<section class="content-section">
+<h2>What Affects Outlet Requirements</h2>
+<p>Several architectural features and room classifications alter basic electrical distribution calculations. Doorways, large floor-to-ceiling windows, and fixed architectural arches interrupt wall space, altering where receptacles can be practically mounted. Furniture layout plans, entertainment centers, and designated appliance zones often require dedicated circuits or higher receptacle density to handle heavy continuous electrical loads safely.</p>
+<p>Additionally, modern energy codes and building amendments increasingly mandate Arc-Fault Circuit-Interrupter (AFCI) and Ground-Fault Circuit-Interrupter (GFCI) protection across nearly all residential living areas. Kitchen appliance circuits, laundry rooms, unfinished basements, and outdoor-adjacent walls demand careful load distribution to prevent tripping breakers and ensure long-term electrical safety compliance.</p>
+</section>
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>What is the 6-foot rule for electrical outlets in residential construction?</h3>
+<p>The 6-foot rule establishes that along any wall line, no point can be further than 6 feet away from an electrical receptacle. This guarantees that any cord-and-plug connected load placed against a wall can reach an outlet without exceeding standard cord lengths.</p>
+<h3>Are kitchen and bathroom outlet requirements different from bedrooms?</h3>
+<p>Yes. Kitchens require specialized small appliance branch circuits with countertop receptacles spaced closely together. Bathrooms require dedicated receptacle placement adjacent to each sink basin with GFCI protection due to moisture risks.</p>
+<h3>Can I rely solely on calculations or do local amendments apply?</h3>
+<p>Calculations provide the minimum baseline required by the National Electrical Code. Local municipal authorities often enforce specific amendments or additional requirements, meaning plans should always be verified against local codes.</p>
+</section>
+</div>
+</main>
+<footer>
+<nav>
+<a href="/">Home</a>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+<a href="#privacy">Privacy</a>
+</nav>
+<div class="citation">Formula source: NEC (National Electrical Code) and NFPA 70. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.</div>
+</footer>
+<script>
+let currentUnit = 'imperial';
+
+function setUnit(unit) {
+currentUnit = unit;
+const btnImp = document.getElementById('btn-imperial');
+const btnMet = document.getElementById('btn-metric');
+const lblLen = document.getElementById('label-length');
+const lblWid = document.getElementById('label-width');
+
+if(unit === 'imperial') {
+btnImp.classList.add('active');
+btnMet.classList.remove('active');
+lblLen.textContent = 'Room Length (feet)';
+lblWid.textContent = 'Room Width (feet)';
+} else {
+btnMet.classList.add('active');
+btnImp.classList.remove('active');
+lblLen.textContent = 'Room Length (meters)';
+lblWid.textContent = 'Room Width (meters)';
+}
+}
+
+function calculateOutlets() {
+let lengthInput = parseFloat(document.getElementById('room-length').value);
+let widthInput = parseFloat(document.getElementById('room-width').value);
+const roomType = document.getElementById('room-type').value;
+
+if(isNaN(lengthInput) || isNaN(lengthInput) || lengthInput <= 0 || widthInput <= 0) {
+alert('Please enter valid positive dimensions for the room.');
+return;
+}
+
+let lengthFt, widthFt;
+if(currentUnit === 'metric') {
+lengthFt = lengthInput / 0.3048;
+widthFt = widthInput / 0.3048;
+} else {
+lengthFt = lengthInput;
+widthFt = widthInput;
+}
+
+let perimeterFt = 2 * (lengthFt + widthFt);
+let generalOutlets = Math.ceil(perimeterFt / 12);
+let specialOutlets = 0;
+let specialLabelText = '';
+
+if(roomType === 'kitchen') {
+let perimeterMeters = perimeterFt * 0.3048;
+let counterLengthFt = (lengthFt + widthFt) * 0.5; 
+specialOutlets = Math.ceil(counterLengthFt / 4);
+specialLabelText = 'Kitchen Counter Receptacles (every 4 ft):';
+} else if(roomType === 'bathroom') {
+specialOutlets = 1;
+specialLabelText = 'Bathroom Basin Receptacle (GFCI):';
+}
+
+let totalOutlets = generalOutlets + (roomType !== 'living' ? specialOutlets : 0);
+
+let perimeterDisplay = currentUnit === 'metric' ? (perimeterFt * 0.3048).toFixed(2) + ' m' : perimeterFt.toFixed(1) + ' ft';
+
+document.getElementById('res-perimeter').textContent = perimeterDisplay;
+document.getElementById('res-general').textContent = generalOutlets;
+
+const rowSpecial = document.getElementById('row-special');
+if(roomType !== 'living') {
+rowSpecial.style.display = 'flex';
+document.getElementById('res-special-label').textContent = specialLabelText;
+document.getElementById('res-special').textContent = specialOutlets;
+} else {
+rowSpecial.style.display = 'none';
+}
+
+document.getElementById('res-total').textContent = totalOutlets;
+document.getElementById('result-box').style.display = 'block';
+}
+</script>
+</body>
+</html>
