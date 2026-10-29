@@ -347,7 +347,8 @@
     "description": "Calculate tiles and materials needed for a shower surround. Account for niches and benches.",
     "inputs": "Shower length (feet), shower width (feet), shower height (feet), number of niches, tile size (inches)",
     "formula": "Wall area = 2 * (length + width) * height. Add 6 sq ft per niche. Tiles = ceil(wall_area / tile_area * 1.15).",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-29T08:09:42.525210Z"
   },
   {
     "slug": "bathroom-floor-tile-calculator",
