@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/bathroom-floor-tile-calculator/">
+<title>Bathroom Floor Tile Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate floor tile needed for a bathroom. Account for toilet, vanity, and tub cutouts.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Bathroom Floor Tile Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:700;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2rem 1rem;max-width:900px;margin:0 auto}
+.container{width:100%}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);margin-bottom:2rem}
+h1{font-size:1.8rem;color:#1a2332;margin-bottom:1.5rem}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem;background:#f4f6f9;padding:0.25rem;border-radius:6px}
+.unit-btn{flex:1;padding:0.5rem;border:none;background:transparent;cursor:pointer;font-weight:600;border-radius:4px;color:#555}
+.unit-btn.active{background:#f5a623;color:#1a2332}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;font-weight:600;margin-bottom:0.5rem;color:#1a2332;font-size:0.95rem}
+.form-group input{width:100%;padding:0.75rem;border:1px solid #ccd0d5;border-radius:4px;font-size:1rem}
+.form-group input:focus{outline:none;border-color:#f5a623}
+.calc-btn{display:block;width:100%;background:#f5a623;color:#1a2332;border:none;padding:0.85rem;font-size:1.1rem;font-weight:700;border-radius:4px;cursor:pointer;margin-top:1.5rem}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#f4f6f9;border-left:4px solid #f5a623;padding:1.5rem;border-radius:4px;margin-top:1.5rem;display:none}
+.result-box h3{color:#1a2332;margin-bottom:1rem}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #e1e4e8;font-size:1rem}
+.result-row:last-child{border-bottom:none}
+.result-label{color:#555}
+.result-value{font-weight:700;color:#1a2332}
+details{background:#fff;border-radius:8px;padding:1.5rem;margin-bottom:2rem;box-shadow:0 2px 4px rgba(0,0,0,0.05);cursor:pointer}
+summary{font-weight:700;color:#1a2332;font-size:1.1rem}
+details p{margin-top:1rem;color:#444;font-size:0.95rem}
+.formula-source{margin-top:0.5rem;font-size:0.85rem;color:#666;font-style:italic}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 2px 4px rgba(0,0,0,0.05)}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.4rem}
+.content-section p{margin-bottom:1rem;color:#444}
+.content-section h3{color:#1a2332;margin:1.2rem 0 0.4rem 0;font-size:1.1rem}
+footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:3rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#fff;margin:0 1rem;text-decoration:none}
+footer nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#aaa;max-width:800px;margin:0 auto}
+@media(max-width:600px){header{flex-direction:column;gap:1rem}nav a{margin:0 0.5rem}}
+</style>
+</head>
+<body>
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+</nav>
+</header>
+<main>
+<div class="container">
+<div class="calculator-box">
+<h1>Bathroom Floor Tile Calculator</h1>
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+</div>
+<form id="tile-form" onsubmit="calculate(event)">
+<div class="form-group">
+<label id="label-length" for="length">Bathroom Length (feet)</label>
+<input type="number" id="length" step="0.01" min="0" required placeholder="e.g., 8">
+</div>
+<div class="form-group">
+<label id="label-width" for="width">Bathroom Width (feet)</label>
+<input type="number" id="width" step="0.01" min="0" required placeholder="e.g., 5">
+</div>
+<div class="form-group">
+<label id="label-tile" for="tile_size">Tile Size (inches)</label>
+<input type="number" id="tile_size" step="0.1" min="0" required placeholder="e.g., 12">
+</div>
+<div class="form-group">
+<label for="waste">Waste Percentage (%)</label>
+<input type="number" id="waste" step="1" min="0" value="10" required>
+</div>
+<button type="submit" class="calc-btn">Calculate Tiles</button>
+</form>
+<div class="result-box" id="result-box">
+<h3>Calculation Results</h3>
+<div class="result-row"><span class="result-label">Gross Floor Area:</span><span class="result-value" id="res-area">0</span></div>
+<div class="result-row"><span class="result-label">Area with Waste Factor:</span><span class="result-value" id="res-waste-area">0</span></div>
+<div class="result-row"><span class="result-label">Total Tiles Needed:</span><span class="result-value" id="res-tiles">0</span></div>
+</div>
+</div>
+
+<details>
+<summary>How this calculator works</summary>
+<p>This calculator determines your gross flooring square footage by multiplying length by width, then applies your selected waste percentage to account for cuts, breakages, and layout patterns around built-in fixtures like vanities, toilets, and tubs. The required number of individual tiles is computed by dividing the adjusted total area by the individual surface area of your chosen tile dimensions.</p>
+<p class="formula-source">Formula based on TCNA Handbook for Ceramic, Glass, and Stone Tile Installation.</p>
+</details>
+
+<section class="content-section">
+<h2>How to Calculate Bathroom Floor Tile</h2>
+<p>Calculating the correct amount of floor tile for a bathroom requires careful measurement of the room's usable floor space while accounting for permanent fixtures such as bathtubs, vanity cabinets, and toilet footprints. Begin by measuring the length and width of the bathroom to establish the base square footage. In bathrooms with complex layouts, breaking the room into smaller rectangular sections helps ensure accuracy.</p>
+<p>Once you have established the base area, factoring in a waste percentage is essential. Cutting tiles to fit around curves, corners, and drains invariably generates off-cuts that cannot be reused. Adding a standard waste buffer ensures you will not run short mid-installation. Finally, divide the total adjusted area by the square footage of a single tile to determine your total box and piece requirements.</p>
+</section>
+
+<section class="content-section">
+<h2>What Affects Bathroom Tile Quantities</h2>
+<p>Several variables impact the exact number of tiles you will need to purchase for a bathroom renovation project. The layout complexity plays a major role; bathrooms with multiple alcoves, diagonal walls, or pedestal sinks require significantly more cuts and generates higher scrap rates than simple rectangular spaces. In these intricate configurations, increasing your waste factor from the standard ten percent to fifteen percent is often recommended.</p>
+<p>Tile dimensions and orientation patterns also influence your material needs. Large-format tiles create fewer grout joints but often result in larger edge-trim remnants, whereas mosaic or rectangular tiles laid in herringbone patterns increase cutting waste substantially. Additionally, accounting for whether your vanity and tub sit directly on the subfloor or if tile runs underneath them changes your net calculation parameters.</p>
+</section>
+
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>Should I tile underneath the bathroom vanity and bathtub?</h3>
+<p>It is generally recommended to tile underneath freestanding vanities to maintain a consistent floor height, but bathtubs and shower pans should be installed directly on the subfloor before tiling right up to their edges with proper expansion gaps.</p>
+<h3>What waste percentage should I use for a small bathroom?</h3>
+<p>A ten percent waste factor is standard for most square or rectangular bathrooms. However, if you are installing tiles diagonally or working in a very small bathroom with many intricate cuts around fixtures, fifteen percent is safer.</p>
+<h3>How do I convert my tile dimensions from inches to square feet?</h3>
+<p>To find the square footage of a single tile, multiply its length in inches by its width in inches, then divide the resulting product by 144 to convert square inches into square feet.</p>
+</section>
+</div>
+</main>
+<footer>
+<nav>
+<a href="/">Home</a>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+<a href="#privacy">Privacy</a>
+</nav>
+<div class="citation">Formula source: TCNA Handbook for Ceramic, Glass, and Stone Tile Installation. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.</div>
+</footer>
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(unit) {
+currentUnit = unit;
+const impBtn = document.getElementById('btn-imperial');
+const metBtn = document.getElementById('btn-metric');
+const lenLabel = document.getElementById('label-length');
+const widLabel = document.getElementById('label-width');
+const tileLabel = document.getElementById('label-tile');
+
+if(unit === 'imperial') {
+impBtn.classList.add('active');
+metBtn.classList.remove('active');
+lenLabel.textContent = 'Bathroom Length (feet)';
+widLabel.textContent = 'Bathroom Width (feet)';
+tileLabel.textContent = 'Tile Size (inches)';
+} else {
+metBtn.classList.add('active');
+impBtn.classList.remove('active');
+lenLabel.textContent = 'Bathroom Length (meters)';
+widLabel.textContent = 'Bathroom Width (meters)';
+tileLabel.textContent = 'Tile Size (centimeters)';
+}
+document.getElementById('result-box').style.display = 'none';
+}
+
+function calculate(event) {
+event.preventDefault();
+let length = parseFloat(document.getElementById('length').value);
+let width = parseFloat(document.getElementById('width').value);
+let tileSize = parseFloat(document.getElementById('tile_size').value);
+let wastePct = parseFloat(document.getElementById('waste').value) / 100;
+
+let areaUnitLabel = 'sq ft';
+let areaVal = 0;
+let wasteAreaVal = 0;
+let tilesCount = 0;
+
+if(currentUnit === 'imperial') {
+areaVal = length * width;
+wasteAreaVal = areaVal * (1 + wastePct);
+let tileSqIn = tileSize * tileSize;
+tilesCount = Math.ceil((areaVal * (1 + wastePct)) / (tileSqIn / 144));
+areaUnitLabel = 'sq ft';
+} else {
+// Metric conversion: meters to feet for calculation consistency
+let lengthFt = length / 0.3048;
+let widthFt = width / 0.3048;
+areaVal = lengthFt * widthFt; // in sq ft internally, display in sq meters
+let areaSqM = length * width;
+let wasteAreaSqM = areaSqM * (1 + wastePct);
+
+let tileSizeIn = tileSize / 2.54;
+let tileSqIn = tileSizeIn * tileSizeIn;
+tilesCount = Math.ceil((areaVal * (1 + wastePct)) / (tileSqIn / 144));
+areaUnitLabel = 'sq m';
+areaVal = areaSqM;
+wasteAreaVal = wasteAreaSqM;
+}
+
+document.getElementById('res-area').textContent = areaVal.toFixed(2) + ' ' + areaUnitLabel;
+document.getElementById('res-waste-area').textContent = wasteAreaVal.toFixed(2) + ' ' + areaUnitLabel;
+document.getElementById('res-tiles').textContent = tilesCount + ' pieces';
+document.getElementById('result-box').style.display = 'block';
+}
+</script>
+</body>
+</html>

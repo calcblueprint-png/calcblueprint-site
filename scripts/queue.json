@@ -356,7 +356,8 @@
     "description": "Calculate floor tile needed for a bathroom. Account for toilet, vanity, and tub cutouts.",
     "inputs": "Bathroom length (feet), bathroom width (feet), tile size (inches), waste percentage",
     "formula": "Area = length * width. Add 10% waste. Tiles = ceil(area * 1.1 / (tile_size^2 / 144)).",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-30T08:13:33.071571Z"
   },
   {
     "slug": "kitchen-floor-calculator",
