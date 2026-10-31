@@ -365,7 +365,8 @@
     "description": "Calculate kitchen floor tile or vinyl needed. Subtract cabinet footprints for accuracy.",
     "inputs": "Kitchen length (feet), kitchen width (feet), cabinet footprint (square feet), flooring type",
     "formula": "Area = length * width - cabinet_footprint. Add 10% waste.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-10-31T08:06:20.253284Z"
   },
   {
     "slug": "paver-calculator",
