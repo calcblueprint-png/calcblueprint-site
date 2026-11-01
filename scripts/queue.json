@@ -374,7 +374,8 @@
     "description": "Calculate pavers needed for patios, driveways, and walkways. Includes base material and sand.",
     "inputs": "Patio length (feet), patio width (feet), paver size (square inches), base depth (inches)",
     "formula": "Area = length * width. Pavers = ceil(area * 144 / paver_size * 1.05). Base cubic yards = area * (base_depth/12) / 27.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-11-01T08:51:20.962594Z"
   },
   {
     "slug": "retaining-wall-calculator",

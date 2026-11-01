@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/paver-calculator/">
+<title>Paver Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate pavers needed for patios, driveways, and walkways. Includes base material and sand.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Paver Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:700;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2.5rem 1rem;max-width:900px;margin:0 auto}
+.container{width:100%}
+h1{font-size:2rem;margin-bottom:0.5rem;color:#1a2332}
+.subtitle{color:#666;margin-bottom:2rem}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.05);margin-bottom:1.5rem}
+.unit-toggle{display:flex;gap:1rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:2px solid #ddd;background:#fff;border-radius:6px;cursor:pointer;font-weight:600;font-size:0.95rem;transition:all 0.2s}
+.unit-btn.active{background:#f5a623;border-color:#f5a623;color:#1a2332}
+.form-group{margin-bottom:1.25rem}
+label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332;font-size:0.95rem}
+input{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:6px;font-size:1rem}
+input:focus{outline:none;border-color:#f5a623}
+.calc-btn{width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;border-radius:6px;font-size:1rem;font-weight:700;cursor:pointer;transition:opacity 0.2s;margin-top:1rem}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:1.5rem;margin-top:1.5rem;display:none}
+.result-box.visible{display:block}
+.result-row{display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid #e2e8f0;font-size:1rem}
+.result-row:last-child{border-bottom:none}
+.result-label{color:#4a5568}
+.result-value{font-weight:700;color:#1a2332}
+details{background:#fff;border-radius:8px;padding:1.25rem 2rem;margin-bottom:2rem;box-shadow:0 2px 6px rgba(0,0,0,0.03);cursor:pointer}
+summary{font-weight:600;color:#1a2332;font-size:1.05rem}
+details p{margin-top:1rem;color:#555;font-size:0.95rem;line-height:1.7}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 2px 6px rgba(0,0,0,0.03)}
+.content-section h2{font-size:1.5rem;color:#1a2332;margin-bottom:1rem}
+.content-section h3{font-size:1.1rem;color:#1a2332;margin-top:1.2rem;margin-bottom:0.4rem}
+.content-section p{color:#4a5568;margin-bottom:1rem;font-size:0.95rem}
+footer{background:#1a2332;color:#fff;text-align:center;padding:2.5rem 1rem;margin-top:3rem;font-size:0.9rem}
+.footer-nav{margin-bottom:1rem}
+.footer-nav a{color:#fff;text-decoration:none;margin:0 1rem}
+.footer-nav a:hover{color:#f5a623}
+.citation{color:#a0aec0;font-size:0.85rem;max-width:700px;margin:0 auto}
+@media(max-width:600px){header{flex-direction:column;gap:1rem}nav a{margin:0 0.5rem}}
+</style>
+</head>
+<body>
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="/">Home</a>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+</nav>
+</header>
+<main>
+<div class="container">
+<h1>Paver Calculator</h1>
+<p class="subtitle">Calculate pavers needed for patios, driveways, and walkways. Includes base material and sand.</p>
+
+<div class="calculator-box">
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+</div>
+
+<div class="form-group">
+<label id="label-length">Patio Length (feet)</label>
+<input type="number" id="length" step="any" placeholder="e.g., 15">
+</div>
+
+<div class="form-group">
+<label id="label-width">Patio Width (feet)</label>
+<input type="number" id="width" step="any" placeholder="e.g., 12">
+</div>
+
+<div class="form-group">
+<label id="label-paver-size">Paver Size (square inches)</label>
+<input type="number" id="paver_size" step="any" placeholder="e.g., 32 (for 8x4 inch pavers)">
+</div>
+
+<div class="form-group">
+<label id="label-base-depth">Base Depth (inches)</label>
+<input type="number" id="base_depth" step="any" placeholder="e.g., 4">
+</div>
+
+<button type="button" class="calc-btn" onclick="calculate()">Calculate Materials</button>
+
+<div class="result-box" id="result-box">
+<div class="result-row">
+<span class="result-label">Total Area:</span>
+<span class="result-value" id="res-area">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Pavers Required (incl. 5% waste):</span>
+<span class="result-value" id="res-pavers">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Base Aggregate Material:</span>
+<span class="result-value" id="res-base">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Bedding Sand (1" depth):</span>
+<span class="result-value" id="res-sand">0</span>
+</div>
+</div>
+</div>
+
+<details>
+<summary>How this calculator works</summary>
+<p>This calculator determines material requirements by first calculating total square footage and factoring in a 5-percent overage allowance for cuts and breakage during installation. Sub-base aggregate volume and leveling sand depths are calculated proportionally based on surface dimensions and specified aggregate thickness layers. Specifications follow standard ICPI (Interlocking Concrete Pavement Institute) installation guidelines for residential hardscapes.</p>
+</details>
+
+<section class="content-section">
+<h2>How to Calculate Pavers and Base Materials</h2>
+<p>Planning a hardscape installation requires precise measurements to prevent costly material shortages or excess waste. The foundation of any paver patio, walkway, or driveway begins with calculating the surface area by multiplying length by width. From this total square footage, you can determine how many individual masonry units are required based on their specific face dimensions. Because cuts along edges and minor handling breakage are inevitable, professional installation guidelines recommend adding a 5 percent contingency buffer to your final paver count.</p>
+<p>In addition to surface pavers, durable hardscapes depend heavily on proper sub-base and bedding layers. A stable aggregate base prevents settling and frost heave, while a 1-inch layer of coarse concrete sand provides a smooth setting bed for final leveling. Calculating sub-base requirements involves determining total volume based on recommended excavation depths—typically 4 to 6 inches for patios and walkways, and 8 to 12 inches for vehicular driveways subjected to heavier loads.</p>
+</section>
+
+<section class="content-section">
+<h2>What Affects Paver Project Requirements</h2>
+<p>Several critical factors influence the exact quantity of materials needed for a successful paving project. Paver geometry and laying patterns dictate how many cuts are necessary; complex designs with sweeping curves or 45-degree herringbone patterns naturally generate more waste than simple running bond layouts using standard rectangular units, potentially requiring a 10 percent waste factor instead of the standard 5 percent.</p>
+<p>Subgrade soil conditions also play a pivotal role in determining base material thickness. Properties built on stable, well-draining sandy soils require standard sub-base depths, whereas expansive clay or poorly compacted native soils demand deeper aggregate layers and geotextile stabilization fabrics to maintain structural integrity. Furthermore, edge restraints, joint sand selection, and polymeric sand quantities depend heavily on the total linear perimeter of your paved surface rather than just surface area alone.</p>
+</section>
+
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>Why do I need to add 5% extra pavers to my order?</h3>
+<p>Cutting pavers to fit perimeter borders, curves, and obstacles invariably produces scrap pieces that cannot be reused. Adding a 5 percent waste factor ensures you will not run short near the end of your project, and provides extra units to keep on hand for future repairs.</p>
+<h3>How thick should the aggregate base be for a driveway versus a patio?</h3>
+<p>Patios and pedestrian walkways generally require a compacted crushed stone base depth of 4 inches. Driveways, however, support vehicular traffic and require a significantly thicker sub-base ranging from 8 to 12 inches to prevent rutting and structural failure.</p>
+<h3>What is the purpose of the bedding sand layer?</h3>
+<p>The 1-inch layer of bedding sand provides a pliable surface that allows you to level individual pavers perfectly during installation. Once compacted and locked in with polymeric joint sand, it prevents shifting and stabilizes the entire interlocking pavement system.</p>
+</section>
+
+</div>
+</main>
+<footer>
+<div class="footer-nav">
+<a href="/">Home</a>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+<a href="/privacy/">Privacy</a>
+</div>
+<div class="citation">
+Formula source: Asphalt Institute MS-22 and NAPA (National Asphalt Pavement Association) specifications. Results are estimates for planning — verify with a licensed professional before ordering materials. &copy; 2026 CalcBlueprint.
+</div>
+</footer>
+
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(unit) {
+currentUnit = unit;
+document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+
+if (unit === 'imperial') {
+document.getElementById('label-length').innerText = 'Patio Length (feet)';
+document.getElementById('label-width').innerText = 'Patio Width (feet)';
+document.getElementById('label-paver-size').innerText = 'Paver Size (square inches)';
+document.getElementById('label-base-depth').innerText = 'Base Depth (inches)';
+} else {
+document.getElementById('label-length').innerText = 'Patio Length (meters)';
+document.getElementById('label-width').innerText = 'Patio Width (meters)';
+document.getElementById('label-paver-size').innerText = 'Paver Size (square centimeters)';
+document.getElementById('label-base-depth').innerText = 'Base Depth (centimeters)';
+}
+}
+
+function calculate() {
+let length = parseFloat(document.getElementById('length').value);
+let width = parseFloat(document.getElementById('width').value);
+let paverSize = parseFloat(document.getElementById('paver_size').value);
+let baseDepth = parseFloat(document.getElementById('base_depth').value);
+
+if (isNaN(length) || isNaN(width) || isNaN(paverSize) || isNaN(baseDepth) || length <= 0 || width <= 0 || paverSize <= 0 || baseDepth <= 0) {
+alert('Please enter valid positive numbers for all fields.');
+return;
+}
+
+let areaSqFt, pavers, baseCuYd, sandCuYd;
+
+if (currentUnit === 'imperial') {
+areaSqFt = length * width;
+pavers = Math.ceil((areaSqFt * 144 / paverSize) * 1.05);
+baseCuYd = (areaSqFt * (baseDepth / 12)) / 27;
+sandCuYd = (areaSqFt * (1 / 12)) / 27;
+
+document.getElementById('res-area').innerText = areaSqFt.toFixed(2) + ' sq ft';
+document.getElementById('res-pavers').innerText = pavers.toLocaleString() + ' units';
+document.getElementById('res-base').innerText = baseCuYd.toFixed(2) + ' cu yd';
+document.getElementById('res-sand').innerText = sandCuYd.toFixed(2) + ' cu yd';
+} else {
+// Metric inputs converted to imperial for formula consistency, then formatted back
+let lengthFt = length / 0.3048;
+let widthFt = width / 0.3048;
+let paverSizeSqIn = paverSize * 0.15500031;
+let baseDepthIn = baseDepth / 2.54;
+
+let areaSqM = length * width;
+let areaSqFtCalc = lengthFt * widthFt;
+
+let paversCalc = Math.ceil((areaSqFtCalc * 144 / paverSizeSqIn) * 1.05);
+let baseCuYdCalc = (areaSqFtCalc * (baseDepthIn / 12)) / 27;
+let sandCuYdCalc = (areaSqFtCalc * (1 / 12)) / 27;
+
+let baseCuM = baseCuYdCalc * 0.764554858;
+let sandCuM = sandCuYdCalc * 0.764554858;
+
+document.getElementById('res-area').innerText = areaSqM.toFixed(2) + ' sq m';
+document.getElementById('res-pavers').innerText = paversCalc.toLocaleString() + ' units';
+document.getElementById('res-base').innerText = baseCuM.toFixed(2) + ' cu m';
+document.getElementById('res-sand').innerText = sandCuM.toFixed(2) + ' cu m';
+}
+
+document.getElementById('result-box').classList.add('visible');
+}
+</script>
+</body>
+</html>
