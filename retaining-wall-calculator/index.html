@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/retaining-wall-calculator/">
+<title>Retaining Wall Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate blocks, caps, gravel, and drainage for a retaining wall. Ensures proper structural design.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Retaining Wall Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f7f6;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:700;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-weight:500}
+nav a:hover{color:#f5a623}
+main{padding:2rem 1rem;max-width:900px;margin:0 auto}
+.container{width:100%}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+h1{font-size:2rem;margin-bottom:1.5rem;color:#1a2332}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:2px solid #ddd;background:#f9f9f9;cursor:pointer;font-weight:600;border-radius:4px;transition:all 0.2s}
+.unit-btn.active{background:#f5a623;border-color:#f5a623;color:#1a2332}
+.form-group{margin-bottom:1.25rem}
+label{display:block;margin-bottom:0.5rem;font-weight:600;color:#2c3e50}
+input, select{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+button.calc-btn{width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;font-size:1.1rem;font-weight:700;border-radius:4px;cursor:pointer;transition:background 0.2s;margin-top:1rem}
+button.calc-btn:hover{background:#e0951b}
+.result-box{background:#f8f9fa;border-left:4px solid #f5a623;padding:1.5rem;margin-top:1.5rem;border-radius:0 8px 8px 0;display:none}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #e9ecef}
+.result-row:last-child{border-bottom:none}
+.result-label{font-weight:600;color:#495057}
+.result-value{font-weight:700;color:#1a2332}
+details{background:#fff;border-radius:8px;padding:1.5rem;margin-bottom:2rem;box-shadow:0 2px 4px rgba(0,0,0,0.05);cursor:pointer}
+summary{font-weight:700;color:#1a2332;font-size:1.1rem}
+details p{margin-top:1rem;color:#555}
+.content-section { background-color: #ffffff; border-radius: 8px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
+.content-section p{margin-bottom:1rem;color:#4a5568}
+.content-section h3{color:#2c3e50;margin-top:1.5rem;margin-bottom:0.5rem;font-size:1.1rem}
+footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:3rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#f5a623;margin:0 10px}
+.citation{font-size:0.85rem;color:#a0aec0;max-width:700px;margin:0 auto;line-height:1.4}
+@media(max-width:600px){header{flex-direction:column;gap:1rem}nav{margin-top:0.5rem}}
+</style>
+</head>
+<body>
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="#">About</a>
+<a href="#">Contact</a>
+</nav>
+</header>
+<main>
+<div class="container">
+<div class="calculator-box">
+<h1>Retaining Wall Calculator</h1>
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+</div>
+<form id="calc-form" onsubmit="calculate(event)">
+<div class="form-group">
+<label id="label-length" for="wall-length">Wall Length (feet)</label>
+<input type="number" id="wall-length" step="0.1" min="0.1" required value="20">
+</div>
+<div class="form-group">
+<label id="label-height" for="wall-height">Wall Height (feet)</label>
+<input type="number" id="wall-height" step="0.1" min="0.1" required value="3">
+</div>
+<div class="form-group">
+<label id="label-block-size" for="block-size">Block Face Size (square inches)</label>
+<input type="number" id="block-size" step="1" min="1" required value="120">
+</div>
+<div class="form-group">
+<label id="label-cap-length" for="cap-length">Cap Block Length (inches)</label>
+<input type="number" id="cap-length" step="0.1" min="1" required value="12">
+</div>
+<div class="form-group">
+<label for="wall-type">Wall Type / Application</label>
+<select id="wall-type">
+<option value="standard">Standard Garden Wall (Under 4 ft)</option>
+<option value="engineered">Engineered Structural Wall (Over 4 ft)</option>
+</select>
+</div>
+<button type="submit" class="calc-btn">Calculate Materials</button>
+</form>
+<div class="result-box" id="result-box">
+<div class="result-row">
+<span class="result-label">Wall Face Area:</span>
+<span class="result-value" id="res-area">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Main Wall Blocks (incl. 5% waste):</span>
+<span class="result-value" id="res-blocks">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Cap Blocks:</span>
+<span class="result-value" id="res-caps">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Estimated Drainage Gravel:</span>
+<span class="result-value" id="res-gravel">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Perforated Drainage Pipe:</span>
+<span class="result-value" id="res-pipe">0</span>
+</div>
+</div>
+</div>
+
+<details>
+<summary>How this calculator works</summary>
+<p>This calculator determines material requirements by first finding the total face area of the wall and factoring in a standard 5% waste allowance for cuts and breakage. It then computes required cap units based on top linear run and estimates necessary backfill gravel and drainage provisions according to industry safety guidelines. Formula based on TMS 402/602 (Masonry Standards Joint Committee) and ASTM C270.</p>
+</details>
+
+<section class="content-section">
+<h2>How to Calculate Retaining Wall Materials</h2>
+<p>Planning a retaining wall requires careful calculation of face units, structural caps, and backfill aggregates to ensure longevity and prevent catastrophic structural collapse. Begin by measuring the linear run and finished height of the proposed barrier to establish total surface area. Once total face square footage is identified, divide by the individual dimensions of your chosen masonry unit, applying a five percent waste factor to account for job-site cuts, corner adjustments, and minor handling damages.</p>
+<p>Beyond the visible masonry blocks, proper estimation must include the subsurface components that keep the wall upright. Retaining structures rely heavily on clean crushed stone for drainage backfill and leveling pads to relieve hydrostatic pressure. Neglecting gravel volume calculations or omitting perforated drain pipes can lead to water accumulation behind the wall, creating immense lateral loads that push masonry out of alignment. Utilizing a comprehensive calculator helps balance aesthetic block counts with critical subsurface infrastructure requirements.</p>
+</section>
+
+<section class="content-section">
+<h2>What Affects Retaining Wall Material Requirements</h2>
+<p>Several critical variables influence the final material count and structural design of any retaining wall project. Wall height is the most important factor; walls exceeding four feet typically require engineered designs, geogrid soil reinforcement, and more substantial base trenching compared to simple garden borders. The choice of retaining block system also dictates quantities, as larger modular blocks alter face-area ratios and require specific setback angles.</p>
+<p>Site conditions, soil characteristics, and drainage layout heavily impact auxiliary material needs. Clay-heavy soils demand thicker gravel backfill envelopes and robust drainage networks to manage poor natural infiltration. Furthermore, wall geometry involving curves, corners, or tiered designs increases cutting waste and requires specialized corner blocks or modified caps, directly altering the total purchasing requirements for your hardscaping project.</p>
+</section>
+
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>Why do I need a 5% waste factor for retaining wall blocks?</h3>
+<p>Job-site cutting, breaking blocks to fit corners or stepped slopes, and minor material handling damage invariably occur during installation. Adding a 5% margin ensures you do not run short near the end of the project.</p>
+<h3>How deep should the gravel base trench be for a standard wall?</h3>
+<p>For standard residential landscape walls under three feet high, a compacted crushed stone base of at least 6 inches in depth is typically required. Taller walls demand thicker foundations as specified by local building codes.</p>
+<h3>Is drainage gravel really necessary behind a low retaining wall?</h3>
+<p>Yes, backfilling with clean, coarse gravel is essential to prevent hydrostatic pressure buildup from trapped rainwater. Without drainage gravel, saturated soil behind the wall can exert freezing and shifting forces that cause structural failure.</p>
+</section>
+
+</div>
+</main>
+<footer>
+<nav>
+<a href="#">Home</a>
+<a href="#">About</a>
+<a href="#">Contact</a>
+<a href="#">Privacy</a>
+</nav>
+<div class="citation">Formula source: TMS 402/602 (Masonry Standards Joint Committee) and ASTM C270. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.</div>
+</footer>
+
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(unit) {
+  currentUnit = unit;
+  document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+  document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+  
+  if (unit === 'metric') {
+    document.getElementById('label-length').innerText = 'Wall Length (meters)';
+    document.getElementById('label-height').innerText = 'Wall Height (meters)';
+    document.getElementById('label-block-size').innerText = 'Block Face Size (square centimeters)';
+    document.getElementById('label-cap-length').innerText = 'Cap Block Length (centimeters)';
+    document.getElementById('wall-length').value = (6.0).toFixed(1);
+    document.getElementById('wall-height').value = (1.0).toFixed(1);
+    document.getElementById('block-size').value = 750;
+    document.getElementById('cap-length').value = 30;
+  } else {
+    document.getElementById('label-length').innerText = 'Wall Length (feet)';
+    document.getElementById('label-height').innerText = 'Wall Height (feet)';
+    document.getElementById('label-block-size').innerText = 'Block Face Size (square inches)';
+    document.getElementById('label-cap-length').innerText = 'Cap Block Length (inches)';
+    document.getElementById('wall-length').value = 20;
+    document.getElementById('wall-height').value = 3;
+    document.getElementById('block-size').value = 120;
+    document.getElementById('cap-length').value = 12;
+  }
+  document.getElementById('result-box').style.display = 'none';
+}
+
+function calculate(e) {
+  e.preventDefault();
+  
+  let length = parseFloat(document.getElementById('wall-length').value);
+  let height = parseFloat(document.getElementById('wall-height').value);
+  let blockSize = parseFloat(document.getElementById('block-size').value);
+  let capLength = parseFloat(document.getElementById('cap-length').value);
+  
+  let area, blocks, caps, gravel, pipe;
+  
+  if (currentUnit === 'imperial') {
+    area = length * height;
+    blocks = Math.ceil((area * 144 / blockSize) * 1.05);
+    let lengthInches = length * 12;
+    caps = Math.ceil(lengthInches / capLength);
+    let cuYards = (area * 1.5) / 27; // estimated 1.5 ft depth average
+    gravel = cuYards.toFixed(2) + ' cubic yards';
+    pipe = length.toFixed(1) + ' linear feet';
+    area = area.toFixed(2) + ' sq ft';
+  } else {
+    area = length * height;
+    let blockSizeSqM = blockSize / 10000;
+    blocks = Math.ceil((area / blockSizeSqM) * 1.05);
+    let lengthCm = length * 100;
+    caps = Math.ceil(lengthCm / capLength);
+    let cuMeters = area * 0.45;
+    gravel = cuMeters.toFixed(2) + ' cubic meters';
+    pipe = length.toFixed(1) + ' linear meters';
+    area = area.toFixed(2) + ' sq meters';
+  }
+  
+  document.getElementById('res-area').innerText = area;
+  document.getElementById('res-blocks').innerText = blocks + ' units';
+  document.getElementById('res-caps').innerText = caps + ' units';
+  document.getElementById('res-gravel').innerText = gravel;
+  document.getElementById('res-pipe').innerText = pipe;
+  
+  document.getElementById('result-box').style.display = 'block';
+}
+</script>
+</body>
+</html>

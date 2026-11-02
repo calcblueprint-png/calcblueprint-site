@@ -383,7 +383,8 @@
     "description": "Calculate blocks, caps, gravel, and drainage for a retaining wall. Ensures proper structural design.",
     "inputs": "Wall length (feet), wall height (feet), block size (square inches of face), wall type",
     "formula": "Wall face area = length * height. Blocks = ceil(wall_face_area * 144 / block_face_area * 1.05). Cap blocks = ceil(length / cap_length).",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-11-02T08:59:02.598931Z"
   },
   {
     "slug": "artificial-turf-calculator",
