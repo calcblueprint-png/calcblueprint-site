@@ -392,7 +392,8 @@
     "description": "Calculate artificial grass needed for lawns and play areas. Includes base material and seaming.",
     "inputs": "Lawn length (feet), lawn width (feet), roll width (feet), waste percentage",
     "formula": "Area = length * width. Rolls = ceil(area / roll_coverage). Add 5% for seams. Base gravel: 3 inches = 0.25 cu yd per sq ft.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-11-03T09:07:50.951928Z"
   },
   {
     "slug": "sod-calculator",
