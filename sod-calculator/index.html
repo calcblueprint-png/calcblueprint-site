@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/sod-calculator/">
+<title>Sod Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate sod rolls or pallets needed for a new lawn. Includes soil prep and starter fertilizer.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Sod Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background-color:#f4f7f6;color:#333333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{color:#ffffff;font-size:1.5rem;font-weight:bold;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#ffffff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2rem 1rem}
+.container{max-width:800px;margin:0 auto}
+.calculator-box{background:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+h1{color:#1a2332;margin-bottom:1.5rem;font-size:1.8rem}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem;background:#f4f7f6;padding:4px;border-radius:6px;width:fit-content}
+.unit-btn{background:transparent;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;font-weight:600;color:#555555}
+.unit-btn.active{background:#f5a623;color:#1a2332}
+.form-group{margin-bottom:1.2rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input,.form-group select{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+.calc-btn{background:#f5a623;color:#1a2332;border:none;padding:1rem 2rem;font-size:1rem;font-weight:bold;border-radius:4px;cursor:pointer;width:100%;margin-top:1rem}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#f4f7f6;border-left:4px solid #f5a623;padding:1.5rem;margin-top:1.5rem;border-radius:0 8px 8px 0;display:none}
+.result-box h3{color:#1a2332;margin-bottom:1rem}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #e0e0e0}
+.result-row:last-child{border-bottom:none}
+.result-label{font-weight:500;color:#555555}
+.result-value{font-weight:bold;color:#1a2332}
+details{background:#ffffff;border-radius:8px;padding:1.5rem;margin-bottom:2rem;box-shadow:0 2px 4px rgba(0,0,0,0.05)}
+summary{font-weight:bold;cursor:pointer;color:#1a2332;font-size:1.1rem}
+details p{margin-top:1rem;color:#555555}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 2px 4px rgba(0,0,0,0.05)}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.4rem}
+.content-section p{margin-bottom:1rem;color:#555555}
+.content-section h3{color:#1a2332;margin:1.2rem 0 0.5rem 0;font-size:1.1rem}
+footer{background:#1a2332;color:#ffffff;text-align:center;padding:2rem;margin-top:4rem}
+.footer-nav{margin-bottom:1rem}
+.footer-nav a{color:#ffffff;text-decoration:none;margin:0 1rem}
+.footer-nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#a0aec0;max-width:700px;margin:0 auto}
+@media(max-width:600px){header{flex-direction:column;gap:1rem}nav a{margin:0 0.5rem}}
+</style>
+</head>
+<body>
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+</nav>
+</header>
+<main>
+<div class="container">
+<div class="calculator-box">
+<h1>Sod Calculator</h1>
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+</div>
+<form id="sod-form" onsubmit="calculateSod(event)">
+<div class="form-group">
+<label id="label-length" for="length">Lawn Length (feet)</label>
+<input type="number" id="length" step="any" min="0" required placeholder="e.g., 50">
+</div>
+<div class="form-group">
+<label id="label-width" for="width">Lawn Width (feet)</label>
+<input type="number" id="width" step="any" min="0" required placeholder="e.g., 30">
+</div>
+<div class="form-group">
+<label id="label-roll-size" for="roll-size">Sod Roll Size (<span id="unit-roll-label">sq ft</span>)</label>
+<input type="number" id="roll-size" step="any" min="1" value="10" required>
+</div>
+<div class="form-group">
+<label for="waste">Waste Factor (%)</label>
+<select id="waste">
+<option value="5">5% (Simple square/rectangular area)</option>
+<option value="10" selected>10% (Standard curves and cuts)</option>
+<option value="15">15% (Complex landscaping / multiple beds)</option>
+</select>
+</div>
+<button type="submit" class="calc-btn">Calculate Sod Needed</button>
+</form>
+<div class="result-box" id="result-box">
+<h3>Calculation Results</h3>
+<div class="result-row">
+<span class="result-label">Total Lawn Area</span>
+<span class="result-value" id="res-area">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Area with Waste Factor</span>
+<span class="result-value" id="res-total-area">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Sod Rolls Needed</span>
+<span class="result-value" id="res-rolls">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Pallets Needed (approx 500 sq ft/pallet)</span>
+<span class="result-value" id="res-pallets">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Starter Fertilizer Required</span>
+<span class="result-value" id="res-fertilizer">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Topsoil for Prep (2" depth)</span>
+<span class="result-value" id="res-soil">0</span>
+</div>
+</div>
+</div>
+
+<details>
+<summary>How this calculator works</summary>
+<p>This calculator determines the total surface area of your lawn by multiplying length by width, then applies an adjustable waste factor to account for cutting, curves, and fitting. The total square footage is divided by your chosen sod roll size to find the exact roll count, and subsequently estimated in standard pallets (typically holding 450 to 500 square feet) along with required starter fertilizer and soil prep amendments.</p>
+<p>State agricultural extension service recommendations and turfgrass establishment guidelines.</p>
+</details>
+
+<section class="content-section">
+<h2>How to Calculate Sod Requirements</h2>
+<p>Laying a brand new lawn from turfgrass requires precise measurement to avoid running short or overspending on perishable material. To begin, measure the longest and widest points of your lawn area in feet (or meters if using the metric toggle). For complex layouts, break the yard down into smaller rectangular sections, calculate the area of each independently, and sum them up.</p>
+<p>Once you have your baseline square footage, factoring in waste is critical. Standard industry practices suggest adding a 5% to 15% buffer depending on how many curves, obstacles, and custom cuts your landscape features. Because sod is harvested fresh and has a limited shelf life before it begins to heat up and spoil on the pallet, ordering the correct amount calculated via standard agronomic formulas ensures a smooth, uninterrupted installation process.</p>
+</section>
+
+<section class="content-section">
+<h2>What Affects Sod Quantities and Installation</h2>
+<p>Several environmental and logistical variables impact how much sod you need to order and how successful your installation will be. The shape of your lawn is a major factor; highly intricate gardens with winding flower beds generate more off-cuts and waste than uniform, open rectangular spaces. Roll dimensions also vary significantly by supplier, ranging from small DIY rolls (typically 9 to 10 square feet) to massive contractor-grade big rolls laid down with specialized machinery.</p>
+<p>Soil preparation significantly dictates whether your newly laid sod will take root or fail. Incorporating proper amendments and starter fertilizer high in phosphorus ensures robust root development during the vital first two weeks. Furthermore, seasonal timing plays a role: laying cool-season grasses in early autumn or warm-season grasses in late spring optimizes survival rates and reduces shrink-back during handling.</p>
+</section>
+
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>How many square feet are typically on a standard pallet of sod?</h3>
+<p>A standard pallet of sod usually holds between 450 and 500 square feet of turf, though exact quantities depend on the farm's harvest cut and geographic region. Always confirm pallet capacities with your local sod farm before finalizing your delivery schedule.</p>
+
+<h3>Should I add a waste percentage when ordering sod?</h3>
+<p>Yes, contractors universally recommend adding a 5% to 10% waste factor for standard lawns, and up to 15% for yards with numerous curves, slopes, irregular borders, or garden beds. This ensures you do not run out mid-installation.</p>
+
+<h3>How soon after delivery must the sod be installed?</h3>
+<p>Sod is a living, perishable plant material that must be installed immediately upon delivery, ideally within 24 hours. Leaving stacked pallets in direct sunlight causes excessive heat buildup within the center of the pallet, which can rapidly kill the grass.</p>
+</section>
+</div>
+</main>
+<footer>
+<div class="footer-nav">
+<a href="/">Home</a>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+<a href="#privacy">Privacy</a>
+</div>
+<div class="citation">
+Formula source: State agricultural extension service recommendations. Results are estimates for planning — verify with a licensed professional before ordering materials. &copy; 2026 CalcBlueprint.
+</div>
+</footer>
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(unit) {
+currentUnit = unit;
+document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+
+const lLabel = document.getElementById('label-length');
+const wLabel = document.getElementById('label-width');
+const rollLabel = document.getElementById('label-roll-size');
+const unitRoll = document.getElementById('unit-roll-label');
+
+if (unit === 'metric') {
+lLabel.textContent = 'Lawn Length (meters)';
+wLabel.textContent = 'Lawn Width (meters)';
+unitRoll.textContent = 'sq meters';
+document.getElementById('roll-size').value = '1';
+} else {
+lLabel.textContent = 'Lawn Length (feet)';
+wLabel.textContent = 'Lawn Width (feet)';
+unitRoll.textContent = 'sq ft';
+document.getElementById('roll-size').value = '10';
+}
+document.getElementById('result-box').style.display = 'none';
+}
+
+function calculateSod(e) {
+e.preventDefault();
+let length = parseFloat(document.getElementById('length').value);
+let width = parseFloat(document.getElementById('width').value);
+let rollSize = parseFloat(document.getElementById('roll-size').value);
+let wastePct = parseFloat(document.getElementById('waste').value) / 100;
+
+if (isNaN(length) || isNaN(width) || isNaN(rollSize) || length <= 0 || width <= 0 || rollSize <= 0) return;
+
+let area, totalArea, rolls, pallets, fertilizer, soil;
+
+if (currentUnit === 'metric') {
+// Convert metric inputs to imperial for internal calculation consistency or calculate directly
+let areaSqM = length * width;
+let totalAreaSqM = areaSqM * (1 + wastePct);
+let rollsMetric = Math.ceil(areaSqM / rollSize);
+let palletsMetric = Math.ceil(areaSqM / 46.45); // approx 500 sq ft = 46.45 sq m
+let fertilizerKg = totalAreaSqM * 0.05; // ~0.05 kg per sq meter starter fert
+let soilCubicM = areaSqM * 0.05; // 5cm (approx 2 inches) depth
+
+document.getElementById('res-area').textContent = areaSqM.toFixed(2) + ' sq m';
+document.getElementById('res-total-area').textContent = totalAreaSqM.toFixed(2) + ' sq m';
+document.getElementById('res-rolls').textContent = rollsMetric + ' rolls';
+document.getElementById('res-pallets').textContent = palletsMetric + ' pallets';
+document.getElementById('res-fertilizer').textContent = fertilizerKg.toFixed(1) + ' kg';
+document.getElementById('res-soil').textContent = soilCubicM.toFixed(2) + ' cubic meters';
+} else {
+area = length * width;
+totalArea = area * (1 + wastePct);
+rolls = Math.ceil(area / rollSize);
+pallets = Math.ceil(area / 500);
+let fertilizerLbs = totalArea * 0.01; // ~1 lb per 100 sq ft starter fert
+let soilCuYds = (area * (2 / 12)) / 27; // 2 inches depth
+
+document.getElementById('res-area').textContent = area.toLocaleString(undefined, {maximumFractionDigits: 1}) + ' sq ft';
+document.getElementById('res-total-area').textContent = totalArea.toLocaleString(undefined, {maximumFractionDigits: 1}) + ' sq ft';
+document.getElementById('res-rolls').textContent = rolls.toLocaleString() + ' rolls';
+document.getElementById('res-pallets').textContent = pallets.toLocaleString() + ' pallets';
+document.getElementById('res-fertilizer').textContent = fertilizerLbs.toFixed(1) + ' lbs';
+document.getElementById('res-soil').textContent = soilCuYds.toFixed(2) + ' cubic yards';
+}
+
+document.getElementById('result-box').style.display = 'block';
+}
+</script>
+</body>
+</html>

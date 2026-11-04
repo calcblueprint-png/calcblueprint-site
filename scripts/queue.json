@@ -401,7 +401,8 @@
     "description": "Calculate sod rolls or pallets needed for a new lawn. Includes soil prep and starter fertilizer.",
     "inputs": "Lawn length (feet), lawn width (feet), sod roll size (square feet)",
     "formula": "Area = length * width. Sod rolls = ceil(area / roll_size). Pallets typically hold 450-500 sq ft.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-11-04T08:44:01.112879Z"
   },
   {
     "slug": "topsoil-calculator",
