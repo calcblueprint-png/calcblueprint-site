@@ -410,7 +410,8 @@
     "description": "Calculate how much topsoil you need for lawns, gardens, and raised beds. Enter area and depth.",
     "inputs": "Length (feet), width (feet), depth (inches), measurement unit",
     "formula": "Volume (cubic feet) = length * width * (depth/12). Cubic yards = cubic feet / 27. Bags (40 lb) = ceil(cubic_feet / 0.75).",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-11-05T09:06:41.120911Z"
   },
   {
     "slug": "compost-calculator",

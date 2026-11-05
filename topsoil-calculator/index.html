@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/topsoil-calculator/">
+<title>Topsoil Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate how much topsoil you need for lawns, gardens, and raised beds. Enter area and depth.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Topsoil Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.6;background:#f4f7f6;color:#333}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 0;color:#fff}
+.container{max-width:900px;margin:0 auto;padding:0 1rem}
+.logo{font-size:1.5rem;font-weight:bold;text-decoration:none;color:#fff}
+.logo span{color:#f5a623}
+nav{float:right}
+nav a{color:#fff;text-decoration:none;margin-left:1rem}
+.calculator-box{background:#fff;padding:2rem;border-radius:8px;margin:2rem 0;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
+.unit-toggle{display:flex;gap:10px;margin-bottom:1.5rem}
+.unit-btn{padding:0.5rem 1rem;cursor:pointer;border:1px solid #1a2332;background:none;border-radius:4px}
+.unit-btn.active{background:#f5a623;color:#1a2332;border-color:#f5a623}
+.form-group{margin-bottom:1rem}
+label{display:block;margin-bottom:0.5rem}
+input{width:100%;padding:0.5rem;border:1px solid #ccc;border-radius:4px}
+button#calc-btn{width:100%;padding:1rem;background:#f5a623;color:#1a2332;border:none;border-radius:4px;font-weight:bold;cursor:pointer;margin-top:1rem}
+.result-box{margin-top:2rem;padding:1rem;background:#eef2f7;border-radius:8px}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #d1d9e0}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem}
+footer{padding:2rem 0;text-align:center;font-size:0.9rem;color:#666}
+details{margin-bottom:1rem;padding:1rem;background:#fff;border-radius:8px}
+</style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <a href="/" class="logo">Calc<span>Blueprint</span></a>
+        <nav><a href="/about">About</a><a href="/contact">Contact</a></nav>
+    </div>
+</header>
+<main>
+    <div class="container">
+        <div class="calculator-box">
+            <div class="unit-toggle">
+                <button class="unit-btn active" id="btn-imperial" onclick="setUnit('imperial')">Imperial (US)</button>
+                <button class="unit-btn" id="btn-metric" onclick="setUnit('metric')">Metric</button>
+            </div>
+            <div class="form-group"><label id="lbl-len">Length (feet)</label><input type="number" id="len" placeholder="0"></div>
+            <div class="form-group"><label id="lbl-wid">Width (feet)</label><input type="number" id="wid" placeholder="0"></div>
+            <div class="form-group"><label id="lbl-dep">Depth (inches)</label><input type="number" id="dep" placeholder="0"></div>
+            <button id="calc-btn" onclick="calculate()">Calculate</button>
+            <div id="results" class="result-box" style="display:none">
+                <div class="result-row"><span>Volume:</span> <span id="res-vol">0</span></div>
+                <div class="result-row"><span>Total Needed:</span> <span id="res-unit">0</span></div>
+                <div class="result-row"><span>Bags (40lb/18kg):</span> <span id="res-bags">0</span></div>
+            </div>
+        </div>
+
+        <details>
+            <summary>How this calculator works</summary>
+            <p>This calculator determines volume by multiplying the surface area by the specified depth. It then converts the cubic volume into standard industry units for ordering bulk material or bagged products. Formula based on State agricultural extension service recommendations.</p>
+        </details>
+
+        <section class="content-section">
+            <h2>How to Calculate Topsoil</h2>
+            <p>Calculating topsoil requirements begins with an accurate measurement of your project area. For rectangular beds, multiply length by width to find square footage. To determine the volume, multiply that area by your desired depth, ensuring the depth is converted to feet (e.g., 3 inches becomes 0.25 feet). For irregular shapes, break the area into smaller rectangles or triangles, calculate them individually, and sum the results. Always account for soil compaction; topsoil typically settles by 10-15% after installation, so it is professional practice to add a slight buffer to your final order to ensure you have enough material to reach your target grade after the first few waterings.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>What Affects Topsoil Requirements</h2>
+            <p>Several factors influence the volume of topsoil needed for a landscape project. The primary variable is the existing soil condition; if you are amending heavy clay, you may need a higher volume of organic-rich topsoil to improve drainage and aeration. Additionally, the intended use dictates the depth: lawns typically require 4-6 inches of topsoil, while raised vegetable beds often perform best with 10-12 inches to support deep root systems. Moisture content also plays a role, as wet soil is denser and may settle differently than dry, screened soil. Finally, the method of delivery—bulk truckload versus bagged product—can impact your total cost and the ease of distribution across your site.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>Frequently Asked Questions</h2>
+            <h3>How deep should my topsoil layer be for a new lawn?</h3>
+            <p>For a healthy lawn, a minimum of 4 to 6 inches of high-quality topsoil is recommended to provide sufficient nutrients and root space for turfgrass.</p>
+            <h3>Should I account for soil settling when ordering?</h3>
+            <p>Yes, it is standard practice to add approximately 10-15% to your calculated volume to account for natural compaction and settling that occurs after the first rainfall.</p>
+            <h3>Can I use the same topsoil for raised beds and general landscaping?</h3>
+            <p>While you can, raised beds often benefit from a mix specifically formulated with higher organic matter content, such as compost or peat moss, to maximize vegetable yields.</p>
+        </section>
+    </div>
+</main>
+<footer>
+    <div class="container">
+        <p><a href="/">Home</a> | <a href="/about">About</a> | <a href="/contact">Contact</a> | <a href="/privacy">Privacy</a></p>
+        <p>Formula source: State agricultural extension service recommendations. Results are estimates for planning — verify with a licensed professional before ordering materials. 2026.</p>
+    </div>
+</footer>
+<script>
+let unit = 'imperial';
+function setUnit(u) {
+    unit = u;
+    document.getElementById('btn-imperial').className = unit === 'imperial' ? 'unit-btn active' : 'unit-btn';
+    document.getElementById('btn-metric').className = unit === 'metric' ? 'unit-btn active' : 'unit-btn';
+    document.getElementById('lbl-len').innerText = unit === 'imperial' ? 'Length (feet)' : 'Length (meters)';
+    document.getElementById('lbl-wid').innerText = unit === 'imperial' ? 'Width (feet)' : 'Width (meters)';
+    document.getElementById('lbl-dep').innerText = unit === 'imperial' ? 'Depth (inches)' : 'Depth (centimeters)';
+}
+function calculate() {
+    let l = parseFloat(document.getElementById('len').value);
+    let w = parseFloat(document.getElementById('wid').value);
+    let d = parseFloat(document.getElementById('dep').value);
+    if(isNaN(l) || isNaN(w) || isNaN(d)) return;
+    let vol, yards, bags;
+    if(unit === 'imperial') {
+        vol = l * w * (d / 12);
+        yards = vol / 27;
+        bags = Math.ceil(vol / 0.75);
+        document.getElementById('res-vol').innerText = vol.toFixed(2) + ' cubic feet';
+        document.getElementById('res-unit').innerText = yards.toFixed(2) + ' cubic yards';
+        document.getElementById('res-bags').innerText = bags;
+    } else {
+        let lM = l, wM = w, dM = d / 100;
+        vol = lM * wM * dM;
+        bags = Math.ceil((vol * 35.3147) / 0.75);
+        document.getElementById('res-vol').innerText = vol.toFixed(2) + ' cubic meters';
+        document.getElementById('res-unit').innerText = vol.toFixed(2) + ' cubic meters';
+        document.getElementById('res-bags').innerText = bags;
+    }
+    document.getElementById('results').style.display = 'block';
+}
+</script>
+</body>
+</html>
