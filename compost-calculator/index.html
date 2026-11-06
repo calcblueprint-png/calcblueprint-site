@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/compost-calculator/">
+<title>Compost Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate how much compost to add to garden beds and lawns. Includes application rate recommendations.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#2c3e50;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#ffffff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:700;color:#ffffff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#ffffff;text-decoration:none;margin-left:1.5rem;font-weight:500}
+nav a:hover{color:#f5a623}
+main{padding:2rem 1rem;max-width:900px;margin:0 auto}
+.container{width:100%}
+.calculator-box{background:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+.calc-title{font-size:1.75rem;margin-bottom:1.5rem;color:#1a2332}
+.unit-toggle{display:flex;gap:10px;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:2px solid #1a2332;background:#ffffff;color:#1a2332;font-weight:600;border-radius:4px;cursor:pointer;transition:all 0.2s}
+.unit-btn.active{background:#1a2332;color:#ffffff}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input,.form-group select{width:100%;padding:0.75rem;border:1px solid #cbd5e1;border-radius:4px;font-size:1rem}
+.calc-btn{background:#f5a623;color:#1a2332;border:none;width:100%;padding:1rem;font-size:1.1rem;font-weight:700;border-radius:4px;cursor:pointer;margin-top:1rem;transition:background 0.2s}
+.calc-btn:hover{background:#e0951b}
+.result-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:1.5rem;margin-top:2rem;display:none}
+.result-box.visible{display:block}
+.result-title{font-size:1.25rem;font-weight:700;margin-bottom:1rem;color:#1a2332}
+.result-row{display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid #e2e8f0}
+.result-row:last-child{border-bottom:none}
+.result-label{font-weight:500;color:#475569}
+.result-value{font-weight:700;color:#1a2332}
+details{background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;padding:1rem 1.5rem;margin-bottom:2rem;box-shadow:0 2px 4px rgba(0,0,0,0.02)}
+summary{font-weight:600;cursor:pointer;color:#1a2332;font-size:1.1rem}
+details p{margin-top:1rem;color:#475569}
+details .source-line{margin-top:0.75rem;font-size:0.9rem;font-style:italic;color:#64748b}
+.content-section { background-color: #ffffff; border-radius: 8px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+.content-section h2 { font-size: 1.5rem; color: #1a2332; margin-bottom: 1rem; }
+.content-section p { margin-bottom: 1rem; color: #475569; }
+.content-section h3 { font-size: 1.15rem; color: #1a2332; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+footer{background:#1a2332;color:#ffffff;text-align:center;padding:2rem;margin-top:3rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#ffffff;text-decoration:none;margin:0 10px}
+footer nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#94a3b8;max-width:700px;margin:0 auto}
+@media(max-width:600px){header{flex-direction:column;gap:1rem}nav a{margin:0 0.5rem}}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Compost Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+</head>
+<body>
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+</nav>
+</header>
+<main>
+<div class="container">
+<div class="calculator-box">
+<h1 class="calc-title">Compost Calculator</h1>
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+</div>
+<form id="calc-form" onsubmit="calculateCompost(event)">
+<div class="form-group">
+<label id="label-area" for="area-input">Garden Area (sq ft)</label>
+<input type="number" id="area-input" step="any" min="0" required placeholder="e.g., 500">
+</div>
+<div class="form-group">
+<label id="label-rate" for="rate-input">Application Rate (inches)</label>
+<input type="number" id="rate-input" step="any" min="0" required placeholder="e.g., 2">
+</div>
+<div class="form-group">
+<label for="compost-type">Compost Type / Purpose</label>
+<select id="compost-type">
+<option value="general">General Garden Bed / Planting Mix (1 - 3 inches)</option>
+<option value="lawn">Lawn Topdressing / Overseeding (0.25 - 0.5 inches)</option>
+<option value="mulch">Surface Mulch / Heavy Amendment (3 - 4 inches)</option>
+</select>
+</div>
+<button type="submit" class="calc-btn">Calculate Compost</button>
+</form>
+<div class="result-box" id="result-box">
+<h2 class="result-title">Required Materials</h2>
+<div class="result-row">
+<span class="result-label" id="res-vol-label">Volume Required:</span>
+<span class="result-value" id="res-volume">0</span>
+</div>
+<div class="result-row">
+<span class="result-label" id="res-bulk-label">Bulk Quantity (Cubic Yards):</span>
+<span class="result-value" id="res-bulk">0</span>
+</div>
+<div class="result-row">
+<span class="result-label" id="res-bag-label">Standard Bags (1.5 cu ft):</span>
+<span class="result-value" id="res-bags">0</span>
+</div>
+<div class="result-row">
+<span class="result-label" id="res-weight-label">Estimated Dry Weight:</span>
+<span class="result-value" id="res-weight">0</span>
+</div>
+</div>
+</div>
+
+<details>
+<summary>How this calculator works</summary>
+<p>This calculator determines the total volume of organic material needed by multiplying your specified garden or lawn surface area by the desired application depth, converting fractional inches into feet. The resulting cubic footage is then translated into standardized bulk supply measurements such as cubic yards or cubic meters, alongside bag estimates and estimated weight conversions based on standard soil amendment densities.</p>
+<div class="source-line">Formula source: State agricultural extension service recommendations</div>
+</details>
+
+<section class="content-section">
+<h2>How to Calculate Compost Requirements</h2>
+<p>Determining the correct amount of organic compost for your residential landscaping or commercial agricultural beds ensures optimal soil structure, moisture retention, and microbial activity without suffocating root zones. To accurately compute your requirement, measure the square footage of your planting area and multiply it by the desired thickness of the topdressing layer converted into feet. For instance, applying a standard two-inch layer across a vegetable plot requires dividing two inches by twelve to establish the depth fraction, then multiplying by the total surface area.</p>
+<p>Once you derive the raw volume in cubic feet, divide the figure by 27 to find the total volume in cubic yards, which is the standard commercial unit used by landscape supply yards. If purchasing bagged products, check the bag capacity—typically measured in 1.5 or 2 cubic foot increments—to convert your total requirement into precise shopping units. Factoring in a 5% to 10% compaction and uneven grading buffer guarantees you do not run short during installation.</p>
+<h3>Application Guidelines</h3>
+<p>Different horticultural applications demand distinct amendment depths. Established lawns benefit from a light quarter-inch to half-inch topdressing to stimulate turf without burying grass blades. New garden beds typically receive a robust one-to-three-inch layer incorporated into the topsoil.</p>
+</section>
+
+<section class="content-section">
+<h2>What Affects Compost Quantities</h2>
+<p>Several environmental and material properties influence the actual volume of compost you need to order and spread. Soil texture plays a primary role; heavy clay soils demand higher incorporation rates and deeper organic amendment to break up compaction and improve drainage, whereas sandy soils require organic matter to enhance moisture retention and nutrient-holding capacity.</p>
+<p>Moisture content at the time of delivery significantly alters weight and perceived volume. Freshly produced bulk compost stored in open-air yards often contains high moisture levels, making it heavier and denser than dry, bagged retail products. Furthermore, settling and grading must be accounted for; loose compost naturally settles by 10% to 20% after the first heavy rainfall or irrigation cycle. If you are grading over uneven terrain or filling depressed planting basins, always measure true surface contours rather than flat aerial footprints to prevent shortages.</p>
+<h3>Material Density and Quality</h3>
+<p>Finely screened composts pack more densely per cubic foot compared to coarse, woody mulches or partially decomposed yard waste, altering your final weight calculations and bag counts.</p>
+</section>
+
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>How deep should I apply compost to a new garden bed?</h3>
+<p>For new garden beds, a depth of 2 to 3 inches of finished compost tilled into the top 6 to 8 inches of native soil provides an ideal nutrient-rich bed for annuals, perennials, and vegetables.</p>
+<h3>Can I put too much compost on my lawn?</h3>
+<p>Yes, applying more than half an inch of compost at one time to a turfgrass lawn can smother the grass blades, block necessary sunlight, and lead to root rot or turf thinning.</p>
+<h3>How many bags of compost equal one cubic yard?</h3>
+<p>One cubic yard equals 27 cubic feet. If you are purchasing standard bags containing 1.5 cubic feet of compost, you will need approximately 18 bags to equal a single cubic yard.</p>
+</section>
+
+</div>
+</main>
+<footer>
+<nav>
+<a href="/">Home</a>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+<a href="#privacy">Privacy</a>
+</nav>
+<div class="citation">Formula source: State agricultural extension service recommendations. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.</div>
+</footer>
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(unit) {
+    currentUnit = unit;
+    document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+    document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+    
+    const labelArea = document.getElementById('label-area');
+    const labelRate = document.getElementById('label-rate');
+    const areaInput = document.getElementById('area-input');
+    const rateInput = document.getElementById('rate-input');
+
+    if(unit === 'metric') {
+        labelArea.textContent = 'Garden Area (sq meters)';
+        labelRate.textContent = 'Application Rate (centimeters)';
+        areaInput.placeholder = 'e.g., 50';
+        rateInput.placeholder = 'e.g., 5';
+    } else {
+        labelArea.textContent = 'Garden Area (sq ft)';
+        labelRate.textContent = 'Application Rate (inches)';
+        areaInput.placeholder = 'e.g., 500';
+        rateInput.placeholder = 'e.g., 2';
+    }
+    
+    // Clear results on unit change
+    document.getElementById('result-box').classList.remove('visible');
+}
+
+function calculateCompost(event) {
+    event.preventDefault();
+    let area = parseFloat(document.getElementById('area-input').value);
+    let rate = parseFloat(document.getElementById('rate-input').value);
+
+    if (isNaN(area) || isNaN(rate) || area <= 0 || rate <= 0) return;
+
+    let volumeCuFt, bulkYards, bagCount, weightLbs;
+    let volLabel, bulkLabel, bagLabel, wtLabel;
+
+    if (currentUnit === 'metric') {
+        // Convert metric inputs to internal calc equivalents if needed, or compute directly
+        // Area in sq meters to sq feet: sq_m * 10.7639
+        // Rate in cm to inches: cm / 2.54
+        let areaSqFt = area * 10.7639104;
+        let rateInches = rate / 2.54;
+
+        let volumeCuFtCalc = areaSqFt * (rateInches / 12.0);
+        let volumeCuMeters = volumeCuFtCalc * 0.0283168466;
+        let weightKg = volumeCuMeters * 700; // approximate density 700 kg/m3 for compost
+
+        volLabel = "Volume Required:";
+        bulkLabel = "Bulk Quantity (Cubic Meters):";
+        bagLabel = "Standard Bags (50 Liters):";
+        wtLabel = "Estimated Dry Weight:";
+
+        document.getElementById('res-volume').textContent = volumeCuMeters.toFixed(2) + " cu m";
+        document.getElementById('res-bulk').textContent = volumeCuMeters.toFixed(2) + " cu m";
+        document.getElementById('res-bags').textContent = Math.ceil(volumeCuMeters * 1000 / 50) + " bags";
+        document.getElementById('res-weight').textContent = weightKg.toFixed(1) + " kg";
+    } else {
+        volumeCuFt = area * (rate / 12.0);
+        bulkYards = volumeCuFt / 27.0;
+        bagCount = volumeCuFt / 1.5; // assuming standard 1.5 cu ft bags
+        weightLbs = volumeCuFt * 40; // approx 40 lbs per cubic foot
+
+        document.getElementById('res-volume').textContent = volumeCuFt.toFixed(2) + " cu ft";
+        document.getElementById('res-bulk').textContent = bulkYards.toFixed(2) + " cu yd";
+        document.getElementById('res-bags').textContent = Math.ceil(bagCount) + " bags";
+        document.getElementById('res-weight').textContent = weightLbs.toFixed(1) + " lbs";
+    }
+
+    document.getElementById('result-box').classList.add('visible');
+}
+</script>
+</body>
+</html>

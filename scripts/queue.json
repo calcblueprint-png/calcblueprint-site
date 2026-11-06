@@ -419,7 +419,8 @@
     "description": "Calculate how much compost to add to garden beds and lawns. Includes application rate recommendations.",
     "inputs": "Garden area (square feet), application rate (inches), compost type",
     "formula": "Volume (cubic feet) = area * (rate/12). Cubic yards = volume / 27.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-11-06T08:59:33.610222Z"
   },
   {
     "slug": "fertilizer-calculator",
