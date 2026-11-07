@@ -428,7 +428,8 @@
     "description": "Calculate fertilizer needed based on NPK ratio and target nitrogen per 1000 sq ft. Essential for lawns.",
     "inputs": "Lawn area (square feet), desired nitrogen per 1000 sq ft (lbs), fertilizer NPK ratio",
     "formula": "Total nitrogen = area / 1000 * N_per_1000. Fertilizer weight = nitrogen / (N_percentage / 100).",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-11-07T08:29:05.194909Z"
   },
   {
     "slug": "grass-seed-calculator",

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/fertilizer-calculator/">
+<title>Fertilizer Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate fertilizer needed based on NPK ratio and target nitrogen per 1000 sq ft. Essential for lawns.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:700;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+.container{max-width:900px;margin:2rem auto;padding:0 1rem}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);margin-bottom:2rem}
+.calc-title{font-size:1.75rem;color:#1a2332;margin-bottom:1.5rem;font-weight:700}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:2px solid #ddd;background:#f9f9f9;border-radius:4px;cursor:pointer;font-weight:600;font-size:0.95rem;transition:all 0.2s}
+.unit-btn.active{background:#f5a623;border-color:#f5a623;color:#1a2332}
+.form-group{margin-bottom:1.25rem}
+label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+input,select{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+input:focus,select:focus{outline:none;border-color:#f5a623}
+.npk-group{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.calc-btn{display:block;width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;border-radius:4px;font-size:1.1rem;font-weight:700;cursor:pointer;transition:background 0.2s;margin-top:1.5rem}
+.calc-btn:hover{background:#e0951f}
+.result-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:1.5rem;margin-top:2rem;display:none}
+.result-box.visible{display:block}
+.result-title{font-size:1.25rem;color:#1a2332;margin-bottom:1rem;font-weight:700}
+.result-row{display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid #e2e8f0}
+.result-row:last-child{border-bottom:none}
+.result-label{color:#4a5568}
+.result-value{font-weight:700;color:#1a2332}
+details{background:#fff;border-radius:8px;padding:1.5rem;margin-bottom:2rem;box-shadow:0 2px 4px rgba(0,0,0,0.03);border:1px solid #e2e8f0}
+summary{font-weight:700;cursor:pointer;color:#1a2332;font-size:1.1rem}
+details p{margin-top:1rem;color:#4a5568}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 2px 4px rgba(0,0,0,0.03);border:1px solid #e2e8f0}
+.content-section h2{font-size:1.5rem;color:#1a2332;margin-bottom:1rem}
+.content-section p{margin-bottom:1rem;color:#4a5568}
+.content-section h3{font-size:1.1rem;color:#1a2332;margin-top:1.25rem;margin-bottom:0.5rem}
+footer{background:#1a2332;color:#fff;padding:2rem;text-align:center;margin-top:4rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#cbd5e1;text-decoration:none;margin:0 1rem}
+footer nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#94a3b8;max-width:700px;margin:0 auto}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Fertilizer Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+</head>
+<body>
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+</nav>
+</header>
+<main>
+<div class="container">
+<div class="calculator-box">
+<h1 class="calc-title">Fertilizer Calculator</h1>
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnitSystem('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnitSystem('metric')">Metric</button>
+</div>
+<form id="fertilizer-form" onsubmit="calculateFertilizer(event)">
+<div class="form-group">
+<label for="area" id="label-area">Lawn Area (square feet)</label>
+<input type="number" id="area" step="any" min="1" required value="5000">
+</div>
+<div class="form-group">
+<label for="n-target" id="label-target">Desired Nitrogen per 1000 sq ft (lbs)</label>
+<input type="number" id="n-target" step="any" min="0.1" required value="1.0">
+</div>
+<div class="form-group">
+<label>Fertilizer NPK Ratio (Nitrogen - Phosphorus - Potassium)</label>
+<div class="npk-group">
+<input type="number" id="npk-n" placeholder="N %" step="any" min="0" required value="29">
+<input type="number" id="npk-p" placeholder="P %" step="any" min="0" required value="0">
+<input type="number" id="npk-k" placeholder="K %" step="any" min="0" required value="4">
+</div>
+</div>
+<button type="submit" class="calc-btn">Calculate Fertilizer</button>
+</form>
+<div class="result-box" id="result-box">
+<h2 class="result-title">Application Results</h2>
+<div class="result-row">
+<span class="result-label">Total Area:</span>
+<span class="result-value" id="res-area">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Total Nitrogen Required:</span>
+<span class="result-value" id="res-nitrogen">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Total Fertilizer Product Needed:</span>
+<span class="result-value" id="res-product">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Nutrient Breakdown (N-P-K applied):</span>
+<span class="result-value" id="res-npk">0</span>
+</div>
+</div>
+</div>
+
+<details>
+<summary>How this calculator works</summary>
+<p>This calculator determines the exact amount of bagged fertilizer product required by evaluating your total application area against your target nitrogen rate per thousand units. It divides your total area by one thousand, multiplies by your target nutrient weight, and then divides by the percentage of nitrogen contained in your chosen fertilizer blend. Formula based on State agricultural extension service recommendations and turf management guidelines.</p>
+</details>
+
+<section class="content-section">
+<h2>How to Calculate Fertilizer Requirements</h2>
+<p>Applying the correct amount of fertilizer is critical for maintaining a dense, healthy lawn while preventing nutrient runoff and environmental damage. Turfgrass professionals rely on precise mathematical formulas to ensure they deliver adequate nutrition without burning the grass or wasting product. The process begins by measuring your total square footage accurately. Irregular lawn layouts can be broken down into smaller geometric shapes like rectangles and triangles to compute total surface area.</p>
+<p>Once you establish your area, you must determine your target nitrogen rate, which typically ranges from 0.5 to 1.0 pounds of actual nitrogen per 1,000 square feet per application during active growing seasons. By referencing the three-number NPK ratio printed on the fertilizer bag—where the first number represents nitrogen percentage—you can easily compute the gross weight of the bag needed to cover your property. Always calibrate your spreader prior to application to ensure even distribution across the entire lawn surface.</p>
+</section>
+
+<section class="content-section">
+<h2>What Affects Turf Fertilizer Requirements</h2>
+<p>Several vital environmental and agronomic factors influence how much fertilizer your lawn needs throughout the growing season. Grass species play a primary role; cool-season grasses like Kentucky bluegrass and tall fescue have peak growth periods in spring and autumn, whereas warm-season grasses like Bermuda and St. Augustine require heavier feeding during scorching summer months.</p>
+<p>Soil composition and pH levels significantly alter nutrient availability. Conducting a professional soil test helps identify existing nutrient reserves, preventing unnecessary phosphorus or potassium applications. Irrigation practices and natural rainfall patterns also dictate feeding schedules; excessive water can leach mobile nutrients like nitrogen below the root zone, necessitating split-application strategies to maintain consistent turf color and vigor.</p>
+</section>
+
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>What does the three-number NPK ratio on a fertilizer bag mean?</h3>
+<p>The three numbers represent the percentage by weight of three primary macronutrients: Nitrogen (N), Phosphorus (P2O5), and Potassium (K2O). For example, a 29-0-4 fertilizer contains 29 percent nitrogen, zero percent phosphate, and 4 percent potash.</p>
+<h3>How often should I apply nitrogen to my lawn?</h3>
+<p>Most residential lawns benefit from two to four applications per year, spaced six to eight weeks apart during active growing seasons. Spreading out applications prevents sudden flush growth and ensures steady nutrient uptake.</p>
+<h3>What happens if I apply too much nitrogen?</h3>
+<p>Over-application of nitrogen can cause rapid, weak top growth that depletes carbohydrate reserves in the roots, makes the turf more susceptible to disease and drought, and can burn the grass blades through chemical dehydration.</p>
+</section>
+
+</div>
+</main>
+<footer>
+<nav>
+<a href="/">Home</a>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+<a href="/privacy/">Privacy</a>
+</nav>
+<p class="citation">Formula source: State agricultural extension service recommendations. Results are estimates for planning — verify with a licensed professional before ordering materials.</p>
+</footer>
+<script>
+let currentSystem = 'imperial';
+
+function setUnitSystem(system) {
+    currentSystem = system;
+    const btnImp = document.getElementById('btn-imperial');
+    const btnMet = document.getElementById('btn-metric');
+    const labelArea = document.getElementById('label-area');
+    const labelTarget = document.getElementById('label-target');
+    const inputArea = document.getElementById('area');
+    const inputTarget = document.getElementById('n-target');
+
+    if (system === 'imperial') {
+        btnImp.classList.add('active');
+        btnMet.classList.remove('active');
+        labelArea.textContent = 'Lawn Area (square feet)';
+        labelTarget.textContent = 'Desired Nitrogen per 1000 sq ft (lbs)';
+        inputArea.value = Math.round(inputArea.value / 0.092903) || 5000;
+        inputTarget.value = (inputTarget.value * 4.88243).toFixed(2);
+    } else {
+        btnMet.classList.add('active');
+        btnImp.classList.remove('active');
+        labelArea.textContent = 'Lawn Area (square meters)';
+        labelTarget.textContent = 'Desired Nitrogen per 100 sq meters (kg)';
+        inputArea.value = Math.round(inputArea.value * 0.092903) || 500;
+        inputTarget.value = (inputTarget.value / 4.88243).toFixed(2);
+    }
+    document.getElementById('result-box').classList.remove('visible');
+}
+
+function calculateFertilizer(event) {
+    event.preventDefault();
+    let areaInput = parseFloat(document.getElementById('area').value);
+    let targetInput = parseFloat(document.getElementById('n-target').value);
+    let nPercent = parseFloat(document.getElementById('npk-n').value);
+    let pPercent = parseFloat(document.getElementById('npk-p').value);
+    let kPercent = parseFloat(document.getElementById('npk-k').value);
+
+    let areaSqFt, targetPerUnit, areaUnitLabel, weightUnitLabel;
+
+    if (currentSystem === 'imperial') {
+        areaSqFt = areaInput;
+        targetPerUnit = targetInput;
+        areaUnitLabel = 'sq ft';
+        weightUnitLabel = 'lbs';
+    } else {
+        // Convert metric sq meters to sq ft, metric kg/100sqm to lbs/1000sqft equivalent for formula
+        areaSqFt = areaInput * 10.7639;
+        // targetInput is kg per 100 sq meters. 100 sqm = 1076.39 sq ft.
+        // We want nitrogen per 1000 sq ft.
+        let targetPerSqM = targetInput / 100;
+        let targetPerSqFt = targetPerSqM / 10.7639;
+        targetPerUnit = targetPerSqFt * 1000;
+        areaUnitLabel = 'sq meters';
+        weightUnitLabel = 'kg';
+    }
+
+    let totalNitrogen = (areaSqFt / 1000) * targetPerUnit;
+    let fertilizerWeight = nPercent > 0 ? totalNitrogen / (nPercent / 100) : 0;
+
+    let displayArea = currentSystem === 'imperial' ? areaSqFt.toLocaleString(undefined, {maximumFractionDigits: 1}) : (areaSqFt * 0.092903).toLocaleString(undefined, {maximumFractionDigits: 1});
+    let displayNitrogen = currentSystem === 'imperial' ? totalNitrogen.toFixed(2) + ' lbs' : (totalNitrogen * 0.453592).toFixed(2) + ' kg';
+    let displayProduct = currentSystem === 'imperial' ? fertilizerWeight.toFixed(2) + ' lbs' : (fertilizerWeight * 0.453592).toFixed(2) + ' kg';
+
+    document.getElementById('res-area').textContent = `${displayArea} ${areaUnitLabel}`;
+    document.getElementById('res-nitrogen').textContent = displayNitrogen;
+    document.getElementById('res-product').textContent = displayProduct;
+    document.getElementById('res-npk').textContent = `${nPercent}-${pPercent}-${kPercent}`;
+
+    document.getElementById('result-box').classList.add('visible');
+}
+</script>
+</body>
+</html>
