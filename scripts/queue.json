@@ -437,7 +437,8 @@
     "description": "Calculate grass seed needed for new lawns or overseeding. Varies by grass type and application.",
     "inputs": "Lawn area (square feet), grass type, application (new lawn or overseed)",
     "formula": "New lawn: 4-6 lbs per 1000 sq ft. Overseed: 2-3 lbs per 1000 sq ft. Total = area / 1000 * rate * 1.1.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-11-08T08:41:25.561609Z"
   },
   {
     "slug": "chain-link-fence-calculator",

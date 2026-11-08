@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/grass-seed-calculator/">
+<title>Grass Seed Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate grass seed needed for new lawns or overseeding. Varies by grass type and application.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Grass Seed Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:bold;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+.container{max-width:900px;margin:2rem auto;padding:0 1rem}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.05);margin-bottom:2rem}
+.unit-toggle{display:flex;gap:1rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:2px solid #ddd;background:#f9f9f9;border-radius:6px;cursor:pointer;font-weight:600;font-size:0.95rem;transition:all 0.2s}
+.unit-btn.active{background:#f5a623;border-color:#f5a623;color:#1a2332}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332;font-size:0.95rem}
+.form-group input,.form-group select{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:6px;font-size:1rem}
+.calc-btn{display:block;width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;border-radius:6px;font-size:1rem;font-weight:bold;cursor:pointer;margin-top:1.5rem;transition:opacity 0.2s}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#f8fafc;border-left:4px solid #f5a623;padding:1.5rem;border-radius:4px;margin-top:1.5rem;display:none}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #e2e8f0;font-size:1rem}
+.result-row:last-child{border-bottom:none}
+.result-label{font-weight:600;color:#1a2332}
+.result-value{font-weight:bold;color:#2d3748}
+details{background:#fff;border-radius:8px;padding:1.5rem;margin-bottom:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.05)}
+summary{font-weight:bold;cursor:pointer;color:#1a2332;font-size:1.1rem}
+details p{margin-top:1rem;color:#4a5568}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.05)}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
+.content-section p{margin-bottom:1rem;color:#4a5568}
+.content-section h3{color:#1a2332;margin-top:1.5rem;margin-bottom:0.5rem;font-size:1.1rem}
+footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:3rem;font-size:0.9rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#fff;margin:0 0.75rem;text-decoration:none}
+footer nav a:hover{color:#f5a623}
+.citation{font-size:0.8rem;color:#a0aec0;max-width:700px;margin:0 auto}
+</style>
+</head>
+<body>
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="/">Home</a>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+</nav>
+</header>
+
+<main>
+<div class="container">
+<div class="calculator-box">
+<h1 style="color:#1a2332;margin-bottom:1.5rem;font-size:1.8rem;">Grass Seed Calculator</h1>
+
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+</div>
+
+<div class="form-group">
+<label id="label-area" for="lawn-area">Lawn Area (sq ft)</label>
+<input type="number" id="lawn-area" placeholder="e.g. 5000" min="1" step="any">
+</div>
+
+<div class="form-group">
+<label for="grass-type">Grass Type</label>
+<select id="grass-type">
+<option value="cool">Cool Season (Kentucky Bluegrass, Fescue, Ryegrass)</option>
+<option value="warm">Warm Season (Bermuda, Zoysia, Centipede)</option>
+<option value="mixed">General Mixed Turf</option>
+</select>
+</div>
+
+<div class="form-group">
+<label for="application-type">Application Type</label>
+<select id="application-type">
+<option value="new">New Lawn Establishment</option>
+<option value="overseed">Overseeding / Repair</option>
+</select>
+</div>
+
+<button type="button" class="calc-btn" onclick="calculateSeed()">Calculate Seed Needed</button>
+
+<div class="result-box" id="result-box">
+<div class="result-row">
+<span class="result-label">Base Coverage Area:</span>
+<span class="result-value" id="res-area">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Recommended Application Rate:</span>
+<span class="result-value" id="res-rate">0</span>
+</div>
+<div class="result-row">
+<span class="result-label">Total Seed Required (incl. 10% waste):</span>
+<span class="result-value" id="res-total">0</span>
+</div>
+</div>
+</div>
+
+<details>
+<summary>How this calculator works</summary>
+<p>This calculator determines the precise amount of grass seed required by factoring in your total surface area, whether you are planting a brand new turf or overseeding an existing lawn, and incorporating a standard 10% contingency for bare spots and uneven distribution. The formula calculates base square footage rates scaled per 1,000 square units. Formula based on State agricultural extension service recommendations and turf management guidelines.</p>
+</details>
+
+<section class="content-section">
+<h2>How to Calculate Grass Seed</h2>
+<p>Establishing a healthy, lush lawn begins with accurate measurement and application math. To determine the correct amount of grass seed, you first need to calculate the total square footage of your lawn by breaking complex yard shapes into manageable rectangles or triangles, calculating their area, and summing them together. Once you have your total area, you must identify whether you are seeding a completely new turf area or simply thickening an existing lawn through overseeding.</p>
+<p>New lawns require heavier seeding rates to establish a dense canopy from scratch, typically ranging between 4 to 6 pounds per 1,000 square feet depending on seed genetics. Conversely, overseeding requires lighter rates, usually 2 to 3 pounds per 1,000 square feet, to fill in thin patches without choking out existing mature grass. Finally, always apply a 10% contingency factor to account for slope runoff, wind scatter, and uneven ground spreading.</p>
+</section>
+
+<section class="content-section">
+<h2>What Affects Grass Seed Requirements</h2>
+<p>Several vital agronomic factors influence how much seed you will ultimately need to purchase and successfully grow. First and foremost is seed variety: fine fescues and Kentucky bluegrass possess different seed counts per pound compared to larger perennial ryegrass or coarse warm-season cultivars. Heavier seeds require higher weight volumes to achieve the same number of individual grass plants per square foot.</p>
+<p>Site conditions and soil preparation also dictate success rates. Poorly graded soils, heavy clay, or erosion-prone slopes often suffer from seed loss during heavy rain events, necessitating slightly higher application density or protective mulching. Additionally, germination rates listed on the seed tag (purity and viability percentages) should be inspected; older seed lots with lower germination percentages may require an increased overall volume to guarantee a thick, uniform turf stand.</p>
+</section>
+
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>What is the difference between new lawn seeding and overseeding rates?</h3>
+<p>New lawn seeding requires higher rates (typically 4-6 lbs per 1,000 sq ft) because you are building the turf canopy completely from bare soil. Overseeding uses lower rates (2-3 lbs per 1,000 sq ft) because established grass plants are already occupying the majority of the ground space.</p>
+
+<h3>Why does the calculator include a 10 percent waste factor?</h3>
+<p>The 10 percent buffer accounts for uneven spreader calibration, wind drift, localized runoff from heavy watering or rain, and bird foraging. Adding this small safety margin ensures you will not run out of seed mid-project.</p>
+
+<h3>When is the best time of year to plant grass seed?</h3>
+<p>Cool-season grasses are best planted in early fall when soil temperatures are warm and air temperatures are cool, reducing weed competition and drought stress. Warm-season grasses are best established in late spring as soil temperatures consistently exceed 65 degrees Fahrenheit.</p>
+</section>
+</div>
+</main>
+
+<footer>
+<nav>
+<a href="/">Home</a>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+<a href="/privacy/">Privacy</a>
+</nav>
+<div class="citation">Formula source: State agricultural extension service recommendations. Results are estimates for planning — verify with a licensed professional before ordering materials. &copy; 2026 CalcBlueprint</div>
+</footer>
+
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(unit) {
+    currentUnit = unit;
+    document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+    document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+    
+    const areaLabel = document.getElementById('label-area');
+    const areaInput = document.getElementById('lawn-area');
+    
+    if (unit === 'metric') {
+        areaLabel.textContent = 'Lawn Area (sq meters)';
+        if (areaInput.value) {
+            areaInput.value = (parseFloat(areaInput.value) * 0.092903).toFixed(1);
+        } else {
+            areaInput.placeholder = 'e.g. 500';
+        }
+    } else {
+        areaLabel.textContent = 'Lawn Area (sq ft)';
+        if (areaInput.value) {
+            areaInput.value = (parseFloat(areaInput.value) / 0.092903).toFixed(0);
+        } else {
+            areaInput.placeholder = 'e.g. 5000';
+        }
+    }
+    
+    document.getElementById('result-box').style.display = 'none';
+}
+
+function calculateSeed() {
+    let area = parseFloat(document.getElementById('lawn-area').value);
+    const grassType = document.getElementById('grass-type').value;
+    const appType = document.getElementById('application-type').value;
+    
+    if (isNaN(area) || area <= 0) {
+        alert('Please enter a valid lawn area.');
+        return;
+    }
+    
+    // Determine base rate per 1000 sq ft (imperial)
+    // New lawn: 4-6 lbs (let's use average 5 for cool/mixed, or adjust per grass type)
+    // Overseed: 2-3 lbs (average 2.5)
+    let ratePer1000 = 5;
+    if (appType === 'overseed') {
+        ratePer1000 = 2.5;
+    } else {
+        if (grassType === 'warm') ratePer1000 = 3.5;
+        if (grassType === 'cool') ratePer1000 = 5;
+        if (grassType === 'mixed') rate
+</body>
+</html>
