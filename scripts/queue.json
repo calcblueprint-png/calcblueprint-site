@@ -446,7 +446,8 @@
     "description": "Calculate chain link fence materials: fabric, posts, rails, and tension wire. Complete list for any length.",
     "inputs": "Total fence length (feet), fence height (feet), post spacing (feet)",
     "formula": "Line posts = ceil(length / post_spacing) + 1. Top rail = length + 5%. Fabric = length * 1.05. Tension wire = length + 10%.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-11-09T09:19:21.977365Z"
   },
   {
     "slug": "privacy-fence-calculator",
