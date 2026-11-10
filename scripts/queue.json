@@ -455,7 +455,8 @@
     "description": "Calculate wood privacy fence materials: pickets, rails, posts, and concrete. For dog-ear, board-on-board, or shadowbox.",
     "inputs": "Total fence length (feet), fence height (feet), picket width (inches), post spacing (feet)",
     "formula": "Pickets = ceil(length * 12 / (picket_width + gap)). Posts = ceil(length / post_spacing) + 1. Rails = posts * (height == 6 ? 3 : 2).",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-11-10T09:24:28.384498Z"
   },
   {
     "slug": "gate-calculator",

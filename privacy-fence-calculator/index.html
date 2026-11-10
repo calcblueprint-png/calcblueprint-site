@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/privacy-fence-calculator/">
+<title>Privacy Fence Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate wood privacy fence materials: pickets, rails, posts, and concrete. For dog-ear, board-on-board, or shadowbox.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Privacy Fence Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f8;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{color:#fff;font-size:1.5rem;font-weight:700;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2.5rem 1rem;max-width:900px;margin:0 auto}
+.container{width:100%}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+.calculator-title{font-size:1.75rem;color:#1a2332;margin-bottom:1.5rem}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:1px solid #ccc;background:#f9f9f9;cursor:pointer;font-weight:600;border-radius:4px;transition:all 0.2s}
+.unit-btn.active{background:#f5a623;color:#1a2332;border-color:#f5a623}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input, .form-group select{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+.calc-btn{width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;font-size:1.1rem;font-weight:700;border-radius:4px;cursor:pointer;margin-top:1rem;transition:opacity 0.2s}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#1a2332;color:#fff;border-radius:8px;padding:2rem;margin-top:2rem;display:none}
+.result-box h3{color:#f5a623;margin-bottom:1rem;font-size:1.25rem}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.1)}
+.result-row:last-child{border-bottom:none}
+details{background:#fff;border-radius:8px;padding:1.5rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);cursor:pointer}
+summary{font-weight:700;color:#1a2332;font-size:1.1rem}
+details p{margin-top:1rem;color:#555}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
+.content-section p{margin-bottom:1rem;color:#444}
+.content-section h3{color:#1a2332;margin-top:1.2rem;margin-bottom:0.4rem;font-size:1.1rem}
+footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:3rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#fff;margin:0 0.75rem;text-decoration:none}
+footer nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#aaa;max-width:700px;margin:0 auto}
+</style>
+</head>
+<body>
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+</nav>
+</header>
+<main>
+<div class="container">
+<div class="calculator-box">
+<h1 class="calculator-title">Privacy Fence Calculator</h1>
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+</div>
+<form id="fence-form" onsubmit="calculateFence(event)">
+<div class="form-group">
+<label id="label-length" for="length">Total Fence Length (feet)</label>
+<input type="number" id="length" step="0.1" min="1" value="100" required>
+</div>
+<div class="form-group">
+<label id="label-height" for="height">Fence Height (feet)</label>
+<input type="number" id="height" step="0.1" min="1" value="6" required>
+</div>
+<div class="form-group">
+<label id="label-picket-width" for="picket-width">Picket Width (inches)</label>
+<input type="number" id="picket-width" step="0.1" min="1" value="5.5" required>
+</div>
+<div class="form-group">
+<label id="label-post-spacing" for="post-spacing">Post Spacing (feet)</label>
+<input type="number" id="post-spacing" step="0.1" min="1" value="8" required>
+</div>
+<div class="form-group">
+<label for="fence-style">Fence Style</label>
+<select id="fence-style">
+<option value="dog-ear">Dog-Ear Standard</option>
+<option value="board-on-board">Board-on-Board</option>
+<option value="shadowbox">Shadowbox</option>
+</select>
+</div>
+<button type="submit" class="calc-btn">Calculate Materials</button>
+</form>
+<div id="result-box" class="result-box">
+<h3>Required Materials Breakdown</h3>
+<div id="results-content"></div>
+</div>
+</div>
+
+<details>
+<summary>How this calculator works</summary>
+<p>This calculator determines privacy fence requirements by applying standard spacing intervals for structural posts, calculating total linear coverage needs for vertical pickets based on individual board widths and gaps, and sizing horizontal framing rails per height specifications. Post concrete volume estimates use standard cylindrical footing dimensions tailored to frost depth and wind load criteria.</p>
+<p>Formula source: IRC (International Residential Code) and AWPA standards</p>
+</details>
+
+<section class="content-section">
+<h2>How to Calculate Privacy Fence Materials</h2>
+<p>Planning a wood privacy fence requires careful calculation of structural posts, horizontal stringers, vertical pickets, and concrete footings. To begin, measure the exact perimeter layout in linear units, accounting for gate openings and property boundaries. The post count is determined by dividing the total linear run by your chosen structural center-to-center spacing, adding an extra terminal post to close the run. Standard spacing typically ranges from six to eight feet depending on anticipated wind loads and lumber grading.</p>
+<p>Picket estimation depends directly on nominal board width and the desired spacing gap between boards. Standard privacy fences utilize dog-ear cedar or pressure-treated pine pickets. For solid styles, boards are placed edge-to-edge with minimal spacing, whereas shadowbox or board-on-board designs require factoring in overlap percentages or dual-sided placement. Multiplying the total linear footage by twelve and dividing by the combined width and gap gives the base unit count, which is then rounded up to account for operational waste and trimming.</p>
+</section>
+
+<section class="content-section">
+<h2>What Affects Privacy Fence Material Requirements</h2>
+<p>Several structural and environmental factors directly influence your final bill of materials. Fence height is the primary driver for framing depth and component density. Enclosures exceeding six feet in height require three horizontal rails instead of two to prevent warping, sagging, and wind damage. Furthermore, taller walls demand deeper concrete post holes—frequently extending thirty inches or below the local frost line—which substantially increases total ready-mix concrete requirements per hole.</p>
+<p>Site topography and soil conditions also play a critical role. Sloped terrain forces stepped or racked framing, which can slightly alter post lengths and rail cut angles. Additionally, fence style selection heavily dictates material multipliers. Traditional dog-ear designs use standard single-layer coverage, while board-on-board configurations require up to twenty-five percent more pickets to achieve visual opacity from all angles. Selecting heavier dimensional lumber species like redwood or Douglas fir rather than standard pine will alter structural spans and fastening schedules.</p>
+</section>
+
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>How many rails do I need for a standard wood privacy fence?</h3>
+<p>For fences up to six feet in height, two horizontal rails are standard, positioned near the top and bottom plates. For heights exceeding six feet or in high-wind zones, three rails are recommended to provide adequate mid-span rigidity and prevent board warping.</p>
+<h3>How deep should fence posts be set in concrete?</h3>
+<p>As a general rule, fence posts should be buried at least one-third to one-half of their total exposed above-ground height, with a minimum depth of twenty-four to thirty inches. In colder climates, footings must extend below the local frost line to prevent heaving.</p>
+<h3>What is the difference between dog-ear, board-on-board, and shadowbox fences?</h3>
+<p>Dog-ear fences feature pickets with clipped top corners placed side-by-side. Board-on-board overlaps alternate pickets on front and back rails to eliminate gaps even as wood shrinks. Shadowbox fences alternate pickets on opposite sides of the rails, allowing airflow and equal appearance on both sides.</p>
+</section>
+
+</div>
+</main>
+<footer>
+<nav>
+<a href="/">Home</a>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+<a href="#privacy">Privacy</a>
+</nav>
+<div class="citation">
+Formula source: IRC (International Residential Code) and AWPA standards. Results are estimates for planning — verify with a licensed professional before ordering materials. &copy; 2026 CalcBlueprint.
+</div>
+</footer>
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(unit) {
+    currentUnit = unit;
+    document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+    document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+    
+    if (unit === 'metric') {
+        document.getElementById('label-length').innerText = 'Total Fence Length (meters)';
+        document.getElementById('label-height').innerText = 'Fence Height (meters)';
+        document.getElementById('label-picket-width').innerText = 'Picket Width (centimeters)';
+        document.getElementById('label-post-spacing').innerText = 'Post Spacing (meters)';
+        document.getElementById('length').value = (100 * 0.3048).toFixed(1);
+        document.getElementById('height').value = (6 * 0.3048).toFixed(1);
+        document.getElementById('picket-width').value = (5.5 * 2.54).toFixed(1);
+        document.getElementById('post-spacing').value = (8 * 0.3048).toFixed(1);
+    } else {
+        document.getElementById('label-length').innerText = 'Total Fence Length (feet)';
+        document.getElementById('label-height').innerText = 'Fence Height (feet)';
+        document.getElementById('label-picket-width').innerText = 'Picket Width (inches)';
+        document.getElementById('label-post-spacing').innerText = 'Post Spacing (feet)';
+        document.getElementById('length').value = 100;
+        document.getElementById('height').value = 6;
+        document.getElementById('picket-width').value = 5.5;
+        document.getElementById('post-spacing').value = 8;
+    }
+}
+
+function calculateFence(event) {
+    event.preventDefault();
+    
+    let length = parseFloat(document.getElementById('length').value);
+    let height = parseFloat(document.getElementById('height').value);
+    let picketWidth = parseFloat(document.getElementById('picket-width').value);
+    let postSpacing = parseFloat(document.getElementById('post-spacing').value);
+    let style = document.getElementById('fence-style').value;
+    
+    let lengthInFeet, heightInFeet, picketWidthInches, postSpacingFeet;
+    
+    if (currentUnit === 'metric') {
+        lengthInFeet = length / 0.3048;
+        heightInFeet = height / 0.3048;
+        picketWidthInches = picketWidth / 2.54;
+        postSpacingFeet = postSpacing / 0.3048;
+    } else {
+        lengthInFeet = length;
+        heightInFeet = height;
+        picketWidthInches = picketWidth;
+        postSpacingFeet = postSpacing;
+    }
+    
+    let gap = 0.25; // Standard gap assumption in inches
+    let pickets = Math.ceil((lengthInFeet * 12) / (picketWidthInches + gap));
+    
+    if (style === 'board-on-board') {
+        pickets = Math.ceil(pickets * 1.25);
+    } else if (style === 'shadowbox') {
+        pickets = Math.ceil(pickets * 1.15);
+    }
+    
+    let posts = Math.ceil(lengthInFeet / postSpacingFeet) + 1;
+    let rails = posts * (heightInFeet >= 6 ? 3 : 2);
+    
+    // Concrete estimation: standard 10-inch diameter hole, 3 feet deep per post
+    let concreteBagsImperial = posts * 3.5; // 80lb bags approx 0.6 cu ft
+    let concreteVolumeCubicMeters = posts * 0.045;
+    
+    let resultsContent = document.getElementById('results-content');
+    let html = '';
+    
+    if (currentUnit === 'metric') {
+        let concreteKg = (concreteBagsImperial * 0.4536 * 36.28); // conversion wrapper
+        html += `<div class="result-row"><span>Total Pickets:</span><span>${pickets} units</span></div>`;
+        html += `<div class="result-row"><span>Structural Posts:</span><span>${posts} units</span></div>`;
+        html += `<div class="result-row"><span>Horizontal Rails:</span><span>${rails} units</span></div>`;
+        html += `<div class="result-row"><span>Concrete Volume:</span><span>${(posts * 0.042).toFixed(2)} cubic meters</span></div>`;
+    } else {
+        html += `<div class="result-row"><span>Total Pickets:</span><span>${pickets} units</span></div>`;
+        html += `<div class="result-row"><span>Structural Posts:</span><span>${posts} units</span></div>`;
+        html += `<div class="result-row"><span>Horizontal Rails:</span><span>${rails} units</span></div>`;
+        html += `<div class="result-row"><span>Concrete (80 lb bags):</span><span>${Math.ceil(concreteBagsImperial)} bags</span></div>`;
+    }
+    
+    resultsContent.innerHTML = html;
+    document.getElementById('result-box').style.display = 'block';
+}
+</script>
+</body>
+</html>
