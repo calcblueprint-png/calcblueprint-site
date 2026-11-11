@@ -464,7 +464,8 @@
     "description": "Calculate materials for a wood fence gate. Includes frame, pickets, hinges, and latch hardware.",
     "inputs": "Gate width (feet), gate height (feet), gate style (single, double, walk-through)",
     "formula": "Pickets = ceil(gate_width * 12 / (picket_width + gap)). Hinges: 2 per gate. Latch: 1 per gate.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-11-11T08:57:51.943137Z"
   },
   {
     "slug": "deck-board-calculator",

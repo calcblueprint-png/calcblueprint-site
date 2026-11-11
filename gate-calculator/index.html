@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/gate-calculator/">
+<title>Fence Gate Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate materials for a wood fence gate. Includes frame, pickets, hinges, and latch hardware.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{color:#fff;font-size:1.5rem;font-weight:700;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2rem 1rem;max-width:900px;margin:0 auto}
+.container{width:100%}
+.unit-toggle{display:flex;margin-bottom:1.5rem;background:#e2e8f0;border-radius:6px;padding:4px}
+.unit-btn{flex:1;background:transparent;border:none;padding:0.5rem;font-weight:600;cursor:pointer;border-radius:4px;color:#4a5568}
+.unit-btn.active{background:#f5a623;color:#1a2332}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);margin-bottom:2rem}
+.calculator-box h1{font-size:1.75rem;color:#1a2332;margin-bottom:1.5rem}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;font-weight:600;margin-bottom:0.5rem;color:#2d3748}
+.form-group input, .form-group select{width:100%;padding:0.75rem;border:1px solid #cbd5e0;border-radius:4px;font-size:1rem}
+.calc-btn{background:#f5a623;color:#1a2332;border:none;width:100%;padding:0.875rem;font-size:1rem;font-weight:700;border-radius:4px;cursor:pointer;margin-top:1rem}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:1.5rem;margin-top:1.5rem;display:none}
+.result-box h3{font-size:1.25rem;color:#1a2332;margin-bottom:1rem}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #e2e8f0;font-size:1rem}
+.result-row:last-child{border-bottom:none}
+.result-value{font-weight:700;color:#1a2332}
+details{background:#fff;border-radius:8px;padding:1rem 1.5rem;margin-bottom:2rem;box-shadow:0 2px 4px rgba(0,0,0,0.03);cursor:pointer}
+summary{font-weight:600;color:#1a2332;outline:none}
+details p{margin-top:1rem;color:#4a5568;font-size:0.95rem;line-height:1.5}
+.content-section { background-color: #ffffff; border-radius: 8px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.03); }
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
+.content-section h3{color:#2d3748;margin-top:1.25rem;margin-bottom:0.5rem;font-size:1.1rem}
+.content-section p{color:#4a5568;margin-bottom:1rem}
+footer{background:#1a2332;color:#fff;padding:2rem;text-align:center;margin-top:3rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#f5a623;margin:0 0.75rem;text-decoration:none}
+.citation{font-size:0.85rem;color:#a0aec0;max-width:700px;margin:0 auto}
+@media(max-width:600px){header{flex-direction:column;text-align:center}nav{margin-top:1rem}nav a{margin:0 0.5rem}}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Fence Gate Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+</head>
+<body>
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="/">Home</a>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+</nav>
+</header>
+<main>
+<div class="container">
+<div class="calculator-box">
+<h1>Fence Gate Calculator</h1>
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnitSystem('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnitSystem('metric')">Metric</button>
+</div>
+<div class="form-group">
+<label id="label-width">Gate Width (feet)</label>
+<input type="number" id="gate-width" value="4" step="0.1" min="1">
+</div>
+<div class="form-group">
+<label id="label-height">Gate Height (feet)</label>
+<input type="number" id="gate-height" value="6" step="0.1" min="1">
+</div>
+<div class="form-group">
+<label id="label-picket-width">Picket Width (inches)</label>
+<input type="number" id="picket-width" value="5.5" step="0.1" min="1">
+</div>
+<div class="form-group">
+<label id="label-gap">Gap Between Pickets (inches)</label>
+<input type="number" id="picket-gap" value="0.5" step="0.1" min="0">
+</div>
+<div class="form-group">
+<label>Gate Style</label>
+<select id="gate-style">
+<option value="single">Single Walk-Through Gate</option>
+<option value="double">Double Driveway Gate</option>
+</select>
+</div>
+<button type="button" class="calc-btn" onclick="calculateGate()">Calculate Materials</button>
+<div class="result-box" id="result-box">
+<h3>Required Gate Materials</h3>
+<div class="result-row"><span>Total Gates</span><span class="result-value" id="res-gates">--</span></div>
+<div class="result-row"><span>Frame Rails (2x4)</span><span class="result-value" id="res-rails">--</span></div>
+<div class="result-row"><span>Frame Uprights / Stiles (2x4)</span><span class="result-value" id="res-stiles">--</span></div>
+<div class="result-row"><span>Diagonal Braces</span><span class="result-value" id="res-brace">--</span></div>
+<div class="result-row"><span>Pickets Needed</span><span class="result-value" id="res-pickets">--</span></div>
+<div class="result-row"><span>Hinges Required</span><span class="result-value" id="res-hinges">--</span></div>
+<div class="result-row"><span>Latch Hardware</span><span class="result-value" id="res-latch">--</span></div>
+</div>
+</div>
+
+<details>
+<summary>How this calculator works</summary>
+<p>This calculator determines the structural framing members, pickets, and heavy-duty hardware required to build a secure wood fence gate. The picket count is determined by dividing the total gate opening width in inches by the combined width of one picket plus its spacing gap, rounding up to ensure full coverage. Frame rails and uprights are calculated based on standard single or double configurations, requiring proper corner joints and diagonal anti-sag bracing to prevent structural warping over time.</p>
+<p>Formula based on IRC (International Residential Code) and AWPA standards for exterior wood fence construction and hardware load distribution.</p>
+</details>
+
+<section class="content-section">
+<h2>How to Calculate Wood Fence Gate Materials</h2>
+<p>Building a durable wood fence gate requires careful calculation of both framing lumber and surface pickets. Unlike fence panels fixed directly to posts, gates carry dynamic loads that cause them to sag over time without proper framing. Start by measuring the exact clear opening between your hinge and latch posts, subtracting appropriate clearance gaps for hardware. To find the number of pickets, multiply your gate width in inches by 12, then divide by the sum of your picket width and desired spacing gap. Always round up to the next whole picket to account for the final edge.</p>
+<p>Next, calculate your lumber needs for the frame. A standard walk-through gate requires top and bottom rails, two vertical stiles, and crucially, a diagonal brace running from the bottom hinge side upward toward the latch side. This transfers the gate's weight directly to the hinge post, eliminating common sagging issues. Double drive gates simply double these structural requirements across two independent leaf frames.</p>
+</section>
+
+<section class="content-section">
+<h2>What Affects Wood Fence Gate Durability</h2>
+<p>Several critical factors influence how long your wood gate will remain plumb, square, and fully functional. Wood species selection is paramount; naturally rot-resistant lumbers like cedar, redwood, or pressure-treated southern yellow pine endure ground-adjacent moisture significantly better than untreated softwoods. Moisture absorption causes expansion and contraction, which can pop fasteners or warp boards if proper spacing gaps are not maintained during installation.</p>
+<p>Hardware quality is another major variable. Standard interior hinges will quickly rust and fail under the weight of an exterior wood gate. Heavy-duty strap hinges, adjustable tension springs, and robust gravity latches rated for exterior use are essential. Furthermore, proper post anchoring—typically set deep in concrete—prevents post shifting that ruins gate alignment regardless of how well the gate frame itself was constructed.</p>
+</section>
+
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>Why do wood fence gates sag over time?</h3>
+<p>Gates sag because constant downward gravitational pull and swinging motion put immense stress on the corner joints. Without a proper diagonal brace installed from the bottom hinge side to the top latch side, the weight forces the frame out of square.</p>
+
+<h3>How much clearance should I leave around a fence gate?</h3>
+<p>You should generally leave a 1/2-inch to 1-inch clearance gap on the latch side and about 2 inches of clearance underneath the gate to allow for seasonal ground shifting, tall grass, and smooth swinging clearance.</p>
+
+<h3>Can I use standard fence pickets for the gate frame?</h3>
+<p>No, fence pickets are too thin and flexible to serve structural framing purposes. Gate frames must be constructed from dimensional lumber such as nominal 2x4 boards to provide adequate structural rigidity and screw-holding capacity for heavy hardware.</p>
+</section>
+
+</div>
+</main>
+<footer>
+<nav>
+<a href="/">Home</a>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+<a href="#privacy">Privacy</a>
+</nav>
+<div class="citation">Formula source: IRC (International Residential Code) and AWPA standards. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.</div>
+</footer>
+<script>
+let currentUnit = 'imperial';
+
+function setUnitSystem(unit) {
+  currentUnit = unit;
+  document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+  document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+  
+  const wInput = document.getElementById('gate-width');
+  const hInput = document.getElementById('gate-height');
+  const pInput = document.getElementById('picket-width');
+  const gInput = document.getElementById('picket-gap');
+
+  if (unit === 'metric') {
+    document.getElementById('label-width').innerText = 'Gate Width (meters)';
+    document.getElementById('label-height').innerText = 'Gate Height (meters)';
+    document.getElementById('label-picket-width').innerText = 'Picket Width (centimeters)';
+    document.getElementById('label-gap').innerText = 'Gap Between Pickets (centimeters)';
+    
+    wInput.value = (parseFloat(wInput.value) * 0.3048).toFixed(2);
+    hInput.value = (parseFloat(hInput.value) * 0.3048).toFixed(2);
+    pInput.value = (parseFloat(pInput.value) * 2.54).toFixed(1);
+    gInput.value = (parseFloat(gInput.value) * 2.54).toFixed(1);
+  } else {
+    document.getElementById('label-width').innerText = 'Gate Width (feet)';
+    document.getElementById('label-height').innerText = 'Gate Height (feet)';
+    document.getElementById('label-picket-width').innerText = 'Picket Width (inches)';
+    document.getElementById('label-gap').innerText = 'Gap Between Pickets (inches)';
+    
+    wInput.value = (parseFloat(wInput.value) / 0.3048).toFixed(1);
+    hInput.value = (parseFloat(hInput.value) / 0.3048).toFixed(1);
+    pInput.value = (parseFloat(pInput.value) / 2.54).toFixed(1);
+    gInput.value = (parseFloat(gInput.value) / 2.54).toFixed(1);
+  }
+}
+
+function calculateGate() {
+  let width = parseFloat(document.getElementById('gate-width').value);
+  let pWidth = parseFloat(document.getElementById('picket-width').value);
+  let pGap = parseFloat(document.getElementById('picket-gap').value);
+  let style = document.getElementById('gate-style').value;
+
+  if (isNaN(width) || width <= 0 || isNaN(pWidth) || pWidth <= 0) {
+    alert('Please enter valid positive numbers for dimensions.');
+    return;
+  }
+
+  let widthInInches;
+  let pWidthInches;
+  let pGapInches;
+
+  if (currentUnit === 'metric') {
+    widthInInches = width * 39.3701;
+    pWidthInches = pWidth / 2.54;
+    pGapInches = pGap / 2.54;
+  } else {
+    widthInInches = width * 12;
+    pWidthInches = pWidth;
+    pGapInches = pGap;
+  }
+
+  let pickets = Math.ceil(widthInInches / (pWidthInches + pGapInches));
+  let numGates = (style === 'double') ? 2 : 1;
+  let rails = numGates * 2;
+  let stiles = numGates * 2;
+  let braces = numGates * 1;
+  let hinges = numGates * 2;
+  let latches = 1;
+
+  document.getElementById('res-gates').innerText = numGates + (numGates === 2 ? ' leaves' : ' leaf');
+  document.getElementById('res-rails').innerText = rails + ' boards (2x4)';
+  document.getElementById('res-stiles').innerText = stiles + ' boards (2x4)';
+  document.getElementById('res-brace').innerText = braces + ' board (2x4)';
+  document.getElementById('res-pickets').innerText = pickets + ' units';
+  document.getElementById('res-hinges').innerText = hinges + ' heavy-duty sets';
+  document.getElementById('res-latch').innerText = latches + ' unit';
+
+  document.getElementById('result-box').style.display = 'block';
+}
+</script>
+</body>
+</html>
