@@ -8,8 +8,9 @@ Fixes performed:
     favicon  — Insert <link rel="icon">
     h1       — Insert missing <h1> (derived from <title> or canonical URL)
     nav      — Normalize nav links: #anchors → URLs, .html → clean URLs, no-slash → slash
-    jsonld   — Insert WebApplication JSON-LD schema
+    jsonld   — Insert WebApplication JSON-LD schema (calculator pages only)
     date     — Insert "Last updated" line after H1 on calculator pages
+    ga4      — Insert GA4 snippet if missing
 
 Does NOT fix (requires human decision):
     - Missing or too-short title/description
@@ -37,6 +38,7 @@ SITE_DOMAIN = "https://calcblueprint.com"
 DEFAULT_OG_IMAGE = f"{SITE_DOMAIN}/og-image.png"
 SITE_AUTHOR = "Emiliano"
 SITE_LAST_UPDATED = "2026-11-12"
+GA4_MEASUREMENT_ID = "G-DHN9J7B497"
 
 IGNORE_DIRS = {
     ".git", ".github", "node_modules", "scripts", "assets", "img",
@@ -86,6 +88,11 @@ NO_SLASH_MAP = {
 NON_CALCULATOR_URLS = {
     "/", "/about/", "/contact/", "/privacy/", "/terms/", "/how-it-works/",
 }
+
+# Pages that should NOT get a WebApplication JSON-LD block
+# (they are legal/info pages — WebApplication schema is semantically wrong here.
+#  Homepage "/" is intentionally excluded from this set — the site itself IS a web app.)
+NO_JSONLD_URLS = {"/about/", "/contact/", "/privacy/", "/terms/", "/how-it-works/"}
 
 
 def find_html_files(site_root: Path):
@@ -219,6 +226,10 @@ def fix_nav(html: str, url: str) -> tuple:
 
 
 def fix_jsonld(html: str, url: str) -> tuple:
+    # Skip legal/info pages — WebApplication schema is wrong there.
+    if url in NO_JSONLD_URLS:
+        return html, False, "skipped (non-calculator URL)"
+
     for m in re.finditer(
         r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
         html, re.DOTALL,
@@ -246,7 +257,7 @@ def fix_date(html: str, url: str) -> tuple:
     if re.search(r"Last updated\s+\d{4}-\d{2}-\d{2}", html):
         return html, False, "date present"
 
-    # Skip non-calculator pages (about, contact, privacy, terms, how-it-works, homepage)
+    # Skip non-calculator pages
     if url in NON_CALCULATOR_URLS or "calculator" not in url:
         return html, False, "not a calculator page"
 
@@ -269,7 +280,27 @@ def fix_date(html: str, url: str) -> tuple:
     return new_html, True, "date line inserted"
 
 
-# Registry — insertion order matters (h1 must run before date)
+def fix_ga4(html: str, url: str) -> tuple:
+    """Insert GA4 snippet if it is missing."""
+    # The measurement ID appears in both the script src and the config call.
+    # If it's anywhere in the file, GA4 is already wired up.
+    if GA4_MEASUREMENT_ID in html:
+        return html, False, "GA4 present"
+
+    snippet = (
+        f'\n<script async src="https://www.googletagmanager.com/gtag/js?id={GA4_MEASUREMENT_ID}"></script>'
+        f'\n<script>window.dataLayer=window.dataLayer||[];'
+        f'function gtag(){{dataLayer.push(arguments);}}'
+        f"gtag('js',new Date());"
+        f"gtag('config','{GA4_MEASUREMENT_ID}');</script>"
+    )
+    if "</head>" in html:
+        new_html = html.replace("</head>", snippet + "\n</head>", 1)
+        return new_html, True, "GA4 inserted"
+    return html, False, "GA4 could not be inserted (no </head>)"
+
+
+# Registry — insertion order matters (h1 must run before date; og before jsonld)
 FIX_REGISTRY = {
     "og": fix_og,
     "favicon": fix_favicon,
@@ -277,6 +308,7 @@ FIX_REGISTRY = {
     "nav": fix_nav,
     "jsonld": fix_jsonld,
     "date": fix_date,
+    "ga4": fix_ga4,
 }
 
 
@@ -285,7 +317,11 @@ FIX_REGISTRY = {
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--site-root", default=".", help="Root folder containing HTML files")
-    ap.add_argument("--fix", default="all", help="Comma-separated fixes: og,favicon,h1,nav,jsonld,date,all")
+    ap.add_argument(
+        "--fix",
+        default="all",
+        help="Comma-separated fixes: og,favicon,h1,nav,jsonld,date,ga4,all",
+    )
     ap.add_argument("--write", action="store_true", help="Apply changes (default: dry-run)")
     args = ap.parse_args()
 
