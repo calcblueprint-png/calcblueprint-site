@@ -198,13 +198,19 @@ def check_internal_links(html: str, site_root: Path, ignore_missing_nav=None):
     return None, None
 
 
-def check_last_updated(html: str):
+NON_CALCULATOR_PAGES = {"/", "/about/", "/contact/", "/privacy/", "/terms/", "/how-it-works/"}
+
+def check_last_updated(html: str, url: str = ""):
+    if url in NON_CALCULATOR_PAGES:
+        return None, None
     if re.search(r"Last updated\s+\d{4}-\d{2}-\d{2}", html):
         return None, None
     return "warn", "Missing 'Last updated YYYY-MM-DD' line"
 
 
-def check_footer_citation(html: str):
+def check_footer_citation(html: str, url: str = ""):
+    if url in NON_CALCULATOR_PAGES:
+        return None, None
     if "Formula source" in html or "Formula based on" in html:
         return None, None
     return "warn", "Missing formula source citation in footer"
@@ -238,8 +244,8 @@ def lint_page(file_path: Path, site_root: Path):
         (check_ga4, (html,)),
         (check_anchor_links, (html,)),
         (check_internal_links, (html, site_root)),
-        (check_last_updated, (html,)),
-        (check_footer_citation, (html,)),
+        (check_last_updated, (html, expected)),
+        (check_footer_citation, (html, expected)),
         (check_404_page, (html, file_path)),
     ]:
         sev, msg = check_fn(*args)
