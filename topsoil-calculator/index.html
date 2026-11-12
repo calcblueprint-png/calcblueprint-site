@@ -9,6 +9,16 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Topsoil Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcblueprint.com/topsoil-calculator/">
+<meta property="og:title" content="Topsoil Calculator — CalcBlueprint">
+<meta property="og:description" content="Calculate how much topsoil you need for lawns, gardens, and raised beds. Enter area and depth.">
+<meta property="og:image" content="https://calcblueprint.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Topsoil Calculator — CalcBlueprint">
+<meta name="twitter:description" content="Calculate how much topsoil you need for lawns, gardens, and raised beds. Enter area and depth.">
+<meta name="twitter:image" content="https://calcblueprint.com/og-image.png">
+<link rel="icon" href="/favicon.ico">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.6;background:#f4f7f6;color:#333}
@@ -18,31 +28,53 @@ header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 0;color:#
 .logo span{color:#f5a623}
 nav{float:right}
 nav a{color:#fff;text-decoration:none;margin-left:1rem}
+nav a:hover{color:#f5a623}
 .calculator-box{background:#fff;padding:2rem;border-radius:8px;margin:2rem 0;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
+h1{color:#1a2332;font-size:1.9rem;margin-bottom:0.5rem}
 .unit-toggle{display:flex;gap:10px;margin-bottom:1.5rem}
 .unit-btn{padding:0.5rem 1rem;cursor:pointer;border:1px solid #1a2332;background:none;border-radius:4px}
 .unit-btn.active{background:#f5a623;color:#1a2332;border-color:#f5a623}
 .form-group{margin-bottom:1rem}
-label{display:block;margin-bottom:0.5rem}
-input{width:100%;padding:0.5rem;border:1px solid #ccc;border-radius:4px}
-button#calc-btn{width:100%;padding:1rem;background:#f5a623;color:#1a2332;border:none;border-radius:4px;font-weight:bold;cursor:pointer;margin-top:1rem}
+label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+input{width:100%;padding:0.5rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+button#calc-btn{width:100%;padding:1rem;background:#f5a623;color:#1a2332;border:none;border-radius:4px;font-weight:bold;cursor:pointer;margin-top:1rem;font-size:1rem}
+button#calc-btn:hover{opacity:0.9}
 .result-box{margin-top:2rem;padding:1rem;background:#eef2f7;border-radius:8px}
 .result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #d1d9e0}
-.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem}
-footer{padding:2rem 0;text-align:center;font-size:0.9rem;color:#666}
-details{margin-bottom:1rem;padding:1rem;background:#fff;border-radius:8px}
+.result-row:last-child{border-bottom:none}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 2px 10px rgba(0,0,0,0.05)}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
+.content-section h3{color:#1a2332;margin-top:1.5rem;margin-bottom:0.5rem;font-size:1.1rem}
+.content-section p{margin-bottom:1rem;color:#4a5568}
+.content-section ul{padding-left:20px;color:#4a5568;line-height:1.9}
+footer{background:#1a2332;color:#fff;padding:2rem;text-align:center;margin-top:3rem;font-size:0.9rem}
+footer nav{float:none;margin-bottom:1rem}
+footer nav a{color:#fff;margin:0 0.5rem}
+footer nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#a0aec0;max-width:700px;margin:0 auto}
+details{margin-bottom:2rem;padding:1.5rem;background:#fff;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.05)}
+details summary{font-weight:bold;cursor:pointer;color:#1a2332}
+details p{margin-top:1rem;color:#555}
+@media(max-width:600px){nav{float:none;margin-top:0.5rem}nav a{margin:0 0.5rem}}
 </style>
 </head>
 <body>
 <header>
     <div class="container">
         <a href="/" class="logo">Calc<span>Blueprint</span></a>
-        <nav><a href="/about">About</a><a href="/contact">Contact</a></nav>
+        <nav>
+            <a href="/how-it-works/">How It Works</a>
+            <a href="/about/">About</a>
+            <a href="/contact/">Contact</a>
+        </nav>
     </div>
 </header>
 <main>
     <div class="container">
         <div class="calculator-box">
+            <h1>Topsoil Calculator</h1>
+            <p style="color:#777;font-size:.85rem;margin:.25rem 0 1.25rem">By Emiliano · Last updated 2026-11-01</p>
+
             <div class="unit-toggle">
                 <button class="unit-btn active" id="btn-imperial" onclick="setUnit('imperial')">Imperial (US)</button>
                 <button class="unit-btn" id="btn-metric" onclick="setUnit('metric')">Metric</button>
@@ -66,11 +98,13 @@ details{margin-bottom:1rem;padding:1rem;background:#fff;border-radius:8px}
         <section class="content-section">
             <h2>How to Calculate Topsoil</h2>
             <p>Calculating topsoil requirements begins with an accurate measurement of your project area. For rectangular beds, multiply length by width to find square footage. To determine the volume, multiply that area by your desired depth, ensuring the depth is converted to feet (e.g., 3 inches becomes 0.25 feet). For irregular shapes, break the area into smaller rectangles or triangles, calculate them individually, and sum the results. Always account for soil compaction; topsoil typically settles by 10-15% after installation, so it is professional practice to add a slight buffer to your final order to ensure you have enough material to reach your target grade after the first few waterings.</p>
+            <p>Topsoil is usually only one part of a landscaping project. If you are seeding a new lawn over the topsoil, our <a href="/grass-seed-calculator/">grass seed calculator</a> converts the same area into pounds of seed. If you are laying sod instead of seeding, use our <a href="/sod-calculator/">sod calculator</a> to estimate rolls and pallets.</p>
         </section>
 
         <section class="content-section">
             <h2>What Affects Topsoil Requirements</h2>
-            <p>Several factors influence the volume of topsoil needed for a landscape project. The primary variable is the existing soil condition; if you are amending heavy clay, you may need a higher volume of organic-rich topsoil to improve drainage and aeration. Additionally, the intended use dictates the depth: lawns typically require 4-6 inches of topsoil, while raised vegetable beds often perform best with 10-12 inches to support deep root systems. Moisture content also plays a role, as wet soil is denser and may settle differently than dry, screened soil. Finally, the method of delivery—bulk truckload versus bagged product—can impact your total cost and the ease of distribution across your site.</p>
+            <p>Several factors influence the volume of topsoil needed for a landscape project. The primary variable is the existing soil condition; if you are amending heavy clay, you may need a higher volume of organic-rich topsoil to improve drainage and aeration. Additionally, the intended use dictates the depth: lawns typically require 4-6 inches of topsoil, while raised vegetable beds often perform best with 10-12 inches to support deep root systems. Moisture content also plays a role, as wet soil is denser and may settle differently than dry, screened soil. Finally, the method of delivery—bulk truckload or bagged product—can impact your total cost and the ease of distribution across your site.</p>
+            <p>Raised beds and garden beds usually mix topsoil with compost, while mulch goes on top as a separate layer. Our <a href="/compost-calculator/">compost calculator</a> and <a href="/mulch-calculator/">mulch calculator</a> handle those volumes from the same bed dimensions. If you are amending an existing lawn rather than building beds, the <a href="/fertilizer-calculator/">fertilizer calculator</a> sizes product by lawn area.</p>
         </section>
 
         <section class="content-section">
@@ -82,13 +116,29 @@ details{margin-bottom:1rem;padding:1rem;background:#fff;border-radius:8px}
             <h3>Can I use the same topsoil for raised beds and general landscaping?</h3>
             <p>While you can, raised beds often benefit from a mix specifically formulated with higher organic matter content, such as compost or peat moss, to maximize vegetable yields.</p>
         </section>
+
+        <section class="content-section">
+            <h2>Related Calculators</h2>
+            <ul>
+                <li><a href="/compost-calculator/">Compost Calculator</a> — compost volume for beds and raised gardens</li>
+                <li><a href="/mulch-calculator/">Mulch Calculator</a> — mulch volume for beds and tree rings</li>
+                <li><a href="/sod-calculator/">Sod Calculator</a> — sod rolls and pallets for lawn area</li>
+                <li><a href="/grass-seed-calculator/">Grass Seed Calculator</a> — seed quantity by lawn area and grass type</li>
+                <li><a href="/fertilizer-calculator/">Fertilizer Calculator</a> — fertilizer by lawn area and N-P-K target</li>
+            </ul>
+        </section>
     </div>
 </main>
 <footer>
-    <div class="container">
-        <p><a href="/">Home</a> | <a href="/about">About</a> | <a href="/contact">Contact</a> | <a href="/privacy">Privacy</a></p>
-        <p>Formula source: State agricultural extension service recommendations. Results are estimates for planning — verify with a licensed professional before ordering materials. 2026.</p>
-    </div>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/how-it-works/">How It Works</a>
+        <a href="/about/">About</a>
+        <a href="/contact/">Contact</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="/terms/">Terms</a>
+    </nav>
+    <p class="citation">Formula source: State agricultural extension service recommendations. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.</p>
 </footer>
 <script>
 let unit = 'imperial';
