@@ -42,6 +42,7 @@ details p{margin-top:1rem;color:#555}
 .content-section h2 { color: #1a2332; margin-bottom: 1rem; font-size: 1.5rem; }
 .content-section h3 { color: #1a2332; margin-top: 1.25rem; margin-bottom: 0.5rem; font-size: 1.1rem; }
 .content-section p { margin-bottom: 1rem; color: #4a5568; }
+.content-section ul { padding-left:20px; color:#4a5568; line-height:1.9; }
 footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:3rem}
 .footer-nav{margin-bottom:1rem}
 .footer-nav a{color:#fff;text-decoration:none;margin:0 1rem;font-size:0.9rem}
@@ -54,14 +55,18 @@ footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:3
 <header>
 <a href="/" class="logo">Calc<span>Blueprint</span></a>
 <nav>
-<a href="#about">About</a>
-<a href="#contact">Contact</a>
+<a href="/how-it-works/">How It Works</a>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
 </nav>
 </header>
 <main>
 <div class="container">
 <div class="calculator-box">
 <h1 class="calculator-title">Hardie Plank Calculator</h1>
+
+<p style="color:#777;font-size:.85rem;margin:.25rem 0 1.25rem">By Emiliano · Last updated 2026-11-01</p>
+
 <div class="unit-toggle">
 <button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnitSystem('imperial')">Imperial (US)</button>
 <button type="button" class="unit-btn" id="btn-metric" onclick="setUnitSystem('metric')">Metric</button>
@@ -111,12 +116,14 @@ footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:3
 <h2>How to Calculate Hardie Plank Siding Requirements</h2>
 <p>Estimating fiber cement siding accurately prevents costly delays and excessive material surplus. To start, you must calculate the total exterior surface area of the walls to be covered, subtracting the square footage of all windows and doors. Once you have the net wall area, determine the exposed face of each board. Because Hardie plank siding overlaps, you subtract the overlap dimension from the total board width to find the effective vertical coverage per course.</p>
 <p>Next, multiply the exposed board width by its length to find the square footage coverage of a single board. Dividing your net wall area by the single board coverage gives you the exact number of pieces required under perfect conditions. However, real-world installation involves cuts, end-matching, fitting around complex architectural elements, and potential breakages. Therefore, professional contractors always add a 10% waste and trim allowance to the final board count to account for field cutting and starter strip requirements.</p>
+<p>If you need to measure the total wall surface first, including gables and openings, use our <a href="/wall-area-calculator/">wall area calculator</a> to get accurate square footage before subtracting doors and windows. For exterior painting after installation, our <a href="/paint-calculator/">paint calculator</a> converts that wall area into gallons per coat.</p>
 </section>
 
 <section class="content-section">
 <h2>What Affects Fiber Cement Siding Quantities</h2>
 <p>Several architectural and logistical variables influence the actual volume of siding materials required for a construction project. Gable walls, dormers, and architectural curves generate significantly more offcuts and waste than simple rectangular wall structures. A home with intricate framing details, numerous corners, and extensive window trim will require a higher waste factor—sometimes up to 15%—compared to a straightforward rectangular layout.</p>
 <p>Board sizing and installation pattern choices also alter material quantities. Selecting wider planks, such as 8.25-inch or 12-inch profiles, changes the exposure amount and overall coverage per square foot relative to narrower profiles. Additionally, local building codes and manufacturer installation specifications dictate specific minimum overlap requirements—typically 1.25 inches—which must be strictly maintained to ensure warranty compliance and moisture resistance, directly affecting your final board calculations.</p>
+<p>Siding is also the exterior layer of a wall assembly. Behind fiber cement sits wall sheathing and, on interior partitions, drywall. If you are also finishing interior walls with gypsum board, our <a href="/drywall-calculator/">drywall calculator</a> estimates sheets, mud, and screws for the same wall square footage.</p>
 </section>
 
 <section class="content-section">
@@ -129,16 +136,29 @@ footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:3
 <p>While some building codes permit installing fiber cement over existing flat wood siding if structurally sound, it is generally recommended to remove old materials to inspect the structural framing and install a proper weather-resistive barrier.</p>
 </section>
 
+<section class="content-section">
+<h2>Related Calculators</h2>
+<ul>
+<li><a href="/wall-area-calculator/">Wall Area Calculator</a> — measure wall square footage before subtracting openings</li>
+<li><a href="/vinyl-siding-calculator/">Vinyl Siding Calculator</a> — estimate vinyl siding squares and trim</li>
+<li><a href="/paint-calculator/">Paint Calculator</a> — convert wall area into gallons per coat</li>
+<li><a href="/drywall-calculator/">Drywall Calculator</a> — for interior wall finishes on the same wall assembly</li>
+<li><a href="/insulation-calculator/">Insulation Calculator</a> — for R-value and batts behind the siding</li>
+</ul>
+</section>
+
 </div>
 </main>
 <footer>
 <div class="footer-nav">
 <a href="/">Home</a>
-<a href="#about">About</a>
-<a href="#contact">Contact</a>
-<a href="#privacy">Privacy</a>
+<a href="/how-it-works/">How It Works</a>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+<a href="/privacy/">Privacy</a>
+<a href="/terms/">Terms</a>
 </div>
-<p class="citation">Formula source: NRCA Roofing Manual and manufacturer installation guides. Results are estimates for planning — verify with a licensed professional before ordering materials.</p>
+<p class="citation">Formula source: NRCA Roofing Manual and manufacturer installation guides. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.</p>
 </footer>
 <script>
 let currentSystem = 'imperial';
