@@ -1,0 +1,316 @@
+#!/usr/bin/env python3
+"""
+CalcBlueprint SEO Linter
+Runs structural + on-page SEO checks against every HTML file.
+
+Usage:
+    python scripts/seo_lint.py                    # default site root
+    python scripts/seo_lint.py --site-root .      # explicit
+    python scripts/seo_lint.py --json             # machine-readable output
+    python scripts/seo_lint.py --fail-on=warn     # stricter CI gate
+
+Exit codes:
+    0 = all checks passed
+    1 = critical failures OR (warn failures with --fail-on=warn)
+    2 = script/config error
+"""
+
+import argparse
+import json
+import os
+import re
+import sys
+from pathlib import Path
+
+# ---------- Configuration ----------
+
+SITE_DOMAIN = "https://calcblueprint.com"
+DEFAULT_OG_IMAGE = f"{SITE_DOMAIN}/og-image.png"
+
+# Directories to skip when walking the tree
+IGNORE_DIRS = {
+    ".git", ".github", "node_modules", "scripts", "assets", "img",
+    "images", "css", "js", "static", "dist", "build", "__pycache__",
+    ".venv", "venv", "env",
+}
+
+# Files to skip (already-fixed anchors, templates, etc.)
+IGNORE_FILES = {
+    "404.html",
+}
+
+# Real URLs that #anchor links should map to
+ANCHOR_MAP = {
+    "#about": "/about/",
+    "#contact": "/contact/",
+    "#privacy": "/privacy/",
+    "#terms": "/terms/",
+    "#how-it-works": "/how-it-works/",
+}
+
+REQUIRED_OG = ["og:type", "og:url", "og:title", "og:description", "og:image"]
+REQUIRED_TWITTER = ["twitter:card", "twitter:title", "twitter:description", "twitter:image"]
+
+
+# ---------- Page loading ----------
+
+def find_html_files(site_root: Path):
+    files = []
+    for path in site_root.rglob("*.html"):
+        if any(part in IGNORE_DIRS for part in path.parts):
+            continue
+        if path.name in IGNORE_FILES:
+            continue
+        files.append(path)
+    return sorted(files)
+
+
+def expected_url(file_path: Path, site_root: Path) -> str:
+    """Map a file path to its expected canonical URL."""
+    rel = file_path.relative_to(site_root)
+    parts = rel.parts
+    if rel.name == "index.html":
+        if len(parts) == 1:
+            return "/"
+        return "/" + "/".join(parts[:-1]) + "/"
+    return "/" + rel.stem + "/"
+
+
+# ---------- Individual checks ----------
+
+def extract(html: str, pattern: str, flags=re.IGNORECASE | re.DOTALL):
+    m = re.search(pattern, html, flags)
+    return m.group(1).strip() if m else None
+
+
+def count(html: str, pattern: str, flags=re.IGNORECASE) -> int:
+    return len(re.findall(pattern, html, flags))
+
+
+def check_title(html: str):
+    title = extract(html, r"<title>(.*?)</title>")
+    if not title:
+        return "critical", "Missing <title>"
+    if len(title) < 30:
+        return "warn", f"Title too short ({len(title)} chars): {title!r}"
+    if len(title) > 65:
+        return "warn", f"Title too long ({len(title)} chars)"
+    return None, None
+
+
+def check_description(html: str):
+    desc = extract(html, r'<meta\s+name=["\']description["\']\s+content=["\'](.*?)["\']')
+    if not desc:
+        return "critical", "Missing meta description"
+    if len(desc) < 120:
+        return "warn", f"Description too short ({len(desc)} chars)"
+    if len(desc) > 165:
+        return "warn", f"Description too long ({len(desc)} chars)"
+    return None, None
+
+
+def check_h1(html: str):
+    n = count(html, r"<h1[\s>]")
+    if n == 0:
+        return "critical", "Missing <h1>"
+    if n > 1:
+        return "warn", f"Multiple <h1> tags ({n})"
+    return None, None
+
+
+def check_canonical(html: str, expected: str):
+    canonical = extract(html, r'<link\s+rel=["\']canonical["\']\s+href=["\']([^"\']+)["\']')
+    if not canonical:
+        return "critical", "Missing canonical"
+    expected_full = f"{SITE_DOMAIN}{expected}"
+    if canonical != expected_full:
+        return "critical", f"Canonical mismatch: {canonical} (expected {expected_full})"
+    return None, None
+
+
+def check_og_tags(html: str):
+    missing = [tag for tag in REQUIRED_OG if f'property="{tag}"' not in html and f"property='{tag}'" not in html]
+    if missing:
+        return "warn", f"Missing OG tags: {', '.join(missing)}"
+    return None, None
+
+
+def check_twitter_tags(html: str):
+    missing = [tag for tag in REQUIRED_TWITTER if f'name="{tag}"' not in html and f"name='{tag}'" not in html]
+    if missing:
+        return "warn", f"Missing Twitter tags: {', '.join(missing)}"
+    return None, None
+
+
+def check_favicon(html: str):
+    if 'rel="icon"' not in html and "rel='icon'" not in html:
+        return "warn", "Missing favicon link"
+    return None, None
+
+
+def check_webapp_jsonld(html: str):
+    for m in re.finditer(r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>(.*?)</script>', html, re.DOTALL):
+        if '"WebApplication"' in m.group(1) or "'WebApplication'" in m.group(1):
+            return None, None
+    return "warn", "Missing WebApplication JSON-LD"
+
+
+def check_ga4(html: str):
+    if "G-DHN9J7B497" not in html:
+        return "warn", "Missing GA4 tag"
+    return None, None
+
+
+def check_anchor_links(html: str):
+    issues = []
+    for anchor, real_url in ANCHOR_MAP.items():
+        if f'href="{anchor}"' in html or f"href='{anchor}'" in html:
+            issues.append(f"{anchor} → {real_url}")
+    if issues:
+        return "warn", f"Nav uses anchors instead of URLs: {', '.join(issues)}"
+    return None, None
+
+
+def check_internal_links(html: str, site_root: Path, ignore_missing_nav=None):
+    """Report hrefs like /foo/ that don't resolve to any file."""
+    hrefs = re.findall(r'<a\s+[^>]*href=["\']([^"\']+)["\']', html, re.IGNORECASE)
+    broken = []
+    for href in hrefs:
+        if not href.startswith("/") or href.startswith("//"):
+            continue
+        if href.startswith("#"):
+            continue
+        # Strip query string and fragment
+        clean = href.split("?")[0].split("#")[0]
+        # Root
+        if clean in ("/", ""):
+            candidate = site_root / "index.html"
+        elif clean.endswith("/"):
+            candidate = site_root / clean.strip("/") / "index.html"
+        else:
+            candidate_1 = site_root / (clean.lstrip("/") + ".html")
+            candidate_2 = site_root / clean.lstrip("/") / "index.html"
+            candidate = candidate_1 if candidate_1.exists() else candidate_2
+        if not candidate.exists():
+            broken.append(href)
+    if broken:
+        return "critical", f"Broken internal links: {', '.join(sorted(set(broken)))}"
+    return None, None
+
+
+def check_last_updated(html: str):
+    if re.search(r"Last updated\s+\d{4}-\d{2}-\d{2}", html):
+        return None, None
+    return "warn", "Missing 'Last updated YYYY-MM-DD' line"
+
+
+def check_footer_citation(html: str):
+    if "Formula source" in html or "Formula based on" in html:
+        return None, None
+    return "warn", "Missing formula source citation in footer"
+
+
+def check_404_page(html: str, file_path: Path):
+    """Special checks for 404 pages."""
+    if file_path.name == "404.html":
+        if 'name="robots"' not in html or "noindex" not in html:
+            return "warn", "404 page should have <meta name=\"robots\" content=\"noindex\">"
+    return None, None
+
+
+# ---------- Main ----------
+
+def lint_page(file_path: Path, site_root: Path):
+    html = file_path.read_text(encoding="utf-8", errors="replace")
+    expected = expected_url(file_path, site_root)
+
+    results = []  # (severity, message)
+
+    for check_fn, args in [
+        (check_title, (html,)),
+        (check_description, (html,)),
+        (check_h1, (html,)),
+        (check_canonical, (html, expected)),
+        (check_og_tags, (html,)),
+        (check_twitter_tags, (html,)),
+        (check_favicon, (html,)),
+        (check_webapp_jsonld, (html,)),
+        (check_ga4, (html,)),
+        (check_anchor_links, (html,)),
+        (check_internal_links, (html, site_root)),
+        (check_last_updated, (html,)),
+        (check_footer_citation, (html,)),
+        (check_404_page, (html, file_path)),
+    ]:
+        sev, msg = check_fn(*args)
+        if sev:
+            results.append((sev, msg))
+
+    critical = sum(1 for s, _ in results if s == "critical")
+    warn = sum(1 for s, _ in results if s == "warn")
+    score = max(0, 100 - critical * 25 - warn * 5)
+
+    return {
+        "file": str(file_path.relative_to(site_root.parent)),
+        "url": expected,
+        "score": score,
+        "critical": critical,
+        "warn": warn,
+        "issues": results,
+    }
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--site-root", default=".", help="Root folder containing HTML files")
+    ap.add_argument("--json", action="store_true", help="Machine-readable output")
+    ap.add_argument("--fail-on", choices=["critical", "warn"], default="critical",
+                    help="Exit 1 if issues at this level exist")
+    args = ap.parse_args()
+
+    site_root = Path(args.site_root).resolve()
+    if not site_root.exists():
+        print(f"error: site root does not exist: {site_root}", file=sys.stderr)
+        sys.exit(2)
+
+    files = find_html_files(site_root)
+    if not files:
+        print(f"error: no HTML files found under {site_root}", file=sys.stderr)
+        sys.exit(2)
+
+    results = [lint_page(f, site_root) for f in files]
+
+    total_critical = sum(r["critical"] for r in results)
+    total_warn = sum(r["warn"] for r in results)
+    avg_score = sum(r["score"] for r in results) / len(results)
+
+    if args.json:
+        print(json.dumps({"results": results,
+                          "summary": {"files": len(results),
+                                      "critical": total_critical,
+                                      "warn": total_warn,
+                                      "avg_score": round(avg_score, 1)}},
+                         indent=2))
+    else:
+        print(f"CalcBlueprint SEO Lint — {len(files)} pages\n")
+        for r in results:
+            status = "OK " if r["score"] == 100 else f"{r['score']:>3}"
+            icon = "✓" if r["score"] == 100 else ("✗" if r["critical"] else "!")
+            print(f"[{icon}] {status}/100  {r['url']}")
+            for sev, msg in r["issues"]:
+                marker = "    CRIT" if sev == "critical" else "    warn"
+                print(f"{marker}  {msg}")
+        print(f"\nSummary: {len(files)} files | "
+              f"{total_critical} critical | {total_warn} warnings | "
+              f"avg score {avg_score:.1f}/100")
+
+    exit_code = 0
+    if args.fail_on == "critical" and total_critical > 0:
+        exit_code = 1
+    elif args.fail_on == "warn" and (total_critical > 0 or total_warn > 0):
+        exit_code = 1
+    sys.exit(exit_code)
+
+
+if __name__ == "__main__":
+    main()
