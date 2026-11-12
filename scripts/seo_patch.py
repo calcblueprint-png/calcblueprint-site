@@ -7,18 +7,19 @@ Fixes performed:
     og       — Insert og:* and twitter:* meta tags (derived from title/description)
     favicon  — Insert <link rel="icon">
     h1       — Insert missing <h1> (derived from <title> or canonical URL)
-    nav      — Replace #about/#contact/#privacy/#terms anchors with real URLs
+    nav      — Normalize nav links: #anchors → URLs, .html → clean URLs, no-slash → slash
     jsonld   — Insert WebApplication JSON-LD schema
+    date     — Insert "Last updated" line after H1 on calculator pages
 
 Does NOT fix (requires human decision):
     - Missing or too-short title/description
-    - Broken internal links
-    - Missing "Last updated" line
-    - Missing footer citation
+    - Broken internal links (except known nav patterns)
+    - Missing footer citation (editorial per-page standard)
 
 Usage:
     python scripts/seo_patch.py                       # dry-run, all fixes
     python scripts/seo_patch.py --fix=og              # only OG tags
+    python scripts/seo_patch.py --fix=nav,date        # only nav + date
     python scripts/seo_patch.py --fix=all --write     # apply everything
     python scripts/seo_patch.py --site-root . --write # explicit root
 
@@ -34,6 +35,8 @@ from pathlib import Path
 
 SITE_DOMAIN = "https://calcblueprint.com"
 DEFAULT_OG_IMAGE = f"{SITE_DOMAIN}/og-image.png"
+SITE_AUTHOR = "Emiliano"
+SITE_LAST_UPDATED = "2026-11-12"
 
 IGNORE_DIRS = {
     ".git", ".github", "node_modules", "scripts", "assets", "img",
@@ -42,12 +45,46 @@ IGNORE_DIRS = {
 }
 IGNORE_FILES = {"404.html"}
 
+# #anchor → real URL (broken on-page nav)
 ANCHOR_MAP = {
     "#about": "/about/",
     "#contact": "/contact/",
     "#privacy": "/privacy/",
     "#terms": "/terms/",
     "#how-it-works": "/how-it-works/",
+}
+
+# .html extension → clean URL (broken internal links)
+HTML_EXT_MAP = {
+    'href="/about.html"': 'href="/about/"',
+    "href='/about.html'": "href='/about/'",
+    'href="/contact.html"': 'href="/contact/"',
+    "href='/contact.html'": "href='/contact/'",
+    'href="/privacy.html"': 'href="/privacy/"',
+    "href='/privacy.html'": "href='/privacy/'",
+    'href="/terms.html"': 'href="/terms/"',
+    "href='/terms.html'": "href='/terms/'",
+    'href="/how-it-works.html"': 'href="/how-it-works/"',
+    "href='/how-it-works.html'": "href='/how-it-works/'",
+}
+
+# Missing trailing slash → with trailing slash (normalization)
+NO_SLASH_MAP = {
+    'href="/about"': 'href="/about/"',
+    "href='/about'": "href='/about/'",
+    'href="/contact"': 'href="/contact/"',
+    "href='/contact'": "href='/contact/'",
+    'href="/privacy"': 'href="/privacy/"',
+    "href='/privacy'": "href='/privacy/'",
+    'href="/terms"': 'href="/terms/"',
+    "href='/terms'": "href='/terms/'",
+    'href="/how-it-works"': 'href="/how-it-works/"',
+    "href='/how-it-works'": "href='/how-it-works/'",
+}
+
+# Pages that should NOT get auto-inserted "Last updated" lines
+NON_CALCULATOR_URLS = {
+    "/", "/about/", "/contact/", "/privacy/", "/terms/", "/how-it-works/",
 }
 
 
@@ -106,7 +143,6 @@ def fix_og(html: str, url: str) -> tuple:
         f'\n<meta name="twitter:image" content="{DEFAULT_OG_IMAGE}">'
     )
 
-    # Insert after description meta, or after title, or before </head>
     patterns = [
         r'(<meta\s+name=["\']description["\'][^>]*>)',
         r"(<title>.*?</title>)",
@@ -133,7 +169,6 @@ def fix_h1(html: str, url: str) -> tuple:
     if re.search(r"<h1[\s>]", html, re.IGNORECASE):
         return html, False, "h1 present"
 
-    # Prefer title without " — CalcBlueprint" suffix
     title_match = re.search(r"<title>(.*?)</title>", html, re.DOTALL)
     if title_match:
         name = re.split(r"\s+[—|-]\s+", title_match.group(1).strip())[0].strip()
@@ -142,7 +177,6 @@ def fix_h1(html: str, url: str) -> tuple:
 
     tag = f'\n<h1>{name}</h1>'
 
-    # Try to place inside calculator-box (before unit-toggle, or after opening div)
     for pat in [
         r'(<div\s+class=["\']calculator-box["\'][^>]*>)',
         r'(<div\s+class=["\']container["\'][^>]*>)',
@@ -156,8 +190,11 @@ def fix_h1(html: str, url: str) -> tuple:
 
 
 def fix_nav(html: str, url: str) -> tuple:
+    """Normalize all nav links: #anchors, .html extensions, missing trailing slash."""
     new_html = html
     changed = False
+
+    # 1. #anchor → real URL
     for anchor, real_url in ANCHOR_MAP.items():
         if f'href="{anchor}"' in new_html:
             new_html = new_html.replace(f'href="{anchor}"', f'href="{real_url}"')
@@ -165,7 +202,20 @@ def fix_nav(html: str, url: str) -> tuple:
         if f"href='{anchor}'" in new_html:
             new_html = new_html.replace(f"href='{anchor}'", f"href='{real_url}'")
             changed = True
-    return new_html, changed, "nav anchors fixed" if changed else "nav ok"
+
+    # 2. .html extension → clean URL
+    for old, new in HTML_EXT_MAP.items():
+        if old in new_html:
+            new_html = new_html.replace(old, new)
+            changed = True
+
+    # 3. missing trailing slash → trailing slash
+    for old, new in NO_SLASH_MAP.items():
+        if old in new_html:
+            new_html = new_html.replace(old, new)
+            changed = True
+
+    return new_html, changed, "nav links normalized" if changed else "nav ok"
 
 
 def fix_jsonld(html: str, url: str) -> tuple:
@@ -181,7 +231,8 @@ def fix_jsonld(html: str, url: str) -> tuple:
         f'\n<script type="application/ld+json">'
         f'{{"@context":"https://schema.org","@type":"WebApplication",'
         f'"name":"{name}","applicationCategory":"UtilityApplication",'
-        f'"operatingSystem":"Web","offers":{{"@type":"Offer","price":"0","priceCurrency":"USD"}}}}</script>'
+        f'"operatingSystem":"Web","offers":{{"@type":"Offer","price":"0","priceCurrency":"USD"}}}}'
+        f'</script>'
     )
     if "</head>" in html:
         new_html = html.replace("</head>", block + "\n</head>", 1)
@@ -189,12 +240,43 @@ def fix_jsonld(html: str, url: str) -> tuple:
     return html, False, "jsonld could not be inserted (no </head>)"
 
 
+def fix_date(html: str, url: str) -> tuple:
+    """Insert 'By Emiliano · Last updated YYYY-MM-DD' after H1 on calculator pages."""
+    # Skip if already present (matches any "Last updated YYYY-MM-DD")
+    if re.search(r"Last updated\s+\d{4}-\d{2}-\d{2}", html):
+        return html, False, "date present"
+
+    # Skip non-calculator pages (about, contact, privacy, terms, how-it-works, homepage)
+    if url in NON_CALCULATOR_URLS or "calculator" not in url:
+        return html, False, "not a calculator page"
+
+    # Need an H1 to anchor the insertion point
+    h1_match = re.search(r"<h1[^>]*>.*?</h1>", html, re.DOTALL | re.IGNORECASE)
+    if not h1_match:
+        return html, False, "no h1 to anchor date"
+
+    # Safety: if a "Last Updated" (any casing) or "By Emiliano" already appears
+    # shortly after the H1, don't duplicate
+    after_h1 = html[h1_match.end():h1_match.end() + 250].lower()
+    if "last updated" in after_h1 or "by emiliano" in after_h1:
+        return html, False, "date-like text already present"
+
+    date_line = (
+        f'\n      <p style="color:#777;font-size:.85rem;margin:.25rem 0 1.25rem">'
+        f'By {SITE_AUTHOR} · Last updated {SITE_LAST_UPDATED}</p>'
+    )
+    new_html = html[:h1_match.end()] + date_line + html[h1_match.end():]
+    return new_html, True, "date line inserted"
+
+
+# Registry — insertion order matters (h1 must run before date)
 FIX_REGISTRY = {
     "og": fix_og,
     "favicon": fix_favicon,
     "h1": fix_h1,
     "nav": fix_nav,
     "jsonld": fix_jsonld,
+    "date": fix_date,
 }
 
 
@@ -203,7 +285,7 @@ FIX_REGISTRY = {
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--site-root", default=".", help="Root folder containing HTML files")
-    ap.add_argument("--fix", default="all", help="Comma-separated fixes: og,favicon,h1,nav,jsonld,all")
+    ap.add_argument("--fix", default="all", help="Comma-separated fixes: og,favicon,h1,nav,jsonld,date,all")
     ap.add_argument("--write", action="store_true", help="Apply changes (default: dry-run)")
     args = ap.parse_args()
 
