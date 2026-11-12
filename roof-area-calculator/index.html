@@ -9,6 +9,16 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Roof Area Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcblueprint.com/roof-area-calculator/">
+<meta property="og:title" content="Roof Area Calculator — CalcBlueprint">
+<meta property="og:description" content="Calculate the actual surface area of your roof from footprint and pitch. Essential for ordering materials accurately.">
+<meta property="og:image" content="https://calcblueprint.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Roof Area Calculator — CalcBlueprint">
+<meta name="twitter:description" content="Calculate the actual surface area of your roof from footprint and pitch. Essential for ordering materials accurately.">
+<meta name="twitter:image" content="https://calcblueprint.com/og-image.png">
+<link rel="icon" href="/favicon.ico">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
@@ -19,6 +29,7 @@ nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
 nav a:hover{color:#f5a623}
 .container{max-width:800px;margin:2rem auto;padding:0 1rem}
 .calculator-box{background:#fff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+h1{color:#1a2332;font-size:1.9rem;margin-bottom:0.5rem}
 .unit-toggle{display:flex;gap:1rem;margin-bottom:1.5rem}
 .unit-btn{flex:1;padding:0.75rem;border:2px solid #1a2332;background:#fff;color:#1a2332;font-weight:600;border-radius:4px;cursor:pointer;transition:all 0.2s}
 .unit-btn.active{background:#1a2332;color:#fff}
@@ -38,6 +49,7 @@ nav a:hover{color:#f5a623}
 .content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
 .content-section h3{color:#1a2332;margin-top:1.5rem;margin-bottom:0.5rem;font-size:1.1rem}
 .content-section p{margin-bottom:1rem;color:#4a5568}
+.content-section ul{padding-left:20px;color:#4a5568;line-height:1.9}
 footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:4rem}
 footer nav{margin-bottom:1rem}
 footer nav a{color:#fff;text-decoration:none;margin:0 0.75rem}
@@ -49,13 +61,16 @@ footer nav a:hover{color:#f5a623}
 <header>
 <a href="/" class="logo">Calc<span>Blueprint</span></a>
 <nav>
-<a href="#about">About</a>
-<a href="#contact">Contact</a>
+<a href="/how-it-works/">How It Works</a>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
 </nav>
 </header>
 <main>
 <div class="container">
 <div class="calculator-box">
+<h1>Roof Area Calculator</h1>
+<p style="color:#777;font-size:.85rem;margin:.25rem 0 1.25rem">By Emiliano · Last updated 2026-11-01</p>
 <div class="unit-toggle">
 <button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
 <button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
@@ -103,12 +118,14 @@ footer nav a:hover{color:#f5a623}
 <h2>How to Calculate Roof Area</h2>
 <p>Calculating your roof area accurately is critical when purchasing shingles, metal panels, underlayment, or hiring a roofing contractor. Simply measuring the footprint of the home is not enough because the slope increases the actual surface area. To find the correct dimensions, you must measure the total length and width of the building's exterior foundation, including any roof overhangs or eaves that you plan to cover.</p>
 <p>Next, you must determine the roof pitch, which is expressed as a ratio of vertical rise to 12 inches of horizontal run (for example, a 6:12 pitch rises 6 inches for every foot). By converting this ratio into a multiplier using square roots, you can scale the flat footprint up to match the true angled plane of the roof deck. Finally, adding a 5% waste factor ensures you do not run short of materials due to field cuts and starter course trimmings.</p>
+<p>If you don't already know your pitch, our <a href="/roof-pitch-calculator/">roof pitch calculator</a> converts rise and run into the X:12 ratio and the corresponding angle in degrees. Once you have the true roof area, our <a href="/shingle-calculator/">shingle calculator</a> turns it into bundles and squares of asphalt shingles for ordering.</p>
 </section>
 
 <section class="content-section">
 <h2>What Affects Roof Area</h2>
 <p>Several architectural features and geometric complexities can alter the physical surface area of a roofing project compared to a simple gable calculation. Dormers, turrets, cross-gables, and complex valley configurations require additional cuts and generate higher scrap rates, sometimes necessitating an 8% to 10% waste factor instead of the standard 5%. Furthermore, overhangs and soffit extensions must be factored directly into the base building dimensions because roofing materials must cover the entire exposed deck extending past the exterior walls.</p>
 <p>The steepness of the pitch also plays a dramatic role; steeper roofs feature much higher pitch multipliers, drastically increasing the square footage of material required. Safety equipment and specialized labor costs often scale with steep pitches as well. Understanding these nuances guarantees that your material orders match field reality, preventing costly mid-project delivery delays or surplus waste.</p>
+<p>Roof area is only the start of a full takeoff. If you are framing the roof structure from scratch, our <a href="/roof-truss-calculator/">roof truss calculator</a> estimates truss count and spacing. For ventilation, the <a href="/ridge-vent-calculator/">ridge vent calculator</a> sizes vent length against roof area. And for the drainage side, our <a href="/gutter-calculator/">gutter calculator</a> converts roof area into downspout and gutter linear footage.</p>
 </section>
 
 <section class="content-section">
@@ -120,14 +137,27 @@ footer nav a:hover{color:#f5a623}
 <h3>Can I use this calculator for complex multi-tier roofs?</h3>
 <p>This calculator is designed for standard rectangular footprints and simple roof planes. For complex roofs with multiple sections, hips, and valleys, it is best to calculate each section independently and sum the total areas.</p>
 </section>
+
+<section class="content-section">
+<h2>Related Calculators</h2>
+<ul>
+<li><a href="/roof-pitch-calculator/">Roof Pitch Calculator</a> — convert rise/run into X:12 ratio and angle</li>
+<li><a href="/shingle-calculator/">Shingle Calculator</a> — bundles and squares from roof area</li>
+<li><a href="/roof-truss-calculator/">Roof Truss Calculator</a> — truss count and spacing for the roof structure</li>
+<li><a href="/ridge-vent-calculator/">Ridge Vent Calculator</a> — ridge vent length by roof area</li>
+<li><a href="/gutter-calculator/">Gutter Calculator</a> — gutter and downspout linear footage</li>
+</ul>
+</section>
 </div>
 </main>
 <footer>
 <nav>
 <a href="/">Home</a>
-<a href="#about">About</a>
-<a href="#contact">Contact</a>
-<a href="#privacy">Privacy</a>
+<a href="/how-it-works/">How It Works</a>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+<a href="/privacy/">Privacy</a>
+<a href="/terms/">Terms</a>
 </nav>
 <div class="citation">Formula source: NRCA Roofing Manual and manufacturer installation guides. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.</div>
 </footer>
