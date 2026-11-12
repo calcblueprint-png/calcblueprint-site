@@ -52,6 +52,13 @@ th{background:#1a2332;font-weight:600;color:#fff;font-size:.85rem;text-transform
 td{color:#333}
 tr:last-child td{border-bottom:none}
 .updated{color:#777;font-size:.9rem;margin-top:3rem;padding-top:1.5rem;border-top:1px solid #e5e5e5}
+.calc-library{margin-top:1.5rem}
+.calc-library h3{font-size:1rem;margin:1.5rem 0 .5rem;color:#1a2332;border-bottom:1px solid #e5e5e5;padding-bottom:.3rem}
+.calc-library ul{list-style:none;margin:0;padding:0;columns:2;column-gap:1.5rem}
+.calc-library li{margin-bottom:.35rem;font-size:.9rem;break-inside:avoid}
+.calc-library a{color:#1a2332;text-decoration:none;border-bottom:1px dotted #ccc}
+.calc-library a:hover{color:#e09515;border-bottom-color:#e09515}
+@media(max-width:600px){.calc-library ul{columns:1}}
 footer{background:#1a2332;color:#b8c1cc;padding:2rem 0;margin-top:3rem;font-size:.9rem}
 footer .container{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;max-width:960px}
 footer a{color:#b8c1cc;text-decoration:none;margin-right:1rem}
@@ -88,16 +95,16 @@ footer a:hover{color:#f5a623}
 <h2>The formulas behind each calculator</h2>
 <table>
 <tr><th>Calculator</th><th>Source standard</th></tr>
-<tr><td>Concrete Slab</td><td>ACI 318 — Standard Building Code for Structural Concrete</td></tr>
-<tr><td>Concrete Footings</td><td>ACI 318 + IRC Table R403.1 (minimum footing sizes)</td></tr>
-<tr><td>Roofing Materials</td><td>NRCA Roofing Manual + manufacturer coverage specs</td></tr>
-<tr><td>Paint Calculator</td><td>Manufacturer spread-rate specs (typically 350 sq ft/gal)</td></tr>
-<tr><td>Tile Calculator</td><td>TCNA (Tile Council of North America) installation guidelines</td></tr>
-<tr><td>Drywall Calculator</td><td>Gypsum Association GA-216 application standard</td></tr>
-<tr><td>Framing Lumber</td><td>IRC Table R602.3(5) — spans for dimensional lumber</td></tr>
-<tr><td>Insulation Calculator</td><td>IECC R-values + manufacturer coverage charts</td></tr>
-<tr><td>Mulch/Sod Calculator</td><td>Manufacturer coverage specs for bulk materials</td></tr>
-<tr><td>Gravel Calculator</td><td>Aggregate weight standards (typically 1.4 tons/yd³)</td></tr>
+<tr><td><a href="/concrete-slab-cost-calculator/">Concrete Slab</a></td><td>ACI 318 — Standard Building Code for Structural Concrete</td></tr>
+<tr><td><a href="/concrete-footing-calculator/">Concrete Footings</a></td><td>ACI 318 + IRC Table R403.1 (minimum footing sizes)</td></tr>
+<tr><td><a href="/shingle-calculator/">Roofing Materials</a></td><td>NRCA Roofing Manual + manufacturer coverage specs</td></tr>
+<tr><td><a href="/paint-calculator/">Paint Calculator</a></td><td>Manufacturer spread-rate specs (typically 350 sq ft/gal)</td></tr>
+<tr><td><a href="/tile-calculator/">Tile Calculator</a></td><td>TCNA (Tile Council of North America) installation guidelines</td></tr>
+<tr><td><a href="/drywall-calculator/">Drywall Calculator</a></td><td>Gypsum Association GA-216 application standard</td></tr>
+<tr><td><a href="/board-foot-calculator/">Framing Lumber</a></td><td>IRC Table R602.3(5) — spans for dimensional lumber</td></tr>
+<tr><td><a href="/insulation-calculator/">Insulation Calculator</a></td><td>IECC R-values + manufacturer coverage charts</td></tr>
+<tr><td><a href="/mulch-calculator/">Mulch</a> / <a href="/sod-calculator/">Sod</a></td><td>Manufacturer coverage specs for bulk materials</td></tr>
+<tr><td><a href="/gravel-calculator/">Gravel Calculator</a></td><td>Aggregate weight standards (typically 1.4 tons/yd³)</td></tr>
 </table>
 
 <h2>How the general formula works</h2>
@@ -123,7 +130,7 @@ footer a:hover{color:#f5a623}
 <h2>How to verify a calculation yourself</h2>
 <p>You don't have to trust this page. Here's how to sanity-check any of our estimates:</p>
 <ol>
-<li>Run a calculation (e.g., <a href="/concrete-slab-calculator/">Concrete Slab Calculator</a>) with simple inputs — say, 10 ft × 10 ft × 4 in.</li>
+<li>Run a calculation (e.g., <a href="/concrete-slab-cost-calculator/">Concrete Slab Cost Calculator</a>) with simple inputs — say, 10 ft × 10 ft × 4 in.</li>
 <li>Work the math by hand: 10 × 10 × 0.333 ft = 33.3 cubic feet; 33.3 ÷ 27 = 1.23 cubic yards.</li>
 <li>Compare with our result. With a 5% waste factor, we'll show ~1.30 cubic yards.</li>
 <li>Cross-check the standard — ACI 318 publishes the same conversion (1 yd³ = 27 ft³).</li>
@@ -144,7 +151,110 @@ footer a:hover{color:#f5a623}
 <h2>Report an error</h2>
 <p>If a calculator gives a wrong result, <a href="/contact/">let us know</a>. Include the calculator URL, your inputs, and what you expected. We take accuracy seriously and update formulas quickly when errors are reported.</p>
 
-<p class="updated">Last updated: 2026-09-27. Maintained by Emiliano.</p>
+<h2>Complete calculator library</h2>
+<p>Every calculator on CalcBlueprint, grouped by category:</p>
+
+<div class="calc-library">
+
+<h3>Concrete &amp; Masonry</h3>
+<ul>
+<li><a href="/concrete-slab-cost-calculator/">Concrete Slab Cost Calculator</a></li>
+<li><a href="/concrete-footing-calculator/">Concrete Footing Calculator</a></li>
+<li><a href="/concrete-column-calculator/">Concrete Column Calculator</a></li>
+<li><a href="/concrete-steps-calculator/">Concrete Steps Calculator</a></li>
+<li><a href="/concrete-block-calculator/">Concrete Block Calculator</a></li>
+<li><a href="/concrete-mix-calculator/">Concrete Mix Ratio Calculator</a></li>
+<li><a href="/rebar-spacing-calculator/">Rebar Spacing Calculator</a></li>
+<li><a href="/brick-calculator/">Brick Calculator</a></li>
+<li><a href="/mortar-calculator/">Mortar Calculator</a></li>
+</ul>
+
+<h3>Roofing &amp; Gutters</h3>
+<ul>
+<li><a href="/roof-pitch-calculator/">Roof Pitch Calculator</a></li>
+<li><a href="/roof-area-calculator/">Roof Area Calculator</a></li>
+<li><a href="/shingle-calculator/">Shingle Calculator</a></li>
+<li><a href="/roof-truss-calculator/">Roof Truss Calculator</a></li>
+<li><a href="/ridge-vent-calculator/">Ridge Vent Calculator</a></li>
+<li><a href="/gutter-calculator/">Gutter Calculator</a></li>
+</ul>
+
+<h3>Siding &amp; Exterior</h3>
+<ul>
+<li><a href="/vinyl-siding-calculator/">Vinyl Siding Calculator</a></li>
+<li><a href="/hardie-plank-calculator/">Hardie Plank Calculator</a></li>
+</ul>
+
+<h3>Lumber, Decks &amp; Fencing</h3>
+<ul>
+<li><a href="/board-foot-calculator/">Board Foot Calculator</a></li>
+<li><a href="/deck-calculator/">Deck Calculator</a></li>
+<li><a href="/fence-calculator/">Fence Calculator</a></li>
+<li><a href="/chain-link-fence-calculator/">Chain Link Fence Calculator</a></li>
+<li><a href="/privacy-fence-calculator/">Privacy Fence Calculator</a></li>
+<li><a href="/gate-calculator/">Gate Calculator</a></li>
+</ul>
+
+<h3>Flooring &amp; Tile</h3>
+<ul>
+<li><a href="/hardwood-flooring-calculator/">Hardwood Flooring Calculator</a></li>
+<li><a href="/laminate-flooring-calculator/">Laminate Flooring Calculator</a></li>
+<li><a href="/carpet-calculator/">Carpet Calculator</a></li>
+<li><a href="/kitchen-floor-calculator/">Kitchen Floor Calculator</a></li>
+<li><a href="/bathroom-floor-tile-calculator/">Bathroom Floor Tile Calculator</a></li>
+<li><a href="/tile-calculator/">Tile Calculator</a></li>
+<li><a href="/shower-tile-calculator/">Shower Tile Calculator</a></li>
+<li><a href="/backsplash-calculator/">Backsplash Calculator</a></li>
+<li><a href="/grout-calculator/">Grout Calculator</a></li>
+<li><a href="/thinset-calculator/">Thinset Calculator</a></li>
+</ul>
+
+<h3>Walls, Ceilings &amp; Finishes</h3>
+<ul>
+<li><a href="/drywall-calculator/">Drywall Calculator</a></li>
+<li><a href="/drywall-mud-calculator/">Drywall Mud Calculator</a></li>
+<li><a href="/drywall-screws-calculator/">Drywall Screws Calculator</a></li>
+<li><a href="/corner-bead-calculator/">Corner Bead Calculator</a></li>
+<li><a href="/wall-area-calculator/">Wall Area Calculator</a></li>
+<li><a href="/wallpaper-calculator/">Wallpaper Calculator</a></li>
+<li><a href="/paint-calculator/">Paint Calculator</a></li>
+<li><a href="/insulation-calculator/">Insulation Calculator</a></li>
+</ul>
+
+<h3>Paving &amp; Landscaping</h3>
+<ul>
+<li><a href="/gravel-calculator/">Gravel Calculator</a></li>
+<li><a href="/asphalt-calculator/">Asphalt Calculator</a></li>
+<li><a href="/paver-calculator/">Paver Calculator</a></li>
+<li><a href="/retaining-wall-calculator/">Retaining Wall Calculator</a></li>
+<li><a href="/artificial-turf-calculator/">Artificial Turf Calculator</a></li>
+<li><a href="/sod-calculator/">Sod Calculator</a></li>
+<li><a href="/mulch-calculator/">Mulch Calculator</a></li>
+<li><a href="/topsoil-calculator/">Topsoil Calculator</a></li>
+<li><a href="/compost-calculator/">Compost Calculator</a></li>
+<li><a href="/fertilizer-calculator/">Fertilizer Calculator</a></li>
+<li><a href="/grass-seed-calculator/">Grass Seed Calculator</a></li>
+</ul>
+
+<h3>HVAC</h3>
+<ul>
+<li><a href="/ac-unit-size-calculator/">AC Unit Size Calculator</a></li>
+<li><a href="/btu-calculator/">BTU Calculator</a></li>
+<li><a href="/furnace-size-calculator/">Furnace Size Calculator</a></li>
+<li><a href="/duct-size-calculator/">Duct Size Calculator</a></li>
+</ul>
+
+<h3>Electrical</h3>
+<ul>
+<li><a href="/electrical-load-calculator/">Electrical Load Calculator</a></li>
+<li><a href="/wire-size-calculator/">Wire Size Calculator</a></li>
+<li><a href="/breaker-size-calculator/">Breaker Size Calculator</a></li>
+<li><a href="/outlet-spacing-calculator/">Outlet Spacing Calculator</a></li>
+</ul>
+
+</div>
+
+<p class="updated">Last updated: 2026-11-01. Maintained by Emiliano.</p>
 
 </div>
 </main>
