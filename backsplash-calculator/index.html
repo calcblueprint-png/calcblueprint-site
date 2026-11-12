@@ -9,6 +9,16 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Backsplash Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcblueprint.com/backsplash-calculator/">
+<meta property="og:title" content="Backsplash Calculator — CalcBlueprint">
+<meta property="og:description" content="Calculate tile needed for a kitchen backsplash. Account for outlets, windows, and tile size.">
+<meta property="og:image" content="https://calcblueprint.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Backsplash Calculator — CalcBlueprint">
+<meta name="twitter:description" content="Calculate tile needed for a kitchen backsplash. Account for outlets, windows, and tile size.">
+<meta name="twitter:image" content="https://calcblueprint.com/og-image.png">
+<link rel="icon" href="/favicon.ico">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background-color:#f4f6f9;color:#333;line-height:1.6}
@@ -19,6 +29,7 @@ nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
 nav a:hover{color:#f5a623}
 .container{max-width:800px;margin:2rem auto;padding:0 1rem}
 .calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);margin-bottom:2rem}
+h1{color:#1a2332;font-size:1.9rem;margin-bottom:0.5rem}
 .unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem}
 .unit-btn{flex:1;padding:0.75rem;border:1px solid #ccc;background:#f9f9f9;cursor:pointer;font-weight:600;border-radius:4px;transition:all 0.2s}
 .unit-btn.active{background:#f5a623;color:#1a2332;border-color:#f5a623}
@@ -38,6 +49,7 @@ nav a:hover{color:#f5a623}
 .content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
 .content-section p{margin-bottom:1rem;color:#4a5568}
 .content-section h3{color:#1a2332;margin-top:1.5rem;margin-bottom:0.5rem;font-size:1.1rem}
+.content-section ul{padding-left:20px;color:#4a5568;line-height:1.9}
 footer{background:#1a2332;color:#fff;padding:2rem;text-align:center;margin-top:4rem}
 footer nav{margin-bottom:1rem}
 footer nav a{color:#fff;margin:0 0.75rem;text-decoration:none}
@@ -50,14 +62,18 @@ footer nav a:hover{color:#f5a623}
 <header>
   <a href="/" class="logo">Calc<span>Blueprint</span></a>
   <nav>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
+    <a href="/how-it-works/">How It Works</a>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
   </nav>
 </header>
 
 <main>
   <div class="container">
     <div class="calculator-box">
+      <h1>Backsplash Calculator</h1>
+      <p style="color:#777;font-size:.85rem;margin:.25rem 0 1.25rem">By Emiliano · Last updated 2026-11-01</p>
+
       <div class="unit-toggle">
         <button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
         <button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
@@ -110,12 +126,14 @@ footer nav a:hover{color:#f5a623}
       <h2>How to Calculate Backsplash Tile</h2>
       <p>Calculating tile for a kitchen backsplash requires careful measurement of your linear counter space and vertical clearance from the countertop to the underside of upper cabinets. Standard backsplashes typically span 18 inches in height, though custom installations may run higher behind ranges or up to the ceiling. To begin, measure the total length of your runs in feet and convert them to inches for consistency with your tile dimensions.</p>
       <p>Once you have total square inches, subtract openings for electrical outlets, light switches, and windows. While some installers choose not to deduct small outlets because cuts around boxes consume extra tile, subtracting standard deductions ensures a realistic baseline before applying your waste factor. Always add 10% for standard installations or 15% to 20% if you are working with intricate herringbone patterns, diagonal layouts, or handmade tiles with high variation.</p>
+      <p>Once you have your tile count, you will also need thinset to set the tile and grout to fill the joints. Use our <a href="/thinset-calculator/">thinset calculator</a> to size mortar bags by trowel notch, and our <a href="/grout-calculator/">grout calculator</a> to estimate grout by joint width and tile size.</p>
     </section>
 
     <section class="content-section">
       <h2>What Affects Backsplash Calculations</h2>
       <p>Tile layout patterns significantly impact material requirements. A straight stack or running bond layout generates minimal waste, hovering close to the standard 10% threshold. Conversely, diagonal layouts, chevron, and herringbone patterns require significantly more cuts along boundaries, increasing waste margins considerably. Additionally, the physical dimensions of the tile dictate how many pieces must be sliced at corners and edges.</p>
       <p>Obstacles like range hoods, windows, and custom cabinetry transitions also alter the equation. Areas behind heavy cooking ranges often feature decorative accent tiles or stainless steel inserts that change field tile totals. Furthermore, batch dye lots mean you must order all required tile—plus extra attic stock—in a single purchase to prevent color matching discrepancies between manufacturing runs.</p>
+      <p>Backsplash tile is often paired with a full kitchen remodel. If you are also replacing the kitchen floor, our <a href="/kitchen-floor-calculator/">kitchen floor calculator</a> handles flooring quantities from the same room dimensions. For larger tile layouts in general (floors, showers, entire rooms), use the main <a href="/tile-calculator/">tile calculator</a>.</p>
     </section>
 
     <section class="content-section">
@@ -128,15 +146,28 @@ footer nav a:hover{color:#f5a623}
       <p>The standard height from the top of the countertop to the bottom of the upper wall cabinets is 18 inches. However, installations often extend higher behind the stove range or up to the ceiling behind open shelving.</p>
     </section>
 
+    <section class="content-section">
+      <h2>Related Calculators</h2>
+      <ul>
+        <li><a href="/tile-calculator/">Tile Calculator</a> — tile count, boxes, thinset, and grout for any room</li>
+        <li><a href="/thinset-calculator/">Thinset Calculator</a> — mortar bags by trowel notch and tile format</li>
+        <li><a href="/grout-calculator/">Grout Calculator</a> — grout quantity by joint width and tile size</li>
+        <li><a href="/kitchen-floor-calculator/">Kitchen Floor Calculator</a> — flooring quantities for the same kitchen</li>
+        <li><a href="/shower-tile-calculator/">Shower Tile Calculator</a> — tile for shower walls and pans</li>
+      </ul>
+    </section>
+
   </div>
 </main>
 
 <footer>
   <nav>
     <a href="/">Home</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
-    <a href="#privacy">Privacy</a>
+    <a href="/how-it-works/">How It Works</a>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+    <a href="/privacy/">Privacy</a>
+    <a href="/terms/">Terms</a>
   </nav>
   <div class="citation">
     Formula source: TCNA Handbook for Ceramic, Glass, and Stone Tile Installation. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint
