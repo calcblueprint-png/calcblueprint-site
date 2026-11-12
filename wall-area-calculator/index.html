@@ -22,6 +22,7 @@ nav a:hover{color:#f5a623}
 main{padding:2rem 1rem}
 .container{max-width:800px;margin:0 auto}
 .calculator-box{background:#ffffff;border-radius:8px;padding:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);margin-bottom:2rem}
+h1{color:#1a2332;font-size:2rem;margin-bottom:0.5rem}
 .unit-toggle{display:flex;margin-bottom:1.5rem;background:#f0f2f5;padding:4px;border-radius:6px}
 .unit-btn{flex:1;padding:0.75rem;border:none;background:transparent;font-weight:600;cursor:pointer;border-radius:4px;color:#555}
 .unit-btn.active{background:#f5a623;color:#1a2332}
@@ -42,6 +43,7 @@ main{padding:2rem 1rem}
 .content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
 .content-section h3{color:#1a2332;margin-top:1.2rem;margin-bottom:0.4rem;font-size:1.1rem}
 .content-section p{margin-bottom:1rem;color:#444}
+.content-section ul{padding-left:20px;color:#444;line-height:1.9}
 footer{background:#1a2332;color:#aaa;padding:2rem;text-align:center;font-size:0.9rem}
 footer nav{margin-bottom:1rem}
 footer nav a{color:#fff;margin:0 1rem;text-decoration:none}
@@ -55,9 +57,9 @@ footer nav a:hover{color:#f5a623}
 <header>
   <a href="/" class="logo">Calc<span>Blueprint</span></a>
   <nav>
-    <a href="/">Home</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
+    <a href="/how-it-works/">How It Works</a>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
   </nav>
 </header>
 
@@ -65,6 +67,10 @@ footer nav a:hover{color:#f5a623}
   <div class="container">
     
     <div class="calculator-box">
+      <h1>Wall Area Calculator</h1>
+
+      <p style="color:#777;font-size:.85rem;margin:.25rem 0 1.25rem">By Emiliano · Last updated 2026-11-01</p>
+
       <div class="unit-toggle">
         <button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
         <button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
@@ -124,12 +130,14 @@ footer nav a:hover{color:#f5a623}
       <h2>How to Calculate Wall Area</h2>
       <p>Accurately measuring wall surface area is the foundational step for any interior remodeling, painting, wallpapering, or siding installation project. To begin manually, measure the total linear footage of all exterior or interior walls by adding the lengths of each side of the room together, or by multiplying the sum of the length and width by two for standard rectangular spaces. Next, measure the vertical distance from the finished floor to the bottom of the ceiling or drywall junction to establish your height metric.</p>
       <p>Once you multiply your total perimeter by the room height, you arrive at the gross wall square footage. Because materials like paint or siding are not applied over openings, you must subtract standard architectural deductions. Professional estimators typically deduct 20 square feet for each standard entry door and 15 square feet for each standard window opening. Subtracting these values from your gross square footage ensures you order the exact amount of finish material required without excessive waste.</p>
+      <p>Wall area is the starting point for almost every interior finish. If you are hanging drywall on these walls, our <a href="/drywall-calculator/">drywall calculator</a> converts net wall square footage into 4x8 sheets, screws, and joint compound. If you are applying wallpaper, our <a href="/wallpaper-calculator/">wallpaper calculator</a> turns the same wall area into roll counts adjusted for pattern repeat.</p>
     </section>
 
     <section class="content-section">
       <h2>What Affects Wall Area Calculations</h2>
       <p>Several architectural variables can significantly alter basic wall area calculations. Vaulted, cathedral, or sloped ceilings break the standard rectangular height formula, requiring you to measure wall triangles and trapezoids separately using geometric height averages rather than a single uniform ceiling height. Open-concept floor plans with partial walls, cased openings, or structural columns also introduce complex perimeters that require careful section-by-section breakdown.</p>
       <p>Additionally, oversized architectural features such as double-hung picture windows, sliding glass doors, or arched entryways deviate heavily from standard 20 sq ft door and 15 sq ft window deduction averages. In these instances, measuring the precise height and width of the actual openings yields far more accurate material estimates. Surface texture, heavy wainscoting, and deep window reveals can also increase actual material requirements despite reducing flat wall square footage, making professional job-site verification vital for precise estimating.</p>
+      <p>The same net wall area is what an exterior cladding estimator starts from. If you are planning fiber cement siding on an exterior wall, our <a href="/hardie-plank-calculator/">Hardie plank calculator</a> uses wall area and board dimensions to compute the number of siding boards. For vinyl siding, use the <a href="/vinyl-siding-calculator/">vinyl siding calculator</a>; for insulation behind the wall surface, our <a href="/insulation-calculator/">insulation calculator</a> matches R-value to wall cavity.</p>
     </section>
 
     <section class="content-section">
@@ -142,15 +150,31 @@ footer nav a:hover{color:#f5a623}
       <p>Yes, professional standards generally recommend adding a 10% to 15% waste factor to your final net wall area calculation. This accounts for pattern matching in wallpaper, cutting errors, brush and roller absorption, and touch-ups required during installation.</p>
     </section>
 
+    <section class="content-section">
+      <h2>Related Calculators</h2>
+      <ul>
+        <li><a href="/drywall-calculator/">Drywall Calculator</a> — sheets, screws, and joint compound for wall finishes</li>
+        <li><a href="/wallpaper-calculator/">Wallpaper Calculator</a> — wallpaper rolls adjusted for pattern repeat</li>
+        <li><a href="/paint-calculator/">Paint Calculator</a> — gallons per coat for net wall area</li>
+        <li><a href="/hardie-plank-calculator/">Hardie Plank Calculator</a> — fiber cement siding boards for exterior walls</li>
+        <li><a href="/vinyl-siding-calculator/">Vinyl Siding Calculator</a> — vinyl siding squares and trim</li>
+        <li><a href="/insulation-calculator/">Insulation Calculator</a> — R-value and batts for wall cavities</li>
+        <li><a href="/drywall-mud-calculator/">Drywall Mud Calculator</a> — joint compound by coat and joint length</li>
+        <li><a href="/corner-bead-calculator/">Corner Bead Calculator</a> — linear feet of corner bead for outside corners</li>
+      </ul>
+    </section>
+
   </div>
 </main>
 
 <footer>
   <nav>
     <a href="/">Home</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
-    <a href="#privacy">Privacy</a>
+    <a href="/how-it-works/">How It Works</a>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+    <a href="/privacy/">Privacy</a>
+    <a href="/terms/">Terms</a>
   </nav>
   <div class="citation">Formula source: Paint manufacturer coverage specifications and ASTM D523. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint</div>
 </footer>
@@ -204,7 +228,7 @@ function calculate() {
 
   const perimeter = 2 * (length + width);
   let grossArea = perimeter * height;
-  let totalDeductions = doorDeduction + windowDeduction;
+  let totalDeductions = doorDeduction + windowDeductions_safe(windowDeduction, currentUnit);
   let netArea = grossArea - totalDeductions;
 
   if (currentUnit === 'metric') {
@@ -221,6 +245,10 @@ function calculate() {
   document.getElementById('res-net').innerText = netArea.toFixed(2) + unitSuffix;
 
   document.getElementById('resultBox').classList.add('visible');
+}
+
+function windowDeductions_safe(windowDeduction, unit) {
+  return windowDeduction;
 }
 </script>
 
