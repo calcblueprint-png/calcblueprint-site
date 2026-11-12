@@ -18,6 +18,7 @@ nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
 nav a:hover{color:#f5a623}
 .container{max-width:900px;margin:2rem auto;padding:0 1rem}
 .calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.05);margin-bottom:2rem}
+h1{color:#1a2332;font-size:1.9rem;margin-bottom:0.5rem}
 .unit-toggle{display:flex;margin-bottom:1.5rem;background:#f0f2f5;border-radius:6px;padding:4px}
 .unit-btn{flex:1;background:transparent;border:none;padding:10px;font-weight:600;cursor:pointer;border-radius:4px;color:#555}
 .unit-btn.active{background:#f5a623;color:#1a2332}
@@ -39,6 +40,7 @@ details p{margin-top:1rem;color:#555}
 .content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
 .content-section p{margin-bottom:1rem;color:#4a5568}
 .content-section h3{color:#1a2332;margin-top:1.5rem;margin-bottom:0.5rem;font-size:1.1rem}
+.content-section ul{padding-left:20px;color:#4a5568;line-height:1.9}
 footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:4rem}
 footer nav{margin-bottom:1rem}
 footer nav a{color:#fff;margin:0 10px;text-decoration:none}
@@ -47,21 +49,34 @@ footer nav a:hover{color:#f5a623}
 @media(max-width:600px){header{flex-direction:column;text-align:center}nav{margin-top:1rem}}
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Carpet Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcblueprint.com/carpet-calculator/">
+<meta property="og:title" content="Carpet Calculator — CalcBlueprint">
+<meta property="og:description" content="Calculate carpet square yards and padding needed for any room. Account for seams and directional layout.">
+<meta property="og:image" content="https://calcblueprint.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Carpet Calculator — CalcBlueprint">
+<meta name="twitter:description" content="Calculate carpet square yards and padding needed for any room. Account for seams and directional layout.">
+<meta name="twitter:image" content="https://calcblueprint.com/og-image.png">
+<link rel="icon" href="/favicon.ico">
 </head>
 <body>
 
 <header>
   <a href="/" class="logo">Calc<span>Blueprint</span></a>
   <nav>
-    <a href="/">Home</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
+    <a href="/how-it-works/">How It Works</a>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
   </nav>
 </header>
 
 <main>
   <div class="container">
     <div class="calculator-box">
+      <h1>Carpet Calculator</h1>
+      <p style="color:#777;font-size:.85rem;margin:.25rem 0 1.25rem">By Emiliano · Last updated 2026-11-01</p>
+
       <div class="unit-toggle">
         <button type="button" class="unit-btn active" id="btnImperial" onclick="setUnitSystem('imperial')">Imperial (US)</button>
         <button type="button" class="unit-btn" id="btnMetric" onclick="setUnitSystem('metric')">Metric</button>
@@ -110,12 +125,14 @@ footer nav a:hover{color:#f5a623}
       <h2>How to Calculate Carpet</h2>
       <p>Calculating carpet quantities accurately requires more than simply multiplying room length by room width and dividing by nine. Because broadloom carpet is manufactured in fixed roll widths—typically 12 feet or 15 feet—layout planning is critical. If your room dimensions exceed standard roll widths, seams become necessary, requiring extra material to align patterns correctly and ensure proper directional flow across all adjoining spaces.</p>
       <p>To begin, measure the longest and widest points of your space, including any alcoves or closets. Multiply these figures to find total square footage, then divide by nine to convert to square yards. Industry standards dictate adding a 10% waste factor to accommodate perimeter trimming, seaming allowances, and directional constraints. Carpet padding is calculated similarly, though it typically requires an additional 5% margin to ensure complete subfloor coverage beneath all stretched carpet boundaries.</p>
+      <p>If you are comparing carpet against hard flooring for the same room, our <a href="/laminate-flooring-calculator/">laminate flooring calculator</a> and <a href="/hardwood-flooring-calculator/">hardwood flooring calculator</a> use the same room dimensions to estimate planks, cartons, and waste.</p>
     </section>
 
     <section class="content-section">
       <h2>What Affects Carpet Calculations</h2>
       <p>Several distinct architectural and material factors influence your final carpet and padding requirements. Pattern matching represents one of the most significant variables; patterned carpets require precise alignment at seams, forcing installers to purchase extra yardage to match designs across adjacent strips. Room geometry also plays a vital role. Irregularly shaped rooms, L-shaped spaces, and multiple doorways increase cutting waste compared to simple, rectangular living rooms.</p>
       <p>Additionally, roll width constraints dictate how efficiently carpet can be cut from the roll. Choosing between a 12-foot or 15-foot roll can drastically alter the amount of leftover scrap material generated during installation. Subfloor conditions, staircases, and heavy traffic transition areas may also necessitate specific padding thicknesses and heavier tack strip placements, slightly shifting overall material usage estimates.</p>
+      <p>Mixed flooring plans often pair carpet in bedrooms with tile in bathrooms and kitchens. For wet areas, our <a href="/tile-calculator/">tile calculator</a> estimates tile count, thinset, and grout from the same room dimensions; for kitchens specifically, use the <a href="/kitchen-floor-calculator/">kitchen floor calculator</a>.</p>
     </section>
 
     <section class="content-section">
@@ -127,15 +144,28 @@ footer nav a:hover{color:#f5a623}
       <h3>Is carpet padding calculated differently than the carpet itself?</h3>
       <p>Carpet padding follows the same baseline square footage calculations as carpet, but generally includes a slightly higher contingency margin of roughly 5% to account for perimeter fitting, stapling, and trimming waste along tack strips.</p>
     </section>
+
+    <section class="content-section">
+      <h2>Related Calculators</h2>
+      <ul>
+        <li><a href="/laminate-flooring-calculator/">Laminate Flooring Calculator</a> — planks and cartons for the same room area</li>
+        <li><a href="/hardwood-flooring-calculator/">Hardwood Flooring Calculator</a> — hardwood planks and waste allowance</li>
+        <li><a href="/tile-calculator/">Tile Calculator</a> — tile count, thinset, and grout for wet areas</li>
+        <li><a href="/kitchen-floor-calculator/">Kitchen Floor Calculator</a> — flooring for kitchens</li>
+        <li><a href="/bathroom-floor-tile-calculator/">Bathroom Floor Tile Calculator</a> — flooring for bathrooms</li>
+      </ul>
+    </section>
   </div>
 </main>
 
 <footer>
   <nav>
     <a href="/">Home</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
-    <a href="#privacy">Privacy</a>
+    <a href="/how-it-works/">How It Works</a>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+    <a href="/privacy/">Privacy</a>
+    <a href="/terms/">Terms</a>
   </nav>
   <div class="citation">
     Formula source: NWFA (National Wood Flooring Association) installation guidelines. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.
