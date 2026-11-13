@@ -181,6 +181,11 @@ CATEGORY_SLUGS = {
         "gravel-calculator", "asphalt-calculator",
         "concrete-mix-calculator", "topsoil-calculator", "mulch-calculator",
     ],
+    "stairs": [
+        "stair-stringer-calculator", "concrete-steps-calculator",
+        "concrete-stairs-calculator", "deck-calculator",
+        "board-foot-calculator",
+    ],
 }
 
 # Reverse lookup — first category a slug appears in becomes its primary
