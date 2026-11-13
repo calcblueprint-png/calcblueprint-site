@@ -36,6 +36,8 @@ DESCRIPTIONS = {
         "Calculate bathroom floor tile count, thinset, and grout. Enter floor dimensions, tile size, and waste % for a complete bathroom tile material list.",
     "/breaker-size-calculator/":
         "Calculate breaker size and wire gauge for any circuit. Enter amp load, voltage, and wire run for safe breaker, wire, and conduit recommendations.",
+    "/brick-calculator/":
+        "Calculate bricks, mortar bags, and sand for any wall, patio, or chimney. Enter wall dimensions, brick size, and joint width for exact material quantities.",
     "/btu-calculator/":
         "Calculate BTU cooling and heating needs for any room. Enter room size, ceiling height, window count, and occupants for precise AC and furnace sizing.",
     "/chain-link-fence-calculator/":
