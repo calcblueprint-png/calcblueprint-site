@@ -169,10 +169,15 @@ def check_favicon(html: str):
 
 
 def check_webapp_jsonld(html: str):
+    """Every page needs at least one valid schema type.
+    Calculator pages use WebApplication. Informational pages use Article."""
     for m in re.finditer(r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>(.*?)</script>', html, re.DOTALL):
-        if '"WebApplication"' in m.group(1) or "'WebApplication'" in m.group(1):
+        block = m.group(1)
+        if '"WebApplication"' in block or "'WebApplication'" in block:
             return None, None
-    return "warn", "Missing WebApplication JSON-LD"
+        if '"Article"' in block or "'Article'" in block:
+            return None, None
+    return "warn", "Missing WebApplication or Article JSON-LD"
 
 
 def check_ga4(html: str):
