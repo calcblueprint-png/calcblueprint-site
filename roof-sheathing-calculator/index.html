@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/roof-sheathing-calculator/">
+<title>Roof Sheathing Calculator — OSB &amp; Plywood Sheets</title>
+<meta name="description" content="Calculate OSB or plywood sheets for roof sheathing. Enter building dimensions and pitch for exact panel count, nails, and H-clips needed.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Roof Sheathing Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"How many sheets of OSB do I need for a roof?","acceptedAnswer":{"@type":"Answer","text":"Divide total roof area (footprint times pitch multiplier, plus 10 percent waste) by the panel size. A 4x8 panel covers 32 square feet. A typical 1,000 square foot roof at 6:12 pitch needs about 35 panels of 4x8 OSB, allowing 10 percent waste for cuts and ridge caps."}},
+{"@type":"Question","name":"What thickness of OSB or plywood should I use for roof sheathing?","acceptedAnswer":{"@type":"Answer","text":"For roof sheathing with rafters or trusses at 24 inches on center, use 7/16 inch OSB or 15/32 inch plywood. For 16 inch rafter spacing, 3/8 inch OSB is acceptable. Check local code and manufacturer span ratings: 7/16 OSB at 24 inch spacing supports 30 psf live load, which meets most residential code requirements."}},
+{"@type":"Question","name":"How far apart should nails be on roof sheathing?","acceptedAnswer":{"@type":"Answer","text":"Per IRC Table R602.3(1), space 8d common nails 6 inches on center along panel edges and 12 inches on center along intermediate supports. Use 8d common (2.5 inches long) for 7/16 to 1/2 inch panels and 10d for thicker panels. Standard calculation is about 60 nails per 4x8 sheet."}}
+]}
+</script>
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcblueprint.com/roof-sheathing-calculator/">
+<meta property="og:title" content="Roof Sheathing Calculator — OSB &amp; Plywood Sheets">
+<meta property="og:description" content="Calculate OSB or plywood sheets for roof sheathing. Enter building dimensions and pitch for exact panel count, nails, and H-clips needed.">
+<meta property="og:image" content="https://calcblueprint.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Roof Sheathing Calculator — OSB &amp; Plywood Sheets">
+<meta name="twitter:description" content="Calculate OSB or plywood sheets for roof sheathing. Enter building dimensions and pitch for exact panel count, nails, and H-clips needed.">
+<meta name="twitter:image" content="https://calcblueprint.com/og-image.png">
+<link rel="icon" href="/favicon.ico">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:700;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2rem 1rem;max-width:900px;margin:0 auto}
+.container{width:100%}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);margin-bottom:2rem}
+h1{color:#1a2332;font-size:1.9rem;margin-bottom:0.5rem}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:1px solid #ccc;background:#f9f9f9;cursor:pointer;font-weight:600;border-radius:4px;transition:all 0.2s}
+.unit-btn.active{background:#f5a623;color:#1a2332;border-color:#f5a623}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input,.form-group select{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem;background:#fff}
+.calc-btn{width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;font-size:1.1rem;font-weight:700;border-radius:4px;cursor:pointer;transition:opacity 0.2s}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#1a2332;color:#fff;padding:1.5rem;border-radius:8px;margin-top:1.5rem;display:none}
+.result-box h3{color:#f5a623;margin-bottom:1rem;font-size:1.2rem}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.1)}
+.result-row:last-child{border-bottom:none}
+.result-value{font-weight:700;color:#f5a623;text-align:right}
+.details-box{background:#fff;border-radius:8px;padding:1.5rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+.details-box summary{font-weight:700;cursor:pointer;color:#1a2332}
+.details-box p{margin-top:1rem;color:#555}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
+.content-section h3{color:#1a2332;margin-top:1.5rem;margin-bottom:0.5rem;font-size:1.1rem}
+.content-section p{margin-bottom:1rem;color:#4a5568}
+.content-section ul{padding-left:20px;color:#4a5568;line-height:1.9}
+footer{background:#1a2332;color:#fff;padding:2rem;text-align:center;margin-top:4rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#fff;margin:0 0.75rem;text-decoration:none}
+footer nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#a0aec0;max-width:600px;margin:0 auto}
+@media(max-width:600px){header{flex-direction:column;gap:0.5rem}nav a{margin:0 0.5rem}}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Calc<span>Blueprint</span></a>
+  <nav>
+    <a href="/how-it-works/">How It Works</a>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <div class="container">
+    <div class="calculator-box">
+      <h1>Roof Sheathing Calculator</h1>
+      <p style="color:#777;font-size:.85rem;margin:.25rem 0 1.25rem">By Emiliano · Last updated 2026-11-13</p>
+
+      <div class="unit-toggle">
+        <button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+        <button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+      </div>
+
+      <div class="form-group">
+        <label id="lbl-length" for="building-length">Building Length (ft)</label>
+        <input type="number" id="building-length" step="any" min="1" value="40" placeholder="e.g. 40">
+      </div>
+
+      <div class="form-group">
+        <label id="lbl-width" for="building-width">Building Width (ft)</label>
+        <input type="number" id="building-width" step="any" min="1" value="24" placeholder="e.g. 24">
+      </div>
+
+      <div class="form-group">
+        <label id="lbl-pitch" for="roof-pitch">Roof Pitch (X:12)</label>
+        <input type="number" id="roof-pitch" step="any" min="0" max="12" value="6" placeholder="e.g. 6">
+      </div>
+
+      <div class="form-group">
+        <label for="panel-size">Panel Size</label>
+        <select id="panel-size">
+          <option value="4x8" selected>4 × 8 ft (32 sq ft) — Standard</option>
+          <option value="4x9">4 × 9 ft (36 sq ft)</option>
+          <option value="4x10">4 × 10 ft (40 sq ft)</option>
+          <option value="4x12">4 × 12 ft (48 sq ft)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="waste">Waste Factor (%)</label>
+        <input type="number" id="waste" step="any" min="0" value="10">
+      </div>
+
+      <button type="button" class="calc-btn" onclick="calculate()">Calculate Sheathing</button>
+
+      <div class="result-box" id="result-box">
+        <h3>Roof Sheathing Results</h3>
+        <div class="result-row"><span>Building Footprint:</span><span class="result-value" id="res-footprint">0</span></div>
+        <div class="result-row"><span>Pitch Multiplier:</span><span class="result-value" id="res-multiplier">0</span></div>
+        <div class="result-row"><span>Total Roof Area:</span><span class="result-value" id="res-roof-area">0</span></div>
+        <div class="result-row"><span>With Waste:</span><span class="result-value" id="res-waste-area">0</span></div>
+        <div class="result-row"><span>Panels Needed:</span><span class="result-value" id="res-panels">0</span></div>
+        <div class="result-row"><span>Total Panel Coverage:</span><span class="result-value" id="res-coverage">0</span></div>
+        <div class="result-row"><span>8d Common Nails:</span><span class="result-value" id="res-nails">0</span></div>
+        <div class="result-row"><span>H-Clips:</span><span class="result-value" id="res-clips">0</span></div>
+      </div>
+    </div>
+
+    <details class="details-box">
+      <summary>How this calculator works</summary>
+      <p>Roof area is calculated by multiplying the building footprint (length × width) by the pitch multiplier, which is √(1 + (pitch/12)²). Standard flat-roof area × 1.118 for a 6:12 pitch, × 1.250 for a 12:12 pitch. Waste is added at 10% for standard gable roofs, 15% for hip roofs with valleys and ridges. Panel count = roof area with waste ÷ panel coverage per sheet. Nail quantity follows IRC Table R602.3(1): 6 inches on center at edges, 12 inches on center in the field, roughly 60 nails per 4×8 sheet. H-clips are placed at every intermediate rafter bay, roughly 4 per 4×8 sheet at 24-inch spacing.</p>
+      <p><strong>Sources:</strong> IRC Table R602.3(1) fastener schedules and APA Panel Span Rating tables.</p>
+    </details>
+
+    <section class="content-section">
+      <h2>How to Calculate Roof Sheathing</h2>
+      <p>Roof sheathing — OSB or plywood panel — is what the shingles or metal roofing actually nail to. Calculating the sheet count correctly requires two steps: finding total roof area (not building footprint) and converting that into panels. The pitch multiplier is the key: a 6:12 pitch adds about 11.8% to the flat footprint area; a 12:12 pitch adds 41.4%. Ignoring this is the most common estimate error on sheathing jobs.</p>
+      <p>Once you have roof area, add a waste factor. Standard gable roofs use 10% waste. Hip roofs, roofs with dormers, or any complex layout with valleys and ridge caps should use 15% — the panel cuts at valleys and hips are rarely reusable. Multiply the roof area by 1 + (waste / 100) to get total material to order, then divide by panel coverage (32, 36, 40, or 48 sq ft depending on panel size). Round up to the next whole sheet.</p>
+      <p>Panel size matters more than most people realize. A 4×8 sheet is the cheapest per square foot but generates the most waste on a large roof because of more seams and more edge cuts. A 4×12 sheet costs more per sheet but reduces the number of joints — often the better choice for large, simple roofs. The trade-off is weight: a 4×12 OSB sheet weighs about 70 pounds, which is at the edge of what a two-person crew can safely lift to a roof.</p>
+      <p>If you still need the actual roof surface area for shingle or metal ordering, our <a href="/roof-area-calculator/">roof area calculator</a> gives you the same total area this calculator uses. And if you don't know the pitch yet, our <a href="/roof-pitch-calculator/">roof pitch calculator</a> converts rise and run to a pitch ratio and angle in degrees.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>What Affects Roof Sheathing Quantities</h2>
+      <p>Beyond raw area, three factors change the panel count. <strong>Roof complexity</strong> is the biggest. A simple gable roof has 2 sloping planes that meet at a ridge — the panels run in one direction and waste is minimal. A hip roof has 4 sloping planes with 4 hips and a ridge, and every hip requires a mitered panel joint that generates cutoffs. A cross-gable roof can easily use 15–20% more panels than the same square footage of simple gable roof.</p>
+      <p><strong>Rafter or truss spacing</strong> changes the panel thickness you can use, which in turn affects cost but not quantity. 24-inch spacing requires 7/16-inch OSB (APA-rated for 30 psf live load). 16-inch spacing allows 3/8-inch OSB at a lower cost per sheet. This is not a quantity difference but a specification difference — order the wrong thickness and the inspector will reject it.</p>
+      <p><strong>Panel clips and H-clips</strong> are the small connectors placed between panel edges to prevent deflection and edge damage. They're required at every intermediate rafter bay where panels meet parallel to the rafters. This calculator estimates 4 H-clips per 4×8 sheet at 24-inch rafter spacing. On 16-inch spacing, use 6 per sheet. Skip them and panels will show visible "cupping" at joints within a season.</p>
+      <p>If you're building the roof structure itself, our <a href="/roof-truss-calculator/">roof truss calculator</a> estimates truss count and spacing. For the shingles that go on the sheathing, use our <a href="/shingle-calculator/">shingle calculator</a> to convert roof area into bundles and squares. For the framing lumber — rafters, ridge, and eave — our <a href="/board-foot-calculator/">board foot calculator</a> converts dimensions into board feet and total cost.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>Frequently Asked Questions</h2>
+      <h3>How many sheets of OSB do I need for a roof?</h3>
+      <p>Divide total roof area (footprint times pitch multiplier, plus 10 percent waste) by the panel size. A 4×8 panel covers 32 square feet. A typical 1,000 square foot roof at 6:12 pitch needs about 35 panels of 4×8 OSB, allowing 10 percent waste for cuts and ridge caps.</p>
+      <h3>What thickness of OSB or plywood should I use for roof sheathing?</h3>
+      <p>For roof sheathing with rafters or trusses at 24 inches on center, use 7/16 inch OSB or 15/32 inch plywood. For 16 inch rafter spacing, 3/8 inch OSB is acceptable. Check local code and manufacturer span ratings: 7/16 OSB at 24 inch spacing supports 30 psf live load, which meets most residential code requirements.</p>
+      <h3>How far apart should nails be on roof sheathing?</h3>
+      <p>Per IRC Table R602.3(1), space 8d common nails 6 inches on center along panel edges and 12 inches on center along intermediate supports. Use 8d common (2.5 inches long) for 7/16 to 1/2 inch panels and 10d for thicker panels. Standard calculation is about 60 nails per 4×8 sheet.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>Related Calculators</h2>
+      <ul>
+        <li><a href="/roof-area-calculator/">Roof Area Calculator</a> — true roof surface area from footprint and pitch</li>
+        <li><a href="/roof-pitch-calculator/">Roof Pitch Calculator</a> — convert rise/run to X:12 ratio and angle</li>
+        <li><a href="/roof-truss-calculator/">Roof Truss Calculator</a> — truss count, span, and spacing for the roof structure</li>
+        <li><a href="/shingle-calculator/">Shingle Calculator</a> — bundles and squares from roof area</li>
+        <li><a href="/ridge-vent-calculator/">Ridge Vent Calculator</a> — ridge vent linear feet by attic area</li>
+        <li><a href="/board-foot-calculator/">Board Foot Calculator</a> — lumber volume and cost for rafters and framing</li>
+      </ul>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/how-it-works/">How It Works</a>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+    <a href="/privacy/">Privacy</a>
+    <a href="/terms/">Terms</a>
+  </nav>
+  <div class="citation">Formula source: IRC Table R602.3(1) fastener schedules and APA Panel Span Rating tables. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.</div>
+</footer>
+
+<script>
+let currentUnit = 'imperial';
+
+const PANEL_SIZES = {
+  '4x8': 32,
+  '4x9': 36,
+  '4x10': 40,
+  '4x12': 48
+};
+
+function setUnits(unit) {
+  currentUnit = unit;
+  document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+  document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+  if (unit === 'imperial') {
+    document.getElementById('lbl-length').innerText = 'Building Length (ft)';
+    document.getElementById('lbl-width').innerText = 'Building Width (ft)';
+    document.getElementById('lbl-pitch').innerText = 'Roof Pitch (X:12)';
+  } else {
+    document.getElementById('lbl-length').innerText = 'Building Length (m)';
+    document.getElementById('lbl-width').innerText = 'Building Width (m)';
+    document.getElementById('lbl-pitch').innerText = 'Roof Pitch (X:12)';
+  }
+}
+
+function calculate() {
+  const length = parseFloat(document.getElementById('building-length').value);
+  const width = parseFloat(document.getElementById('building-width').value);
+  const pitch = parseFloat(document.getElementById('roof-pitch').value);
+  const panelSize = document.getElementById('panel-size').value;
+  const waste = parseFloat(document.getElementById('waste').value) || 10;
+
+  if ([length, width, pitch].some(v => isNaN(v) || v < 0)) {
+    alert('Please enter valid numbers for all fields.');
+    return;
+  }
+  if (length <= 0 || width <= 0) {
+    alert('Building length and width must be positive.');
+    return;
+  }
+
+  // Convert to feet for formula
+  const factor = currentUnit === 'metric' ? 3.28084 : 1;
+  const lengthFt = length * factor;
+  const widthFt = width * factor;
+
+  // Footprint and roof area
+  const footprintSqFt = lengthFt * widthFt;
+  const pitchMultiplier = Math.sqrt(1 + Math.pow(pitch / 12, 2));
+  const roofAreaSqFt = footprintSqFt * pitchMultiplier;
+  const wasteAreaSqFt = roofAreaSqFt * (1 + waste / 100);
+
+  // Panels
+  const panelArea = PANEL_SIZES[panelSize];
+  const numPanels = Math.ceil(wasteAreaSqFt / panelArea);
+  const coverageSqFt = numPanels * panelArea;
+
+  // Materials
+  const nails = Math.ceil((coverageSqFt / 32) * 60);
+  const clips = Math.ceil((coverageSqFt / 32) * 4);
+
+  // Display formatting
+  const dispArea = (sqft) => currentUnit === 'metric'
+    ? (sqft * 0.092903).toFixed(1) + ' m²'
+    : sqft.toFixed(1) + ' sq ft';
+
+  document.getElementById('res-footprint').innerText = dispArea(footprintSqFt);
+  document.getElementById('res-multiplier').innerText = pitchMultiplier.toFixed(3);
+  document.getElementById('res-roof-area').innerText = dispArea(roofAreaSqFt);
+  document.getElementById('res-waste-area').innerText = dispArea(wasteAreaSqFt);
+  document.getElementById('res-panels').innerText = numPanels + ' sheets';
+  document.getElementById('res-coverage').innerText = dispArea(coverageSqFt);
+  document.getElementById('res-nails').innerText = nails.toLocaleString() + ' nails';
+  document.getElementById('res-clips').innerText = clips + ' H-clips';
+
+  document.getElementById('result-box').style.display = 'block';
+}
+</script>
+</body>
+</html>
