@@ -75,6 +75,9 @@ jobs:
       - name: Apply patch
         run: python scripts/seo_patch.py --site-root . --fix=all --write
 
+      - name: Rewrite descriptions
+        run: python scripts/seo_descriptions.py --site-root . --write
+
       - name: Re-lint after patch
         run: python scripts/seo_lint.py --site-root .
 
