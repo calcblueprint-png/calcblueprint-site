@@ -13,12 +13,13 @@ Fixes performed:
     ga4         — Insert GA4 snippet if missing
     faq         — Generate FAQPage JSON-LD from visible FAQ if missing
     unclosed_p  — Close unclosed <p> tags (invalid HTML, breaks FAQ schema)
+    related     — Insert Related Calculators section with category siblings
 
 Does NOT fix (requires human decision):
     - Missing or too-short title/description
     - Broken internal links (except known nav patterns)
     - FAQ schema that exists but mismatches visible FAQ (flagged by linter)
-    - Orphan pages (< 3 inbound links; flagged by linter)
+    - Orphan pages with truly zero inbound links (flagged by linter)
 
 Usage:
     python scripts/seo_patch.py                       # dry-run, all fixes
@@ -103,6 +104,87 @@ BLOCK_TAGS = (
     r'ul|ol|li|table|thead|tbody|tr|td|th|details|summary|'
     r'form|fieldset|blockquote|pre|hr'
 )
+
+# Topical category clusters — used to auto-generate "Related Calculators" sections.
+# Each calculator slug belongs to one PRIMARY category (first one encountered wins),
+# but may appear as a sibling in other categories too.
+CATEGORY_SLUGS = {
+    "concrete": [
+        "concrete-slab-cost-calculator", "concrete-footing-calculator",
+        "concrete-mix-calculator", "concrete-steps-calculator",
+        "concrete-stairs-calculator", "concrete-column-calculator",
+        "concrete-block-calculator", "rebar-spacing-calculator",
+        "how-many-bags-of-concrete",
+    ],
+    "roofing": [
+        "roof-pitch-calculator", "roof-area-calculator",
+        "roof-truss-calculator", "shingle-calculator",
+        "ridge-vent-calculator", "gutter-calculator",
+    ],
+    "fencing": [
+        "fence-calculator", "chain-link-fence-calculator",
+        "privacy-fence-calculator", "gate-calculator",
+        "concrete-footing-calculator",
+    ],
+    "tile": [
+        "tile-calculator", "grout-calculator", "thinset-calculator",
+        "backsplash-calculator", "shower-tile-calculator",
+        "bathroom-floor-tile-calculator", "kitchen-floor-calculator",
+    ],
+    "flooring": [
+        "hardwood-flooring-calculator", "laminate-flooring-calculator",
+        "carpet-calculator", "kitchen-floor-calculator",
+    ],
+    "drywall": [
+        "drywall-calculator", "drywall-mud-calculator",
+        "drywall-screws-calculator", "corner-bead-calculator",
+        "wall-area-calculator",
+    ],
+    "paint": [
+        "paint-calculator", "wallpaper-calculator", "wall-area-calculator",
+        "drywall-calculator",
+    ],
+    "hvac": [
+        "ac-unit-size-calculator", "btu-calculator",
+        "furnace-size-calculator", "duct-size-calculator",
+    ],
+    "electrical": [
+        "electrical-load-calculator", "wire-size-calculator",
+        "breaker-size-calculator", "outlet-spacing-calculator",
+    ],
+    "landscaping": [
+        "mulch-calculator", "sod-calculator", "compost-calculator",
+        "fertilizer-calculator", "grass-seed-calculator",
+        "topsoil-calculator", "artificial-turf-calculator",
+        "paver-calculator",
+    ],
+    "siding": [
+        "vinyl-siding-calculator", "hardie-plank-calculator",
+        "wall-area-calculator", "paint-calculator",
+    ],
+    "deck": [
+        "deck-calculator", "board-foot-calculator",
+        "concrete-footing-calculator", "fence-calculator",
+    ],
+    "masonry": [
+        "brick-calculator", "mortar-calculator",
+        "concrete-block-calculator", "retaining-wall-calculator",
+    ],
+    "insulation": [
+        "insulation-calculator", "drywall-calculator",
+        "wall-area-calculator", "paint-calculator",
+    ],
+    "gravel": [
+        "gravel-calculator", "asphalt-calculator",
+        "concrete-mix-calculator", "topsoil-calculator", "mulch-calculator",
+    ],
+}
+
+# Reverse lookup — first category a slug appears in becomes its primary
+SLUG_TO_CATEGORY = {}
+for _cat, _slugs in CATEGORY_SLUGS.items():
+    for _slug in _slugs:
+        SLUG_TO_CATEGORY.setdefault(_slug, _cat)
 
 
 def find_html_files(site_root: Path):
@@ -308,7 +390,6 @@ def fix_ga4(html: str, url: str) -> tuple:
 
 def fix_faq_schema(html: str, url: str) -> tuple:
     """Generate FAQPage JSON-LD from visible FAQ if missing."""
-    # Find visible FAQ section
     m = re.search(
         r'<h2[^>]*>\s*Frequently\s+Asked\s+Questions\s*</h2>(.*?)(?=<section|<footer|</main>)',
         html, re.DOTALL | re.IGNORECASE
@@ -382,7 +463,6 @@ def fix_faq_schema(html: str, url: str) -> tuple:
 
 def fix_unclosed_p(html: str, url: str) -> tuple:
     """Close unclosed <p> tags by inserting </p> before the next block element."""
-    # Quick check — no fix if already balanced
     opens = len(re.findall(r'<p[\s>]', html, re.IGNORECASE))
     closes = len(re.findall(r'</p>', html, re.IGNORECASE))
     if opens <= closes:
@@ -398,14 +478,13 @@ def fix_unclosed_p(html: str, url: str) -> tuple:
     work = re.sub(r'<style\b[^>]*>.*?</style>', mask_replacer, work, flags=re.DOTALL | re.IGNORECASE)
     work = re.sub(r'<!--.*?-->', mask_replacer, work, flags=re.DOTALL)
 
-    # Pattern: <p> followed by content with no </p> and no block tag, then a block tag
     pattern = re.compile(
         r'<p\b[^>]*>((?:(?!</p>)(?!<' + BLOCK_TAGS + r'\b).)*?)(?=<' + BLOCK_TAGS + r'\b)',
         re.DOTALL | re.IGNORECASE
     )
 
     fixes_applied = 0
-    for _ in range(100):  # safety limit
+    for _ in range(100):
         m = pattern.search(work)
         if not m:
             break
@@ -413,7 +492,6 @@ def fix_unclosed_p(html: str, url: str) -> tuple:
         work = work[:end] + '</p>' + work[end:]
         fixes_applied += 1
 
-    # Unmask
     def unmask_replacer(m):
         return masked_items[int(m.group(1))]
 
@@ -422,13 +500,57 @@ def fix_unclosed_p(html: str, url: str) -> tuple:
     if fixes_applied == 0:
         return html, False, "no unclosed <p> found (may be at end of file)"
 
-    # Post-check
     opens_after = len(re.findall(r'<p[\s>]', result, re.IGNORECASE))
     closes_after = len(re.findall(r'</p>', result, re.IGNORECASE))
     remaining = opens_after - closes_after
     if remaining > 0:
         return result, True, f"closed {fixes_applied} unclosed <p> tag(s); {remaining} still unclosed"
     return result, True, f"closed {fixes_applied} unclosed <p> tag(s)"
+
+
+def fix_related(html: str, url: str) -> tuple:
+    """Insert a Related Calculators section with category siblings if missing."""
+    if url in NON_CALCULATOR_URLS or "calculator" not in url:
+        return html, False, "not a calculator page"
+
+    if re.search(r'Related\s+Calculators', html, re.IGNORECASE):
+        return html, False, "Related Calculators section present"
+
+    slug = url.strip("/").split("/")[-1]
+    category = SLUG_TO_CATEGORY.get(slug)
+    if not category:
+        return html, False, f"no category mapping for {slug}"
+
+    siblings = [s for s in CATEGORY_SLUGS[category] if s != slug][:6]
+    if not siblings:
+        return html, False, f"no siblings in {category} category"
+
+    items = '\n'.join(
+        f'        <li><a href="/{s}/">{page_name_from_url("/" + s + "/")}</a></li>'
+        for s in siblings
+    )
+    block = (
+        '\n    <section class="content-section">\n'
+        '      <h2>Related Calculators</h2>\n'
+        '      <ul style="padding-left:20px;line-height:1.9;">\n'
+        f'{items}\n'
+        '      </ul>\n'
+        '    </section>\n'
+    )
+
+    main_close = html.find('</main>')
+    if main_close == -1:
+        return html, False, "no </main> found"
+
+    # Insert before the last </div> before </main> if one exists
+    # (keeps the new section inside the existing .container wrapper)
+    last_div = html.rfind('</div>', 0, main_close)
+    if last_div != -1 and main_close - last_div < 200:
+        new_html = html[:last_div] + block + html[last_div:]
+    else:
+        new_html = html[:main_close] + block + '\n' + html[main_close:]
+
+    return new_html, True, f"Related section added ({len(siblings)} links from {category})"
 
 
 # Registry — insertion order matters (h1 before date; unclosed_p before faq)
@@ -440,8 +562,9 @@ FIX_REGISTRY = {
     "jsonld": fix_jsonld,
     "date": fix_date,
     "ga4": fix_ga4,
-    "unclosed_p": fix_unclosed_p,   # run before faq (fixes HTML first)
+    "unclosed_p": fix_unclosed_p,
     "faq": fix_faq_schema,
+    "related": fix_related,
 }
 
 
@@ -453,7 +576,7 @@ def main():
     ap.add_argument(
         "--fix",
         default="all",
-        help="Comma-separated fixes: og,favicon,h1,nav,jsonld,date,ga4,unclosed_p,faq,all",
+        help="Comma-separated fixes: og,favicon,h1,nav,jsonld,date,ga4,unclosed_p,faq,related,all",
     )
     ap.add_argument("--write", action="store_true", help="Apply changes (default: dry-run)")
     args = ap.parse_args()
