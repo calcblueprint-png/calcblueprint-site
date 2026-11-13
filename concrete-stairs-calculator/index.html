@@ -9,6 +9,13 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Concrete Stairs Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"How thick should concrete stairs be?","acceptedAnswer":{"@type":"Answer","text":"Concrete stairs should maintain a minimum of 4 to 6 inches of concrete thickness below every tread. The structural layer under the steps is what carries the load, not the visible tread surface. For stairs carrying heavy loads or exposed to freeze-thaw cycles, 6 inches with #4 rebar at 12-inch on center is standard practice per ACI 318."}},
+{"@type":"Question","name":"Can I build concrete stairs over an existing wood or dirt base?","acceptedAnswer":{"@type":"Answer","text":"Yes, but the base must be compacted and stable. Most exterior concrete stairs are poured over a compacted gravel base of 4 to 6 inches, with formwork building the step shape. Wood stair forms are removed after the concrete cures for 7 days. Building over soft or uncompacted soil will cause cracking and settlement."}},
+{"@type":"Question","name":"How many days does concrete take to cure before you can walk on stairs?","acceptedAnswer":{"@type":"Answer","text":"You can walk on concrete stairs after 24 to 48 hours, but full cure takes 28 days. For exterior stairs exposed to weather, keep foot traffic light for the first 7 days, and avoid heavy loads or vehicle traffic for the full 28 days. Cold weather below 50 degrees Fahrenheit significantly slows curing and requires insulated blankets or heated enclosures."}}
+]}
+</script>
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://calcblueprint.com/concrete-stairs-calculator/">
 <meta property="og:title" content="Concrete Stairs Calculator — CalcBlueprint">
@@ -102,6 +109,11 @@ footer nav a:hover{color:#f5a623}
       </div>
 
       <div class="form-group">
+        <label id="lbl-struct" for="struct-thickness">Min Structural Thickness (inches)</label>
+        <input type="number" id="struct-thickness" step="any" min="3" value="6">
+      </div>
+
+      <div class="form-group">
         <label for="waste">Waste Factor (%)</label>
         <input type="number" id="waste" step="any" min="0" value="10">
       </div>
@@ -123,20 +135,20 @@ footer nav a:hover{color:#f5a623}
 
     <details class="details-box">
       <summary>How this calculator works</summary>
-      <p>This calculator determines the concrete volume needed for a straight-run staircase by modeling the stairs as a triangular prism: 0.5 × total rise × total run × stair width. Steps are calculated by dividing the total rise by the desired rise per step, then rounding up. The formula aligns with ACI 318 requirements for exterior stair construction. Add 10% waste for spillage, uneven subgrade, and formwork imperfections.</p>
+      <p>This calculator models a concrete staircase as two parts. First, the geometric triangular wedge: 0.5 × total rise × total run × stair width. Second, a structural layer of uniform minimum thickness measured perpendicular to the sloped underside (4–6 inches is standard): slope length × stair width × structural thickness. The two are added together to produce the total concrete volume. Steps are calculated by dividing total rise by desired rise per step, then rounding up. Formula aligns with ACI 318 requirements for exterior stair construction.</p>
       <p><strong>Source:</strong> ACI 318 Building Code Requirements for Structural Concrete.</p>
     </details>
 
     <section class="content-section">
       <h2>How to Calculate Concrete for Stairs</h2>
-      <p>Calculating concrete for stairs is not the same as calculating for a flat slab. The shape of a staircase is a triangular prism — the bottom follows the slope, and the top forms the steps. To estimate the volume, treat the entire stair assembly as one triangular wedge: multiply half of the total rise by the total run, then multiply by the stair width. This gives you the cubic volume of concrete, which you convert to cubic yards for ready-mix ordering or to bag counts for mixing on site.</p>
+      <p>Calculating concrete for stairs is not the same as calculating for a flat slab. The shape of a staircase combines a triangular wedge — where the underside follows a constant slope and the top forms the steps — with a uniform structural layer that must be a minimum thickness below every tread. To estimate the volume manually, calculate the triangular prism volume first: multiply half of the total rise by the total run, then multiply by the stair width. Next, add the structural layer: multiply the slope length (the diagonal from bottom of the lowest riser to the top of the highest tread) by the stair width, then multiply by the minimum required thickness — usually 4 to 6 inches for residential stairs.</p>
       <p>The first step is to divide your total rise — the height from the lower finished grade to the upper landing — by the target rise per step. A rise of 7 inches per step is standard for residential exterior stairs, with a maximum of 7¾ inches per the International Residential Code (IRC). If you land on a fractional number of steps, round up and adjust rise per step slightly to hit your total rise evenly. The total run is the number of steps minus one, multiplied by tread depth. Tread depth of 11 inches is standard, with 10 inches as the minimum for residential use.</p>
       <p>For stairs that will carry foot traffic, reinforcement matters more than for a flat slab. If you want to size the rebar grid for a thicker slab or landing, our <a href="/rebar-spacing-calculator/">rebar spacing calculator</a> converts slab thickness and load requirements into bar spacing and total length. And if you need to budget the overall project, our <a href="/concrete-slab-cost-calculator/">concrete slab cost calculator</a> turns cubic yards into dollars using your local pricing.</p>
     </section>
 
     <section class="content-section">
       <h2>What Affects Concrete Stair Calculations</h2>
-      <p>Several real-world factors change the material math for concrete stairs. <strong>Stringer thickness</strong> — the depth of concrete from the tread surface to the bottom slope — is not the same as the geometric triangle. In practice, a minimum thickness of 4 to 6 inches must be maintained below every tread, which means the actual concrete volume is 15% to 30% higher than the pure triangular prism. This calculator assumes a 6-inch minimum structural thickness under each tread and folds it into the volume output.</p>
+      <p>Several real-world factors change the material math for concrete stairs. <strong>Structural thickness</strong> — the depth of concrete measured perpendicular to the sloped underside — is not the same as the geometric triangle. In practice, a minimum thickness of 4 to 6 inches must be maintained below every tread, which means the actual concrete volume is 40–60% higher than the pure triangular prism. This calculator includes that structural layer as a separate input so your bag count matches what you will actually need to order.</p>
       <p><strong>Landing size</strong> also affects volume significantly. A mid-run landing or a top landing adds a rectangular slab on top of the stair wedge. If your stairs land on a 4×4 ft slab at the top, add that slab volume separately using our <a href="/concrete-slab-cost-calculator/">concrete slab cost calculator</a>. <strong>Footing requirements</strong> matter too — exterior stairs need a frost-depth footing at the base. Size that with the <a href="/concrete-footing-calculator/">concrete footing calculator</a>. And if your staircase ties into a larger pour like a stoop or walkway, our <a href="/concrete-mix-calculator/">concrete mix calculator</a> helps you batch the correct cement-to-sand-to-gravel ratio for consistent strength across the whole assembly.</p>
     </section>
 
@@ -154,6 +166,7 @@ footer nav a:hover{color:#f5a623}
       <h2>Related Calculators</h2>
       <ul>
         <li><a href="/concrete-steps-calculator/">Concrete Steps Calculator</a> — for straight-run step sets and stoops</li>
+        <li><a href="/how-many-bags-of-concrete/">How Many Bags of Concrete?</a> — bag count reference table by slab and post hole size</li>
         <li><a href="/concrete-slab-cost-calculator/">Concrete Slab Cost Calculator</a> — for landings and stoops attached to stairs</li>
         <li><a href="/concrete-footing-calculator/">Concrete Footing Calculator</a> — for the frost-depth footing at the stair base</li>
         <li><a href="/rebar-spacing-calculator/">Rebar Spacing Calculator</a> — for stair and landing reinforcement layout</li>
@@ -187,11 +200,15 @@ function setUnits(unit) {
     document.getElementById('lbl-rps').innerText = 'Rise per Step (inches)';
     document.getElementById('lbl-tread').innerText = 'Tread Depth (inches)';
     document.getElementById('lbl-width').innerText = 'Stair Width (inches)';
+    document.getElementById('lbl-struct').innerText = 'Min Structural Thickness (inches)';
+    document.getElementById('struct-thickness').value = '6';
   } else {
     document.getElementById('lbl-rise').innerText = 'Total Rise (cm)';
     document.getElementById('lbl-rps').innerText = 'Rise per Step (cm)';
     document.getElementById('lbl-tread').innerText = 'Tread Depth (cm)';
     document.getElementById('lbl-width').innerText = 'Stair Width (cm)';
+    document.getElementById('lbl-struct').innerText = 'Min Structural Thickness (cm)';
+    document.getElementById('struct-thickness').value = '15';
   }
 }
 
@@ -200,9 +217,10 @@ function calculate() {
   const risePerStep = parseFloat(document.getElementById('rise-per-step').value);
   const treadDepth = parseFloat(document.getElementById('tread-depth').value);
   const stairWidth = parseFloat(document.getElementById('stair-width').value);
+  const structRaw = parseFloat(document.getElementById('struct-thickness').value);
   const waste = parseFloat(document.getElementById('waste').value) || 10;
 
-  if ([totalRise, risePerStep, treadDepth, stairWidth].some(v => isNaN(v) || v <= 0)) {
+  if ([totalRise, risePerStep, treadDepth, stairWidth, structRaw].some(v => isNaN(v) || v <= 0)) {
     alert('Please enter valid positive numbers for all fields.');
     return;
   }
@@ -213,14 +231,20 @@ function calculate() {
   const rpsIn = risePerStep * factor;
   const treadIn = treadDepth * factor;
   const widthIn = stairWidth * factor;
+  const structIn = structRaw * factor;
 
   // Number of steps (round up)
   const steps = Math.ceil(riseIn / rpsIn);
   const totalRun = (steps - 1) * treadIn;
+  const slopeIn = Math.sqrt(riseIn * riseIn + totalRun * totalRun);
   const angleDeg = Math.atan2(riseIn, totalRun) * 180 / Math.PI;
 
-  // Triangular prism volume in cubic inches
-  const volCuIn = 0.5 * riseIn * totalRun * widthIn;
+  // 1. Geometric triangular wedge volume
+  const triangleCuIn = 0.5 * riseIn * totalRun * widthIn;
+  // 2. Structural layer (perpendicular to slope)
+  const structuralCuIn = slopeIn * widthIn * structIn;
+  // Total
+  const volCuIn = triangleCuIn + structuralCuIn;
   const volCuFt = volCuIn / 1728;
   const volCuYd = volCuFt / 27;
   const totalCuYd = volCuYd * (1 + waste / 100);
@@ -229,11 +253,10 @@ function calculate() {
   const bags60 = Math.ceil(totalCuYd * 60);
   const bags80 = Math.ceil(totalCuYd * 45);
 
-  // Rebar estimate: horizontal bars (1 per step across width) + 4 longitudinal
-  const rebarInches = steps * (widthIn + 6) + 4 * Math.sqrt(totalRun * totalRun + riseIn * riseIn);
+  // Rebar estimate: horizontal bars (1 per step across width + 6" overlap) + 4 longitudinal bars along slope
+  const rebarInches = steps * (widthIn + 6) + 4 * slopeIn;
   const rebarFt = rebarInches / 12;
 
-  const unitLabel = currentUnit === 'metric' ? 'cm' : 'in';
   const volLabel = currentUnit === 'metric' ? ' m³' : ' cu yd';
   const runLabel = currentUnit === 'metric' ? ' cm' : ' in';
   const rebarLabel = currentUnit === 'metric' ? ' m' : ' ft';
