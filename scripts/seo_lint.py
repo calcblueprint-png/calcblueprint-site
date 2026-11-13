@@ -29,6 +29,9 @@ from pathlib import Path
 SITE_DOMAIN = "https://calcblueprint.com"
 DEFAULT_OG_IMAGE = f"{SITE_DOMAIN}/og-image.png"
 
+# Current year — used to detect future dates that hurt trust signals
+CURRENT_YEAR = "2026"
+
 # Directories to skip when walking the tree
 IGNORE_DIRS = {
     ".git", ".github", "node_modules", "scripts", "assets", "img",
@@ -237,7 +240,7 @@ def check_404_page(html: str, file_path: Path):
     return None, None
 
 
-# ---------- New checks (SEO structural integrity) ----------
+# ---------- Structural integrity checks ----------
 
 def check_faq_schema(html: str, url: str) -> tuple:
     """Visible FAQ section must have matching FAQPage JSON-LD."""
@@ -246,7 +249,7 @@ def check_faq_schema(html: str, url: str) -> tuple:
         html, re.DOTALL | re.IGNORECASE
     )
     if not m:
-        return None, None  # No visible FAQ, no requirement
+        return None, None
 
     visible = re.findall(r'<h3[^>]*>(.*?)</h3>', m.group(1), re.DOTALL | re.IGNORECASE)
     visible_qs = [strip_html(q).strip() for q in visible if strip_html(q).strip()]
@@ -318,6 +321,36 @@ def check_desc_differs_from_title(html: str) -> tuple:
     return None, None
 
 
+def check_future_dates(html: str) -> tuple:
+    """Flag any year 2027+ in dates, copyright, or JSON-LD — future dates hurt trust signals."""
+    FUTURE_YEAR = r'20(?:2[7-9]|[3-9]\d)'
+    issues = []
+
+    # "Last updated YYYY-MM-DD" lines with a future year
+    for m in re.finditer(rf'Last updated\s+({FUTURE_YEAR})', html):
+        issues.append(f"Last updated {m.group(1)}")
+
+    # Copyright "© YYYY" or "&copy; YYYY"
+    for m in re.finditer(rf'(?:©|&copy;)\s*({FUTURE_YEAR})', html):
+        issues.append(f"© {m.group(1)}")
+
+    # JSON-LD datePublished / dateModified
+    for m in re.finditer(rf'"(?:datePublished|dateModified)"\s*:\s*"({FUTURE_YEAR})', html):
+        issues.append(f"schema date {m.group(1)}")
+
+    # OpenGraph article:published_time / modified_time
+    for m in re.finditer(
+        rf'<meta\s+property=["\']article:(?:published|modified)_time["\']\s+content=["\']({FUTURE_YEAR})',
+        html
+    ):
+        issues.append(f"OG article date {m.group(1)}")
+
+    if issues:
+        unique = sorted(set(issues))
+        return "warn", f"Future year(s) 2027+: {', '.join(unique)}"
+    return None, None
+
+
 # ---------- Main ----------
 
 def lint_page(file_path: Path, site_root: Path):
@@ -341,12 +374,12 @@ def lint_page(file_path: Path, site_root: Path):
         (check_last_updated, (html, expected)),
         (check_footer_citation, (html, expected)),
         (check_404_page, (html, file_path)),
-        # New structural checks
         (check_faq_schema, (html, expected)),
         (check_unclosed_p, (html,)),
         (check_jsonld_validity, (html,)),
         (check_related_calculators, (html, expected)),
         (check_desc_differs_from_title, (html,)),
+        (check_future_dates, (html,)),
     ]:
         sev, msg = check_fn(*args)
         if sev:
@@ -430,7 +463,6 @@ def main():
 
     results = [lint_page(f, site_root) for f in files]
 
-    # Two-pass orphan detection
     if not args.no_orphan_check:
         inbound = compute_inbound_links(files, site_root)
         apply_orphan_check(results, inbound)
