@@ -509,7 +509,7 @@ def fix_unclosed_p(html: str, url: str) -> tuple:
 
 
 def fix_related(html: str, url: str) -> tuple:
-    """Insert a Related Calculators section with category siblings if missing."""
+    """Insert a Related Calculators section with category  if missing."""
     if url in NON_CALCULATOR_URLS or "calculator" not in url:
         return html, False, "not a calculator page"
 
@@ -521,7 +521,7 @@ def fix_related(html: str, url: str) -> tuple:
     if not category:
         return html, False, f"no category mapping for {slug}"
 
-    siblings = [s for s in CATEGORY_SLUGS[category] if s != slug][:6]
+    siblings = [s for s in CATEGORY_SLUGS[category] if s != slug][:8]
     if not siblings:
         return html, False, f"no siblings in {category} category"
 
