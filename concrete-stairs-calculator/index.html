@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/concrete-stairs-calculator/">
+<title>Concrete Stairs Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate concrete for exterior stairs and steps. Enter total rise, tread depth, and stair width for exact cubic yards, bags, and rebar needed.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Concrete Stairs Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcblueprint.com/concrete-stairs-calculator/">
+<meta property="og:title" content="Concrete Stairs Calculator — CalcBlueprint">
+<meta property="og:description" content="Calculate concrete for exterior stairs and steps. Enter total rise, tread depth, and stair width for exact cubic yards, bags, and rebar needed.">
+<meta property="og:image" content="https://calcblueprint.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Concrete Stairs Calculator — CalcBlueprint">
+<meta name="twitter:description" content="Calculate concrete for exterior stairs and steps. Enter total rise, tread depth, and stair width for exact cubic yards, bags, and rebar needed.">
+<meta name="twitter:image" content="https://calcblueprint.com/og-image.png">
+<link rel="icon" href="/favicon.ico">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:700;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2rem 1rem;max-width:900px;margin:0 auto}
+.container{width:100%}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);margin-bottom:2rem}
+h1{color:#1a2332;font-size:1.9rem;margin-bottom:0.5rem}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:1px solid #ccc;background:#f9f9f9;cursor:pointer;font-weight:600;border-radius:4px;transition:all 0.2s}
+.unit-btn.active{background:#f5a623;color:#1a2332;border-color:#f5a623}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+.calc-btn{width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;font-size:1.1rem;font-weight:700;border-radius:4px;cursor:pointer;transition:opacity 0.2s}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#1a2332;color:#fff;padding:1.5rem;border-radius:8px;margin-top:1.5rem;display:none}
+.result-box h3{color:#f5a623;margin-bottom:1rem;font-size:1.2rem}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.1)}
+.result-row:last-child{border-bottom:none}
+.result-value{font-weight:700;color:#f5a623}
+.details-box{background:#fff;border-radius:8px;padding:1.5rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+.details-box summary{font-weight:700;cursor:pointer;color:#1a2332}
+.details-box p{margin-top:1rem;color:#555}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
+.content-section h3{color:#1a2332;margin-top:1.5rem;margin-bottom:0.5rem;font-size:1.1rem}
+.content-section p{margin-bottom:1rem;color:#4a5568}
+.content-section ul{padding-left:20px;color:#4a5568;line-height:1.9}
+footer{background:#1a2332;color:#fff;padding:2rem;text-align:center;margin-top:4rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#fff;margin:0 0.75rem;text-decoration:none}
+footer nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#a0aec0;max-width:600px;margin:0 auto}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Calc<span>Blueprint</span></a>
+  <nav>
+    <a href="/how-it-works/">How It Works</a>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <div class="container">
+    <div class="calculator-box">
+      <h1>Concrete Stairs Calculator</h1>
+      <p style="color:#777;font-size:.85rem;margin:.25rem 0 1.25rem">By Emiliano · Last updated 2026-11-13</p>
+
+      <div class="unit-toggle">
+        <button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+        <button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+      </div>
+
+      <div class="form-group">
+        <label id="lbl-rise" for="total-rise">Total Rise (inches)</label>
+        <input type="number" id="total-rise" step="any" min="1" value="30" placeholder="e.g. 30">
+      </div>
+
+      <div class="form-group">
+        <label id="lbl-rps" for="rise-per-step">Rise per Step (inches)</label>
+        <input type="number" id="rise-per-step" step="any" min="4" max="8" value="7">
+      </div>
+
+      <div class="form-group">
+        <label id="lbl-tread" for="tread-depth">Tread Depth (inches)</label>
+        <input type="number" id="tread-depth" step="any" min="9" max="14" value="11">
+      </div>
+
+      <div class="form-group">
+        <label id="lbl-width" for="stair-width">Stair Width (inches)</label>
+        <input type="number" id="stair-width" step="any" min="24" value="36">
+      </div>
+
+      <div class="form-group">
+        <label for="waste">Waste Factor (%)</label>
+        <input type="number" id="waste" step="any" min="0" value="10">
+      </div>
+
+      <button type="button" class="calc-btn" onclick="calculate()">Calculate Concrete Needed</button>
+
+      <div class="result-box" id="result-box">
+        <h3>Calculation Results</h3>
+        <div class="result-row"><span>Number of Steps:</span><span class="result-value" id="res-steps">0</span></div>
+        <div class="result-row"><span>Total Run:</span><span class="result-value" id="res-run">0</span></div>
+        <div class="result-row"><span>Stair Slope Angle:</span><span class="result-value" id="res-angle">0</span></div>
+        <div class="result-row"><span>Net Concrete Volume:</span><span class="result-value" id="res-vol">0</span></div>
+        <div class="result-row"><span>Total with Waste:</span><span class="result-value" id="res-total">0</span></div>
+        <div class="result-row"><span>60 lb Bags Needed:</span><span class="result-value" id="res-bags60">0</span></div>
+        <div class="result-row"><span>80 lb Bags Needed:</span><span class="result-value" id="res-bags80">0</span></div>
+        <div class="result-row"><span>Estimated Rebar Length:</span><span class="result-value" id="res-rebar">0</span></div>
+      </div>
+    </div>
+
+    <details class="details-box">
+      <summary>How this calculator works</summary>
+      <p>This calculator determines the concrete volume needed for a straight-run staircase by modeling the stairs as a triangular prism: 0.5 × total rise × total run × stair width. Steps are calculated by dividing the total rise by the desired rise per step, then rounding up. The formula aligns with ACI 318 requirements for exterior stair construction. Add 10% waste for spillage, uneven subgrade, and formwork imperfections.</p>
+      <p><strong>Source:</strong> ACI 318 Building Code Requirements for Structural Concrete.</p>
+    </details>
+
+    <section class="content-section">
+      <h2>How to Calculate Concrete for Stairs</h2>
+      <p>Calculating concrete for stairs is not the same as calculating for a flat slab. The shape of a staircase is a triangular prism — the bottom follows the slope, and the top forms the steps. To estimate the volume, treat the entire stair assembly as one triangular wedge: multiply half of the total rise by the total run, then multiply by the stair width. This gives you the cubic volume of concrete, which you convert to cubic yards for ready-mix ordering or to bag counts for mixing on site.</p>
+      <p>The first step is to divide your total rise — the height from the lower finished grade to the upper landing — by the target rise per step. A rise of 7 inches per step is standard for residential exterior stairs, with a maximum of 7¾ inches per the International Residential Code (IRC). If you land on a fractional number of steps, round up and adjust rise per step slightly to hit your total rise evenly. The total run is the number of steps minus one, multiplied by tread depth. Tread depth of 11 inches is standard, with 10 inches as the minimum for residential use.</p>
+      <p>For stairs that will carry foot traffic, reinforcement matters more than for a flat slab. If you want to size the rebar grid for a thicker slab or landing, our <a href="/rebar-spacing-calculator/">rebar spacing calculator</a> converts slab thickness and load requirements into bar spacing and total length. And if you need to budget the overall project, our <a href="/concrete-slab-cost-calculator/">concrete slab cost calculator</a> turns cubic yards into dollars using your local pricing.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>What Affects Concrete Stair Calculations</h2>
+      <p>Several real-world factors change the material math for concrete stairs. <strong>Stringer thickness</strong> — the depth of concrete from the tread surface to the bottom slope — is not the same as the geometric triangle. In practice, a minimum thickness of 4 to 6 inches must be maintained below every tread, which means the actual concrete volume is 15% to 30% higher than the pure triangular prism. This calculator assumes a 6-inch minimum structural thickness under each tread and folds it into the volume output.</p>
+      <p><strong>Landing size</strong> also affects volume significantly. A mid-run landing or a top landing adds a rectangular slab on top of the stair wedge. If your stairs land on a 4×4 ft slab at the top, add that slab volume separately using our <a href="/concrete-slab-cost-calculator/">concrete slab cost calculator</a>. <strong>Footing requirements</strong> matter too — exterior stairs need a frost-depth footing at the base. Size that with the <a href="/concrete-footing-calculator/">concrete footing calculator</a>. And if your staircase ties into a larger pour like a stoop or walkway, our <a href="/concrete-mix-calculator/">concrete mix calculator</a> helps you batch the correct cement-to-sand-to-gravel ratio for consistent strength across the whole assembly.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>Frequently Asked Questions</h2>
+      <h3>How thick should concrete stairs be?</h3>
+      <p>Concrete stairs should maintain a minimum of 4 to 6 inches of concrete thickness below every tread. The structural layer under the steps is what carries the load, not the visible tread surface. For stairs carrying heavy loads or exposed to freeze-thaw cycles, 6 inches with #4 rebar at 12-inch on center is standard practice per ACI 318.</p>
+      <h3>Can I build concrete stairs over an existing wood or dirt base?</h3>
+      <p>Yes, but the base must be compacted and stable. Most exterior concrete stairs are poured over a compacted gravel base of 4 to 6 inches, with formwork building the step shape. Wood stair forms are removed after the concrete cures for 7 days. Building over soft or uncompacted soil will cause cracking and settlement.</p>
+      <h3>How many days does concrete take to cure before you can walk on stairs?</h3>
+      <p>You can walk on concrete stairs after 24 to 48 hours, but full cure takes 28 days. For exterior stairs exposed to weather, keep foot traffic light for the first 7 days, and avoid heavy loads or vehicle traffic for the full 28 days. Cold weather below 50°F significantly slows curing and requires insulated blankets or heated enclosures.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>Related Calculators</h2>
+      <ul>
+        <li><a href="/concrete-steps-calculator/">Concrete Steps Calculator</a> — for straight-run step sets and stoops</li>
+        <li><a href="/concrete-slab-cost-calculator/">Concrete Slab Cost Calculator</a> — for landings and stoops attached to stairs</li>
+        <li><a href="/concrete-footing-calculator/">Concrete Footing Calculator</a> — for the frost-depth footing at the stair base</li>
+        <li><a href="/rebar-spacing-calculator/">Rebar Spacing Calculator</a> — for stair and landing reinforcement layout</li>
+        <li><a href="/concrete-mix-calculator/">Concrete Mix Calculator</a> — for cement, sand, and gravel ratios by PSI target</li>
+      </ul>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/how-it-works/">How It Works</a>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+    <a href="/privacy/">Privacy</a>
+    <a href="/terms/">Terms</a>
+  </nav>
+  <div class="citation">Formula source: ACI 318 Building Code Requirements for Structural Concrete. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.</div>
+</footer>
+
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(unit) {
+  currentUnit = unit;
+  document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+  document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+  if (unit === 'imperial') {
+    document.getElementById('lbl-rise').innerText = 'Total Rise (inches)';
+    document.getElementById('lbl-rps').innerText = 'Rise per Step (inches)';
+    document.getElementById('lbl-tread').innerText = 'Tread Depth (inches)';
+    document.getElementById('lbl-width').innerText = 'Stair Width (inches)';
+  } else {
+    document.getElementById('lbl-rise').innerText = 'Total Rise (cm)';
+    document.getElementById('lbl-rps').innerText = 'Rise per Step (cm)';
+    document.getElementById('lbl-tread').innerText = 'Tread Depth (cm)';
+    document.getElementById('lbl-width').innerText = 'Stair Width (cm)';
+  }
+}
+
+function calculate() {
+  const totalRise = parseFloat(document.getElementById('total-rise').value);
+  const risePerStep = parseFloat(document.getElementById('rise-per-step').value);
+  const treadDepth = parseFloat(document.getElementById('tread-depth').value);
+  const stairWidth = parseFloat(document.getElementById('stair-width').value);
+  const waste = parseFloat(document.getElementById('waste').value) || 10;
+
+  if ([totalRise, risePerStep, treadDepth, stairWidth].some(v => isNaN(v) || v <= 0)) {
+    alert('Please enter valid positive numbers for all fields.');
+    return;
+  }
+
+  // Convert metric (cm) to inches for the formula
+  const factor = currentUnit === 'metric' ? 1 / 2.54 : 1;
+  const riseIn = totalRise * factor;
+  const rpsIn = risePerStep * factor;
+  const treadIn = treadDepth * factor;
+  const widthIn = stairWidth * factor;
+
+  // Number of steps (round up)
+  const steps = Math.ceil(riseIn / rpsIn);
+  const totalRun = (steps - 1) * treadIn;
+  const angleDeg = Math.atan2(riseIn, totalRun) * 180 / Math.PI;
+
+  // Triangular prism volume in cubic inches
+  const volCuIn = 0.5 * riseIn * totalRun * widthIn;
+  const volCuFt = volCuIn / 1728;
+  const volCuYd = volCuFt / 27;
+  const totalCuYd = volCuYd * (1 + waste / 100);
+
+  // Bag counts (1 cu yd = 60 bags of 60 lb, 45 bags of 80 lb)
+  const bags60 = Math.ceil(totalCuYd * 60);
+  const bags80 = Math.ceil(totalCuYd * 45);
+
+  // Rebar estimate: horizontal bars (1 per step across width) + 4 longitudinal
+  const rebarInches = steps * (widthIn + 6) + 4 * Math.sqrt(totalRun * totalRun + riseIn * riseIn);
+  const rebarFt = rebarInches / 12;
+
+  const unitLabel = currentUnit === 'metric' ? 'cm' : 'in';
+  const volLabel = currentUnit === 'metric' ? ' m³' : ' cu yd';
+  const runLabel = currentUnit === 'metric' ? ' cm' : ' in';
+  const rebarLabel = currentUnit === 'metric' ? ' m' : ' ft';
+
+  let volDisplay = currentUnit === 'metric' ? (totalCuYd * 0.7646).toFixed(2) + volLabel : totalCuYd.toFixed(2) + volLabel;
+  let netVolDisplay = currentUnit === 'metric' ? (volCuYd * 0.7646).toFixed(2) + volLabel : volCuYd.toFixed(2) + volLabel;
+  let runDisplay = currentUnit === 'metric' ? (totalRun * 2.54).toFixed(1) + runLabel : totalRun.toFixed(1) + runLabel;
+  let rebarDisplay = currentUnit === 'metric' ? (rebarFt * 0.3048).toFixed(1) + rebarLabel : rebarFt.toFixed(1) + rebarLabel;
+
+  document.getElementById('res-steps').innerText = steps + ' steps';
+  document.getElementById('res-run').innerText = runDisplay;
+  document.getElementById('res-angle').innerText = angleDeg.toFixed(1) + '°';
+  document.getElementById('res-vol').innerText = netVolDisplay;
+  document.getElementById('res-total').innerText = volDisplay;
+  document.getElementById('res-bags60').innerText = bags60 + ' bags';
+  document.getElementById('res-bags80').innerText = bags80 + ' bags';
+  document.getElementById('res-rebar').innerText = rebarDisplay;
+
+  document.getElementById('result-box').style.display = 'block';
+}
+</script>
+</body>
+</html>
