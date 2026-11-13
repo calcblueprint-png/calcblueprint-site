@@ -117,7 +117,7 @@ CATEGORY_SLUGS = {
         "concrete-mix-calculator", "concrete-steps-calculator",
         "concrete-stairs-calculator", "concrete-column-calculator",
         "concrete-block-calculator", "rebar-spacing-calculator",
-        "how-many-bags-of-concrete",
+        "how-many-bags-of-concrete", "how-much-does-a-yard-of-concrete-weigh",   # ← new
     ],
     "roofing": [
         "roof-pitch-calculator", "roof-area-calculator",
