@@ -16,10 +16,12 @@ Exit codes:
 """
 
 import argparse
+import html as html_module
 import json
 import os
 import re
 import sys
+from collections import Counter
 from pathlib import Path
 
 # ---------- Configuration ----------
@@ -51,6 +53,12 @@ ANCHOR_MAP = {
 REQUIRED_OG = ["og:type", "og:url", "og:title", "og:description", "og:image"]
 REQUIRED_TWITTER = ["twitter:card", "twitter:title", "twitter:description", "twitter:image"]
 
+# Non-calculator pages (skip calculator-specific checks)
+NON_CALCULATOR_PAGES = {"/", "/about/", "/contact/", "/privacy/", "/terms/", "/how-it-works/"}
+
+# Orphan threshold — calculator pages should have at least this many inbound links
+MIN_INBOUND_LINKS = 3
+
 
 # ---------- Page loading ----------
 
@@ -76,7 +84,7 @@ def expected_url(file_path: Path, site_root: Path) -> str:
     return "/" + rel.stem + "/"
 
 
-# ---------- Individual checks ----------
+# ---------- Helpers ----------
 
 def extract(html: str, pattern: str, flags=re.IGNORECASE | re.DOTALL):
     m = re.search(pattern, html, flags)
@@ -86,6 +94,15 @@ def extract(html: str, pattern: str, flags=re.IGNORECASE | re.DOTALL):
 def count(html: str, pattern: str, flags=re.IGNORECASE) -> int:
     return len(re.findall(pattern, html, flags))
 
+
+def strip_html(text: str) -> str:
+    """Strip HTML tags and decode entities, then collapse whitespace."""
+    text = re.sub(r'<[^>]+>', '', text)
+    text = html_module.unescape(text)
+    return re.sub(r'\s+', ' ', text).strip()
+
+
+# ---------- Individual checks ----------
 
 def check_title(html: str):
     title = extract(html, r"<title>(.*?)</title>")
@@ -171,7 +188,7 @@ def check_anchor_links(html: str):
     return None, None
 
 
-def check_internal_links(html: str, site_root: Path, ignore_missing_nav=None):
+def check_internal_links(html: str, site_root: Path):
     """Report hrefs like /foo/ that don't resolve to any file."""
     hrefs = re.findall(r'<a\s+[^>]*href=["\']([^"\']+)["\']', html, re.IGNORECASE)
     broken = []
@@ -180,9 +197,7 @@ def check_internal_links(html: str, site_root: Path, ignore_missing_nav=None):
             continue
         if href.startswith("#"):
             continue
-        # Strip query string and fragment
         clean = href.split("?")[0].split("#")[0]
-        # Root
         if clean in ("/", ""):
             candidate = site_root / "index.html"
         elif clean.endswith("/"):
@@ -197,8 +212,6 @@ def check_internal_links(html: str, site_root: Path, ignore_missing_nav=None):
         return "critical", f"Broken internal links: {', '.join(sorted(set(broken)))}"
     return None, None
 
-
-NON_CALCULATOR_PAGES = {"/", "/about/", "/contact/", "/privacy/", "/terms/", "/how-it-works/"}
 
 def check_last_updated(html: str, url: str = ""):
     if url in NON_CALCULATOR_PAGES:
@@ -221,6 +234,87 @@ def check_404_page(html: str, file_path: Path):
     if file_path.name == "404.html":
         if 'name="robots"' not in html or "noindex" not in html:
             return "warn", "404 page should have <meta name=\"robots\" content=\"noindex\">"
+    return None, None
+
+
+# ---------- New checks (SEO structural integrity) ----------
+
+def check_faq_schema(html: str, url: str) -> tuple:
+    """Visible FAQ section must have matching FAQPage JSON-LD."""
+    m = re.search(
+        r'<h2[^>]*>\s*Frequently\s+Asked\s+Questions\s*</h2>(.*?)(?=<section|<footer|</main>)',
+        html, re.DOTALL | re.IGNORECASE
+    )
+    if not m:
+        return None, None  # No visible FAQ, no requirement
+
+    visible = re.findall(r'<h3[^>]*>(.*?)</h3>', m.group(1), re.DOTALL | re.IGNORECASE)
+    visible_qs = [strip_html(q).strip() for q in visible if strip_html(q).strip()]
+    if not visible_qs:
+        return None, None
+
+    schema_qs = []
+    for sm in re.finditer(
+        r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
+        html, re.DOTALL
+    ):
+        try:
+            data = json.loads(sm.group(1))
+            if isinstance(data, dict) and data.get("@type") == "FAQPage":
+                for q in data.get("mainEntity", []):
+                    name = q.get("name", "").strip()
+                    if name:
+                        schema_qs.append(name)
+        except json.JSONDecodeError:
+            continue
+
+    if not schema_qs:
+        return "critical", f"Visible FAQ ({len(visible_qs)} questions) but no FAQPage JSON-LD"
+    unmatched = [q for q in visible_qs if q not in schema_qs]
+    if unmatched:
+        return "critical", f"FAQ schema mismatch: {len(unmatched)}/{len(visible_qs)} visible questions not in schema"
+    return None, None
+
+
+def check_unclosed_p(html: str) -> tuple:
+    """Detect unclosed <p> tags (invalid HTML that breaks FAQ schema matching)."""
+    cleaned = re.sub(r'<script[^>]*>.*?</script>', '', html, flags=re.DOTALL | re.IGNORECASE)
+    cleaned = re.sub(r'<style[^>]*>.*?</style>', '', cleaned, flags=re.DOTALL | re.IGNORECASE)
+    opens = len(re.findall(r'<p[\s>]', cleaned, re.IGNORECASE))
+    closes = len(re.findall(r'</p>', cleaned, re.IGNORECASE))
+    if opens > closes:
+        return "critical", f"{opens - closes} unclosed <p> tag(s) — invalid HTML"
+    return None, None
+
+
+def check_jsonld_validity(html: str) -> tuple:
+    """Every JSON-LD block must parse as valid JSON."""
+    for i, m in enumerate(re.finditer(
+        r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
+        html, re.DOTALL
+    )):
+        try:
+            json.loads(m.group(1))
+        except json.JSONDecodeError as e:
+            return "critical", f"Invalid JSON-LD block #{i+1}: {str(e)[:80]}"
+    return None, None
+
+
+def check_related_calculators(html: str, url: str) -> tuple:
+    """Calculator pages must have a Related Calculators section."""
+    if url in NON_CALCULATOR_PAGES or "calculator" not in url:
+        return None, None
+    if not re.search(r'Related\s+Calculators', html, re.IGNORECASE):
+        return "warn", "Missing Related Calculators section"
+    return None, None
+
+
+def check_desc_differs_from_title(html: str) -> tuple:
+    """Description must not be identical to title."""
+    title = extract(html, r"<title>(.*?)</title>")
+    desc = extract(html, r'<meta\s+name=["\']description["\']\s+content=["\'](.*?)["\']')
+    if title and desc and title.strip() == desc.strip():
+        return "warn", "Description is identical to title"
     return None, None
 
 
@@ -247,6 +341,12 @@ def lint_page(file_path: Path, site_root: Path):
         (check_last_updated, (html, expected)),
         (check_footer_citation, (html, expected)),
         (check_404_page, (html, file_path)),
+        # New structural checks
+        (check_faq_schema, (html, expected)),
+        (check_unclosed_p, (html,)),
+        (check_jsonld_validity, (html,)),
+        (check_related_calculators, (html, expected)),
+        (check_desc_differs_from_title, (html,)),
     ]:
         sev, msg = check_fn(*args)
         if sev:
@@ -266,12 +366,56 @@ def lint_page(file_path: Path, site_root: Path):
     }
 
 
+def compute_inbound_links(files, site_root: Path) -> Counter:
+    """Build a count of internal inbound links per URL across all pages."""
+    inbound = Counter()
+    for path in files:
+        try:
+            html = path.read_text(encoding="utf-8", errors="replace")
+        except Exception:
+            continue
+        for href in re.findall(r'<a\s+[^>]*href=["\']([^"\']+)["\']', html, re.IGNORECASE):
+            if not href.startswith("/") or href.startswith("//"):
+                continue
+            if href.startswith("#"):
+                continue
+            clean = href.split("?")[0].split("#")[0]
+            if clean in ("/", ""):
+                inbound["/"] += 1
+            elif clean.endswith("/"):
+                inbound[clean] += 1
+    return inbound
+
+
+def apply_orphan_check(results, inbound: Counter):
+    """Flag calculator pages with too few inbound internal links."""
+    for r in results:
+        if r["url"] in NON_CALCULATOR_PAGES:
+            continue
+        count = inbound.get(r["url"], 0)
+        if count >= MIN_INBOUND_LINKS:
+            continue
+        if count == 0:
+            sev, msg = "critical", "Orphan page: 0 inbound internal links"
+        else:
+            sev, msg = "warn", f"Only {count} inbound internal link(s) — target {MIN_INBOUND_LINKS}+"
+        r["issues"].append((sev, msg))
+        if sev == "critical":
+            r["critical"] += 1
+            r["score"] = max(0, r["score"] - 25)
+        else:
+            r["warn"] += 1
+            r["score"] = max(0, r["score"] - 5)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--site-root", default=".", help="Root folder containing HTML files")
     ap.add_argument("--json", action="store_true", help="Machine-readable output")
     ap.add_argument("--fail-on", choices=["critical", "warn"], default="critical",
                     help="Exit 1 if issues at this level exist")
+    ap.add_argument("--no-orphan-check", action="store_true",
+                    help="Skip inbound-link orphan detection")
     args = ap.parse_args()
 
     site_root = Path(args.site_root).resolve()
@@ -285,6 +429,11 @@ def main():
         sys.exit(2)
 
     results = [lint_page(f, site_root) for f in files]
+
+    # Two-pass orphan detection
+    if not args.no_orphan_check:
+        inbound = compute_inbound_links(files, site_root)
+        apply_orphan_check(results, inbound)
 
     total_critical = sum(r["critical"] for r in results)
     total_warn = sum(r["warn"] for r in results)
