@@ -538,17 +538,24 @@ def fix_related(html: str, url: str) -> tuple:
         '    </section>\n'
     )
 
-    main_close = html.find('</main>')
-    if main_close == -1:
-        return html, False, "no </main> found"
+    # Find insertion point. Try </main> first, then fall back to </footer> or </body>.
+    insertion_index = -1
+    for candidate in ('</main>', '</footer>', '</body>'):
+        idx = html.find(candidate)
+        if idx != -1:
+            insertion_index = idx
+            break
 
-    # Insert before the last </div> before </main> if one exists
-    # (keeps the new section inside the existing .container wrapper)
-    last_div = html.rfind('</div>', 0, main_close)
-    if last_div != -1 and main_close - last_div < 200:
+    if insertion_index == -1:
+        return html, False, "no </main>, </footer>, or </body> found"
+
+    # Prefer inserting before the last </div> that precedes the insertion point
+    # (keeps the section inside the .container wrapper for pages without <main>)
+    last_div = html.rfind('</div>', 0, insertion_index)
+    if last_div != -1 and insertion_index - last_div < 400:
         new_html = html[:last_div] + block + html[last_div:]
     else:
-        new_html = html[:main_close] + block + '\n' + html[main_close:]
+        new_html = html[:insertion_index] + block + '\n' + html[insertion_index:]
 
     return new_html, True, f"Related section added ({len(siblings)} links from {category})"
 
