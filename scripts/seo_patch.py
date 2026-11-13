@@ -123,6 +123,7 @@ CATEGORY_SLUGS = {
         "roof-pitch-calculator", "roof-area-calculator",
         "roof-truss-calculator", "shingle-calculator",
         "ridge-vent-calculator", "gutter-calculator",
+        "roof-sheathing-calculator",   # ← new
     ],
     "fencing": [
         "fence-calculator", "chain-link-fence-calculator",
