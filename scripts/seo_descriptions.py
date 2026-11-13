@@ -37,7 +37,7 @@ DESCRIPTIONS = {
     "/breaker-size-calculator/":
         "Calculate breaker size and wire gauge for any circuit. Enter amp load, voltage, and wire run for safe breaker, wire, and conduit recommendations.",
     "/btu-calculator/":
-        "Calculate BTU cooling and heating needs for any room. Enter room size, ceiling height, and window count for precise AC and furnace sizing.",
+        "Calculate BTU cooling and heating needs for any room. Enter room size, ceiling height, window count, and occupants for precise AC and furnace sizing.",
     "/chain-link-fence-calculator/":
         "Calculate chain link fence materials for any yard. Enter linear feet, height, and post spacing for exact rolls, posts, rails, and tension wire.",
     "/compost-calculator/":
@@ -51,7 +51,7 @@ DESCRIPTIONS = {
     "/drywall-mud-calculator/":
         "Calculate joint compound for any drywall job. Enter sheet count, joint length, and finish level for exact mud, tape, and bucket quantities needed.",
     "/drywall-screws-calculator/":
-        "Calculate drywall screw quantity for any job. Enter sheet count, stud spacing, and stud length for exact screw count and bulk box quantity.",
+        "Calculate drywall screw quantity for any job. Enter drywall sheet count, stud spacing, and stud length for exact screw count and bulk box quantity.",
     "/duct-size-calculator/":
         "Calculate HVAC duct size for any room. Enter CFM airflow, duct type, and run length for exact round or rectangular duct dimensions and velocities.",
     "/electrical-load-calculator/":
@@ -75,11 +75,11 @@ DESCRIPTIONS = {
     "/kitchen-floor-calculator/":
         "Calculate tile, laminate, or vinyl for any kitchen floor. Enter kitchen dimensions, floor material, and waste % for exact material and cost.",
     "/laminate-flooring-calculator/":
-        "Calculate laminate flooring planks and cartons for any room. Enter room dimensions, plank size, and waste % for exact box count and cost.",
+        "Calculate laminate flooring planks and cartons for any room. Enter room dimensions, plank size, and waste % for exact box count, plank count, and cost.",
     "/mortar-calculator/":
         "Calculate mortar, sand, and cement for brick or block walls. Enter wall area, unit size, and joint width for exact mortar bags and sand volume.",
     "/mulch-calculator/":
-        "Calculate mulch volume for any landscape bed. Enter area dimensions and depth for exact cubic yards, cubic feet, and bag counts needed.",
+        "Calculate mulch volume for any landscape bed or garden. Enter area dimensions and desired depth for exact cubic yards, cubic feet, and bag counts needed.",
     "/outlet-spacing-calculator/":
         "Calculate outlet spacing and total count for any room. Enter wall length, ceiling height, and local code spacing for exact outlet placement and count.",
     "/paver-calculator/":
@@ -89,7 +89,7 @@ DESCRIPTIONS = {
     "/retaining-wall-calculator/":
         "Calculate retaining wall blocks, capstones, and gravel. Enter wall length, height, and block type for exact blocks, base, and drainage stone needed.",
     "/ridge-vent-calculator/":
-        "Calculate ridge vent for any attic. Enter attic floor area, roof pitch, and vent type for exact linear feet and net free vent area needed.",
+        "Calculate ridge vent for any attic. Enter attic floor area, roof pitch, and vent type for exact ridge vent linear feet and net free vent area needed.",
     "/roof-truss-calculator/":
         "Calculate roof trusses for any house. Enter building width, roof pitch, and truss spacing for exact truss count, span, and uplift requirements.",
     "/shower-tile-calculator/":
@@ -97,7 +97,7 @@ DESCRIPTIONS = {
     "/sod-calculator/":
         "Calculate sod rolls or pallets for any lawn. Enter lawn dimensions and sod roll size for exact square footage, rolls, and pallet quantities needed.",
     "/thinset-calculator/":
-        "Calculate thinset mortar for any tile job. Enter tile area, trowel size, and tile type for exact 50-lb bag count and per-bag coverage rate.",
+        "Calculate thinset mortar for any tile job. Enter tile area, trowel size, and tile type for exact 50-lb bag quantities and per-bag coverage rate.",
     "/topsoil-calculator/":
         "Calculate topsoil for lawns, gardens, and raised beds. Enter area dimensions and depth for exact cubic yards, cubic feet, or bag counts needed.",
     "/vinyl-siding-calculator/":
@@ -113,7 +113,7 @@ DESCRIPTIONS = {
     "/contact/":
         "Contact CalcBlueprint with questions, corrections, or feedback about our construction calculators. We respond to accuracy reports within 1-2 business days.",
     "/how-it-works/":
-        "See exactly how CalcBlueprint calculates every material estimate. Every formula, standard, and data source, verified against ACI, ICC, ASTM, and NRCA.",
+        "See exactly how CalcBlueprint calculates every construction material estimate. Every formula, standard, and data source verified against ACI, ICC, ASTM.",
     "/privacy/":
         "How CalcBlueprint handles your data. No signups, no accounts, no ad cookies. A short, analytics-limited privacy policy you can read in two minutes.",
     "/terms/":
@@ -156,33 +156,39 @@ def replace_description(html: str, new_desc: str) -> tuple:
     """
     Replace <meta name="description">, then sync og:description and
     twitter:description to the same value. Returns (new_html, changed, msg).
+
+    Uses a quote-aware regex so descriptions containing apostrophes
+    (e.g. "CalcBlueprint's") are matched correctly.
     """
-    # Match the description meta tag content
-    pattern = r'(<meta\s+name=["\']description["\']\s+content=["\'])([^"\']*)(["\']\s*/?>)'
+    # Match: meta name="description" content=<quote>...<same quote>
+    # \2 backreference ensures we only stop at the matching closing quote.
+    pattern = r'(<meta\s+name=["\']description["\']\s+content=)(["\'])(.*?)\2(\s*/?>)'
     m = re.search(pattern, html, re.IGNORECASE)
     if not m:
         return html, False, "no description meta found"
 
-    old_desc = m.group(2)
+    quote = m.group(2)
+    old_desc = m.group(3)
     if old_desc == new_desc:
         return html, False, "already up to date"
 
-    # Replace description content using slices (safe for any characters)
-    new_html = html[:m.start(2)] + new_desc + html[m.end(2):]
+    # Replace description content, preserving the original quote style
+    replacement = f'{m.group(1)}{quote}{new_desc}{quote}{m.group(4)}'
+    new_html = html[:m.start()] + replacement + html[m.end():]
 
     # Sync og:description
-    og_pattern = r'(<meta\s+property=["\']og:description["\']\s+content=["\'])([^"\']*)(["\']\s*/?>)'
+    og_pattern = r'(<meta\s+property=["\']og:description["\']\s+content=)(["\'])(.*?)\2(\s*/?>)'
     new_html = re.sub(
         og_pattern,
-        lambda mm: mm.group(1) + new_desc + mm.group(3),
+        lambda mm: f'{mm.group(1)}{mm.group(2)}{new_desc}{mm.group(2)}{mm.group(4)}',
         new_html, count=1, flags=re.IGNORECASE,
     )
 
     # Sync twitter:description
-    tw_pattern = r'(<meta\s+name=["\']twitter:description["\']\s+content=["\'])([^"\']*)(["\']\s*/?>)'
+    tw_pattern = r'(<meta\s+name=["\']twitter:description["\']\s+content=)(["\'])(.*?)\2(\s*/?>)'
     new_html = re.sub(
         tw_pattern,
-        lambda mm: mm.group(1) + new_desc + mm.group(3),
+        lambda mm: f'{mm.group(1)}{mm.group(2)}{new_desc}{mm.group(2)}{mm.group(4)}',
         new_html, count=1, flags=re.IGNORECASE,
     )
 
@@ -247,10 +253,11 @@ def main():
             if args.write:
                 path.write_text(new_html, encoding="utf-8")
         else:
-            total_skipped += 1
             if msg == "no description meta found":
                 print(f"[MISSING] {url} — {msg}")
                 total_missing += 1
+            else:
+                total_skipped += 1
 
     # Pages in DESCRIPTIONS dict that we never matched to a file
     unseen = set(DESCRIPTIONS.keys()) - seen_urls
