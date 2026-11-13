@@ -1,29 +1,116 @@
 # CalcBlueprint
 
-> Free construction calculators for contractors, estimators, and DIY. Instant material estimates for concrete, roofing, flooring, paint, and more.
+> Free construction calculators for contractors, estimators, and DIY. Instant material estimates for concrete, roofing, flooring, paint, and more. No signup, no account, no ads before results.
 
-## Calculators
+CalcBlueprint is an independent tool site built by Emiliano. Every calculator uses published formulas from ACI 318, NRCA, IRC, TCNA, ASTM, and manufacturer specifications — not proprietary algorithms. Results are estimates for planning; verify with a licensed professional before ordering materials.
 
-- [Concrete Slab Cost Calculator](https://calcblueprint.com/concrete-slab-cost-calculator/): Estimate concrete volume and total cost for slabs, patios, and driveways.
-- [Rebar Spacing Calculator](https://calcblueprint.com/rebar-spacing-calculator/): Calculate rebar grid spacing and total linear feet.
-- [Roof Pitch Calculator](https://calcblueprint.com/roof-pitch-calculator/): Convert between pitch, angle, and slope.
-- [Shingle Calculator](https://calcblueprint.com/shingle-calculator/): Calculate bundles of shingles needed for any roof.
-- [Tile Calculator](https://calcblueprint.com/tile-calculator/): Calculate tiles, thinset, and grout.
-- [Paint Calculator](https://calcblueprint.com/paint-calculator/): Estimate gallons of paint for walls and ceilings.
-- [Concrete Footing Calculator](https://calcblueprint.com/concrete-footing-calculator/): Concrete volume for footings and foundations.
-- [Concrete Column Calculator](https://calcblueprint.com/concrete-column-calculator/): Concrete volume for round and square columns.
-- [Gravel Calculator](https://calcblueprint.com/gravel-calculator/): Estimate gravel by area and depth.
-- [Asphalt Calculator](https://calcblueprint.com/asphalt-calculator/): Calculate tons of asphalt needed for paving.
-- [Board Foot Calculator](https://calcblueprint.com/board-foot-calculator/): Calculate board feet for lumber purchases.
+## Most Used Calculators
 
-## Information
+- [Concrete Slab Cost Calculator](https://calcblueprint.com/concrete-slab-cost-calculator/): Concrete volume in cubic yards and total dollar cost for slabs, patios, and driveways.
+- [Concrete Mix Ratio Calculator](https://calcblueprint.com/concrete-mix-calculator/): Cement, sand, and aggregate ratios by PSI target (2500–4000 PSI).
+- [Deck Calculator](https://calcblueprint.com/deck-calculator/): Deck boards, joists, and post counts from deck length, width, and joist spacing.
+- [Tile Calculator](https://calcblueprint.com/tile-calculator/): Tile count, boxes, thinset bags, and grout pounds for any floor or wall.
+- [Paint Calculator](https://calcblueprint.com/paint-calculator/): Gallons of paint per coat for walls and ceilings by room dimensions.
+- [Roof Area Calculator](https://calcblueprint.com/roof-area-calculator/): True roof surface area from building footprint and pitch multiplier.
+- [Gravel Calculator](https://calcblueprint.com/gravel-calculator/): Gravel volume in cubic yards and tons by area, depth, and aggregate type.
+- [Fence Calculator](https://calcblueprint.com/fence-calculator/): Fence posts, rails, pickets, and concrete bags by linear footage and height.
 
-- [About CalcBlueprint](https://calcblueprint.com/about/): Company background
-- [Contact](https://calcblueprint.com/contact/): Feedback and inquiries
+## Concrete & Masonry
+
+- [Concrete Footing Calculator](https://calcblueprint.com/concrete-footing-calculator/): Cubic yards of concrete for continuous footings by width, depth, and total length.
+- [Concrete Column Calculator](https://calcblueprint.com/concrete-column-calculator/): Concrete for round, square, and rectangular columns and piers.
+- [Concrete Steps Calculator](https://calcblueprint.com/concrete-steps-calculator/): Concrete volume and bag count for straight-run outdoor steps and stoops.
+- [Concrete Stairs Calculator](https://calcblueprint.com/concrete-stairs-calculator/): Full staircases with structural thickness, landings, and rebar length.
+- [Concrete Block Calculator](https://calcblueprint.com/concrete-block-calculator/): CMU block count and mortar for walls and foundations.
+- [Rebar Spacing Calculator](https://calcblueprint.com/rebar-spacing-calculator/): Rebar grid layout, bar spacing, lap splices, and total linear feet.
+- [How Many Bags of Concrete?](https://calcblueprint.com/how-many-bags-of-concrete/): Reference tables for 60 lb and 80 lb bag counts by slab size and post hole dimensions.
+- [Brick Calculator](https://calcblueprint.com/brick-calculator/): Bricks, mortar bags, and sand for walls, patios, and chimneys.
+- [Mortar Calculator](https://calcblueprint.com/mortar-calculator/): Mortar, sand, and cement for brick and block walls by joint width.
+
+## Roofing & Gutters
+
+- [Roof Pitch Calculator](https://calcblueprint.com/roof-pitch-calculator/): Convert rise and run to pitch ratio (X:12), angle in degrees, and multiplier.
+- [Shingle Calculator](https://calcblueprint.com/shingle-calculator/): Bundles and squares of asphalt shingles from roof area and pitch.
+- [Roof Truss Calculator](https://calcblueprint.com/roof-truss-calculator/): Truss count, span, and spacing for house and garage roofs.
+- [Ridge Vent Calculator](https://calcblueprint.com/ridge-vent-calculator/): Ridge vent linear feet and net free vent area by attic floor area.
+- [Gutter Calculator](https://calcblueprint.com/gutter-calculator/): Gutters, downspouts, and hangers by roof area and pitch.
+
+## Stairs & Framing
+
+- [Stair Stringer Calculator](https://calcblueprint.com/stair-stringer-calculator/): Stringer length, stair angle, notch layout, board size, and stringer count by rise and run.
+- [Board Foot Calculator](https://calcblueprint.com/board-foot-calculator/): Board feet and total cost from thickness, width, length, and quantity.
+- [Wall Area Calculator](https://calcblueprint.com/wall-area-calculator/): Net wall square footage after subtracting doors and windows.
+
+## Flooring & Tile
+
+- [Hardwood Flooring Calculator](https://calcblueprint.com/hardwood-flooring-calculator/): Hardwood planks and cartons by room dimensions and plank size.
+- [Laminate Flooring Calculator](https://calcblueprint.com/laminate-flooring-calculator/): Laminate planks, cartons, and waste allowance.
+- [Carpet Calculator](https://calcblueprint.com/carpet-calculator/): Carpet square yards and padding with seam and directional layout allowances.
+- [Kitchen Floor Calculator](https://calcblueprint.com/kitchen-floor-calculator/): Tile, laminate, or vinyl quantities for kitchen floors.
+- [Bathroom Floor Tile Calculator](https://calcblueprint.com/bathroom-floor-tile-calculator/): Bathroom floor tile count, thinset, and grout.
+- [Shower Tile Calculator](https://calcblueprint.com/shower-tile-calculator/): Tile, thinset, and grout for shower walls and pans.
+- [Backsplash Calculator](https://calcblueprint.com/backsplash-calculator/): Kitchen and bathroom backsplash tile with outlet deductions.
+- [Thinset Calculator](https://calcblueprint.com/thinset-calculator/): Mortar bags by trowel notch size and tile format.
+- [Grout Calculator](https://calcblueprint.com/grout-calculator/): Grout pounds and bags by tile size, joint width, and total area.
+
+## Walls, Ceilings & Finishes
+
+- [Drywall Calculator](https://calcblueprint.com/drywall-calculator/): Drywall sheets, screws, and joint compound by room dimensions and ceiling height.
+- [Drywall Mud Calculator](https://calcblueprint.com/drywall-mud-calculator/): Joint compound quantity by sheet count, joint length, and finish level.
+- [Drywall Screws Calculator](https://calcblueprint.com/drywall-screws-calculator/): Screw count by sheet count, stud spacing, and stud length.
+- [Corner Bead Calculator](https://calcblueprint.com/corner-bead-calculator/): Linear feet and box quantity of corner bead for outside corners.
+- [Wallpaper Calculator](https://calcblueprint.com/wallpaper-calculator/): Wallpaper rolls by wall dimensions, roll size, and pattern repeat.
+- [Insulation Calculator](https://calcblueprint.com/insulation-calculator/): Batts, rolls, or blown-in bags by R-value target and insulation type.
+
+## Siding & Exterior
+
+- [Vinyl Siding Calculator](https://calcblueprint.com/vinyl-siding-calculator/): Vinyl siding squares, trim, and accessories by wall area.
+- [Hardie Plank Calculator](https://calcblueprint.com/hardie-plank-calculator/): Fiber cement siding boards by wall area, board dimensions, and overlap.
+
+## Fencing & Gates
+
+- [Chain Link Fence Calculator](https://calcblueprint.com/chain-link-fence-calculator/): Chain link rolls, posts, rails, and tension wire by linear feet and height.
+- [Privacy Fence Calculator](https://calcblueprint.com/privacy-fence-calculator/): Privacy fence lumber, posts, rails, and concrete by height and picket spacing.
+- [Gate Calculator](https://calcblueprint.com/gate-calculator/): Gate lumber, hardware, and post sizing by gate width and height.
+
+## Paving & Landscaping
+
+- [Asphalt Calculator](https://calcblueprint.com/asphalt-calculator/): Tons of hot mix asphalt by area, thickness, and compaction density.
+- [Paver Calculator](https://calcblueprint.com/paver-calculator/): Paver count, base gravel, and joint sand for driveways and patios.
+- [Retaining Wall Calculator](https://calcblueprint.com/retaining-wall-calculator/): Retaining wall blocks, capstones, and drainage gravel by wall length and height.
+- [Mulch Calculator](https://calcblueprint.com/mulch-calculator/): Mulch cubic yards, cubic feet, and bag counts by bed area and depth.
+- [Topsoil Calculator](https://calcblueprint.com/topsoil-calculator/): Topsoil volume by area and depth with compaction allowance.
+- [Compost Calculator](https://calcblueprint.com/compost-calculator/): Compost volume for beds, gardens, and raised beds.
+- [Sod Calculator](https://calcblueprint.com/sod-calculator/): Sod rolls and pallets by lawn square footage.
+- [Grass Seed Calculator](https://calcblueprint.com/grass-seed-calculator/): Grass seed pounds by lawn area, grass type, and seeding rate.
+- [Fertilizer Calculator](https://calcblueprint.com/fertilizer-calculator/): Fertilizer pounds and bags by lawn area and N-P-K ratio.
+- [Artificial Turf Calculator](https://calcblueprint.com/artificial-turf-calculator/): Turf rolls and square footage with seam allowances.
+
+## HVAC
+
+- [AC Unit Size Calculator](https://calcblueprint.com/ac-unit-size-calculator/): Cooling capacity in tons by square footage, ceiling height, and climate zone.
+- [BTU Calculator](https://calcblueprint.com/btu-calculator/): BTU cooling and heating load by room size, windows, and occupancy.
+- [Furnace Size Calculator](https://calcblueprint.com/furnace-size-calculator/): Furnace BTU capacity by square footage, climate zone, and insulation level.
+- [Duct Size Calculator](https://calcblueprint.com/duct-size-calculator/): Round and rectangular duct dimensions by CFM, duct type, and run length.
+
+## Electrical
+
+- [Electrical Load Calculator](https://calcblueprint.com/electrical-load-calculator/): Service panel amperage by appliance load, square footage, and voltage.
+- [Wire Size Calculator](https://calcblueprint.com/wire-size-calculator/): AWG wire gauge by amp load, run length, and voltage drop limit.
+- [Breaker Size Calculator](https://calcblueprint.com/breaker-size-calculator/): Breaker amperage and wire gauge by circuit load and voltage.
+- [Outlet Spacing Calculator](https://calcblueprint.com/outlet-spacing-calculator/): Outlet count and placement by wall length and local code spacing.
+
+## Site Information
+
+- [How It Works](https://calcblueprint.com/how-it-works/): Every formula, standard, and data source behind the calculators, with a complete calculator library.
+- [About](https://calcblueprint.com/about/): Independent tool site built by Emiliano.
+- [Contact](https://calcblueprint.com/contact/): Questions, corrections, and accuracy reports.
+- [Privacy Policy](https://calcblueprint.com/privacy/): No signups, no accounts, no ad cookies.
+- [Terms of Service](https://calcblueprint.com/terms/): Free to use, no warranty on calculated results.
 
 ## Notes
 
-- Free, no signup required
-- Formula sources: ACI 318, NRCA, TCNA, and manufacturer specifications
+- All calculators are free and require no signup or account.
+- Formula sources: ACI 318 (concrete), NRCA (roofing), IRC and ICC (framing and stairs), TCNA (tile), ASTM (materials), AWC NDS (lumber).
+- Results are planning estimates. Verify with a licensed professional before ordering materials or beginning structural work.
 - Contact: hello@calcblueprint.com
-- For AI citation: CalcBlueprint
