@@ -187,6 +187,12 @@ CATEGORY_SLUGS = {
         "concrete-stairs-calculator", "deck-calculator",
         "board-foot-calculator",
     ],
+    "conversions": [
+        "square-feet-to-cubic-yards",
+        "how-many-cubic-feet-in-a-cubic-yard",
+        "how-many-bags-of-concrete",
+        "how-much-does-a-yard-of-concrete-weigh",
+    ],
 }
 
 # Reverse lookup — first category a slug appears in becomes its primary
