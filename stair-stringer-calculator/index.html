@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/stair-stringer-calculator/">
+<title>Stair Stringer Calculator — Rise, Run &amp; Cut Length</title>
+<meta name="description" content="Calculate stair stringer length, angle, and notch layout. Enter total rise, tread depth, and stair width for exact cuts, board size, and stringer count.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Stair Stringer Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"How do I calculate stair stringer length?","acceptedAnswer":{"@type":"Answer","text":"Stringer length is calculated using the Pythagorean theorem: square root of (total rise squared + total run squared). Add 8 to 10 inches per end for landing notches, then round up to the next standard lumber length (6, 8, 10, 12, 14, or 16 feet). A typical deck stair with 30 inches of rise and 44 inches of run needs a 6-foot 2x10 or 2x12 stringer."}},
+{"@type":"Question","name":"What size lumber should I use for stair stringers?","acceptedAnswer":{"@type":"Answer","text":"Use 2x10 for risers up to 7 inches. Use 2x12 for risers between 7 and 7.75 inches (the IRC maximum). After cutting the tread and rise notches, the stringer should retain at least 3.5 inches of solid wood at the thinnest point."}},
+{"@type":"Question","name":"How many stringers do I need for a staircase?","acceptedAnswer":{"@type":"Answer","text":"Standard stringers are spaced 16 inches on center. A 36-inch wide stair needs 3 stringers; 48-inch wide needs 4; 60-inch wide needs 5. Narrow stairs under 30 inches can use 2. Add one stringer per additional 14 inches of width beyond 72 inches."}}
+]}
+</script>
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcblueprint.com/stair-stringer-calculator/">
+<meta property="og:title" content="Stair Stringer Calculator — Rise, Run &amp; Cut Length">
+<meta property="og:description" content="Calculate stair stringer length, angle, and notch layout. Enter total rise, tread depth, and stair width for exact cuts, board size, and stringer count.">
+<meta property="og:image" content="https://calcblueprint.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Stair Stringer Calculator — Rise, Run &amp; Cut Length">
+<meta name="twitter:description" content="Calculate stair stringer length, angle, and notch layout. Enter total rise, tread depth, and stair width for exact cuts, board size, and stringer count.">
+<meta name="twitter:image" content="https://calcblueprint.com/og-image.png">
+<link rel="icon" href="/favicon.ico">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:700;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2rem 1rem;max-width:900px;margin:0 auto}
+.container{width:100%}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);margin-bottom:2rem}
+h1{color:#1a2332;font-size:1.9rem;margin-bottom:0.5rem}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem}
+.unit-btn{flex:1;padding:0.75rem;border:1px solid #ccc;background:#f9f9f9;cursor:pointer;font-weight:600;border-radius:4px;transition:all 0.2s}
+.unit-btn.active{background:#f5a623;color:#1a2332;border-color:#f5a623}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332}
+.form-group input{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+.calc-btn{width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;font-size:1.1rem;font-weight:700;border-radius:4px;cursor:pointer;transition:opacity 0.2s}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#1a2332;color:#fff;padding:1.5rem;border-radius:8px;margin-top:1.5rem;display:none}
+.result-box h3{color:#f5a623;margin-bottom:1rem;font-size:1.2rem}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.1)}
+.result-row:last-child{border-bottom:none}
+.result-value{font-weight:700;color:#f5a623;text-align:right}
+.details-box{background:#fff;border-radius:8px;padding:1.5rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+.details-box summary{font-weight:700;cursor:pointer;color:#1a2332}
+.details-box p{margin-top:1rem;color:#555}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
+.content-section h3{color:#1a2332;margin-top:1.5rem;margin-bottom:0.5rem;font-size:1.1rem}
+.content-section p{margin-bottom:1rem;color:#4a5568}
+.content-section ul{padding-left:20px;color:#4a5568;line-height:1.9}
+footer{background:#1a2332;color:#fff;padding:2rem;text-align:center;margin-top:4rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#fff;margin:0 0.75rem;text-decoration:none}
+footer nav a:hover{color:#f5a623}
+.citation{font-size:0.85rem;color:#a0aec0;max-width:600px;margin:0 auto}
+@media(max-width:600px){header{flex-direction:column;gap:0.5rem}nav a{margin:0 0.5rem}}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Calc<span>Blueprint</span></a>
+  <nav>
+    <a href="/how-it-works/">How It Works</a>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <div class="container">
+    <div class="calculator-box">
+      <h1>Stair Stringer Calculator</h1>
+      <p style="color:#777;font-size:.85rem;margin:.25rem 0 1.25rem">By Emiliano · Last updated 2026-11-13</p>
+
+      <div class="unit-toggle">
+        <button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+        <button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+      </div>
+
+      <div class="form-group">
+        <label id="lbl-total-rise" for="total-rise">Total Rise (floor to floor, in)</label>
+        <input type="number" id="total-rise" step="any" min="1" value="30" placeholder="e.g. 30">
+      </div>
+
+      <div class="form-group">
+        <label id="lbl-target-rise" for="target-rise">Target Rise per Step (in)</label>
+        <input type="number" id="target-rise" step="any" min="4" max="7.75" value="7">
+      </div>
+
+      <div class="form-group">
+        <label id="lbl-tread" for="tread-depth">Tread Depth (in)</label>
+        <input type="number" id="tread-depth" step="any" min="9" max="14" value="11">
+      </div>
+
+      <div class="form-group">
+        <label id="lbl-width" for="stair-width">Stair Width (in)</label>
+        <input type="number" id="stair-width" step="any" min="24" value="36">
+      </div>
+
+      <div class="form-group">
+        <label for="waste">Waste Factor (%)</label>
+        <input type="number" id="waste" step="any" min="0" value="10">
+      </div>
+
+      <button type="button" class="calc-btn" onclick="calculate()">Calculate Stringer</button>
+
+      <div class="result-box" id="result-box">
+        <h3>Stair Stringer Results</h3>
+        <div class="result-row"><span>Number of Risers:</span><span class="result-value" id="res-risers">0</span></div>
+        <div class="result-row"><span>Number of Treads:</span><span class="result-value" id="res-treads">0</span></div>
+        <div class="result-row"><span>Actual Rise per Step:</span><span class="result-value" id="res-actual-rise">0</span></div>
+        <div class="result-row"><span>Total Run:</span><span class="result-value" id="res-run">0</span></div>
+        <div class="result-row"><span>Stair Angle:</span><span class="result-value" id="res-angle">0</span></div>
+        <div class="result-row"><span>Stringer Length (per board):</span><span class="result-value" id="res-stringer">0</span></div>
+        <div class="result-row"><span>Number of Stringers:</span><span class="result-value" id="res-num-stringers">0</span></div>
+        <div class="result-row"><span>Board Type:</span><span class="result-value" id="res-board">0</span></div>
+        <div class="result-row"><span>Recommended Board Length:</span><span class="result-value" id="res-board-length">0</span></div>
+        <div class="result-row"><span>Total Stringer Lumber:</span><span class="result-value" id="res-total">0</span></div>
+      </div>
+    </div>
+
+    <details class="details-box">
+      <summary>How this calculator works</summary>
+      <p>The calculator determines stringer length from two geometric inputs: total rise (floor-to-floor height) and total run (number of treads × tread depth). Stringer length = √(rise² + run²) plus a standard 16-inch landing allowance (8 inches per end for the top and bottom notches). The number of risers is total rise ÷ target rise, rounded up to the nearest whole number; actual rise per step is then total rise ÷ number of risers so the top step and bottom step are equal. Board type is 2x10 for risers up to 7 inches, or 2x12 for risers up to 7.75 inches (the IRC maximum).</p>
+      <p><strong>Source:</strong> IRC R311.7 (Stairway rise, run, and stringer requirements) and AWC NDS for structural lumber sizing.</p>
+    </details>
+
+    <section class="content-section">
+      <h2>How to Calculate Stair Stringers</h2>
+      <p>Stair stringers are the angled support boards that carry every tread and riser in a staircase. Getting the stringer cut length right is the difference between a stair that fits its opening and one that needs to be rebuilt. The math comes from the Pythagorean theorem: stringer length = the square root of (total rise² + total run²). Total rise is the floor-to-floor height; total run is the horizontal distance from the bottom riser's face to the top riser's face.</p>
+      <p>To find the number of risers, divide the total rise by your target rise per step (typically 7 to 7.75 inches). Round up to the next whole number, then divide again to get the actual rise. For a 30-inch rise with a 7-inch target, you get 5 risers at 6 inches each — under the 7.75-inch code maximum. The number of treads is one fewer than the number of risers, because the top step is the landing itself.</p>
+      <p>Once you have total rise and total run, multiply the diagonal by 1.05 to 1.15 for landing notches and kerf, then round up to the next standard board length (6, 8, 10, 12, 14, 16 feet). For a typical deck stair with 30 inches of rise and 44 inches of run, the diagonal is about 53 inches; with landing allowance you need a 6-foot board.</p>
+      <p>If you are pouring concrete steps instead of building wood stairs, our <a href="/concrete-steps-calculator/">concrete steps calculator</a> handles volume and bag counts for the same rise/run dimensions. For pricing the lumber you'll use to build the stringers and treads, our <a href="/board-foot-calculator/">board foot calculator</a> converts dimensions into board feet and total cost.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>What Affects Stair Stringer Design</h2>
+      <p>Several factors change the stringer length and board choice beyond the basic geometry. First, the rise per step must be at or below 7.75 inches per the International Residential Code (IRC R311.7.5). A 2x10 stringer can handle risers up to 7 inches with enough wood remaining below the notch. A 2x12 is required for risers between 7 and 7.75 inches. Anything taller needs a mid-stair landing.</p>
+      <p>Stringer spacing also matters. Standard 16-inch on-center spacing keeps the treads from sagging. For 36-inch-wide stairs, that means 3 stringers. For 48-inch wide, 4 stringers. Narrow 24-inch stairs can use 2. For wider stairs above 72 inches, add one stringer per additional 14 inches of width. Three stringers is the standard minimum for any stair over 30 inches wide.</p>
+      <p>The stringer's actual cut length also depends on how it lands at the top and bottom. A stringer that sits on a concrete slab needs a small notch or plumb cut where it meets the slab. A stringer that attaches to a rim joist needs a longer horizontal tail that tucks behind the deck rim. Both add to the raw diagonal length; standard practice is to add 8 to 10 inches per end.</p>
+      <p>If your stairs are part of a deck build, our <a href="/deck-calculator/">deck calculator</a> estimates deck boards, joists, and post footings in the same pass. If you are building an exterior concrete staircase instead of wood, our <a href="/concrete-stairs-calculator/">concrete stairs calculator</a> handles the full volume, bag counts, and rebar length for the same rise and run.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>Frequently Asked Questions</h2>
+      <h3>How do I calculate stair stringer length?</h3>
+      <p>Stringer length is calculated using the Pythagorean theorem: square root of (total rise squared + total run squared). Add 8 to 10 inches per end for landing notches, then round up to the next standard lumber length (6, 8, 10, 12, 14, or 16 feet). A typical deck stair with 30 inches of rise and 44 inches of run needs a 6-foot 2x10 or 2x12 stringer.</p>
+      <h3>What size lumber should I use for stair stringers?</h3>
+      <p>Use 2x10 for risers up to 7 inches. Use 2x12 for risers between 7 and 7.75 inches (the IRC maximum). After cutting the tread and rise notches, the stringer should retain at least 3.5 inches of solid wood at the thinnest point.</p>
+      <h3>How many stringers do I need for a staircase?</h3>
+      <p>Standard stringers are spaced 16 inches on center. A 36-inch wide stair needs 3 stringers; 48-inch wide needs 4; 60-inch wide needs 5. Narrow stairs under 30 inches can use 2. Add one stringer per additional 14 inches of width beyond 72 inches.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>Related Calculators</h2>
+      <ul>
+        <li><a href="/deck-calculator/">Deck Calculator</a> — deck boards, joists, and post footings for deck stairs</li>
+        <li><a href="/concrete-steps-calculator/">Concrete Steps Calculator</a> — concrete volume for exterior step sets</li>
+        <li><a href="/concrete-stairs-calculator/">Concrete Stairs Calculator</a> — full staircases with landings and rebar</li>
+        <li><a href="/board-foot-calculator/">Board Foot Calculator</a> — lumber volume and cost for stringers and treads</li>
+        <li><a href="/roof-pitch-calculator/">Roof Pitch Calculator</a> — rise and run math for sloped roofs</li>
+      </ul>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/how-it-works/">How It Works</a>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+    <a href="/privacy/">Privacy</a>
+    <a href="/terms/">Terms</a>
+  </nav>
+  <div class="citation">Formula source: IRC R311.7 (Stairway rise, run, and stringer requirements) and AWC NDS for structural lumber sizing. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.</div>
+</footer>
+
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(unit) {
+  currentUnit = unit;
+  document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
+  document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+  if (unit === 'imperial') {
+    document.getElementById('lbl-total-rise').innerText = 'Total Rise (floor to floor, in)';
+    document.getElementById('lbl-target-rise').innerText = 'Target Rise per Step (in)';
+    document.getElementById('lbl-tread').innerText = 'Tread Depth (in)';
+    document.getElementById('lbl-width').innerText = 'Stair Width (in)';
+  } else {
+    document.getElementById('lbl-total-rise').innerText = 'Total Rise (floor to floor, cm)';
+    document.getElementById('lbl-target-rise').innerText = 'Target Rise per Step (cm)';
+    document.getElementById('lbl-tread').innerText = 'Tread Depth (cm)';
+    document.getElementById('lbl-width').innerText = 'Stair Width (cm)';
+  }
+}
+
+function calculate() {
+  const totalRise = parseFloat(document.getElementById('total-rise').value);
+  const targetRise = parseFloat(document.getElementById('target-rise').value);
+  const treadDepth = parseFloat(document.getElementById('tread-depth').value);
+  const stairWidth = parseFloat(document.getElementById('stair-width').value);
+  const waste = parseFloat(document.getElementById('waste').value) || 10;
+
+  if ([totalRise, targetRise, treadDepth, stairWidth].some(v => isNaN(v) || v <= 0)) {
+    alert('Please enter valid positive numbers for all fields.');
+    return;
+  }
+
+  // Convert to inches for formula
+  const factor = currentUnit === 'metric' ? 1 / 2.54 : 1;
+  const riseIn = totalRise * factor;
+  const targetIn = targetRise * factor;
+  const treadIn = treadDepth * factor;
+  const widthIn = stairWidth * factor;
+
+  // Steps
+  const numRisers = Math.ceil(riseIn / targetIn);
+  const actualRise = riseIn / numRisers;
+  const numTreads = numRisers - 1;
+  const totalRun = numTreads * treadIn;
+
+  // Geometry
+  const angleRad = Math.atan2(riseIn, totalRun);
+  const angleDeg = angleRad * 180 / Math.PI;
+  const diagonal = Math.sqrt(riseIn * riseIn + totalRun * totalRun);
+  const stringerLength = (diagonal + 16) * (1 + waste / 100);
+
+  // Number of stringers
+  let numStringers;
+  if (widthIn < 30) numStringers = 2;
+  else if (widthIn <= 42) numStringers = 3;
+  else if (widthIn <= 56) numStringers = 4;
+  else if (widthIn <= 72) numStringers = 5;
+  else numStringers = Math.ceil(widthIn / 14) + 1;
+
+  // Board type
+  let boardType;
+  if (actualRise <= 7) boardType = '2x10';
+  else if (actualRise <= 7.75) boardType = '2x12';
+  else boardType = 'Needs landing (rise > 7.75")';
+
+  // Board length recommendation
+  const feetNeeded = stringerLength / 12;
+  const standards = [6, 8, 10, 12, 14, 16, 18, 20, 24];
+  let boardLength = null;
+  for (const s of standards) {
+    if (feetNeeded <= s) { boardLength = s; break; }
+  }
+  if (!boardLength) boardLength = Math.ceil(feetNeeded / 2) * 2;
+
+  const totalLF = boardLength * numStringers * (1 + waste / 100);
+
+  // Display
+  const fmt = (inches) => formatLength(inches);
+  document.getElementById('res-risers').innerText = numRisers;
+  document.getElementById('res-treads').innerText = numTreads;
+  document.getElementById('res-actual-rise').innerText = fmt(actualRise) + ' (target: ' + fmt(targetIn) + ')';
+  document.getElementById('res-run').innerText = fmt(totalRun);
+  document.getElementById('res-angle').innerText = angleDeg.toFixed(1) + '°';
+  document.getElementById('res-stringer').innerText = fmt(stringerLength);
+  document.getElementById('res-num-stringers').innerText = numStringers + ' boards';
+  document.getElementById('res-board').innerText = boardType;
+  document.getElementById('res-board-length').innerText = boardLength + "' (" + (boardLength * 0.3048).toFixed(2) + ' m)';
+  document.getElementById('res-total').innerText = currentUnit === 'metric'
+    ? (totalLF * 0.3048).toFixed(1) + ' m'
+    : totalLF.toFixed(1) + ' ft';
+
+  document.getElementById('result-box').style.display = 'block';
+}
+
+function formatLength(inches) {
+  if (currentUnit === 'metric') {
+    return (inches * 2.54).toFixed(1) + ' cm';
+  }
+  if (inches < 12) return inches.toFixed(1) + '"';
+  const ft = Math.floor(inches / 12);
+  const rem = inches - ft * 12;
+  return ft + "' " + rem.toFixed(1) + '"';
+}
+</script>
+</body>
+</html>
