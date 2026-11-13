@@ -4,18 +4,21 @@ CalcBlueprint SEO Patcher
 Auto-fixes safe, reversible SEO issues across all HTML pages.
 
 Fixes performed:
-    og       — Insert og:* and twitter:* meta tags (derived from title/description)
-    favicon  — Insert <link rel="icon">
-    h1       — Insert missing <h1> (derived from <title> or canonical URL)
-    nav      — Normalize nav links: #anchors → URLs, .html → clean URLs, no-slash → slash
-    jsonld   — Insert WebApplication JSON-LD schema (calculator pages only)
-    date     — Insert "Last updated" line after H1 on calculator pages
-    ga4      — Insert GA4 snippet if missing
+    og          — Insert og:* and twitter:* meta tags (derived from title/description)
+    favicon     — Insert <link rel="icon">
+    h1          — Insert missing <h1> (derived from <title> or canonical URL)
+    nav         — Normalize nav links: #anchors → URLs, .html → clean URLs, no-slash → slash
+    jsonld      — Insert WebApplication JSON-LD schema (calculator pages only)
+    date        — Insert "Last updated" line after H1 on calculator pages
+    ga4         — Insert GA4 snippet if missing
+    faq         — Generate FAQPage JSON-LD from visible FAQ if missing
+    unclosed_p  — Close unclosed <p> tags (invalid HTML, breaks FAQ schema)
 
 Does NOT fix (requires human decision):
     - Missing or too-short title/description
     - Broken internal links (except known nav patterns)
-    - Missing footer citation (editorial per-page standard)
+    - FAQ schema that exists but mismatches visible FAQ (flagged by linter)
+    - Orphan pages (< 3 inbound links; flagged by linter)
 
 Usage:
     python scripts/seo_patch.py                       # dry-run, all fixes
@@ -30,6 +33,8 @@ Exit codes:
 """
 
 import argparse
+import html as html_module
+import json
 import re
 import sys
 from pathlib import Path
@@ -37,7 +42,7 @@ from pathlib import Path
 SITE_DOMAIN = "https://calcblueprint.com"
 DEFAULT_OG_IMAGE = f"{SITE_DOMAIN}/og-image.png"
 SITE_AUTHOR = "Emiliano"
-SITE_LAST_UPDATED = "2026-11-12"
+SITE_LAST_UPDATED = "2026-11-13"
 GA4_MEASUREMENT_ID = "G-DHN9J7B497"
 
 IGNORE_DIRS = {
@@ -90,9 +95,14 @@ NON_CALCULATOR_URLS = {
 }
 
 # Pages that should NOT get a WebApplication JSON-LD block
-# (they are legal/info pages — WebApplication schema is semantically wrong here.
-#  Homepage "/" is intentionally excluded from this set — the site itself IS a web app.)
 NO_JSONLD_URLS = {"/about/", "/contact/", "/privacy/", "/terms/", "/how-it-works/"}
+
+# Block-level tags that cannot legally appear inside a <p>
+BLOCK_TAGS = (
+    r'p|h[1-6]|div|section|article|header|footer|main|aside|nav|'
+    r'ul|ol|li|table|thead|tbody|tr|td|th|details|summary|'
+    r'form|fieldset|blockquote|pre|hr'
+)
 
 
 def find_html_files(site_root: Path):
@@ -122,6 +132,13 @@ def page_name_from_url(url: str) -> str:
         return "CalcBlueprint"
     slug = url.strip("/").split("/")[-1]
     return " ".join(w.capitalize() for w in slug.replace("-", " ").split())
+
+
+def strip_html(text: str) -> str:
+    """Strip HTML tags and decode entities, then collapse whitespace."""
+    text = re.sub(r'<[^>]+>', '', text)
+    text = html_module.unescape(text)
+    return re.sub(r'\s+', ' ', text).strip()
 
 
 # ---------- Fix functions ----------
@@ -201,7 +218,6 @@ def fix_nav(html: str, url: str) -> tuple:
     new_html = html
     changed = False
 
-    # 1. #anchor → real URL
     for anchor, real_url in ANCHOR_MAP.items():
         if f'href="{anchor}"' in new_html:
             new_html = new_html.replace(f'href="{anchor}"', f'href="{real_url}"')
@@ -210,13 +226,11 @@ def fix_nav(html: str, url: str) -> tuple:
             new_html = new_html.replace(f"href='{anchor}'", f"href='{real_url}'")
             changed = True
 
-    # 2. .html extension → clean URL
     for old, new in HTML_EXT_MAP.items():
         if old in new_html:
             new_html = new_html.replace(old, new)
             changed = True
 
-    # 3. missing trailing slash → trailing slash
     for old, new in NO_SLASH_MAP.items():
         if old in new_html:
             new_html = new_html.replace(old, new)
@@ -226,7 +240,6 @@ def fix_nav(html: str, url: str) -> tuple:
 
 
 def fix_jsonld(html: str, url: str) -> tuple:
-    # Skip legal/info pages — WebApplication schema is wrong there.
     if url in NO_JSONLD_URLS:
         return html, False, "skipped (non-calculator URL)"
 
@@ -253,21 +266,16 @@ def fix_jsonld(html: str, url: str) -> tuple:
 
 def fix_date(html: str, url: str) -> tuple:
     """Insert 'By Emiliano · Last updated YYYY-MM-DD' after H1 on calculator pages."""
-    # Skip if already present (matches any "Last updated YYYY-MM-DD")
     if re.search(r"Last updated\s+\d{4}-\d{2}-\d{2}", html):
         return html, False, "date present"
 
-    # Skip non-calculator pages
     if url in NON_CALCULATOR_URLS or "calculator" not in url:
         return html, False, "not a calculator page"
 
-    # Need an H1 to anchor the insertion point
     h1_match = re.search(r"<h1[^>]*>.*?</h1>", html, re.DOTALL | re.IGNORECASE)
     if not h1_match:
         return html, False, "no h1 to anchor date"
 
-    # Safety: if a "Last Updated" (any casing) or "By Emiliano" already appears
-    # shortly after the H1, don't duplicate
     after_h1 = html[h1_match.end():h1_match.end() + 250].lower()
     if "last updated" in after_h1 or "by emiliano" in after_h1:
         return html, False, "date-like text already present"
@@ -282,8 +290,6 @@ def fix_date(html: str, url: str) -> tuple:
 
 def fix_ga4(html: str, url: str) -> tuple:
     """Insert GA4 snippet if it is missing."""
-    # The measurement ID appears in both the script src and the config call.
-    # If it's anywhere in the file, GA4 is already wired up.
     if GA4_MEASUREMENT_ID in html:
         return html, False, "GA4 present"
 
@@ -300,7 +306,132 @@ def fix_ga4(html: str, url: str) -> tuple:
     return html, False, "GA4 could not be inserted (no </head>)"
 
 
-# Registry — insertion order matters (h1 must run before date; og before jsonld)
+def fix_faq_schema(html: str, url: str) -> tuple:
+    """Generate FAQPage JSON-LD from visible FAQ if missing."""
+    # Find visible FAQ section
+    m = re.search(
+        r'<h2[^>]*>\s*Frequently\s+Asked\s+Questions\s*</h2>(.*?)(?=<section|<footer|</main>)',
+        html, re.DOTALL | re.IGNORECASE
+    )
+    if not m:
+        return html, False, "no visible FAQ"
+
+    # Skip if FAQPage schema already exists (mismatches are flagged by the linter)
+    for sm in re.finditer(
+        r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
+        html, re.DOTALL
+    ):
+        try:
+            data = json.loads(sm.group(1))
+            if isinstance(data, dict) and data.get("@type") == "FAQPage":
+                return html, False, "FAQPage schema present"
+        except json.JSONDecodeError:
+            continue
+
+    faq_html = m.group(1)
+    main_entity = []
+
+    # Pattern 1: <h3>Question</h3> followed by <p>Answer</p>
+    q_blocks = re.split(r'<h3[^>]*>', faq_html, flags=re.IGNORECASE)[1:]
+    for block in q_blocks:
+        parts = re.split(r'</h3>', block, maxsplit=1)
+        if len(parts) != 2:
+            continue
+        question = strip_html(parts[0]).strip()
+        paragraphs = re.findall(r'<p[^>]*>(.*?)</p>', parts[1], re.DOTALL | re.IGNORECASE)
+        answer = ' '.join(strip_html(p).strip() for p in paragraphs if strip_html(p).strip())
+        if question and answer:
+            main_entity.append({
+                "@type": "Question",
+                "name": question,
+                "acceptedAnswer": {"@type": "Answer", "text": answer}
+            })
+
+    # Pattern 2 (fallback): <div class="faq-question">...</div> + <div class="faq-answer">...</div>
+    if not main_entity:
+        pairs = re.findall(
+            r'<div[^>]*class=["\'][^"\']*faq-question[^"\']*["\'][^>]*>(.*?)</div>'
+            r'\s*<div[^>]*class=["\'][^"\']*faq-answer[^"\']*["\'][^>]*>(.*?)</div>',
+            faq_html, re.DOTALL | re.IGNORECASE
+        )
+        for q, a in pairs:
+            question = strip_html(q).strip()
+            answer = strip_html(a).strip()
+            if question and answer:
+                main_entity.append({
+                    "@type": "Question",
+                    "name": question,
+                    "acceptedAnswer": {"@type": "Answer", "text": answer}
+                })
+
+    if not main_entity:
+        return html, False, "no Q&A pairs parsed from visible FAQ"
+
+    schema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": main_entity
+    }
+    block = f'\n<script type="application/ld+json">\n{json.dumps(schema, indent=2, ensure_ascii=False)}\n</script>'
+
+    if "</head>" in html:
+        new_html = html.replace("</head>", block + "\n</head>", 1)
+        return new_html, True, f"FAQPage schema generated ({len(main_entity)} questions)"
+    return html, False, "no </head>"
+
+
+def fix_unclosed_p(html: str, url: str) -> tuple:
+    """Close unclosed <p> tags by inserting </p> before the next block element."""
+    # Quick check — no fix if already balanced
+    opens = len(re.findall(r'<p[\s>]', html, re.IGNORECASE))
+    closes = len(re.findall(r'</p>', html, re.IGNORECASE))
+    if opens <= closes:
+        return html, False, "no unclosed <p> found"
+
+    # Mask scripts/styles/comments so we don't touch them
+    masked_items = []
+    def mask_replacer(m):
+        masked_items.append(m.group(0))
+        return f'\x00MASK{len(masked_items) - 1}\x00'
+
+    work = re.sub(r'<script\b[^>]*>.*?</script>', mask_replacer, html, flags=re.DOTALL | re.IGNORECASE)
+    work = re.sub(r'<style\b[^>]*>.*?</style>', mask_replacer, work, flags=re.DOTALL | re.IGNORECASE)
+    work = re.sub(r'<!--.*?-->', mask_replacer, work, flags=re.DOTALL)
+
+    # Pattern: <p> followed by content with no </p> and no block tag, then a block tag
+    pattern = re.compile(
+        r'<p\b[^>]*>((?:(?!</p>)(?!<' + BLOCK_TAGS + r'\b).)*?)(?=<' + BLOCK_TAGS + r'\b)',
+        re.DOTALL | re.IGNORECASE
+    )
+
+    fixes_applied = 0
+    for _ in range(100):  # safety limit
+        m = pattern.search(work)
+        if not m:
+            break
+        end = m.end(1)
+        work = work[:end] + '</p>' + work[end:]
+        fixes_applied += 1
+
+    # Unmask
+    def unmask_replacer(m):
+        return masked_items[int(m.group(1))]
+
+    result = re.sub(r'\x00MASK(\d+)\x00', unmask_replacer, work)
+
+    if fixes_applied == 0:
+        return html, False, "no unclosed <p> found (may be at end of file)"
+
+    # Post-check
+    opens_after = len(re.findall(r'<p[\s>]', result, re.IGNORECASE))
+    closes_after = len(re.findall(r'</p>', result, re.IGNORECASE))
+    remaining = opens_after - closes_after
+    if remaining > 0:
+        return result, True, f"closed {fixes_applied} unclosed <p> tag(s); {remaining} still unclosed"
+    return result, True, f"closed {fixes_applied} unclosed <p> tag(s)"
+
+
+# Registry — insertion order matters (h1 before date; unclosed_p before faq)
 FIX_REGISTRY = {
     "og": fix_og,
     "favicon": fix_favicon,
@@ -309,6 +440,8 @@ FIX_REGISTRY = {
     "jsonld": fix_jsonld,
     "date": fix_date,
     "ga4": fix_ga4,
+    "unclosed_p": fix_unclosed_p,   # run before faq (fixes HTML first)
+    "faq": fix_faq_schema,
 }
 
 
@@ -320,7 +453,7 @@ def main():
     ap.add_argument(
         "--fix",
         default="all",
-        help="Comma-separated fixes: og,favicon,h1,nav,jsonld,date,ga4,all",
+        help="Comma-separated fixes: og,favicon,h1,nav,jsonld,date,ga4,unclosed_p,faq,all",
     )
     ap.add_argument("--write", action="store_true", help="Apply changes (default: dry-run)")
     args = ap.parse_args()
