@@ -78,6 +78,9 @@ jobs:
       - name: Rewrite descriptions
         run: python scripts/seo_descriptions.py --site-root . --write
 
+      - name: Regenerate llms.txt
+        run: python scripts/seo_llmstxt.py --site-root . --write
+
       - name: Re-lint after patch
         run: python scripts/seo_lint.py --site-root .
 
