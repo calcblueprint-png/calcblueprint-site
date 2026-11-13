@@ -49,10 +49,12 @@ SECTION_TITLES = {
     "gravel": "Paving & Landscaping",
     "hvac": "HVAC",
     "electrical": "Electrical",
+    "conversions": "Conversions & Reference",
 }
 
 # Priority order for sections — most-searched categories first
 SECTION_ORDER = [
+    "conversions",  # ← add at the top
     "concrete", "masonry", "roofing", "stairs", "deck", "tile", "flooring",
     "drywall", "paint", "insulation", "siding", "fencing", "landscaping",
     "gravel", "hvac", "electrical",
