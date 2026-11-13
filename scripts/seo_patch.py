@@ -14,6 +14,7 @@ Fixes performed:
     faq         — Generate FAQPage JSON-LD from visible FAQ if missing
     unclosed_p  — Close unclosed <p> tags (invalid HTML, breaks FAQ schema)
     related     — Insert Related Calculators section with category siblings
+    future_dates — Replace future year (2027+) with 2026 in dates, ©, and JSON-LD
 
 Does NOT fix (requires human decision):
     - Missing or too-short title/description
@@ -45,6 +46,8 @@ DEFAULT_OG_IMAGE = f"{SITE_DOMAIN}/og-image.png"
 SITE_AUTHOR = "Emiliano"
 SITE_LAST_UPDATED = "2026-11-13"
 GA4_MEASUREMENT_ID = "G-DHN9J7B497"
+# Current year — used by fix_future_dates to normalize 2027+ references
+CURRENT_YEAR = "2026"
 
 IGNORE_DIRS = {
     ".git", ".github", "node_modules", "scripts", "assets", "img",
@@ -509,7 +512,7 @@ def fix_unclosed_p(html: str, url: str) -> tuple:
 
 
 def fix_related(html: str, url: str) -> tuple:
-    """Insert a Related Calculators section with category  if missing."""
+    """Insert a Related Calculators section with category siblings if missing."""
     if url in NON_CALCULATOR_URLS or "calculator" not in url:
         return html, False, "not a calculator page"
 
@@ -560,7 +563,47 @@ def fix_related(html: str, url: str) -> tuple:
     return new_html, True, f"Related section added ({len(siblings)} links from {category})"
 
 
-# Registry — insertion order matters (h1 before date; unclosed_p before faq)
+def fix_future_dates(html: str, url: str) -> tuple:
+    """Replace any year 2027+ with 2026 in Last updated, copyright, and JSON-LD dates."""
+    original = html
+
+    # Matches year 2027 through 2099
+    FUTURE_YEAR = r'20(?:2[7-9]|[3-9]\d)'
+
+    # 1. "Last updated YYYY-MM-DD" — swap only the year
+    html = re.sub(
+        rf'(Last updated\s+){FUTURE_YEAR}',
+        rf'\g<1>{CURRENT_YEAR}',
+        html,
+    )
+
+    # 2. Copyright "© YYYY" or "&copy; YYYY" — swap only the year
+    html = re.sub(
+        rf'((?:©|&copy;)\s*){FUTURE_YEAR}',
+        rf'\g<1>{CURRENT_YEAR}',
+        html,
+    )
+
+    # 3. JSON-LD datePublished / dateModified — swap only the year
+    html = re.sub(
+        rf'("(?:datePublished|dateModified)"\s*:\s*"){FUTURE_YEAR}',
+        rf'\g<1>{CURRENT_YEAR}',
+        html,
+    )
+
+    # 4. OpenGraph article:published_time / modified_time — swap only the year
+    html = re.sub(
+        rf'(<meta\s+property=["\']article:(?:published|modified)_time["\']\s+content=["\']){FUTURE_YEAR}',
+        rf'\g<1>{CURRENT_YEAR}',
+        html,
+    )
+
+    if html != original:
+        return html, True, "year 2027+ normalized to 2026"
+    return html, False, "no future years"
+
+
+# Registry — insertion order matters (h1 before date; unclosed_p before faq; future_dates last)
 FIX_REGISTRY = {
     "og": fix_og,
     "favicon": fix_favicon,
@@ -572,6 +615,7 @@ FIX_REGISTRY = {
     "unclosed_p": fix_unclosed_p,
     "faq": fix_faq_schema,
     "related": fix_related,
+    "future_dates": fix_future_dates,
 }
 
 
@@ -583,7 +627,7 @@ def main():
     ap.add_argument(
         "--fix",
         default="all",
-        help="Comma-separated fixes: og,favicon,h1,nav,jsonld,date,ga4,unclosed_p,faq,related,all",
+        help="Comma-separated fixes: og,favicon,h1,nav,jsonld,date,ga4,unclosed_p,faq,related,future_dates,all",
     )
     ap.add_argument("--write", action="store_true", help="Apply changes (default: dry-run)")
     args = ap.parse_args()
