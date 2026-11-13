@@ -280,6 +280,17 @@
             font-size: 1rem;
         }
 
+        .content-section ul {
+            padding-left: 20px;
+            line-height: 1.9;
+            color: #444;
+        }
+
+        .content-section ul li a {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
         .faq-item {
             margin-bottom: 1.5rem;
         }
@@ -358,7 +369,7 @@
     <div class="container">
         <h1>Board Foot Calculator</h1>
 
-        <p style="color:#777;font-size:.85rem;margin:.5rem 0 1.25rem">By Emiliano · Last updated 2026-09-27</p>
+        <p style="color:#777;font-size:.85rem;margin:.5rem 0 1.25rem">By Emiliano · Last updated 2026-11-13</p>
         <p class="tagline">Quickly estimate lumber volume and cost for your construction and woodworking projects.</p>
 
         <div class="calculator-box">
@@ -420,13 +431,15 @@
         <div class="content-section">
             <h2>How to Calculate Board Feet</h2>
             <p>A board foot is a specialized unit of volume used in the United States and Canada for measuring rough lumber. One board foot represents the volume of a board that is 12 inches wide, 12 inches long, and 1 inch thick, which equals 144 cubic inches. To calculate the board footage of any piece of wood, you use the standard formula: <strong>Board Feet = (Thickness in inches × Width in inches × Length in feet) / 12</strong>.</p>
-            <p>When dealing with rough-sawn lumber, particularly hardwoods, thickness is often expressed in quarters of an inch. For example, a 1-inch thick board is referred to as "four-quarter" (4/4), while a 2-inch thick board is "eight-quarter" (8/4). It is important to note that softwood lumber is typically sold by nominal dimensions (the size before planing, such as a 2x4), whereas hardwood lumber is often measured by its actual rough dimensions before surfacing. Always clarify with your supplier whether they are billing based on nominal or actual dimensions.</p>
+            <p>When dealing with rough-sawn lumber, particularly hardwoods, thickness is often expressed in quarters of an inch. For example, a 1-inch thick board is referred to as "four-quarter" (4/4), while a 2-inch thick board is referred to as "eight-quarter" (8/4). It is important to note that softwood lumber is typically sold by nominal dimensions (the size before planing, such as a 2x4), whereas hardwood lumber is often measured by its actual rough dimensions before surfacing. Always clarify with your supplier whether they are billing based on nominal or actual dimensions.</p>
+            <p>If you are using this calculation to price lumber for a deck build, pair it with our <a href="/deck-calculator/">deck calculator</a> which estimates board counts, joists, and post footings. For interior wood flooring, our <a href="/hardwood-flooring-calculator/">hardwood flooring calculator</a> handles square footage, planks, and waste for finished installs.</p>
         </div>
 
         <div class="content-section">
             <h2>What Affects Lumber Yield and Cost</h2>
             <p>Several critical factors influence the final yield and cost of lumber in construction and woodworking projects. First and foremost is the lumber grade. Hardwoods graded by the National Hardwood Lumber Association (NHLA) range from FAS (First and Seconds), which offers the highest yield of clear cuttings, down to Common grades that contain more knots and defects. Choosing a lower grade may reduce the initial price per board foot but will significantly increase your waste factor.</p>
             <p>Milling and drying also play a massive role in pricing. Kiln-dried lumber is more stable but carries a premium over green or air-dried lumber due to the energy costs of running dry kilns. When planning a purchase, always factor in a waste allowance. For standard projects using high-grade lumber, a 10% to 15% waste factor is typical. However, if you are working with lower-grade wood or require highly specific grain matching, you should increase your waste estimate to 20% or even 30% to avoid running short mid-project.</p>
+            <p>Board footage also feeds into other framing calculators. If your deck or fence project needs post footings sized, our <a href="/concrete-footing-calculator/">concrete footing calculator</a> converts post count and hole dimensions into cubic yards. For a complete fence material takeoff including pickets and rails, use the <a href="/fence-calculator/">fence calculator</a>.</p>
         </div>
 
         <div class="content-section">
@@ -444,14 +457,27 @@
                 <div class="faq-answer">Lumber yards often charge extra fees for surfacing (planing the wood flat) or straight-line ripping (creating a perfectly straight edge). Additionally, taxes, delivery fees, and minimum order requirements can increase the final invoice beyond the base price per board foot.</div>
             </div>
         </div>
+
+        <div class="content-section">
+            <h2>Related Calculators</h2>
+            <ul>
+                <li><a href="/deck-calculator/">Deck Calculator</a> — board counts, joists, and post footings for deck framing</li>
+                <li><a href="/hardwood-flooring-calculator/">Hardwood Flooring Calculator</a> — square footage and planks for interior wood floors</li>
+                <li><a href="/laminate-flooring-calculator/">Laminate Flooring Calculator</a> — planks and cartons for laminate installs</li>
+                <li><a href="/fence-calculator/">Fence Calculator</a> — pickets, rails, and posts by linear footage</li>
+                <li><a href="/concrete-footing-calculator/">Concrete Footing Calculator</a> — concrete for deck and fence post footings</li>
+            </ul>
+        </div>
     </div>
 
     <footer>
         <div class="footer-nav">
             <a href="/">Home</a>
+            <a href="/how-it-works/">How It Works</a>
             <a href="/about/">About</a>
             <a href="/contact/">Contact</a>
             <a href="/privacy/">Privacy</a>
+            <a href="/terms/">Terms</a>
         </div>
         <p class="citation">Formula source: AWC (American Wood Council) NDS and SPIB grading rules. Results are estimates for planning — verify with a licensed professional before ordering materials. &copy; 2026 CalcBlueprint.</p>
     </footer>
@@ -462,11 +488,9 @@
         function setUnit(unit) {
             currentUnit = unit;
             
-            // Update active state of buttons
             document.getElementById('btn-imperial').classList.toggle('active', unit === 'imperial');
             document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
 
-            // Update input labels
             if (unit === 'imperial') {
                 document.getElementById('lbl-thickness').innerText = 'Thickness (inches)';
                 document.getElementById('lbl-width').innerText = 'Width (inches)';
@@ -487,7 +511,6 @@
                 document.getElementById('price').placeholder = 'e.g., 1900.00 (optional)';
             }
 
-            // Recalculate if there are already values filled
             const thickness = document.getElementById('thickness').value;
             const width = document.getElementById('width').value;
             const length = document.getElementById('length').value;
@@ -515,18 +538,12 @@
             let totalCost = 0;
 
             if (currentUnit === 'imperial') {
-                // Imperial formula: BF = (T_in * W_in * L_ft) / 12
                 const bfPerPiece = (thickness * width * length) / 12;
                 totalBF = bfPerPiece * quantity;
                 totalCost = totalBF * price;
 
                 document.getElementById('row-vol').style.display = 'none';
             } else {
-                // Metric formula
-                // Convert inputs to Imperial for BF calculation:
-                // 1 inch = 2.54 cm -> thickness_in = thickness_cm / 2.54
-                // 1 inch = 2.54 cm -> width_in = width_cm / 2.54
-                // 1 foot = 0.3048 m -> length_ft = length_m / 0.3048
                 const thicknessIn = thickness / 2.54;
                 const widthIn = width / 2.54;
                 const lengthFt = length / 0.3048;
@@ -534,8 +551,6 @@
                 const bfPerPiece = (thicknessIn * widthIn * lengthFt) / 12;
                 totalBF = bfPerPiece * quantity;
 
-                // Calculate actual volume in cubic meters
-                // Volume (m3) = (T_cm/100) * (W_cm/100) * L_m * Qty
                 totalVolumeM3 = (thickness / 100) * (width / 100) * length * quantity;
                 totalCost = totalVolumeM3 * price;
 
@@ -543,7 +558,6 @@
                 document.getElementById('val-vol').innerText = totalVolumeM3.toFixed(4) + ' m³';
             }
 
-            // Update display
             document.getElementById('val-bf').innerText = totalBF.toFixed(2) + ' BF';
             
             if (price > 0) {
