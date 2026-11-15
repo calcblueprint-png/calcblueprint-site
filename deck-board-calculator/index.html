@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/deck-board-calculator/">
+<title>Deck Board Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate deck boards needed for your deck surface. Includes gap allowance and waste factor.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f6f9;color:#2c3e50;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{color:#ffffff;font-size:1.5rem;font-weight:700;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#ffffff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2.5rem 1rem;max-width:800px;margin:0 auto}
+.container{width:100%}
+h1{font-size:2rem;margin-bottom:0.5rem;color:#1a2332}
+.subtitle{color:#6c757d;margin-bottom:2rem;font-size:1.05rem}
+.calculator-box{background:#ffffff;border-radius:8px;padding:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);margin-bottom:2rem}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem;background:#f4f6f9;padding:0.25rem;border-radius:6px}
+.unit-btn{flex:1;padding:0.5rem;border:none;background:transparent;cursor:pointer;font-weight:600;border-radius:4px;color:#495057;transition:all 0.2s}
+.unit-btn.active{background:#f5a623;color:#1a2332}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;font-size:0.95rem;color:#2c3e50}
+.form-group input{width:100%;padding:0.75rem;border:1px solid #ced4da;border-radius:4px;font-size:1rem}
+.form-group input:focus{outline:none;border-color:#f5a623;box-shadow:0 0 0 3px rgba(245,166,35,0.15)}
+.calc-btn{width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;font-size:1rem;font-weight:700;border-radius:4px;cursor:pointer;transition:background 0.2s}
+.calc-btn:hover{background:#e0951a}
+.result-box{background:#1a2332;color:#ffffff;border-radius:8px;padding:2rem;margin-top:2rem;display:none}
+.result-box h3{color:#f5a623;margin-bottom:1rem;font-size:1.25rem}
+.result-row{display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid rgba(255,255,255,0.1)}
+.result-row:last-child{border-bottom:none}
+.formula-details{background:#ffffff;border-radius:8px;padding:1.5rem;margin-bottom:2rem;box-shadow:0 2px 4px rgba(0,0,0,0.03);border:1px solid #e9ecef}
+.formula-details summary{font-weight:600;cursor:pointer;color:#1a2332}
+.formula-details p{margin-top:0.75rem;font-size:0.95rem;color:#495057}
+.formula-details .source{margin-top:0.5rem;font-size:0.85rem;color:#6c757d;font-style:italic}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 2px 4px rgba(0,0,0,0.03)}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
+.content-section p{margin-bottom:1rem;color:#495057}
+.content-section h3{color:#1a2332;margin-top:1.5rem;margin-bottom:0.5rem;font-size:1.15rem}
+footer{background:#1a2332;color:#ffffff;text-align:center;padding:2rem;margin-top:3rem;font-size:0.9rem}
+footer nav{margin-bottom:1rem}
+footer nav a{color:#ffffff;margin:0 1rem;text-decoration:none}
+footer nav a:hover{color:#f5a623}
+.citation{color:#a0aec0;font-size:0.8rem;max-width:600px;margin:0 auto;line-height:1.4}
+@media(max-width:600px){header{padding:1rem}main{padding:1rem}}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Deck Board Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+</head>
+<body>
+<header>
+<a href="/" class="logo">Calc<span>Blueprint</span></a>
+<nav>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+</nav>
+</header>
+<main>
+<div class="container">
+<h1>Deck Board Calculator</h1>
+<p class="subtitle">Calculate deck boards needed for your deck surface. Includes gap allowance and waste factor.</p>
+
+<div class="calculator-box">
+<div class="unit-toggle">
+<button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial (US)</button>
+<button type="button" class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+</div>
+
+<div class="form-group">
+<label id="lbl-length" for="deck-length">Deck Length (feet)</label>
+<input type="number" id="deck-length" step="0.1" min="0" value="16">
+</div>
+
+<div class="form-group">
+<label id="lbl-width" for="deck-width">Deck Width (feet)</label>
+<input type="number" id="deck-width" step="0.1" min="0" value="12">
+</div>
+
+<div class="form-group">
+<label id="lbl-board-width" for="board-width">Board Width (inches)</label>
+<input type="number" id="board-width" step="0.1" min="0" value="5.5">
+</div>
+
+<div class="form-group">
+<label id="lbl-board-length" for="board-length">Board Length (feet)</label>
+<input type="number" id="board-length" step="0.1" min="0" value="12">
+</div>
+
+<div class="form-group">
+<label id="lbl-gap" for="gap">Gap Between Boards (inches)</label>
+<input type="number" id="gap" step="0.05" min="0" value="0.25">
+</div>
+
+<button type="button" class="calc-btn" onclick="calculate()">Calculate Boards</button>
+
+<div class="result-box" id="result-box">
+<h3>Calculation Results</h3>
+<div class="result-row">
+<span>Exact Boards Needed:</span>
+<strong id="res-exact">0</strong>
+</div>
+<div class="result-row">
+<span>Boards with 10% Waste:</span>
+<strong id="res-waste">0</strong>
+</div>
+<div class="result-row">
+<span>Total Linear Length:</span>
+<strong id="res-linear">0</strong>
+</div>
+</div>
+</div>
+
+<details class="formula-details">
+<summary>How this calculator works</summary>
+<p>The calculation divides the deck dimensions by the board coverage dimensions, factoring in the required spacing gaps between individual planks. It then multiplies the rows and runs together and adds a standard 10% waste factor to account for end-cuts, splitting, and minor imperfections during installation.</p>
+<p class="source">Formula source: IRC (International Residential Code) and AWPA standards</p>
+</details>
+
+<section class="content-section">
+<h2>How to Calculate Deck Boards</h2>
+<p>Determining the correct number of deck boards requires careful measurement of your framing layout and accounting for material sizing and spacing tolerances. First, measure the overall dimensions of the surface area you intend to cover. Standard residential deck planning relies on calculating the total run length perpendicular to the direction of the boards, factoring in the physical width of each board combined with the recommended spacing gap to ensure proper water drainage and thermal expansion.</p>
+<p>Next, determine how many rows of boards are needed by dividing your total span by the individual board coverage width. You must also evaluate the board lengths available against your deck dimensions to minimize butt joints and scrap waste. Finally, apply a standard 10 percent material surplus buffer. This accounts for end trimming, knot defects in natural wood, or cutting errors during installation, ensuring you do not run short mid-project.</p>
+</section>
+
+<section class="content-section">
+<h2>What Affects Deck Board Quantities</h2>
+<p>Several variables impact the final count and linear footage of decking materials required for a project. The layout pattern is a primary factor; traditional perpendicular decking requires a straightforward grid calculation, whereas diagonal patterns or complex herringbone designs dramatically increase cutting waste and total material requirements, often requiring a 15 to 20 percent waste allowance instead of the standard 10 percent.</p>
+<p>Board dimensions also play a significant role. Choosing nominal 5.5-inch decking versus narrower 3.5-inch boards changes the total number of rows and spacing gaps across the exact same surface area. Additionally, the spacing gap size—dictated by wood moisture content, species expansion characteristics, or manufacturer specifications for composite materials—directly affects overall coverage. Environmental factors, local building codes regarding fastener patterns, and the presence of features like integrated benches, stairs, or complex multi-tier framing profiles will similarly influence your final material order.</p>
+</section>
+
+<section class="content-section">
+<h2>Frequently Asked Questions</h2>
+<h3>Why do I need to add a waste factor to my deck board calculation?</h3>
+<p>A waste factor accounts for end trimming to square off factory edges, saw kerf loss, and unusable pieces resulting from knots, splits, or measurement errors. Adding 10 percent is the industry standard for straightforward deck designs, while intricate patterns require higher percentages.</p>
+<h3>How does the gap between deck boards affect the total number of boards?</h3>
+<p>The gap increases the overall span covered by a single row of boards. Including the gap in your math ensures that your boards span the complete deck width without forcing tight compression or misaligned overhangs at the final rim joist.</p>
+<h3>Can I use this calculator for composite decking as well as traditional wood?</h3>
+<p>Yes, this calculator works for any linear decking material. For composite or PVC boards, make sure to follow the manufacturer's strict installation guidelines regarding maximum span lengths, joist spacing, and precise thermal gap requirements.</p>
+</section>
+
+</div>
+</main>
+<footer>
+<nav>
+<a href="/">Home</a>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+<a href="/privacy/">Privacy</a>
+</nav>
+<p class="citation">Formula source: IRC (International Residential Code) and AWPA standards. Results are estimates for planning — verify with a licensed professional before ordering materials.</p>
+<p style="margin-top:1rem;font-size:0.8rem;color:#718096">&copy; 2026 CalcBlueprint. All rights reserved.</p>
+</footer>
+<script>
+let currentUnit = 'imperial';
+
+function setUnits(system) {
+currentUnit = system;
+document.getElementById('btn-imperial').classList.toggle('active', system === 'imperial');
+document.getElementById('btn-metric').classList.toggle('active', system === 'metric');
+
+const lenLbl = document.getElementById('lbl-length');
+const widLbl = document.getElementById('lbl-width');
+const bWidLbl = document.getElementById('lbl-board-width');
+const bLenLbl = document.getElementById('lbl-board-length');
+const gapLbl = document.getElementById('lbl-gap');
+
+const lenIn = document.getElementById('deck-length');
+const widIn = document.getElementById('deck-width');
+const bWidIn = document.getElementById('board-width');
+const bLenIn = document.getElementById('board-length');
+const gapIn = document.getElementById('gap');
+
+if(system === 'metric') {
+lenLbl.innerText = 'Deck Length (meters)';
+widLbl.innerText = 'Deck Width (meters)';
+bWidLbl.innerText = 'Board Width (centimeters)';
+bLenLbl.innerText = 'Board Length (meters)';
+gapLbl.innerText = 'Gap Between Boards (centimeters)';
+
+lenIn.value = (parseFloat(lenIn.value) * 0.3048).toFixed(2);
+widIn.value = (parseFloat(widIn.value) * 0.3048).toFixed(2);
+bWidIn.value = (parseFloat(bWidIn.value) * 2.54).toFixed(1);
+bLenIn.value = (parseFloat(bLenIn.value) * 0.3048).toFixed(2);
+gapIn.value = (parseFloat(gapIn.value) * 2.54).toFixed(2);
+} else {
+lenLbl.innerText = 'Deck Length (feet)';
+widLbl.innerText = 'Deck Width (feet)';
+bWidLbl.innerText = 'Board Width (inches)';
+bLenLbl.innerText = 'Board Length (feet)';
+gapLbl.innerText = 'Gap Between Boards (inches)';
+
+lenIn.value = (parseFloat(lenIn.value) / 0.3048).toFixed(1);
+widIn.value = (parseFloat(widIn.value) / 0.3048).toFixed(1);
+bWidIn.value = (parseFloat(bWidIn.value) / 2.54).toFixed(1);
+bLenIn.value = (parseFloat(bLenIn.value) / 0.3048).toFixed(1);
+gapIn.value = (parseFloat(gapIn.value) / 2.54).toFixed(2);
+}
+}
+
+function calculate() {
+let deckLength = parseFloat(document.getElementById('deck-length').value);
+let deckWidth = parseFloat(document.getElementById('deck-width').value);
+let boardWidth = parseFloat(document.getElementById('board-width').value);
+let boardLength = parseFloat(document.getElementById('board-length').value);
+let gap = parseFloat(document.getElementById('gap').value);
+
+if(currentUnit === 'metric') {
+// Convert metric inputs to imperial base for formula consistency, or apply metric equivalent formula
+// Board coverage = (board_width_cm / 2.54 + gap_cm / 2.54) / 12 -> in feet
+// Let's convert all inputs to feet/inches internally for formula
+deckLength = deckLength / 0.3048; // to feet
+deckWidth = deckWidth / 0.3048;   // to feet
+boardWidth = boardWidth / 2.54; // to inches
+boardLength = boardLength / 0.3048; // to feet
+gap = gap / 2.54; // to inches
+}
+
+let boardCoverage = (boardWidth + gap) / 12; // in feet
+let boardsLengthCount = Math.ceil(deckLength / boardCoverage);
+let boardsWidthCount = Math.ceil(deckWidth / boardLength);
+let exactBoards = boardsLengthCount * boardsWidthCount;
+let wasteBoards = Math.ceil(exactBoards * 1.10);
+let totalLinearFeet = wasteBoards * boardLength;
+
+let unitStr = currentUnit === 'metric' ? 'meters' : 'feet';
+let linearDisplay = currentUnit === 'metric' ? (totalLinearFeet * 0.3048).toFixed(1) + ' m' : totalLinearFeet.toFixed(1) + ' ft';
+
+document.getElementById('res-exact').innerText = exactBoards + ' boards';
+document.getElementById('res-waste').innerText = wasteBoards + ' boards';
+document.getElementById('res-linear').innerText = linearDisplay;
+document.getElementById('result-box').style.display = 'block';
+}
+</script>
+</body>
+</html>

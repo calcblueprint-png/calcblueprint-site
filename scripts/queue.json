@@ -473,7 +473,8 @@
     "description": "Calculate deck boards needed for your deck surface. Includes gap allowance and waste factor.",
     "inputs": "Deck length (feet), deck width (feet), board width (inches), board length (feet), gap between boards (inches)",
     "formula": "Board coverage = (board_width + gap) / 12. Boards = ceil(deck_length / board_coverage) * ceil(deck_width / board_length). Add 10% waste.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-11-15T08:54:14.164707Z"
   },
   {
     "slug": "deck-railing-calculator",
