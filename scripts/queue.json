@@ -482,7 +482,8 @@
     "description": "Calculate deck railing materials: posts, top rail, bottom rail, balusters, and hardware.",
     "inputs": "Total railing length (feet), railing height (feet), post spacing (feet), baluster spacing (inches)",
     "formula": "Railing posts = ceil(length / post_spacing) + 1. Balusters = ceil(length * 12 / (baluster_width + gap)). Top and bottom rail = length + 5%.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-11-16T09:07:37.829470Z"
   },
   {
     "slug": "deck-stair-calculator",

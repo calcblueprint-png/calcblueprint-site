@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/deck-railing-calculator/">
+<title>Deck Railing Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate deck railing materials: posts, top rail, bottom rail, balusters, and hardware.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Deck Railing Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.6;background:#f4f7f6;color:#333}
+header{background:#1a2332;border-bottom:3px solid #f5a623;padding:1rem 0;color:#fff}
+.container{max-width:900px;margin:0 auto;padding:0 1rem}
+.logo{font-size:1.5rem;font-weight:bold;text-decoration:none;color:#fff}
+.logo span{color:#f5a623}
+nav{float:right}
+nav a{color:#fff;text-decoration:none;margin-left:1rem}
+.calculator-box{background:#fff;padding:2rem;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.1);margin:2rem 0}
+.unit-toggle{display:flex;gap:10px;margin-bottom:1.5rem}
+.unit-btn{padding:0.5rem 1rem;border:1px solid #1a2332;background:#fff;cursor:pointer;border-radius:4px}
+.unit-btn.active{background:#f5a623;color:#1a2332;border-color:#f5a623}
+.form-group{margin-bottom:1rem}
+label{display:block;margin-bottom:0.5rem}
+input{width:100%;padding:0.5rem;border:1px solid #ccc;border-radius:4px}
+button#calc-btn{background:#f5a623;color:#1a2332;padding:1rem 2rem;border:none;border-radius:4px;font-weight:bold;cursor:pointer;width:100%;margin-top:1rem}
+.result-box{margin-top:2rem;padding:1rem;background:#eef2f7;border-radius:8px;display:none}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #d1d9e0}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem}
+footer{background:#1a2332;color:#fff;padding:2rem 0;text-align:center;margin-top:2rem}
+footer a{color:#f5a623;margin:0 0.5rem}
+details{margin-bottom:1rem;padding:1rem;background:#fff;border-radius:8px}
+</style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <a href="/" class="logo">Calc<span>Blueprint</span></a>
+        <nav><a href="/about">About</a><a href="/contact">Contact</a></nav>
+    </div>
+</header>
+<main>
+    <div class="container">
+        <div class="calculator-box">
+            <div class="unit-toggle">
+                <button class="unit-btn active" onclick="setUnit('imperial')">Imperial (US)</button>
+                <button class="unit-btn" onclick="setUnit('metric')">Metric</button>
+            </div>
+            <div class="form-group"><label id="label-len">Total railing length (feet)</label><input type="number" id="length" value="20"></div>
+            <div class="form-group"><label id="label-h">Railing height (feet)</label><input type="number" id="height" value="3"></div>
+            <div class="form-group"><label id="label-ps">Post spacing (feet)</label><input type="number" id="post_spacing" value="6"></div>
+            <div class="form-group"><label id="label-bs">Baluster spacing (inches)</label><input type="number" id="baluster_spacing" value="4"></div>
+            <button id="calc-btn" onclick="calculate()">Calculate</button>
+            <div class="result-box" id="results">
+                <div class="result-row"><span>Total Posts:</span><strong id="res-posts"></strong></div>
+                <div class="result-row"><span>Total Balusters:</span><strong id="res-balusters"></strong></div>
+                <div class="result-row"><span>Top/Bottom Rail:</span><strong id="res-rails"></strong></div>
+            </div>
+        </div>
+        <details>
+            <summary>How this calculator works</summary>
+            <p>This calculator determines the number of posts by dividing the total span by your chosen spacing and adding one for the end. Baluster counts are derived by dividing the total length by the sum of the baluster width and gap, while rails include a 5% waste factor for trimming. Formula based on IRC (International Residential Code) and AWPA standards.</p>
+        </details>
+        <section class="content-section">
+            <h2>How to Calculate Deck Railing</h2>
+            <p>Calculating deck railing requires precision to ensure both structural integrity and code compliance. Start by measuring the total perimeter of the deck area requiring protection. You must account for the number of posts needed to support the railing system, which is typically determined by the maximum allowable span between posts—usually 6 feet for standard wood railings. Once you have the post count, determine the number of balusters by dividing the total length by the desired spacing plus the width of the baluster itself. Always add a 5% to 10% waste factor for rails to account for miter cuts and potential board defects encountered during installation.</p>
+        </section>
+        <section class="content-section">
+            <h2>What Affects Railing Costs</h2>
+            <p>Several factors influence the overall material cost of your deck railing project. The choice of material—whether pressure-treated lumber, cedar, composite, or aluminum—is the primary driver of expense. Composite and metal systems often require specific proprietary hardware and mounting brackets, which can significantly increase the budget compared to traditional wood systems. Additionally, the complexity of the deck layout, such as the number of corners, stairs, and transitions, requires more posts and specialized hardware. Local building codes also dictate specific height requirements and baluster spacing (typically 4 inches maximum), which can limit your material options and influence the total quantity of components needed for a safe, compliant installation.</p>
+        </section>
+        <section class="content-section">
+            <h2>Frequently Asked Questions</h2>
+            <h3>What is the standard height for deck railings?</h3>
+            <p>According to the International Residential Code (IRC), deck railings must be at least 36 inches high for residential decks. However, always check your local municipal codes as some jurisdictions may require 42 inches.</p>
+            <h3>How far apart should deck balusters be placed?</h3>
+            <p>The IRC mandates that balusters must be spaced so that a 4-inch sphere cannot pass through any opening. This ensures child safety and prevents entrapment.</p>
+            <h3>Do I need to account for waste when ordering lumber?</h3>
+            <p>Yes, it is standard practice to add 5% to 10% to your total material order to account for board defects, waste during cutting, and potential errors during the installation process.</p>
+        </section>
+    </div>
+</main>
+<footer>
+    <div class="container">
+        <a href="/">Home</a> | <a href="/about">About</a> | <a href="/contact">Contact</a> | <a href="/privacy">Privacy</a>
+        <p style="margin-top:1rem;font-size:0.8rem">Formula source: IRC (International Residential Code) and AWPA standards. Results are estimates for planning — verify with a licensed professional before ordering materials. 2026.</p>
+    </div>
+</footer>
+<script>
+let unit = 'imperial';
+function setUnit(u) {
+    unit = u;
+    document.querySelectorAll('.unit-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    if(u === 'metric') {
+        document.getElementById('label-len').innerText = 'Total railing length (meters)';
+        document.getElementById('label-h').innerText = 'Railing height (meters)';
+        document.getElementById('label-ps').innerText = 'Post spacing (meters)';
+        document.getElementById('label-bs').innerText = 'Baluster spacing (cm)';
+    } else {
+        document.getElementById('label-len').innerText = 'Total railing length (feet)';
+        document.getElementById('label-h').innerText = 'Railing height (feet)';
+        document.getElementById('label-ps').innerText = 'Post spacing (feet)';
+        document.getElementById('label-bs').innerText = 'Baluster spacing (inches)';
+    }
+}
+function calculate() {
+    let len = parseFloat(document.getElementById('length').value);
+    let ps = parseFloat(document.getElementById('post_spacing').value);
+    let bs = parseFloat(document.getElementById('baluster_spacing').value);
+    let balWidth = 1.5; // Standard 2x2 nominal
+    if(unit === 'metric') {
+        len = len / 0.3048;
+        ps = ps / 0.3048;
+        bs = bs / 2.54;
+        balWidth = 1.5;
+    }
+    const posts = Math.ceil(len / ps) + 1;
+    const balusters = Math.ceil((len * 12) / (balWidth + bs));
+    const rails = (len * 1.05).toFixed(2);
+    document.getElementById('results').style.display = 'block';
+    document.getElementById('res-posts').innerText = posts;
+    document.getElementById('res-balusters').innerText = balusters;
+    document.getElementById('res-rails').innerText = unit === 'metric' ? (rails * 0.3048).toFixed(2) + ' m' : rails + ' ft';
+}
+</script>
+</body>
+</html>
