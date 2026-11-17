@@ -491,7 +491,8 @@
     "description": "Calculate stair stringers, treads, and risers for deck stairs. Ensures code-compliant dimensions.",
     "inputs": "Total rise (inches), total run (inches), desired tread depth (inches), stair width (feet)",
     "formula": "Risers = ceil(total_rise / 7.5). Total run = (risers - 1) * tread_depth. Stringers = ceil(stair_width / 16).",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-11-17T10:20:18.230337Z"
   },
   {
     "slug": "footing-size-calculator",
