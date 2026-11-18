@@ -500,7 +500,8 @@
     "description": "Determine proper footing dimensions based on load, soil bearing capacity, and building code.",
     "inputs": "Load in pounds, soil bearing capacity (psf), footing type",
     "formula": "Required footing area = load / soil_bearing_capacity. For square pad: side = sqrt(area). Depth: 12 inches minimum below frost line.",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-11-18T09:50:32.176437Z"
   },
   {
     "slug": "load-bearing-wall-calculator",
