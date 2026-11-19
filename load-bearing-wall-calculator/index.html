@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://calcblueprint.com/load-bearing-wall-calculator/">
+<title>Load Bearing Calculator — CalcBlueprint</title>
+<meta name="description" content="Calculate load on a beam or wall based on floor area supported. Ensures structural beams are properly sized.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DHN9J7B497"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DHN9J7B497');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Load Bearing Calculator","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f4f7f6;color:#333;line-height:1.6}
+header{background:#1a2332;border-bottom:3px solid #f5a623;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.5rem;font-weight:bold;color:#fff;text-decoration:none}
+.logo span{color:#f5a623}
+nav a{color:#fff;text-decoration:none;margin-left:1.5rem;font-size:0.95rem}
+nav a:hover{color:#f5a623}
+main{padding:2rem 1rem;max-width:900px;margin:0 auto}
+.container{width:100%}
+.calculator-box{background:#fff;border-radius:8px;padding:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);margin-bottom:2rem}
+.unit-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem;border-bottom:1px solid #eee;padding-bottom:1rem}
+.unit-btn{flex:1;padding:0.75rem;border:1px solid #ccc;background:#f9f9f9;cursor:pointer;border-radius:4px;font-weight:600;font-size:0.95rem;transition:all 0.2s}
+.unit-btn.active{background:#f5a623;color:#1a2332;border-color:#f5a623}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a2332;font-size:0.95rem}
+.form-group input,.form-group select{width:100%;padding:0.75rem;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+.calc-btn{width:100%;background:#f5a623;color:#1a2332;border:none;padding:1rem;font-size:1rem;font-weight:bold;border-radius:4px;cursor:pointer;transition:opacity 0.2s;margin-top:0.5rem}
+.calc-btn:hover{opacity:0.9}
+.result-box{background:#f8f9fa;border:1px solid #e9ecef;border-radius:6px;padding:1.5rem;margin-top:1.5rem;display:none}
+.result-box h3{margin-bottom:1rem;color:#1a2332;font-size:1.2rem}
+.result-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #e9ecef;font-size:1rem}
+.result-row:last-child{border-bottom:none}
+.result-value{font-weight:bold;color:#1a2332}
+details{background:#fff;border-radius:8px;padding:1.5rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05);cursor:pointer}
+summary{font-weight:600;color:#1a2332;font-size:1.1rem;outline:none}
+details p{margin-top:1rem;color:#555;font-size:0.95rem}
+details .source-line{margin-top:0.75rem;font-style:italic;color:#666;font-size:0.9rem}
+.content-section{background-color:#ffffff;border-radius:8px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 6px rgba(0,0,0,0.05)}
+.content-section h2{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
+.content-section p{margin-bottom:1rem;color:#444}
+.content-section h3{color:#1a2332;margin-top:1.25rem;margin-bottom:0.5rem;font-size:1.1rem}
+footer{background:#1a2332;color:#fff;text-align:center;padding:2rem;margin-top:3rem;font-size:0.9rem}
+.footer-nav{margin-bottom:1rem}
+.footer-nav a{color:#fff;text-decoration:none;margin:0 1rem}
+.footer-nav a:hover{color:#f5a623}
+.citation{color:#adb5bd;font-size:0.85rem;max-width:800px;margin:0 auto}
+@media(max-width:600px){header{flex-direction:column;gap:1rem}nav a{margin:0 0.5rem}}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Calc<span>Blueprint</span></a>
+  <nav>
+    <a href="/">Home</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <div class="container">
+    
+    <div class="calculator-box">
+      <h1 style="margin-bottom:1.5rem;color:#1a2332;font-size:1.75rem;">Load Bearing Calculator</h1>
+      
+      <div class="unit-toggle">
+        <button type="button" class="unit-btn active" id="btn-imperial" onclick="setUnitSystem('imperial')">Imperial (US)</button>
+        <button type="button" class="unit-btn" id="btn-metric" onclick="setUnitSystem('metric')">Metric</button>
+      </div>
+
+      <div class="form-group">
+        <label id="label-area" for="floorArea">Floor Area Supported (sq ft):</label>
+        <input type="number" id="floorArea" placeholder="e.g., 400" min="0" step="any">
+      </div>
+
+      <div class="form-group">
+        <label for="floorType">Floor Type:</label>
+        <select id="floorType">
+          <option value="living">Living Area (40 psf live load)</option>
+          <option value="storage">Storage Area (125 psf live load)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label id="label-spacing" for="joistSpacing">Joist Spacing (inches):</label>
+        <input type="number" id="joistSpacing" value="16" min="0" step="any">
+      </div>
+
+      <button type="button" class="calc-btn" onclick="calculateLoad()">Calculate Total Load</button>
+
+      <div class="result-box" id="resultBox">
+        <h3>Calculation Results</h3>
+        <div class="result-row">
+          <span>Live Load:</span>
+          <span class="result-value" id="resLiveLoad">0 lbs</span>
+        </div>
+        <div class="result-row">
+          <span>Dead Load:</span>
+          <span class="result-value" id="resDeadLoad">0 lbs</span>
+        </div>
+        <div class="result-row">
+          <span>Total Load:</span>
+          <span class="result-value" id="resTotalLoad">0 lbs</span>
+        </div>
+        <div class="result-row">
+          <span>Linear Load (per unit length):</span>
+          <span class="result-value" id="resLinearLoad">0 lbs/ft</span>
+        </div>
+      </div>
+    </div>
+
+    <details>
+      <summary>How this calculator works</summary>
+      <p>This calculator determines the total gravity load transferred to a structural beam or load-bearing wall by multiplying the supported floor area by the combined design live and dead loads. Dead load is established at a standard 10 psf for structural components, while live load varies between 40 psf for residential living spaces and 125 psf for storage allocations.</p>
+      <div class="source-line">Formula based on AWC (American Wood Council) NDS and SPIB grading rules</div>
+    </details>
+
+    <section class="content-section">
+      <h2>How to Calculate Load Bearing Requirements</h2>
+      <p>Determining the correct load bearing capacity for a wall or beam is critical to maintaining structural integrity during remodeling or new construction. Every horizontal framing member collects weight from the floor above and safely transfers it down to the foundation. To compute this accurately, you must first calculate the tributary area—the specific section of the floor plan whose weight drains directly onto the beam or wall in question.</p>
+      <p>Once you establish the square footage of the supported area, you must account for two primary force categories: dead load and live load. Dead load represents the permanent static weight of the building materials themselves, including subflooring, joists, drywall, and finishes. Live load accounts for the temporary, shifting weight of occupants, furniture, and movable equipment. Summing these factors gives you the total downward force that your structural support must safely carry without excessive deflection or failure.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>What Affects Load Bearing Calculations</h2>
+      <p>Several engineering and architectural variables directly impact the outcome of a load-bearing calculation. The intended occupancy classification is paramount; a residential bedroom requires significantly less load capacity than a high-density storage attic or commercial workspace. Building codes mandate specific minimum safety thresholds to protect occupants against unexpected weight surges.</p>
+      <p>Additionally, material selection and span length heavily influence how structural members respond to pressure. Wood species, steel grade, and concrete density determine maximum allowable bending stress. Furthermore, environmental factors such as moisture content in lumber or seismic zone classifications can necessitate stricter safety margins, requiring contractors to upsize framing elements to prevent long-term structural sagging or catastrophic failure.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>Frequently Asked Questions</h2>
+      <h3>What is the difference between live load and dead load?</h3>
+      <p>Live load refers to temporary, transient forces such as people, furniture, and movable storage items. Dead load refers to the permanent, static weight of the building materials making up the structure itself, including floors, walls, and roofing components.</p>
+      <h3>Can I remove a load-bearing wall if I install a steel beam?</h3>
+      <p>Yes, load-bearing walls can often be removed safely, but only after installing an adequately sized temporary shoring system and a permanent structural beam and column assembly engineered to carry the redirected loads down to the foundation.</p>
+      <h3>How do joist spacing dimensions affect wall load calculations?</h3>
+      <p>Closer joist spacing distributes weight more evenly across a wider structural footprint, while wider spacing concentrates higher point weights onto fewer structural members, requiring higher individual load capacities for the supporting framing below.</p>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="footer-nav">
+    <a href="/">Home</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <a href="#privacy">Privacy</a>
+  </div>
+  <div class="citation">
+    Formula source: AWC (American Wood Council) NDS and SPIB grading rules. Results are estimates for planning — verify with a licensed professional before ordering materials. © 2026 CalcBlueprint.
+  </div>
+</footer>
+
+<script>
+let currentSystem = 'imperial';
+
+function setUnitSystem(system) {
+  currentSystem = system;
+  const btnImp = document.getElementById('btn-imperial');
+  const btnMet = document.getElementById('btn-metric');
+  const labelArea = document.getElementById('label-area');
+  const labelSpacing = document.getElementById('label-spacing');
+  const floorAreaInput = document.getElementById('floorArea');
+  const joistSpacingInput = document.getElementById('joistSpacing');
+
+  if (system === 'imperial') {
+    btnImp.classList.add('active');
+    btnMet.classList.remove('active');
+    labelArea.textContent = 'Floor Area Supported (sq ft):';
+    labelSpacing.textContent = 'Joist Spacing (inches):';
+    if(floorAreaInput.value) floorAreaInput.value = (parseFloat(floorAreaInput.value) * 10.7639).toFixed(1);
+    if(joistSpacingInput.value) joistSpacingInput.value = (parseFloat(joistSpacingInput.value) / 2.54).toFixed(1);
+  } else {
+    btnMet.classList.add('active');
+    btnImp.classList.remove('active');
+    labelArea.textContent = 'Floor Area Supported (sq meters):';
+    labelSpacing.textContent = 'Joist Spacing (centimeters):';
+    if(floorAreaInput.value) floorAreaInput.value = (parseFloat(floorAreaInput.value) / 10.7639).toFixed(1);
+    if(joistSpacingInput.value) joistSpacingInput.value = (parseFloat(joistSpacingInput.value) * 2.54).toFixed(1);
+  }
+  document.getElementById('resultBox').style.display = 'none';
+}
+
+function calculateLoad() {
+  let areaInput = parseFloat(document.getElementById('floorArea').value);
+  const floorType = document.getElementById('floorType').value;
+  let spacingInput = parseFloat(document.getElementById('joistSpacing').value);
+
+  if (isNaN(areaInput) || areaInput <= 0) {
+    alert('Please enter a valid floor area.');
+    return;
+  }
+
+  let areaSqFt = currentSystem === 'imperial' ? areaInput : areaInput * 10.7639;
+  
+  let livePsf = floorType === 'living' ? 40 : 125;
+  let deadPsf = 10;
+  
+  let totalPsf = livePsf + deadPsf;
+  let totalLoadLbs = areaSqFt * totalPsf;
+  let liveLoadLbs = areaSqFt * livePsf;
+  let deadLoadLbs = areaSqFt * deadPsf;
+  
+  let approxSpanFt = Math.sqrt(areaSqFt);
+  if(approxSpanFt === 0) approxSpanFt = 1;
+  let linearLoadPlf = totalLoadLbs / approxSpanFt;
+
+  if (currentSystem === 'imperial') {
+    document.getElementById('resLiveLoad').textContent = liveLoadLbs.toLocaleString(undefined, {maximumFractionDigits: 1}) + ' lbs';
+    document.getElementById('resDeadLoad').textContent = deadLoadLbs.toLocaleString(undefined, {maximumFractionDigits: 1}) + ' lbs';
+    document.getElementById('resTotalLoad').textContent = totalLoadLbs.toLocaleString(undefined, {maximumFractionDigits: 1}) + ' lbs';
+    document.getElementById('resLinearLoad').textContent = linearLoadPlf.toLocaleString(undefined, {maximumFractionDigits: 1}) + ' lbs/ft';
+  } else {
+    let liveLoadKg = liveLoadLbs * 0.4536;
+    let deadLoadKg = deadLoadLbs * 0.4536;
+    let totalLoadKg = totalLoadLbs * 0.4536;
+    let linearLoadKgM = linearLoadPlf * (0.4536 / 0.3048);
+
+    document.getElementById('resLiveLoad').textContent = liveLoadKg.toLocaleString(undefined, {maximumFractionDigits: 1}) + ' kg';
+    document.getElementById('resDeadLoad').textContent = deadLoadKg.toLocaleString(undefined, {maximumFractionDigits: 1}) + ' kg';
+    document.getElementById('resTotalLoad').textContent = totalLoadKg.toLocaleString(undefined, {maximumFractionDigits: 1}) + ' kg';
+    document.getElementById('resLinearLoad').textContent = linearLoadKgM.toLocaleString(undefined, {maximumFractionDigits: 1}) + ' kg/m';
+  }
+
+  document.getElementById('resultBox').style.display = 'block';
+}
+</script>
+
+</body>
+</html>

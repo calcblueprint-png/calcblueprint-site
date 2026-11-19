@@ -509,6 +509,7 @@
     "description": "Calculate load on a beam or wall based on floor area supported. Ensures structural beams are properly sized.",
     "inputs": "Floor area supported (square feet), floor type, joist spacing (inches)",
     "formula": "Live load: 40 psf living, 125 psf storage. Dead load: 10 psf. Total = area * (live + dead).",
-    "status": "pending"
+    "status": "done",
+    "generated_at": "2026-11-19T09:58:12.908094Z"
   }
 ]
